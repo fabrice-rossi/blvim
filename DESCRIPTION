@@ -1,0 +1,15 @@
+Package: blvim
+Title: Boltzmann–Lotka–Volterra Interaction Model
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Fabrice", 
+           family = "Rossi", 
+           role = c("aut", "cre"),
+           email = "Fabrice.Rossi@apiacoa.org", 
+           comment = c(ORCID = "0000-0003-4638-1286"))
+Description: Estimates Boltzmann–Lotka–Volterra (BLV) interaction model 
+    efficiently. See Wilson, A. (2007) <dx.doi.org/10.1098/rsif.2007.1288>.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
