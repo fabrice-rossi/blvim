@@ -1,0 +1,67 @@
+#' Compute flows between origin and destination locations
+#'
+#' This function computes flows between origin locations and destination
+#' locations according to the production constrained entropy maximising model
+#' proposed by A. Wilson.
+#'
+#' The model computes flows using the following parameters:
+#' * `costs` (\eqn{c}) is a \eqn{n\times p} matrix whose \eqn{(i,j )} entry is the
+#' cost of a "unit" flow from origin location \eqn{i} to destination location
+#' \eqn{j}
+#' * `X` (\eqn{X}) is a vector of size \eqn{n} containing non negative production
+#' constraints for the \eqn{n} origin locations
+#' * `alpha` (\eqn{\alpha}) is a return to scale parameter that enhance (or reduce is smaller
+#' that 1) the attractiveness of destination location larger than 1
+#' * `beta` (\eqn{\beta}) is the inverse of a cost scale parameter, i.e., costs are multiplied
+#' by `beta` in the model
+#' * `Z` (\eqn{Z}) is a vector of size \eqn{p} containing positive attractivenesses for
+#' the \eqn{p} destination locations
+#'
+#' According to Wilson's model, the flow between origin location \eqn{i} and
+#' destination location \eqn{j}, \eqn{Y_{ij}}, is given by
+#'
+#' \deqn{Y_{ij}=\frac{X_iZ_j^{\alpha}\exp(-\beta
+#' c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})}.}
+#'
+#' The model is production constrained because
+#'
+#' \deqn{\forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij},}
+#'
+#' that is the origin location \eqn{i} sends a total flow of exactly \eqn{X_i}.
+#'
+#' @param costs a cost matrix
+#' @param X a vector of production constraints
+#' @param alpha the return to scale parameter
+#' @param beta the cost inverse scale parameter
+#' @param Z a vector of destination attractivenesses
+#'
+#' @returns a matrix of flows between the origin and the destination locations
+#'   (see \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}} above).
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 10)
+#' attractiveness <- c(2, rep(1, 9))
+#' flows <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#'
+#' @references Wilson, A. (1971), "A family of spatial interaction models, and
+#'   associated developments", Environment and Planning A: Economy and Space,
+#'   3(1), 1-32 \doi{10.1068/a030001}
+static_blvim <- function(costs, X, alpha, beta, Z) {
+  if (!is.matrix(costs)) {
+    cli::cli_abort("{.var costs} must be a matrix")
+  }
+  if (nrow(costs) != length(X)) {
+    cli::cli_abort(c("{.var costs} must have {.val {length(X)}} rows",
+      "x" = "{.var costs} has {.val {nrow(costs)}} rows"
+    ))
+  }
+  if (ncol(costs) != length(Z)) {
+    cli::cli_abort(c("{.var costs} must have {.val {length(Z)}} columns",
+      "x" = "{.var costs} has {.val {ncol(costs)}} columns"
+    ))
+  }
+  we_oc(costs, X, alpha, beta, Z)
+}
