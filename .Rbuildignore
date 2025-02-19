@@ -1,3 +1,4 @@
 ^blvim\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+devtools
