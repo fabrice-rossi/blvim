@@ -17,6 +17,7 @@ LinkingTo:
     Rcpp,
     RcppArmadillo
 Imports: 
+    cli,
     Rcpp
 Suggests: 
     testthat (>= 3.0.0),
