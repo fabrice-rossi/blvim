@@ -30,16 +30,17 @@ proposed by A. Wilson.
 The model computes flows using the following parameters:
 \itemize{
 \item \code{costs} (\eqn{c}) is a \eqn{n\times p} matrix whose \eqn{(i,j )} entry is the
-cost of a "unit" flow from origin location \eqn{i} to destination location
-\eqn{j}
+cost of having a "unitary" flow from origin location \eqn{i} to destination
+location \eqn{j}
 \item \code{X} (\eqn{X}) is a vector of size \eqn{n} containing non negative production
 constraints for the \eqn{n} origin locations
-\item \code{alpha} (\eqn{\alpha}) is a return to scale parameter that enhance (or reduce is smaller
-that 1) the attractiveness of destination location larger than 1
-\item \code{beta} (\eqn{\beta}) is the inverse of a cost scale parameter, i.e., costs are multiplied
-by \code{beta} in the model
-\item \code{Z} (\eqn{Z}) is a vector of size \eqn{p} containing positive attractivenesses for
-the \eqn{p} destination locations
+\item \code{alpha} (\eqn{\alpha}) is a return to scale parameter that enhance (or reduce
+if smaller that 1) the attractivenesses of destination locations when they
+are larger than 1
+\item \code{beta} (\eqn{\beta}) is the inverse of a cost scale parameter, i.e., costs
+are multiplied by \code{beta} in the model
+\item \code{Z} (\eqn{Z}) is a vector of size \eqn{p} containing the positive
+attractivenesses of the \eqn{p} destination locations
 }
 
 According to Wilson's model, the flow between origin location \eqn{i} and
