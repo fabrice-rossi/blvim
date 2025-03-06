@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 `blvim` implements A. Wilson's Boltzmann–Lotka–Volterra (BLV) interaction model. 
 The model is described in 
-[Wilson, A. (1971), "A family of spatial interaction models, and associated developments", Environment and Planning A: Economy and Space, 3(1), 1-32](http://dx.doi.org/10.1068/a030001)
+[Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural evolution: an integrated methodology for some dynamical systems", J. R. Soc. Interface.5865–871](http://dx.doi.org/10.1098/rsif.2007.1288)
 
 ## Installation
 
