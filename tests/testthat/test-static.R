@@ -14,11 +14,14 @@ test_that("static_blvim detects errors", {
 
 test_that("static_blvim fulfills its contracts", {
   config <- create_locations(40, 50, seed = 0)
-  flows <- static_blvim(config$costs, config$X, 1.5, 1, config$Z)
+  model <- static_blvim(config$costs, config$X, 1.5, 1, config$Z)
   ## correct dimensions
-  expect_equal(dim(flows), c(length(config$X), length(config$Z)))
+  expect_equal(dim(flows(model)), c(length(config$X), length(config$Z)))
   ## production constraints
-  expect_equal(rowSums(flows), config$X)
+  expect_equal(rowSums(flows(model)), config$X)
+  expect_equal(production(model), config$X)
+  ## attractiveness
+  expect_equal(attractiveness(model), config$Z)
 })
 
 test_that("static_blvim fulfills computes Wilson's equation", {
@@ -30,6 +33,6 @@ test_that("static_blvim fulfills computes Wilson's equation", {
   XZeC <- outer(config$X, config$Z**alpha) * exp_costs
   Y_norm <- exp_costs %*% config$Z**alpha
   Y <- sweep(XZeC, 1, Y_norm[, 1], "/")
-  flows <- static_blvim(config$costs, config$X, alpha, beta, config$Z)
-  expect_equal(flows, Y, ignore_attr = TRUE)
+  model <- static_blvim(config$costs, config$X, alpha, beta, config$Z)
+  expect_equal(flows(model), Y, ignore_attr = TRUE)
 })

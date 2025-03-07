@@ -18,8 +18,10 @@ static_blvim(costs, X, alpha, beta, Z)
 \item{Z}{a vector of destination attractivenesses}
 }
 \value{
-a matrix of flows between the origin and the destination locations
-(see \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}} above).
+an object of class \code{sim} for spatial interaction model that contains
+the matrix of flows between the origin and the destination locations (see
+\eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}} above) and the
+attractivenesses of the destination locations.
 }
 \description{
 This function computes flows between origin locations and destination
@@ -60,7 +62,7 @@ positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
-flows <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 
 }
 \references{

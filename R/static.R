@@ -36,8 +36,11 @@
 #' @param beta the cost inverse scale parameter
 #' @param Z a vector of destination attractivenesses
 #'
-#' @returns a matrix of flows between the origin and the destination locations
-#'   (see \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}} above).
+#' @returns an object of class `sim` for spatial interaction model that contains
+#'   the matrix of flows between the origin and the destination locations (see
+#'   \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}} above) and the
+#'   attractivenesses of the destination locations.
+#'
 #' @export
 #'
 #' @examples
@@ -45,12 +48,13 @@
 #' distances <- as.matrix(dist(positions))
 #' production <- rep(1, 10)
 #' attractiveness <- c(2, rep(1, 9))
-#' flows <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 #'
 #' @references Wilson, A. (1971), "A family of spatial interaction models, and
 #'   associated developments", Environment and Planning A: Economy and Space,
 #'   3(1), 1-32 \doi{10.1068/a030001}
 static_blvim <- function(costs, X, alpha, beta, Z) {
   check_configuration(costs, X, alpha, beta, Z)
-  we_oc(costs, X, alpha, beta, Z)
+  Y <- we_oc(costs, X, alpha, beta, Z)
+  new_sim(Y, Z)
 }
