@@ -97,3 +97,27 @@ attractiveness <- function(sim, ...) {
 attractiveness.sim <- function(sim, ...) {
   sim$Z
 }
+
+#' Compute the flows incoming at each destination location
+#'
+#' @param sim a spatial interaction model object
+#' @param ... additional parameters
+#'
+#' @returns a vector of flows incoming at destination locations
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 10)
+#' attractiveness <- c(2, rep(1, 9))
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' destination_flow(model)
+destination_flow <- function(sim, ...) {
+  UseMethod("destination_flow")
+}
+
+#' @export
+destination_flow.sim <- function(sim, ...) {
+  colSums(sim$Y)
+}
