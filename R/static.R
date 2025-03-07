@@ -51,18 +51,6 @@
 #'   associated developments", Environment and Planning A: Economy and Space,
 #'   3(1), 1-32 \doi{10.1068/a030001}
 static_blvim <- function(costs, X, alpha, beta, Z) {
-  if (!is.matrix(costs)) {
-    cli::cli_abort("{.var costs} must be a matrix")
-  }
-  if (nrow(costs) != length(X)) {
-    cli::cli_abort(c("{.var costs} must have {.val {length(X)}} rows",
-      "x" = "{.var costs} has {.val {nrow(costs)}} rows"
-    ))
-  }
-  if (ncol(costs) != length(Z)) {
-    cli::cli_abort(c("{.var costs} must have {.val {length(Z)}} columns",
-      "x" = "{.var costs} has {.val {ncol(costs)}} columns"
-    ))
-  }
+  check_configuration(costs, X, alpha, beta, Z)
   we_oc(costs, X, alpha, beta, Z)
 }

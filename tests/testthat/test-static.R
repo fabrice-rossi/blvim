@@ -1,4 +1,4 @@
-test_that("static_blvim fulfills detects errors", {
+test_that("static_blvim detects errors", {
   config <- create_locations(4, 5, seed = 2)
   ## not a cost matrix
   expect_error(static_blvim(config$X, c(config$X, 2), 1.5, 1, config$Z))
@@ -6,6 +6,10 @@ test_that("static_blvim fulfills detects errors", {
   expect_error(static_blvim(config$costs, c(config$X, 2), 1.5, 1, config$Z))
   ## not enough columns
   expect_error(static_blvim(config$costs, config$X, 1.5, 1, c(config$Z, 1)))
+  ## negative return to scale
+  expect_error(static_blvim(config$costs, config$X, -1.5, 1, config$Z))
+  ## negative inverse cost
+  expect_error(static_blvim(config$costs, config$X, 1.5, -1, config$Z))
 })
 
 test_that("static_blvim fulfills its contracts", {
