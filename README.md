@@ -4,6 +4,8 @@
 # Boltzmann–Lotka–Volterra Interaction Model
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `blvim` implements A. Wilson’s Boltzmann–Lotka–Volterra (BLV)
