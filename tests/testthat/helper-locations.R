@@ -4,7 +4,11 @@ create_locations <- function(nprod, ndest, seed = 0) {
   pos_dest <- matrix(rnorm(ndest * 2), ncol = 2)
   distances <- as.matrix(dist(rbind(pos_prod, pos_dest)))[1:nprod, (nprod + 1):(nprod + ndest)]
   dimnames(distances) <- NULL
+  d_scale <- median(distances[distances > 0])
   production <- runif(nrow(pos_prod), min = 0.1, max = 2)
   attractiveness <- runif(nrow(pos_dest), min = 1, max = 2)
-  list(costs = distances, X = production, Z = attractiveness, pp = pos_prod, pd = pos_dest)
+  list(
+    costs = distances, X = production, Z = attractiveness, pp = pos_prod,
+    pd = pos_dest, scale = d_scale
+  )
 }
