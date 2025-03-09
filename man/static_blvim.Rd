@@ -19,7 +19,7 @@ static_blvim(costs, X, alpha, beta, Z)
 }
 \value{
 an object of class \code{sim} for spatial interaction model that contains
-the matrix of flows between the origin and the destination locations (see
+the matrix of flows from the origin locations to the destination locations (see
 \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}} above) and the
 attractivenesses of the destination locations.
 }
@@ -45,7 +45,7 @@ are multiplied by \code{beta} in the model
 attractivenesses of the \eqn{p} destination locations
 }
 
-According to Wilson's model, the flow between origin location \eqn{i} and
+According to Wilson's model, the flow from origin location \eqn{i} to
 destination location \eqn{j}, \eqn{Y_{ij}}, is given by
 
 \deqn{Y_{ij}=\frac{X_iZ_j^{\alpha}\exp(-\beta

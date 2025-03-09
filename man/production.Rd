@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim.R
 \name{production}
 \alias{production}
-\title{Extract the production constraints of spatial interaction model object}
+\title{Extract the production constraints from a spatial interaction model object}
 \usage{
 production(sim, ...)
 }
@@ -15,7 +15,7 @@ production(sim, ...)
 a vector of production constraints at the origin locations
 }
 \description{
-Extract the production constraints of spatial interaction model object
+Extract the production constraints from a spatial interaction model object
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)

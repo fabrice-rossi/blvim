@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim.R
 \name{attractiveness}
 \alias{attractiveness}
-\title{Extract the attractivenesses of a spatial interaction model object}
+\title{Extract the attractivenesses from a spatial interaction model object}
 \usage{
 attractiveness(sim, ...)
 }
@@ -15,7 +15,7 @@ attractiveness(sim, ...)
 a vector of attractivenesses at the destination locations
 }
 \description{
-Extract the attractivenesses of a spatial interaction model object
+Extract the attractivenesses from a spatial interaction model object
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)

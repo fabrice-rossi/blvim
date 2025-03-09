@@ -50,7 +50,7 @@ flows.sim <- function(sim, ...) {
   sim$Y
 }
 
-#' Extract the production constraints of spatial interaction model object
+#' Extract the production constraints from a spatial interaction model object
 #'
 #' @param sim a spatial interaction model object
 #' @param ... additional parameters
@@ -74,7 +74,7 @@ production.sim <- function(sim, ...) {
   rowSums(sim$Y)
 }
 
-#' Extract the attractivenesses of a spatial interaction model object
+#' Extract the attractivenesses from a spatial interaction model object
 #'
 #' @param sim a spatial interaction model object
 #' @param ... additional parameters
