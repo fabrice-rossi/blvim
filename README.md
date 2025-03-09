@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/fabrice-rossi/blvim/graph/badge.svg)](https://app.codecov.io/gh/fabrice-rossi/blvim)
 <!-- badges: end -->
 
 `blvim` implements A. Wilson’s Boltzmann–Lotka–Volterra (BLV)
