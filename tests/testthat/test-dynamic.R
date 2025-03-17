@@ -37,3 +37,13 @@ test_that("blvim computes the BLV model", {
   expect_equal(production(model), production(r_model))
   expect_equal(attractiveness(model), attractiveness(r_model))
 })
+
+test_that("blvim computes the quadratic BLV model", {
+  config <- create_locations(40, 50, seed = 2)
+  ## we compare the C++ implementation with a R one
+  model <- blvim(config$costs, config$X, 1.5, 1, config$Z, quadratic = TRUE)
+  r_model <- r_blvim(config$costs, config$X, 1.5, 1, config$Z, quadratic = TRUE)
+  expect_equal(flows(model), flows(r_model))
+  expect_equal(production(model), production(r_model))
+  expect_equal(attractiveness(model), attractiveness(r_model))
+})
