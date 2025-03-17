@@ -3,7 +3,7 @@ test_that("terminals detects errors", {
   model <- blvim(config$costs, config$X, 1.5, 2, config$Z)
   ## not a square model
   expect_error(terminals(model))
-  config <- create_locations(40, 40, seed = 0)
+  config <- create_locations(40, 40, seed = 0, symmetric = TRUE)
   model <- blvim(config$costs, config$X, 1.5, 2, config$Z)
   ## unexpected definition
   expect_error(terminals(model, definition = "HD"))
@@ -11,7 +11,7 @@ test_that("terminals detects errors", {
 
 test_that("terminals returns only terminals", {
   for (s in 0:3) {
-    config <- create_locations(30, 30, seed = s)
+    config <- create_locations(30, 30, seed = s, symmetric = TRUE)
     model <- blvim(config$costs, config$X, 1.3, 10 / config$scale, config$Z)
     Y <- flows(model)
     D <- destination_flow(model)
