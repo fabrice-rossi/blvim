@@ -29,7 +29,7 @@ destination locations are identical.
 \details{
 The notion of terminal used in this function is based on seminal work by J.
 D. Nystuen and M. F. Dacey (Nystuen & Dacey, 1961), as well as on the follow
-up variation from Rihll & Wislon, 1987 and 1991). We assume given a square
+up variation from Rihll & Wislon (1987 and 1991). We assume given a square
 flow matrix \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq n}}. The incoming flow
 at location \eqn{j} is given by
 

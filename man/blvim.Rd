@@ -57,7 +57,7 @@ constrained entropy maximising model proposed by A. Wilson and implemented in
 \code{\link[=static_blvim]{static_blvim()}}. Then the flows received at a destination are computed as
 follows
 
-\deqn{\forall i,\quad D_j=\sum_{i=1}^{n}Y_{ij},}
+\deqn{\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},}
 
 for destination \eqn{j}. This enables updating the attractivenesses by making
 them closer to the received flows, i.e. trying to reduce \eqn{|D_j-Z_j|}.
