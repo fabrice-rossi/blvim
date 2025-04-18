@@ -70,6 +70,10 @@ flows <- blvim(distances, production, 1.5, 3, attractiveness)
 diversity(flows)
 diversity(flows, "renyi", 2)
 }
+\references{
+Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
+\doi{10.1111/j.2006.0030-1299.14714.x}
+}
 \seealso{
 \code{\link[=destination_flow]{destination_flow()}}
 }

@@ -50,6 +50,8 @@
 #' @seealso [destination_flow()]
 #' @export
 #'
+#' @references Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
+#'   \doi{10.1111/j.2006.0030-1299.14714.x}
 #' @examples
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
 #' distances <- as.matrix(dist(positions))
