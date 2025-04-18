@@ -5,7 +5,7 @@ new_sim <- function(Y, Z, ..., class = character()) {
       Z = Z,
       ...
     ),
-    class = c("sim")
+    class = c(class, "sim")
   )
 }
 
