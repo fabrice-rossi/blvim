@@ -13,15 +13,15 @@ static_blvim(costs, X, alpha, beta, Z)
 
 \item{alpha}{the return to scale parameter}
 
-\item{beta}{the cost inverse scale parameter}
+\item{beta}{the inverse cost scale parameter}
 
 \item{Z}{a vector of destination attractivenesses}
 }
 \value{
-an object of class \code{sim} for spatial interaction model that contains
-the matrix of flows from the origin locations to the destination locations (see
-\eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}} above) and the
-attractivenesses of the destination locations.
+an object of class \code{sim} (and \code{sim_wpc}) for spatial interaction
+model that contains the matrix of flows from the origin locations to the
+destination locations (see \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}}
+above) and the attractivenesses of the destination locations.
 }
 \description{
 This function computes flows between origin locations and destination

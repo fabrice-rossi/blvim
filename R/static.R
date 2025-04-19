@@ -33,13 +33,13 @@
 #' @param costs a cost matrix
 #' @param X a vector of production constraints
 #' @param alpha the return to scale parameter
-#' @param beta the cost inverse scale parameter
+#' @param beta the inverse cost scale parameter
 #' @param Z a vector of destination attractivenesses
 #'
-#' @returns an object of class `sim` for spatial interaction model that contains
-#'   the matrix of flows from the origin locations to the destination locations (see
-#'   \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}} above) and the
-#'   attractivenesses of the destination locations.
+#' @returns an object of class `sim` (and `sim_wpc`) for spatial interaction
+#'   model that contains the matrix of flows from the origin locations to the
+#'   destination locations (see \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}}
+#'   above) and the attractivenesses of the destination locations.
 #'
 #' @export
 #'
@@ -56,5 +56,5 @@
 static_blvim <- function(costs, X, alpha, beta, Z) {
   check_configuration(costs, X, alpha, beta, Z)
   Y <- we_oc(costs, X, alpha, beta, Z)
-  new_sim(Y, Z)
+  new_sim_wpc(Y, Z, costs, alpha, beta)
 }
