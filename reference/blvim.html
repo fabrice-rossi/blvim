@@ -83,7 +83,7 @@ attractivenesses according the received flows.</p>
 
 
 <dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
-<dd><p>the cost inverse scale parameter</p></dd>
+<dd><p>the inverse cost scale parameter</p></dd>
 
 
 <dt id="arg-z">Z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
@@ -112,9 +112,10 @@ attractivenesses according the received flows.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>an object of class <code>sim</code> for spatial interaction model that contains
-the matrix of flows between the origin and the destination locations as well
-as the final attractivenesses computed by the model.</p>
+    <p>an object of class <code>sim</code>(and <code>sim_blvim</code>) for spatial interaction
+model that contains the matrix of flows between the origin and the
+destination locations as well as the final attractivenesses computed by the
+model.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -122,7 +123,7 @@ as the final attractivenesses computed by the model.</p>
 constrained entropy maximising model proposed by A. Wilson and implemented in
 <code><a href="static_blvim.html">static_blvim()</a></code>. Then the flows received at a destination are computed as
 follows</p>
-<p>$$\forall i,\quad D_j=\sum_{i=1}^{n}Y_{ij},$$</p>
+<p>$$\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},$$</p>
 <p>for destination \(j\). This enables updating the attractivenesses by making
 them closer to the received flows, i.e. trying to reduce \(|D_j-Z_j|\).</p>
 <p>A. Wilson and co-authors proposed two different update strategies:</p><ol><li><p>The original model proposed in Harris &amp; Wilson (1978) updates the
@@ -130,14 +131,14 @@ them closer to the received flows, i.e. trying to reduce \(|D_j-Z_j|\).</p>
 <li><p>In Wilson (2008), the update is given by $$Z_j^{t+1} = Z_j^{t} +
 \epsilon (D^{t}_j-Z^{t}_j)Z^{t}_j$$</p></li>
 </ol><p>In both cases, \(\epsilon\) is given by the <code>epsilon</code> parameter. It should
-be smaller than 1. The first update is used when the <code>quadratic</code>
-parameter is <code>FALSE</code> which is the default value. The second update is used
-when <code>quadratic</code> is <code>TRUE</code>.</p>
-<p>Updates are performed until convergence or for a maximum of <code>iter_max</code> iterations.
-Convergence is checked every <code>conv_check</code> iterations. The algorithm is
-considered to have converged if
-$$\|Z^{t+1}-Z^t\|&lt;\delta (\|Z^{t+1}\|+\delta),$$
-where \(\delta\) is given by the <code>precision</code> parameter.</p>
+be smaller than 1. The first update is used when the <code>quadratic</code> parameter is
+<code>FALSE</code> which is the default value. The second update is used when
+<code>quadratic</code> is <code>TRUE</code>.</p>
+<p>Updates are performed until convergence or for a maximum of <code>iter_max</code>
+iterations. Convergence is checked every <code>conv_check</code> iterations. The
+algorithm is considered to have converged if $$\|Z^{t+1}-Z^t\|&lt;\delta
+(\|Z^{t+1}\|+\delta),$$ where \(\delta\) is given by the <code>precision</code>
+parameter.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
