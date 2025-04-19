@@ -52,3 +52,14 @@ print.sim_list <- function(x, ...) {
 as.list.sim_list <- function(x, ...) {
   x$sims
 }
+
+#' @export
+as.data.frame.sim_list <- function(x, row.names = NULL, optional = FALSE, ...) {
+  data.frame(
+    alpha = x$alphas,
+    beta = x$betas,
+    diversity = sapply(x, diversity),
+    terminals = I(lapply(x, terminals)),
+    model = I(x$sims)
+  )
+}
