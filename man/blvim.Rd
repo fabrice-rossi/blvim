@@ -24,7 +24,7 @@ blvim(
 
 \item{alpha}{the return to scale parameter}
 
-\item{beta}{the cost inverse scale parameter}
+\item{beta}{the inverse cost scale parameter}
 
 \item{Z}{a vector of initial destination attractivenesses}
 
@@ -39,9 +39,10 @@ blvim(
 \item{quadratic}{selects the update rule, see details.}
 }
 \value{
-an object of class \code{sim} for spatial interaction model that contains
-the matrix of flows between the origin and the destination locations as well
-as the final attractivenesses computed by the model.
+an object of class \code{sim}(and \code{sim_blvim}) for spatial interaction
+model that contains the matrix of flows between the origin and the
+destination locations as well as the final attractivenesses computed by the
+model.
 }
 \description{
 This function computes flows between origin locations and destination
@@ -71,15 +72,15 @@ A. Wilson and co-authors proposed two different update strategies:
 }
 
 In both cases, \eqn{\epsilon} is given by the \code{epsilon} parameter. It should
-be smaller than 1. The first update is used when the \code{quadratic}
-parameter is \code{FALSE} which is the default value. The second update is used
-when \code{quadratic} is \code{TRUE}.
+be smaller than 1. The first update is used when the \code{quadratic} parameter is
+\code{FALSE} which is the default value. The second update is used when
+\code{quadratic} is \code{TRUE}.
 
-Updates are performed until convergence or for a maximum of \code{iter_max} iterations.
-Convergence is checked every \code{conv_check} iterations. The algorithm is
-considered to have converged if
-\deqn{\|Z^{t+1}-Z^t\|<\delta (\|Z^{t+1}\|+\delta),}
-where \eqn{\delta} is given by the \code{precision} parameter.
+Updates are performed until convergence or for a maximum of \code{iter_max}
+iterations. Convergence is checked every \code{conv_check} iterations. The
+algorithm is considered to have converged if \deqn{\|Z^{t+1}-Z^t\|<\delta
+(\|Z^{t+1}\|+\delta),} where \eqn{\delta} is given by the \code{precision}
+parameter.
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)

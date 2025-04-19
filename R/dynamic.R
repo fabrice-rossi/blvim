@@ -25,20 +25,20 @@
 #' \epsilon (D^{t}_j-Z^{t}_j)Z^{t}_j}
 #'
 #' In both cases, \eqn{\epsilon} is given by the `epsilon` parameter. It should
-#' be smaller than 1. The first update is used when the `quadratic`
-#' parameter is `FALSE` which is the default value. The second update is used
-#' when `quadratic` is `TRUE`.
+#' be smaller than 1. The first update is used when the `quadratic` parameter is
+#' `FALSE` which is the default value. The second update is used when
+#' `quadratic` is `TRUE`.
 #'
-#' Updates are performed until convergence or for a maximum of `iter_max` iterations.
-#' Convergence is checked every `conv_check` iterations. The algorithm is
-#' considered to have converged if
-#' \deqn{\|Z^{t+1}-Z^t\|<\delta (\|Z^{t+1}\|+\delta),}
-#' where \eqn{\delta} is given by the `precision` parameter.
+#' Updates are performed until convergence or for a maximum of `iter_max`
+#' iterations. Convergence is checked every `conv_check` iterations. The
+#' algorithm is considered to have converged if \deqn{\|Z^{t+1}-Z^t\|<\delta
+#' (\|Z^{t+1}\|+\delta),} where \eqn{\delta} is given by the `precision`
+#' parameter.
 #'
 #' @param costs a cost matrix
 #' @param X a vector of production constraints
 #' @param alpha the return to scale parameter
-#' @param beta the cost inverse scale parameter
+#' @param beta the inverse cost scale parameter
 #' @param Z a vector of initial destination attractivenesses
 #' @param epsilon the update intensity
 #' @param iter_max the maximal number of steps of the BLV dynamic
@@ -46,9 +46,10 @@
 #' @param precision convergence threshold
 #' @param quadratic selects the update rule, see details.
 #'
-#' @returns an object of class `sim` for spatial interaction model that contains
-#'   the matrix of flows between the origin and the destination locations as well
-#'   as the final attractivenesses computed by the model.
+#' @returns an object of class `sim`(and `sim_blvim`) for spatial interaction
+#'   model that contains the matrix of flows between the origin and the
+#'   destination locations as well as the final attractivenesses computed by the
+#'   model.
 #' @export
 #'
 #' @examples
@@ -75,5 +76,8 @@ blvim <- function(costs, X, alpha, beta, Z,
                   quadratic = FALSE) {
   check_configuration(costs, X, alpha, beta, Z)
   pre <- blv(costs, X, alpha, beta, Z, epsilon, iter_max, conv_check, precision, quadratic)
-  new_sim(pre$Y, pre$Z[, 1], iteration = pre$iter + 1)
+  new_sim_blvim(pre$Y, pre$Z[, 1], costs, alpha, beta,
+    iteration = pre$iter + 1,
+    pre$iter < iter_max
+  )
 }
