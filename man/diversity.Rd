@@ -11,7 +11,7 @@ diversity(sim, definition = c("shannon", "renyi"), order = 1L)
 
 \item{definition}{diversity definition either \code{"shannon"} (default) or \code{"renyi"} (see details)}
 
-\item{order}{order of the Rényi entropy, used only when \code{defintion="renyi"}}
+\item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
 }
 \value{
 the diversity of destination flows

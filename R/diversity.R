@@ -44,7 +44,7 @@
 #'
 #' @param sim a spatial interaction model object
 #' @param definition diversity definition either `"shannon"` (default) or `"renyi"` (see details)
-#' @param order order of the Rényi entropy, used only when `defintion="renyi"`
+#' @param order order of the Rényi entropy, used only when `definition="renyi"`
 #'
 #' @returns the diversity of destination flows
 #' @seealso [destination_flow()]
