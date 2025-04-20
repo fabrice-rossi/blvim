@@ -21,7 +21,12 @@ Imports:
     Rcpp,
     rlang
 Suggests: 
+    callr,
+    ggplot2,
+    pkgload,
+    sloop,
     testthat (>= 3.0.0),
+    vdiffr,
     withr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
