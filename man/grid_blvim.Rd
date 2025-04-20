@@ -14,7 +14,8 @@ grid_blvim(
   iter_max = 50000,
   conv_check = 100,
   precision = 1e-06,
-  quadratic = FALSE
+  quadratic = FALSE,
+  progress = FALSE
 )
 }
 \arguments{
@@ -37,18 +38,20 @@ grid_blvim(
 \item{precision}{convergence threshold}
 
 \item{quadratic}{selects the update rule, see details.}
+
+\item{progress}{if TRUE, a progress bar is shown during the calculation
+(defaults to FALSE)}
 }
 \value{
 an object of class \code{sim_list}
 }
 \description{
-This function computes a collection of flows between origin locations
-and destination locations using \code{\link[=blvim]{blvim()}} on a grid of parameters. The flows
-use the same costs, same production constraints and same attractivenesses.
-Each flow is computed using one of all the pairwise combinations between
-the alpha values given by \code{alphas} and the beta values given by \code{betas}. The
-function returns an object of class \code{sim_list} which contains the resulting
-flows.
+This function computes a collection of flows between origin locations and
+destination locations using \code{\link[=blvim]{blvim()}} on a grid of parameters. The flows use
+the same costs, same production constraints and same attractivenesses. Each
+flow is computed using one of all the pairwise combinations between the alpha
+values given by \code{alphas} and the beta values given by \code{betas}. The function
+returns an object of class \code{sim_list} which contains the resulting flows.
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
