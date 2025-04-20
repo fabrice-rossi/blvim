@@ -1,29 +1,50 @@
-testthat::skip_on_cran()
+skip_on_cran()
 test_that("test .onLoad", {
-  skip_if_not_installed("ggplot2")
-  if (testthat:::in_rcmd_check() || testthat:::in_covr()) {
-    callr::r(function() {
-      library(blvim)
-      library(ggplot2)
-      blvim:::.onLoad()
-      testthat::expect_true(sloop::is_s3_method("autoplot.sim_list"))
-    })
-    callr::r(function() {
-      library(blvim)
-      blvim:::.onLoad()
-      testthat::expect_false(sloop::is_s3_method("autoplot.sim_list"))
-    })
-  } else if (!testthat:::in_rcmd_check()) {
-    callr::r(function() {
+  ## first we test without loading ggplot2
+  autoplot_sim_list_registered <- FALSE
+  if (pkgload::is_dev_package("blvim")) {
+    autoplot_sim_list_registered <- callr::r(function() {
       pkgload::load_all()
-      library(ggplot2)
-      blvim:::.onLoad()
-      testthat::expect_true(sloop::is_s3_method("autoplot.sim_list"))
+      if (covr::in_covr()) {
+        ## should not be needed
+        blvim:::.onLoad()
+      }
+      sloop::is_s3_method("autoplot.sim_list")
     })
-    callr::r(function() {
-      pkgload::load_all()
-      blvim:::.onLoad()
-      testthat::expect_false(sloop::is_s3_method("autoplot.sim_list"))
+  } else {
+    autoplot_sim_list_registered <- callr::r(function() {
+      library(blvim)
+      if (covr::in_covr()) {
+        ## should not be needed
+        blvim:::.onLoad()
+      }
+      sloop::is_s3_method("autoplot.sim_list")
     })
   }
+  expect_false(autoplot_sim_list_registered)
+  ## then we test only if ggplot2 is installed
+  skip_if_not_installed("ggplot2")
+  autoplot_sim_list_registered <- FALSE
+  if (pkgload::is_dev_package("blvim")) {
+    autoplot_sim_list_registered <- callr::r(function() {
+      pkgload::load_all()
+      if (covr::in_covr()) {
+        ## should not be needed
+        blvim:::.onLoad()
+      }
+      library(ggplot2)
+      sloop::is_s3_method("autoplot.sim_list")
+    })
+  } else {
+    autoplot_sim_list_registered <- callr::r(function() {
+      library(blvim)
+      if (covr::in_covr()) {
+        ## should not be needed
+        blvim:::.onLoad()
+      }
+      library(ggplot2)
+      sloop::is_s3_method("autoplot.sim_list")
+    })
+  }
+  expect_true(autoplot_sim_list_registered)
 })

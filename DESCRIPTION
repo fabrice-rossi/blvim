@@ -22,6 +22,7 @@ Imports:
     rlang
 Suggests: 
     callr,
+    covr,
     ggplot2,
     pkgload,
     sloop,
