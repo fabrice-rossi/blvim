@@ -1,9 +1,21 @@
-new_sim_list <- function(sims, ..., class = character()) {
+## All sim in a sim list must have the same cost matrix. This is not
+## verified for efficiency reasons
+new_sim_list <- function(sims, costs = NULL, ..., class = character()) {
+  ## keeping only one cost is useful when we save and restore the objects
+  if (is.null(costs)) {
+    costs <- sims[[1]]$costs
+    sims <- lapply(sims, function(x) {
+      x$costs <- NULL
+      x
+    })
+  }
+  ## when costs is specified, we assume it was removed from the sim objects
   structure(
     list(
       sims = sims,
       alphas = sapply(sims, return_to_scale),
       betas = sapply(sims, inverse_cost),
+      costs = costs,
       ...
     ),
     class = c(class, "sim_list")
@@ -17,12 +29,15 @@ length.sim_list <- function(x) {
 
 #' @export
 `[.sim_list` <- function(x, i, ...) {
-  new_sim_list(x$sims[i, ...])
+  new_sim_list(x$sims[i, ...], costs = x$costs)
 }
 
 #' @export
 `[[.sim_list` <- function(x, i, ...) {
-  x$sims[[i, ...]]
+  pre <- x$sims[[i, ...]]
+  ## restore the shared cost
+  pre$costs <- x$costs
+  pre
 }
 
 #' @export
@@ -50,7 +65,10 @@ print.sim_list <- function(x, ...) {
 
 #' @export
 as.list.sim_list <- function(x, ...) {
-  x$sims
+  lapply(x$sims, function(y) {
+    y$costs <- x$costs
+    y
+  })
 }
 
 
@@ -93,7 +111,7 @@ as.data.frame.sim_list <- function(x, ..., models = TRUE) {
     pre_result$terminals <- I(lapply(x, terminals))
   }
   if (models) {
-    pre_result$model <- I(x$sims)
+    pre_result$model <- I(as.list(x))
   }
   pre_result
 }

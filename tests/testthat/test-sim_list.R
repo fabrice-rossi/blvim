@@ -15,7 +15,7 @@ test_that("sim_list is a list", {
   for (k in seq_along(models)) {
     expect_s3_class(models[k], "sim_list")
     expect_s3_class(models[[k]], "sim_blvim")
-    expect_equal(models[k][[1]], models[[k]])
+    expect_mapequal(unclass(models[k][[1]]), unclass(models[[k]]))
   }
   params <- expand.grid(alpha = alphas, beta = betas)
   expect_equal(params$alpha, sapply(models, return_to_scale))
