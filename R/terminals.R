@@ -4,7 +4,7 @@
 #' spatial interaction model. Terminals are locally dominating locations that
 #' essentially send less to other locations than they receive (see details for
 #' formal definitions). As we compare incoming flows to outgoing flows, terminal
-#' computation is restricted so interaction models in which origin and
+#' computation is restricted to interaction models in which origin and
 #' destination locations are identical.
 #'
 #' The notion of terminal used in this function is based on seminal work by J.
