@@ -7,3 +7,4 @@ devtools
 ^docs$
 ^pkgdown$
 ^\.github$
+^codemeta\.json$
