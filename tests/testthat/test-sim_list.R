@@ -60,4 +60,20 @@ test_that("sim_list is converted correctly to a data frame", {
     expect_equal(diversity(a_model), models_df$diversity[k])
     expect_equal(terminals(a_model), models_df$terminals[[k]])
   }
+  models_df_nm <- as.data.frame(models, models = FALSE)
+  expect_null(models_df_nm$model)
+  ## no terminal
+  config <- create_locations(25, 30, seed = 10)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5
+  )
+  models_df <- as.data.frame(models)
+  expect_null(models_df$terminals)
 })
