@@ -52,7 +52,7 @@ test_that("autoplot.sim_list border cases", {
     \() print(ggplot2::autoplot(models))
   )
   vdiffr::expect_doppelganger(
-    "Rényi order 0.25 diversity one alpha non inverted beta",
+    "Renyi o. 0.25 div. one alpha non inv. beta",
     \() print(ggplot2::autoplot(models, "renyi", order = 0.25, inverse = FALSE))
   )
   ## only one beta, irregular alphas
@@ -70,7 +70,7 @@ test_that("autoplot.sim_list border cases", {
     \() print(ggplot2::autoplot(models, "terminals"))
   )
   vdiffr::expect_doppelganger(
-    "Rényi order 4 diversity one beta non inverted beta",
+    "Renyi o. 4 div. one beta non inv. beta",
     \() print(ggplot2::autoplot(models, "renyi", order = 4, inverse = FALSE))
   )
   ## only one of each
