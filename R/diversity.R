@@ -3,7 +3,8 @@
 #' This function computes the diversity of the destination flows according to
 #' different definitions that all aim at estimating a number of active destinations,
 #' i.e., the number of destination locations that receive a "significant fraction"
-#' of the total flow.
+#' of the total flow. The function applies also to a collection of spatial
+#' interaction models as represented by a `sim_list`.
 #'
 #' If \eqn{Y} is a flow matrix, the destination flows are computed as follows
 #'
@@ -42,11 +43,17 @@
 #' underflows in the calculation that will trigger the use of the min-entropy instead
 #' of the exact Rényi entropy.
 #'
-#' @param sim a spatial interaction model object
+#' When applied to a collection of spatial interaction  models (an object of class
+#' `sim_list`) the function uses the same parameters (`definition` and `order`)
+#' for all models and returns a vector of diversities.
+#'
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction  models (an object of class `sim_list`)
 #' @param definition diversity definition either `"shannon"` (default) or `"renyi"` (see details)
 #' @param order order of the Rényi entropy, used only when `definition="renyi"`
+#' @param ... additional parameters
 #'
-#' @returns the diversity of destination flows
+#' @returns the diversity of destination flows (one value per spatial interaction model)
 #' @seealso [destination_flow()]
 #' @export
 #'
@@ -60,7 +67,13 @@
 #' flows <- blvim(distances, production, 1.5, 3, attractiveness)
 #' diversity(flows)
 #' diversity(flows, "renyi", 2)
-diversity <- function(sim, definition = c("shannon", "renyi"), order = 1L) {
+diversity <- function(sim, definition = c("shannon", "renyi"), order = 1L, ...) {
+  UseMethod("diversity")
+}
+
+#' @export
+#' @rdname diversity
+diversity.sim <- function(sim, definition = c("shannon", "renyi"), order = 1L, ...) {
   definition <- rlang::arg_match(definition)
   if (definition == "renyi" && order < 0) {
     cli::cli_abort(c("{.var order} must be non negative",
@@ -80,4 +93,10 @@ diversity <- function(sim, definition = c("shannon", "renyi"), order = 1L) {
       D_sum^(1 / (1 - order))
     }
   }
+}
+
+#' @export
+#' @rdname diversity
+diversity.sim_list <- function(sim, definition = c("shannon", "renyi"), order = 1L, ...) {
+  sapply(sim, diversity, definition, order, ...)
 }

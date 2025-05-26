@@ -27,3 +27,24 @@ test_that("diversity computes what is expected", {
   ## max
   expect_equal(length(D), diversity(model, "renyi", order = 0))
 })
+
+test_that("diversity computes what is expected on sim lists", {
+  config <- create_locations(25, 20, seed = 8)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.05, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    precision = .Machine$double.eps^0.5
+  )
+  orders <- c(0, 0.5, 1, 1.5, 3, Inf)
+  for (gamma in orders) {
+    divs <- diversity(models, "renyi", order = gamma)
+    expect_length(divs, length(models))
+    for (k in seq_along(models)) {
+      expect_equal(divs[k], diversity(models[[k]], "renyi", order = gamma))
+    }
+  }
+})

@@ -2,25 +2,35 @@
 % Please edit documentation in R/diversity.R
 \name{diversity}
 \alias{diversity}
+\alias{diversity.sim}
+\alias{diversity.sim_list}
 \title{Compute the diversity of the destination flows in a spatial interaction model}
 \usage{
-diversity(sim, definition = c("shannon", "renyi"), order = 1L)
+diversity(sim, definition = c("shannon", "renyi"), order = 1L, ...)
+
+\method{diversity}{sim}(sim, definition = c("shannon", "renyi"), order = 1L, ...)
+
+\method{diversity}{sim_list}(sim, definition = c("shannon", "renyi"), order = 1L, ...)
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
+collection of spatial interaction  models (an object of class \code{sim_list})}
 
 \item{definition}{diversity definition either \code{"shannon"} (default) or \code{"renyi"} (see details)}
 
 \item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
+
+\item{...}{additional parameters}
 }
 \value{
-the diversity of destination flows
+the diversity of destination flows (one value per spatial interaction model)
 }
 \description{
 This function computes the diversity of the destination flows according to
 different definitions that all aim at estimating a number of active destinations,
 i.e., the number of destination locations that receive a "significant fraction"
-of the total flow.
+of the total flow. The function applies also to a collection of spatial
+interaction models as represented by a \code{sim_list}.
 }
 \details{
 If \eqn{Y} is a flow matrix, the destination flows are computed as follows
@@ -60,6 +70,10 @@ parameter is not used). Using \code{renyi} gives access to all Rényi diversitie
 as specified by the \code{order} parameter. Large values of \code{order} tend to generate
 underflows in the calculation that will trigger the use of the min-entropy instead
 of the exact Rényi entropy.
+
+When applied to a collection of spatial interaction  models (an object of class
+\code{sim_list}) the function uses the same parameters (\code{definition} and \code{order})
+for all models and returns a vector of diversities.
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
