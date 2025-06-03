@@ -47,3 +47,12 @@ test_that("blvim computes the quadratic BLV model", {
   expect_equal(production(model), production(r_model))
   expect_equal(attractiveness(model), attractiveness(r_model))
 })
+
+test_that("blvim obeys to iteration control", {
+  config <- create_locations(40, 50, seed = 2)
+  for (k in seq(500, 5000, by = 500)) {
+    model <- blvim(config$costs, config$X, 1.5, 1, config$Z, iter_max = k)
+    expect_lte(model$iteration, k + 1)
+    expect_true(model$converged == (model$iteration <= k))
+  }
+})

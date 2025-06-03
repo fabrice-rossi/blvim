@@ -78,6 +78,6 @@ blvim <- function(costs, X, alpha, beta, Z,
   pre <- blv(costs, X, alpha, beta, Z, epsilon, iter_max, conv_check, precision, quadratic)
   new_sim_blvim(pre$Y, pre$Z[, 1], costs, alpha, beta,
     iteration = pre$iter + 1,
-    pre$iter < iter_max
+    converged = pre$iter < iter_max
   )
 }
