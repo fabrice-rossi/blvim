@@ -42,6 +42,7 @@ grid_blvim <- function(costs, X, alphas, betas, Z,
       params$beta[k],
       Z,
       epsilon = epsilon,
+      iter_max = iter_max,
       conv_check = conv_check,
       precision = precision,
       quadratic = quadratic
