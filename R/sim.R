@@ -148,3 +148,32 @@ sim_iterations.sim <- function(sim, ...) {
   1L
 }
 
+#' Reports whether the spatial interaction model construction converged
+#'
+#' Some spatial interaction models are the result of an iteration calculation,
+#' see for instance [blvim()]. This calculation may have been interrupted before
+#' convergence. The present function returns `TRUE` if the calculation converged,
+#' `FALSE` if this was not the case and `NA` if the spatial interaction model
+#' is not the result of an interative calculation .
+#'
+#' @param sim a spatial interaction model object
+#' @param ... additional parameters
+#'
+#' @returns `TRUE`, `FALSE` or `NA`, as described above
+#' @export
+#' @seealso [sim_iterations()]
+#' @examples
+#' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 10)
+#' attractiveness <- c(2, rep(1, 9))
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' sim_converged(model) ## must be NA
+sim_converged <- function(sim, ...) {
+  UseMethod("sim_converged")
+}
+
+#' @export
+sim_converged.sim <- function(sim, ...) {
+  NA
+}

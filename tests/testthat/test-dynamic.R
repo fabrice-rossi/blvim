@@ -52,7 +52,7 @@ test_that("blvim obeys to iteration control", {
   config <- create_locations(40, 50, seed = 2)
   for (k in seq(500L, 5000L, by = 500L)) {
     model <- blvim(config$costs, config$X, 1.5, 1, config$Z, iter_max = k)
-    expect_true(model$converged == (model$iteration <= k))
     expect_lte(sim_iterations(model), k + 1L)
+    expect_true(sim_converged(model) == (sim_iterations(model) <= k))
   }
 })

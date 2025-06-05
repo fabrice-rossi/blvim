@@ -27,3 +27,7 @@ sim_iterations.sim_blvim <- function(sim, ...) {
   sim$iteration
 }
 
+#' @export
+sim_converged.sim_blvim <- function(sim, ...) {
+  sim$converged
+}
