@@ -21,3 +21,9 @@ format.sim_blvim <- function(x, ...) {
     })
   )
 }
+
+#' @export
+sim_iterations.sim_blvim <- function(sim, ...) {
+  sim$iteration
+}
+

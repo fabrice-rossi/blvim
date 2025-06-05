@@ -121,3 +121,30 @@ destination_flow <- function(sim, ...) {
 destination_flow.sim <- function(sim, ...) {
   colSums(sim$Y)
 }
+
+
+#' Returns the number of iterations used to produce this spatial interaction model
+#'
+#' @param sim a spatial interaction model object
+#' @param ... additional parameters
+#'
+#' @returns a number of iterations that may be one if the spatial interaction model
+#'  has been obtained using a static model (see [static_blvim()]).
+#' @export
+#' @seealso [sim_converged()]
+#' @examples
+#' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 10)
+#' attractiveness <- c(2, rep(1, 9))
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' sim_iterations(model) ## must be one
+sim_iterations <- function(sim, ...) {
+  UseMethod("sim_iterations")
+}
+
+#' @export
+sim_iterations.sim <- function(sim, ...) {
+  1L
+}
+

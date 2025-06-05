@@ -38,7 +38,7 @@ test_that("grid_blvim obeys to iteration control", {
       iter_max = k,
       precision = .Machine$double.eps^0.5
     )
-    all_iterations <- sapply(models, function(x) x$iteration)
+    all_iterations <- sapply(models, sim_iterations)
     expect_true(all(all_iterations <= k + 1))
     all_converged <- sapply(models, function(x) x$converged)
     expect_true(all(all_converged == (all_iterations <= k)))
