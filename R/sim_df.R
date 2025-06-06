@@ -16,10 +16,10 @@ new_sim_df <- function(sim_list, ..., class = character()) {
   pre_result
 }
 
-#' Create a spatial interaction data frame from a collection of interaction models
+#' Create a spatial interaction models data frame from a collection of interaction models
 #'
 #' This function build a data frame from a collection of spatial interaction
-#' model. The data frame has a list column `sim` which stores the collection
+#' models. The data frame has a list column `sim` which stores the collection
 #' of models and classical columns that contain characteristics of the models.
 #' See details for the default columns.
 #'

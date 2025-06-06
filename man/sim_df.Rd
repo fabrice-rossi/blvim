@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_df.R
 \name{sim_df}
 \alias{sim_df}
-\title{Create a spatial interaction data frame from a collection of interaction models}
+\title{Create a spatial interaction models data frame from a collection of interaction models}
 \usage{
 sim_df(x)
 }
@@ -16,7 +16,7 @@ with classes \code{sim_df} and \code{data.frame}
 }
 \description{
 This function build a data frame from a collection of spatial interaction
-model. The data frame has a list column \code{sim} which stores the collection
+models. The data frame has a list column \code{sim} which stores the collection
 of models and classical columns that contain characteristics of the models.
 See details for the default columns.
 }
