@@ -21,14 +21,6 @@ test_that("autoplot.sim_df works as expected", {
     \() print(ggplot2::autoplot(models_df, inverse = FALSE))
   )
   vdiffr::expect_doppelganger(
-    "Renyi diversity, order 0.5",
-    \() print(ggplot2::autoplot(models_df, diversity(sim, "renyi", order = 0.5)))
-  )
-  vdiffr::expect_doppelganger(
-    "Renyi diversity, order 2",
-    \() print(ggplot2::autoplot(models_df, diversity(sim, "renyi", order = 2)))
-  )
-  vdiffr::expect_doppelganger(
     "Terminal number",
     \() print(ggplot2::autoplot(models_df, diversity(sim, "ND")))
   )
@@ -39,6 +31,16 @@ test_that("autoplot.sim_df works as expected", {
   vdiffr::expect_doppelganger(
     "Convergence",
     \() print(ggplot2::autoplot(models_df, converged))
+  )
+  skip_on_os("mac")
+  ## subtle differences appear between linux figures and mac os figures.
+  vdiffr::expect_doppelganger(
+    "Renyi diversity, order 0.5",
+    \() print(ggplot2::autoplot(models_df, diversity(sim, "renyi", order = 0.5)))
+  )
+  vdiffr::expect_doppelganger(
+    "Renyi diversity, order 2",
+    \() print(ggplot2::autoplot(models_df, diversity(sim, "renyi", order = 2)))
   )
 })
 
