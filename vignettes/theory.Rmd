@@ -1,0 +1,58 @@
+---
+title: "Theoretical background"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Theoretical background}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(blvim)
+```
+
+## Spatial interaction models
+
+Spatial interaction models try to estimate flows between locations, for instance 
+workers commuting from residential zones to employment zones. Models are built from:
+
+-   a collection of $n$ origin locations described by a some characteristics $(X_i)_{1\leq i\leq n}$
+-   a collection of $p$ destination locations described by a some characteristics $(Z_j)_{1\leq j\leq p}$
+-   a collection of $n\times p$ characteristics of the difficulty of travelling (in a broad sense) from origin $i$ to destination $j$, $c_{ij}$
+
+The goal is to estimate flows $(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}$ from origin locations to destinations locations. A typical hypothesis is for the flows to depend on characteristics as follows
+
+$$
+Y_{ij}=f(X_i, Z_j, c_{ij}),
+$$ 
+for a well chosen function $f$. The most well known spatial interaction model
+is the so called *gravity model* which takes the form
+$$
+Y_{ij}\propto \frac{X_iZ_j}{c_{ij}^2},
+$$ 
+where $\propto$ means proportional to, $c_{ij}$ is supposed to be the distance
+between origin $i$ and destination $j$, and the characteristics $X_i$ and $Z_j$ 
+are assumed to be numerical.
+
+## Maximum entropy models
+In the late 60s, Alan Wilson developed a collection of spatial interaction models
+based of a maximum entropy principle. In those models, the flow is given by
+$$
+Y_{ij} \propto X_iZ_j^{\alpha}\exp(-\beta c_{ij}),
+$$
+where $\alpha$ and $\beta$ are two parameters interpreted as follows:
+
+-   $Z_j$ is the attractiveness of the destination location $j$
+-   $\alpha$ is then a *return to scale* parameter: if $Z_j$ grows above $1$, its
+    actual attractiveness can increase in a super-linear way ($\alpha>1$) or in a
+    sub-linear way $\alpha<1$
+-   $\beta$ acts as the *inverse of the scale of the costs* $c_{ij}$. If those costs
+    are distances, for instance, $\frac{1}{\beta}$ can be seen as a cut off distance. 
+    
