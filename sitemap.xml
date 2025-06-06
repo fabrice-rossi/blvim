@@ -1,10 +1,13 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://fabrice-rossi.github.io/blvim/404.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/LICENSE.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/articles/index.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/articles/theory.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/authors.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/index.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/as.data.frame.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/attractiveness.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_df.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/blvim.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/costs.html</loc></url>
