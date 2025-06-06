@@ -24,7 +24,8 @@ details}
 
 \item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
 
-\item{definition}{diversity definition either \code{"shannon"} (default) or \code{"renyi"} (see details)}
+\item{definition}{diversity definition \code{"shannon"} (default),
+\code{"renyi"} (see details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
 
 \item{...}{additional parameters (not used currently)}
 }

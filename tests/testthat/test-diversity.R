@@ -26,10 +26,18 @@ test_that("diversity computes what is expected", {
   expect_equal(-log(max(D)), log(diversity(model, "renyi", order = Inf)))
   ## max
   expect_equal(length(D), diversity(model, "renyi", order = 0))
+  ## terminals (error because non squared)
+  expect_error(diversity(model, "RW"))
+  expect_error(diversity(model, "ND"))
+  ## squared version
+  config <- create_locations(40, 40, seed = 3, symmetric = TRUE)
+  model <- blvim(config$costs, config$X, 1.5, 6, config$Z, precision = .Machine$double.eps^0.5)
+  expect_equal(diversity(model, "RW"), length(terminals(model, "RW")))
+  expect_equal(diversity(model, "ND"), length(terminals(model, "ND")))
 })
 
 test_that("diversity computes what is expected on sim lists", {
-  config <- create_locations(25, 20, seed = 8)
+  config <- create_locations(25, 25, seed = 8, symmetric = TRUE)
   alphas <- seq(1.25, 2, by = 0.25)
   betas <- 1 / seq(0.05, 0.5, length.out = 4)
   models <- grid_blvim(config$costs,
@@ -45,6 +53,12 @@ test_that("diversity computes what is expected on sim lists", {
     expect_length(divs, length(models))
     for (k in seq_along(models)) {
       expect_equal(divs[k], diversity(models[[k]], "renyi", order = gamma))
+    }
+  }
+  for (term_def in c("ND", "RW")) {
+    divs <- diversity(models, term_def)
+    for (k in seq_along(models)) {
+      expect_equal(divs[k], diversity(models[[k]], term_def))
     }
   }
 })
