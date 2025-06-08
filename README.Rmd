@@ -1,5 +1,6 @@
 ---
 output: github_document
+math-rendering: mathjax
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -84,13 +85,16 @@ Z <- rep(1, nrow(destinations))
 ### Static models
 In Wilson's production constrained maximum entropy model, the flows are given
 by
+
 $$
 Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},
 $$
+
 where $\alpha$ is a return to scale parameter and $\beta$ is the inverse of a
 cost scale parameter. Notice that the flow matrix is *production constrained*, 
 which means that the total outgoing flow from any origin location is equal to 
 the production of this location, i.e.
+
 $$
 \forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.
 $$
@@ -121,7 +125,19 @@ image(t(a_model_flows),
 ```
 
 In this representation, each row gives the flows from one origin location to
-all the destination location. 
+all the destination location. The package provides a `ggplot2::autoplot()` function
+that can be used as follows
+```{r a_flow_ggplot2}
+#| fig.height: 9
+#| fig.width: 4
+#| out.width: 40%
+#| fig.align: center
+library(ggplot2)
+autoplot(a_model, "full") +
+  scale_fill_viridis_c() +
+  coord_fixed()
+```
+
 
 
 ```{r}
@@ -131,15 +147,12 @@ b_model
 
 ```{r b_flow}
 #| fig.height: 9
-#| fig.width: 3
-#| out.width: 25%
+#| fig.width: 4
+#| out.width: 40%
 #| fig.align: center
-par(mar = rep(0.1, 4))
-image(t(flows(b_model)),
-  col = gray.colors(20, start = 1, end = 0),
-  axes = FALSE,
-  frame = TRUE
-)
+autoplot(b_model) +
+  scale_fill_viridis_c() +
+  coord_fixed()
 ```
 
 Different values of the parameters $\alpha$ and $\beta$ lead to more or less 
@@ -164,7 +177,7 @@ a_blv_model
 
 Notice that we start with some initial values of the attractivenesses but the 
 final values are different. They can be obtained using the `attractiveness()` 
-function as follows (we show the values using a barplot).
+function as follows (we show the values using a bar plot).
 
 ```{r a_blv_Z}
 #| fig.height: 4
@@ -180,16 +193,21 @@ the flows. This can be seen also on the final flow matrix.
 
 ```{r a_blv_flow}
 #| fig.height: 9
-#| fig.width: 3
-#| out.width: 25%
+#| fig.width: 4
+#| out.width: 40%
 #| fig.align: center
-par(mar = rep(0.1, 4))
-image(t(flows(a_blv_model)),
-  col = gray.colors(20, start = 1, end = 0),
-  axes = FALSE,
-  frame = TRUE
-)
+autoplot(a_blv_model) +
+  scale_fill_viridis_c()
 ```
+
+The `autoplot()` function can also be used to show the destination flows or the
+attractivenesses as follows. 
+```{r a_blv_Z_ggplot2}
+#| fig.height: 4
+#| fig.width: 8
+autoplot(a_blv_model, "attractiveness")
+```
+
 
 Results are of course strongly influenced by the parameters, as shown by this 
 second example.
@@ -203,21 +221,14 @@ b_blv_model
 ```{r b_blv_Z}
 #| fig.height: 4
 #| fig.width: 8
-#| out.width: 80%
-#| fig.align: center
-b_final_Z <- attractiveness(b_blv_model)
-barplot(b_final_Z)
+autoplot(b_blv_model, "attractiveness")
 ```
 
 ```{r b_blv_flow}
 #| fig.height: 9
-#| fig.width: 3
-#| out.width: 25%
+#| fig.width: 4
+#| out.width: 40%
 #| fig.align: center
-par(mar = rep(0.1, 4))
-image(t(flows(b_blv_model)),
-  col = gray.colors(20, start = 1, end = 0),
-  axes = FALSE,
-  frame = TRUE
-)
+autoplot(b_blv_model) +
+  scale_fill_viridis_c()
 ```

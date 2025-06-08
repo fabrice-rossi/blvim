@@ -89,12 +89,18 @@ Z <- rep(1, nrow(destinations))
 ### Static models
 
 In Wilson’s production constrained maximum entropy model, the flows are
-given by $$
+given by
+
+$$
 Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},
-$$ where $\alpha$ is a return to scale parameter and $\beta$ is the
-inverse of a cost scale parameter. Notice that the flow matrix is
-*production constrained*, which means that the total outgoing flow from
-any origin location is equal to the production of this location, i.e. $$
+$$
+
+where $\alpha$ is a return to scale parameter and $\beta$ is the inverse
+of a cost scale parameter. Notice that the flow matrix is *production
+constrained*, which means that the total outgoing flow from any origin
+location is equal to the production of this location, i.e.
+
+$$
 \forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.
 $$
 
@@ -129,7 +135,17 @@ image(t(a_model_flows),
 <img src="man/figures/README-a_flow-1.png" width="25%" style="display: block; margin: auto;" />
 
 In this representation, each row gives the flows from one origin
-location to all the destination location.
+location to all the destination location. The package provides a
+`ggplot2::autoplot()` function that can be used as follows
+
+``` r
+library(ggplot2)
+autoplot(a_model, "full") +
+  scale_fill_viridis_c() +
+  coord_fixed()
+```
+
+<img src="man/figures/README-a_flow_ggplot2-1.png" width="40%" style="display: block; margin: auto;" />
 
 ``` r
 b_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 15, Z)
@@ -140,15 +156,12 @@ b_model
 ```
 
 ``` r
-par(mar = rep(0.1, 4))
-image(t(flows(b_model)),
-  col = gray.colors(20, start = 1, end = 0),
-  axes = FALSE,
-  frame = TRUE
-)
+autoplot(b_model) +
+  scale_fill_viridis_c() +
+  coord_fixed()
 ```
 
-<img src="man/figures/README-b_flow-1.png" width="25%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_flow-1.png" width="40%" style="display: block; margin: auto;" />
 
 Different values of the parameters $\alpha$ and $\beta$ lead to more or
 less concentrated flows as exemplified by the two above figures.
@@ -174,8 +187,8 @@ a_blv_model
 
 Notice that we start with some initial values of the attractivenesses
 but the final values are different. They can be obtained using the
-`attractiveness()` function as follows (we show the values using a
-barplot).
+`attractiveness()` function as follows (we show the values using a bar
+plot).
 
 ``` r
 par(mar = c(0.1, 4, 1, 0))
@@ -188,15 +201,20 @@ In this example, one destination location acts as a global attractor of
 all the flows. This can be seen also on the final flow matrix.
 
 ``` r
-par(mar = rep(0.1, 4))
-image(t(flows(a_blv_model)),
-  col = gray.colors(20, start = 1, end = 0),
-  axes = FALSE,
-  frame = TRUE
-)
+autoplot(a_blv_model) +
+  scale_fill_viridis_c()
 ```
 
-<img src="man/figures/README-a_blv_flow-1.png" width="25%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_blv_flow-1.png" width="40%" style="display: block; margin: auto;" />
+
+The `autoplot()` function can also be used to show the destination flows
+or the attractivenesses as follows.
+
+``` r
+autoplot(a_blv_model, "attractiveness")
+```
+
+<img src="man/figures/README-a_blv_Z_ggplot2-1.png" width="100%" />
 
 Results are of course strongly influenced by the parameters, as shown by
 this second example.
@@ -211,19 +229,14 @@ b_blv_model
 ```
 
 ``` r
-b_final_Z <- attractiveness(b_blv_model)
-barplot(b_final_Z)
+autoplot(b_blv_model, "attractiveness")
 ```
 
-<img src="man/figures/README-b_blv_Z-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_blv_Z-1.png" width="100%" />
 
 ``` r
-par(mar = rep(0.1, 4))
-image(t(flows(b_blv_model)),
-  col = gray.colors(20, start = 1, end = 0),
-  axes = FALSE,
-  frame = TRUE
-)
+autoplot(b_blv_model) +
+  scale_fill_viridis_c()
 ```
 
-<img src="man/figures/README-b_blv_flow-1.png" width="25%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_blv_flow-1.png" width="40%" style="display: block; margin: auto;" />
