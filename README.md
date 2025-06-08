@@ -16,6 +16,7 @@ interaction model. The model is described in [Wilson, A. (2008),
 “Boltzmann, Lotka and Volterra and spatial structural evolution: an
 integrated methodology for some dynamical systems”, J. R. Soc.
 Interface.5865–871](http://dx.doi.org/10.1098/rsif.2007.1288)
+$\newcommand{\sub}[2]{{#1}_{#2}}$
 
 ## Installation
 
@@ -36,12 +37,13 @@ by Alan Wilson. See `vignette("theory")` for a theoretical background.
 
 In practice, if we have $n$ origin locations and $p$ destination
 locations, the aim is to compute a matrix of flows
-$(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}$, where $Y_{ij}$ is the flow
-from origin $i$ to destination $j$. This is done using characteristics
-of the origin and destination locations, together with a matrix of
-exchange difficulties, a *cost matrix*,
-$(c_{ij})_{1\leq i\leq n, 1\leq j\leq p}$. For instance $c_{ij}$ can be
-the distance between origin $i$ and destination $j$.
+$\sub{(\sub{Y}{ij})}{1\leq i\leq n, 1\leq j\leq p}$, where $\sub{Y}{ij}$
+is the flow from origin $i$ to destination $j$. This is done using
+characteristics of the origin and destination locations, together with a
+matrix of exchange difficulties, a *cost matrix*,
+$\sub{(\sub{c}{ij})}{1\leq i\leq n, 1\leq j\leq p}$. For instance
+$\sub{c}{ij}$ can be the distance between origin $i$ and destination
+$j$.
 
 ## Usage
 
@@ -171,10 +173,14 @@ less concentrated flows as exemplified by the two above figures.
 A. Wilson’s Boltzmann–Lotka–Volterra (BLV) interaction model is based on
 the production constrained maximum entropy model. The main idea consists
 in updating the attractivenesses of the destination locations based on
-their incoming flows. In the limit we want to have $$
+their incoming flows. In the limit we want to have
+
+$$
 Z_j =\sum_{i=1}^{n}Y_{ij}, 
-$$ where the flows are given by the equations above. The model is
-estimated using the `blvim()` function as follows.
+$$
+
+where the flows are given by the equations above. The model is estimated
+using the `blvim()` function as follows.
 
 ``` r
 a_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 2, Z)
