@@ -107,9 +107,12 @@
 <div class="section level3">
 <h3 id="static-models">Static models<a class="anchor" aria-label="anchor" href="#static-models"></a>
 </h3>
-<p>In Wilson’s production constrained maximum entropy model, the flows are given by <span class="math display">\[
+<p>In Wilson’s production constrained maximum entropy model, the flows are given by</p>
+<p><span class="math display">\[
 Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},
-\]</span> where <span class="math inline">\(\alpha\)</span> is a return to scale parameter and <span class="math inline">\(\beta\)</span> is the inverse of a cost scale parameter. Notice that the flow matrix is <em>production constrained</em>, which means that the total outgoing flow from any origin location is equal to the production of this location, i.e. <span class="math display">\[
+\]</span></p>
+<p>where <span class="math inline">\(\alpha\)</span> is a return to scale parameter and <span class="math inline">\(\beta\)</span> is the inverse of a cost scale parameter. Notice that the flow matrix is <em>production constrained</em>, which means that the total outgoing flow from any origin location is equal to the production of this location, i.e.</p>
+<p><span class="math display">\[
 \forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.
 \]</span></p>
 <p>The model is obtained using the <code><a href="reference/static_blvim.html">static_blvim()</a></code> function as follows:</p>
@@ -131,21 +134,24 @@ Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(
 <span>  frame <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_flow-1.png" width="25%" style="display: block; margin: auto;"></p>
-<p>In this representation, each row gives the flows from one origin location to all the destination location.</p>
+<p>In this representation, each row gives the flows from one origin location to all the destination location. The package provides a <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">ggplot2::autoplot()</a></code> function that can be used as follows</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">a_model</span>, <span class="st">"full"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-a_flow_ggplot2-1.png" width="40%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">cost_matrix</span>, <span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">1.1</span>, beta <span class="op">=</span> <span class="fl">15</span>, <span class="va">Z</span><span class="op">)</span></span>
 <span><span class="va">b_model</span></span>
 <span><span class="co">#&gt; Spatial interaction model with 30 origin locations and 10 destination locations</span></span>
 <span><span class="co">#&gt; • Model: Wilson's production constrained</span></span>
 <span><span class="co">#&gt; • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) = 15</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/image.html" class="external-link">image</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="reference/flows.html">flows</a></span><span class="op">(</span><span class="va">b_model</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">gray.colors</a></span><span class="op">(</span><span class="fl">20</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
-<span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  frame <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-b_flow-1.png" width="25%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">b_model</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-b_flow-1.png" width="40%" style="display: block; margin: auto;"></p>
 <p>Different values of the parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> lead to more or less concentrated flows as exemplified by the two above figures.</p>
 </div>
 <div class="section level3">
@@ -154,47 +160,42 @@ Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(
 <p>A. Wilson’s Boltzmann–Lotka–Volterra (BLV) interaction model is based on the production constrained maximum entropy model. The main idea consists in updating the attractivenesses of the destination locations based on their incoming flows. In the limit we want to have <span class="math display">\[
 Z_j =\sum_{i=1}^{n}Y_{ij},
 \]</span> where the flows are given by the equations above. The model is estimated using the <code><a href="reference/blvim.html">blvim()</a></code> function as follows.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a_blv_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blvim.html">blvim</a></span><span class="op">(</span><span class="va">cost_matrix</span>, <span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">1.1</span>, beta <span class="op">=</span> <span class="fl">2</span>, <span class="va">Z</span><span class="op">)</span></span>
 <span><span class="va">a_blv_model</span></span>
 <span><span class="co">#&gt; Spatial interaction model with 30 origin locations and 10 destination locations</span></span>
 <span><span class="co">#&gt; • Model: Wilson's production constrained</span></span>
 <span><span class="co">#&gt; • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) = 2</span></span>
 <span><span class="co">#&gt; ℹ The BLV model converged after 5800 iterations.</span></span></code></pre></div>
-<p>Notice that we start with some initial values of the attractivenesses but the final values are different. They can be obtained using the <code><a href="reference/attractiveness.html">attractiveness()</a></code> function as follows (we show the values using a barplot).</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>Notice that we start with some initial values of the attractivenesses but the final values are different. They can be obtained using the <code><a href="reference/attractiveness.html">attractiveness()</a></code> function as follows (we show the values using a bar plot).</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">a_final_Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/attractiveness.html">attractiveness</a></span><span class="op">(</span><span class="va">a_blv_model</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span><span class="va">a_final_Z</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_blv_Z-1.png" width="80%" style="display: block; margin: auto;"> In this example, one destination location acts as a global attractor of all the flows. This can be seen also on the final flow matrix.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/image.html" class="external-link">image</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="reference/flows.html">flows</a></span><span class="op">(</span><span class="va">a_blv_model</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">gray.colors</a></span><span class="op">(</span><span class="fl">20</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
-<span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  frame <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-a_blv_flow-1.png" width="25%" style="display: block; margin: auto;"></p>
-<p>Results are of course strongly influenced by the parameters, as shown by this second example.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">a_blv_model</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-a_blv_flow-1.png" width="40%" style="display: block; margin: auto;"></p>
+<p>The <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> function can also be used to show the destination flows or the attractivenesses as follows.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">a_blv_model</span>, <span class="st">"attractiveness"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-a_blv_Z_ggplot2-1.png" width="100%"></p>
+<p>Results are of course strongly influenced by the parameters, as shown by this second example.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b_blv_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blvim.html">blvim</a></span><span class="op">(</span><span class="va">cost_matrix</span>, <span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">1.1</span>, beta <span class="op">=</span> <span class="fl">15</span>, <span class="va">Z</span><span class="op">)</span></span>
 <span><span class="va">b_blv_model</span></span>
 <span><span class="co">#&gt; Spatial interaction model with 30 origin locations and 10 destination locations</span></span>
 <span><span class="co">#&gt; • Model: Wilson's production constrained</span></span>
 <span><span class="co">#&gt; • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) = 15</span></span>
 <span><span class="co">#&gt; ℹ The BLV model converged after 13300 iterations.</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">b_final_Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/attractiveness.html">attractiveness</a></span><span class="op">(</span><span class="va">b_blv_model</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span><span class="va">b_final_Z</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-b_blv_Z-1.png" width="80%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/image.html" class="external-link">image</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="reference/flows.html">flows</a></span><span class="op">(</span><span class="va">b_blv_model</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">gray.colors</a></span><span class="op">(</span><span class="fl">20</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
-<span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  frame <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-b_blv_flow-1.png" width="25%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">b_blv_model</span>, <span class="st">"attractiveness"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-b_blv_Z-1.png" width="100%"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">b_blv_model</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-b_blv_flow-1.png" width="40%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
