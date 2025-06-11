@@ -117,3 +117,8 @@ test_that("sim_list destination flows extraction", {
     expect_equal(grid_Z[k, ], destination_flow(models[[k]]))
   }
 })
+
+test_that("sim_list extraction functions detect errors", {
+  expect_error(grid_destination_flow(list()))
+  expect_error(grid_attractiveness(2))
+})
