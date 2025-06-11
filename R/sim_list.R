@@ -115,3 +115,40 @@ as.data.frame.sim_list <- function(x, ..., models = TRUE) {
   }
   pre_result
 }
+
+#' Extract all the attractivenesses from a collection of spatial interaction models
+#'
+#' The function extract attractivenesses from all the spatial interaction models
+#' of the collection and returns then in a matrix in which each row corresponds
+#' to a model and each column to a destination location.
+#'
+#' @param sim_list a collection of spatial interaction models, an object of class
+#'   `sim_list`
+#' @param ... additional parameters of the [attractiveness()] function
+#'
+#' @returns a matrix of attractivenesses at the destination locations
+#' @seealso [attractiveness()] and [grid_blvim()]
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(15 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 15)
+#' attractiveness <- rep(1, 15)
+#' all_flows <- grid_blvim(distances,
+#'   production,
+#'   c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3),
+#'   attractiveness,
+#'   epsilon = 0.1
+#' )
+#' g_Z <- grid_attractiveness(all_flows)
+#' ## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
+#' ## sites)
+#' dim(g_Z)
+grid_attractiveness <- function(sim_list, ...) {
+  if (!inherits(sim_list, "sim_list")) {
+    cli::abort("{.var sim_list} must be an object of class {.cls sim_list}")
+  }
+  t(sapply(sim_list, attractiveness, ...))
+}

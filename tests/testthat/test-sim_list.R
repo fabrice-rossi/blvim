@@ -77,3 +77,23 @@ test_that("sim_list is converted correctly to a data frame", {
   models_df <- as.data.frame(models)
   expect_null(models_df$terminals)
 })
+
+test_that("sim_list attractivenesses extraction", {
+  config <- create_locations(20, 30, seed = 4)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5
+  )
+  grid_Z <- grid_attractiveness(models)
+  expect_true(inherits(grid_Z, "matrix"))
+  expect_equal(dim(grid_Z), c(length(alphas) * length(betas), length(config$Z)))
+  for (k in seq_along(models)) {
+    expect_equal(grid_Z[k, ], attractiveness(models[[k]]))
+  }
+})
