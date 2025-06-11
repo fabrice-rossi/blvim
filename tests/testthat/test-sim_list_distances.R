@@ -11,6 +11,8 @@ test_that("sim_distance works as expected", {
     precision = .Machine$double.eps^0.5
   )
   withr::local_seed(4)
+  ## error case
+  expect_error(sim_distance(list()))
   ## full flows
   m_dist <- as.matrix(sim_distance(models, "full"))
   from_to <- sample(1:length(models), 8)

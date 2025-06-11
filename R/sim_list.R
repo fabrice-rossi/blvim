@@ -148,7 +148,7 @@ as.data.frame.sim_list <- function(x, ..., models = TRUE) {
 #' dim(g_Z)
 grid_attractiveness <- function(sim_list, ...) {
   if (!inherits(sim_list, "sim_list")) {
-    cli::abort("{.var sim_list} must be an object of class {.cls sim_list}")
+    cli::cli_abort("{.var sim_list} must be an object of class {.cls sim_list}")
   }
   t(sapply(sim_list, attractiveness, ...))
 }
@@ -185,7 +185,7 @@ grid_attractiveness <- function(sim_list, ...) {
 #' dim(g_df)
 grid_destination_flow <- function(sim_list, ...) {
   if (!inherits(sim_list, "sim_list")) {
-    cli::abort("{.var sim_list} must be an object of class {.cls sim_list}")
+    cli::cli_abort("{.var sim_list} must be an object of class {.cls sim_list}")
   }
   t(sapply(sim_list, destination_flow, ...))
 }
