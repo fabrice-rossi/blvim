@@ -18,6 +18,7 @@ LinkingTo:
     RcppArmadillo
 Imports: 
     cli,
+    collapse,
     Rcpp,
     rlang
 Suggests: 

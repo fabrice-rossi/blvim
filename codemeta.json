@@ -170,6 +170,18 @@
     },
     "2": {
       "@type": "SoftwareApplication",
+      "identifier": "collapse",
+      "name": "collapse",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=collapse"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
       "provider": {
@@ -180,7 +192,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    "3": {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -194,7 +206,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "7988.824KB",
+  "fileSize": "7415.538KB",
   "relatedLink": "https://fabrice-rossi.github.io/blvim/",
   "readme": "https://github.com/fabrice-rossi/blvim/blob/main/README.md",
   "contIntegration": ["https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/fabrice-rossi/blvim"],
