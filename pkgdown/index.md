@@ -1,3 +1,4 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Boltzmann–Lotka–Volterra Interaction Model
@@ -33,14 +34,14 @@ instance workers commuting from residential zones to employment zones.
 The focus of the `blvim` package is on maximum entropy models developed
 by Alan Wilson. See `vignette("theory")` for a theoretical background.
 
-In practice, if we have $`n`$ origin locations and $`p`$ destination
+In practice, if we have $n$ origin locations and $p$ destination
 locations, the aim is to compute a matrix of flows
-$`(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}`$, where $`Y_{ij}`$ is the
-flow from origin $`i`$ to destination $`j`$. This is done using
-characteristics of the origin and destination locations, together with a
-matrix of exchange difficulties, a *cost matrix*,
-$`(c_{ij})_{1\leq i\leq n, 1\leq j\leq p}`$. For instance $`c_{ij}`$ can
-be the distance between origin $`i`$ and destination $`j`$.
+$(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}$, where $Y_{ij}$ is the flow
+from origin $i$ to destination $j$. This is done using characteristics
+of the origin and destination locations, together with a matrix of
+exchange difficulties, a *cost matrix*,
+$(c_{ij})_{1\leq i\leq n, 1\leq j\leq p}$. For instance $c_{ij}$ can be
+the distance between origin $i$ and destination $j$.
 
 ## Usage
 
@@ -69,7 +70,7 @@ cost_matrix <- full_costs[1:nrow(origins), (nrow(origins) + 1):(nrow(origins) + 
 
 In addition, we focus on production constrained models which means that
 we need to specify the production of each origin location (a vector of
-positive values $`(X_i)_{1\leq i\leq n}`$). In this example we assume a
+positive values $(X_i)_{1\leq i\leq n}$). In this example we assume a
 common unitary production.
 
 ``` r
@@ -78,7 +79,7 @@ X <- rep(1, nrow(origins))
 
 Finally, the simple *static* model needs an attractiveness value of each
 destination location, a vector of positive values
-$`(Z_j)_{1\leq j\leq p}`$. We assume again a common unitary
+$(Z_j)_{1\leq j\leq p}$. We assume again a common unitary
 attractiveness.
 
 ``` r
@@ -90,18 +91,14 @@ Z <- rep(1, nrow(destinations))
 In Wilson’s production constrained maximum entropy model, the flows are
 given by
 
-``` math
-Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},
-```
+$$Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},$$
 
-where $`\alpha`$ is a return to scale parameter and $`\beta`$ is the
-inverse of a cost scale parameter. Notice that the flow matrix is
-*production constrained*, which means that the total outgoing flow from
-any origin location is equal to the production of this location, i.e.
+where $\alpha$ is a return to scale parameter and $\beta$ is the inverse
+of a cost scale parameter. Notice that the flow matrix is *production
+constrained*, which means that the total outgoing flow from any origin
+location is equal to the production of this location, i.e.
 
-``` math
-\forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.
-```
+$$\forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.$$
 
 The model is obtained using the `static_blvim()` function as follows:
 
@@ -114,7 +111,7 @@ a_model
 ```
 
 Several functions are provided to extract parts of the result. In
-particular `flows()` returns the flow matrix $`Y`$.
+particular `flows()` returns the flow matrix $Y$.
 
 ``` r
 a_model_flows <- flows(a_model)
@@ -162,8 +159,8 @@ autoplot(b_model) +
 
 <img src="man/figures/README-b_flow-1.png" width="40%" style="display: block; margin: auto;" />
 
-Different values of the parameters $`\alpha`$ and $`\beta`$ lead to more
-or less concentrated flows as exemplified by the two above figures.
+Different values of the parameters $\alpha$ and $\beta$ lead to more or
+less concentrated flows as exemplified by the two above figures.
 
 ### Dynamic models
 
@@ -172,9 +169,7 @@ the production constrained maximum entropy model. The main idea consists
 in updating the attractivenesses of the destination locations based on
 their incoming flows. In the limit we want to have
 
-``` math
-Z_j =\sum_{i=1}^{n}Y_{ij}, 
-```
+$$Z_j =\sum_{i=1}^{n}Y_{ij}, $$
 
 where the flows are given by the equations above. The model is estimated
 using the `blvim()` function as follows.
