@@ -1,5 +1,14 @@
 new_sim_wpc <- function(Y, Z, costs, alpha, beta, ..., class = character()) {
-  new_sim(Y, Z, costs = costs, alpha = alpha, beta = beta, ..., class = c(class, "sim_wpc"))
+  new_sim(Y,
+    Z,
+    origin_names = rownames(costs),
+    destination_names = colnames(costs),
+    costs = costs,
+    alpha = alpha,
+    beta = beta,
+    ...,
+    class = c(class, "sim_wpc")
+  )
 }
 
 #' @export

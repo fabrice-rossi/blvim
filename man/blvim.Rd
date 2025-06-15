@@ -82,6 +82,20 @@ algorithm is considered to have converged if \deqn{\|Z^{t+1}-Z^t\|<\delta
 (\|Z^{t+1}\|+\delta),} where \eqn{\delta} is given by the \code{precision}
 parameter.
 }
+\section{Location data}{
+While models in this package do not use location data beyond \code{X} and \code{Z},
+additional data can be stored and used when analysing spatial interaction
+models.
+\subsection{Origin and destination location names}{
+
+Spatial interaction models can store names for origin and destination
+locations, using \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}. Names
+are taken by default from names of the cost matrix \code{costs}. More precisely,
+\code{rownames(costs)} is used for origin location names and \code{colnames(costs)} for
+destination location names.
+}
+}
+
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))

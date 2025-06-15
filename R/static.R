@@ -30,6 +30,20 @@
 #'
 #' that is the origin location \eqn{i} sends a total flow of exactly \eqn{X_i}.
 #'
+#' # Location data
+#'
+#' While models in this package do not use location data beyond `X` and `Z`,
+#' additional data can be stored and used when analysing spatial interaction
+#' models.
+#'
+#' ## Origin and destination location names
+#'
+#' Spatial interaction models can store names for origin and destination
+#' locations, using [`origin_names<-()`] and [`destination_names<-()`]. Names
+#' are taken by default from names of the cost matrix `costs`. More precisely,
+#' `rownames(costs)` is used for origin location names and `colnames(costs)` for
+#' destination location names.
+#'
 #' @param costs a cost matrix
 #' @param X a vector of production constraints
 #' @param alpha the return to scale parameter
@@ -53,6 +67,7 @@
 #' @references Wilson, A. (1971), "A family of spatial interaction models, and
 #'   associated developments", Environment and Planning A: Economy and Space,
 #'   3(1), 1-32 \doi{10.1068/a030001}
+#' @seealso [origin_names()], [destination_names()]
 static_blvim <- function(costs, X, alpha, beta, Z) {
   check_configuration(costs, X, alpha, beta, Z)
   Y <- we_oc(costs, X, alpha, beta, Z)

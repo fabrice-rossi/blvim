@@ -52,6 +52,7 @@
 #'   model.
 #' @export
 #'
+#' @inheritSection static_blvim Location data
 #' @examples
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
 #' distances <- as.matrix(dist(positions))

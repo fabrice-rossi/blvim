@@ -36,3 +36,12 @@ test_that("static_blvim fulfills computes Wilson's equation", {
   model <- static_blvim(config$costs, config$X, alpha, beta, config$Z)
   expect_equal(flows(model), Y, ignore_attr = TRUE)
 })
+
+test_that("static_blvim use names from the cost matrix", {
+  config <- create_locations(20, 25, seed = 12308)
+  rownames(config$costs) <- letters[1:20]
+  colnames(config$costs) <- LETTERS[1:25]
+  model <- static_blvim(config$costs, config$X, 1.5, 1, config$Z)
+  expect_equal(origin_names(model), letters[1:20])
+  expect_equal(destination_names(model), LETTERS[1:25])
+})

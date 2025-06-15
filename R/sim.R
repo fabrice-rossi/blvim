@@ -1,8 +1,35 @@
-new_sim <- function(Y, Z, ..., class = character()) {
+validate_sim <- function(Y, Z, origin_names, destination_names) {
+  if (ncol(Y) != length(Z)) {
+    cli::cli_abort("{.arg Z} must be of length {.val {ncol(Y)}}")
+  }
+  if (!is.null(origin_names) && length(origin_names) != nrow(Y)) {
+    cli::cli_abort("{.arg origin_names} must be of length {.val {nrow(Y)}}")
+  }
+  if (!is.null(destination_names) && length(destination_names) != ncol(Y)) {
+    cli::cli_abort("{.arg destination_names} must be of length {.val {ncol(Y)}}")
+  }
+}
+
+new_sim <- function(Y,
+                    Z,
+                    origin_names = NULL,
+                    destination_names = NULL,
+                    ...,
+                    class = character()) {
+  validate_sim(Y, Z, origin_names, destination_names)
+  if (is.null(origin_names) && is.null(destination_names)) {
+    location_names <- NULL
+  } else {
+    location_names <- list(
+      origin = origin_names,
+      destination = destination_names
+    )
+  }
   structure(
     list(
       Y = Y,
       Z = Z,
+      location_names = location_names,
       ...
     ),
     class = c(class, "sim")
