@@ -7,6 +7,7 @@ test_that("sim_list is a list", {
     alphas,
     betas,
     config$Z,
+    epsilon = 0.1,
     iter_max = 5000,
     precision = .Machine$double.eps^0.5
   )
@@ -31,6 +32,7 @@ test_that("sim_list prints as expected", {
     alphas,
     betas,
     config$Z,
+    epsilon = 0.1,
     iter_max = 5000,
     precision = .Machine$double.eps^0.5
   )
@@ -46,6 +48,7 @@ test_that("sim_list is converted correctly to a data frame", {
     alphas,
     betas,
     config$Z,
+    epsilon = 0.1,
     iter_max = 5000,
     precision = .Machine$double.eps^0.5
   )
@@ -71,6 +74,7 @@ test_that("sim_list is converted correctly to a data frame", {
     alphas,
     betas,
     config$Z,
+    epsilon = 0.1,
     iter_max = 5000,
     precision = .Machine$double.eps^0.5
   )
@@ -87,6 +91,7 @@ test_that("sim_list attractivenesses extraction", {
     alphas,
     betas,
     config$Z,
+    epsilon = 0.1,
     iter_max = 5000,
     precision = .Machine$double.eps^0.5
   )
@@ -107,6 +112,7 @@ test_that("sim_list destination flows extraction", {
     alphas,
     betas,
     config$Z,
+    epsilon = 0.1,
     iter_max = 5000,
     precision = .Machine$double.eps^0.5
   )
@@ -121,4 +127,29 @@ test_that("sim_list destination flows extraction", {
 test_that("sim_list extraction functions detect errors", {
   expect_error(grid_destination_flow(list()))
   expect_error(grid_attractiveness(2))
+})
+
+test_that("sim_list common information restoration works", {
+  config <- create_locations(20, 30, seed = 20)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  ## introduction names
+  on <- paste(sample(letters, 20, replace = TRUE), 1:20, sep = "_")
+  dn <- paste(sample(LETTERS, 30, replace = TRUE), 1:30, sep = "_")
+  rownames(config$costs) <- on
+  colnames(config$costs) <- dn
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  for (k in seq_along(models)) {
+    expect_equal(origin_names(models[[k]]), on)
+    expect_equal(destination_names(models[[k]]), dn)
+    expect_equal(models[[k]]$costs, config$costs)
+  }
 })

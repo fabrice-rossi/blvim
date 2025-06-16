@@ -1,21 +1,42 @@
-## All sim in a sim list must have the same cost matrix. This is not
-## verified for efficiency reasons
-new_sim_list <- function(sims, costs = NULL, ..., class = character()) {
-  ## keeping only one cost is useful when we save and restore the objects
-  if (is.null(costs)) {
-    costs <- sims[[1]]$costs
-    sims <- lapply(sims, function(x) {
-      x$costs <- NULL
-      x
-    })
+## remove from the sims common content
+## the first sim is assumed to contain the common content
+sims_compress <- function(sims) {
+  costs <- sims[[1]]$costs
+  location_names <- location_names(sims[[1]])
+  sims <- lapply(sims, function(x) {
+    x$costs <- NULL
+    location_names(x) <- NULL
+    x
+  })
+  list(sims = sims, common = list(costs = costs, location_names = location_names))
+}
+
+## reverse of compression for one sim
+sim_restore <- function(sim, common) {
+  sim$costs <- common$costs
+  location_names(sim) <- common$location_names
+  sim
+}
+
+## All sim in a sim list must have a collection of common elements:
+## - the cost matrix
+## - location data
+## This is not verified for efficiency reasons
+new_sim_list <- function(sims, common = NULL, ..., class = character()) {
+  ## if common is NULL, we extract the common parameters from the first
+  ## sim and the sims are "compressed"
+  if (is.null(common)) {
+    cp_sims <- sims_compress(sims)
+    common <- cp_sims$common
+    sims <- cp_sims$sims
   }
-  ## when costs is specified, we assume it was removed from the sim objects
+  ## when common is specified, we assume the common elements were removed from the sim objects
   structure(
     list(
       sims = sims,
       alphas = sapply(sims, return_to_scale),
       betas = sapply(sims, inverse_cost),
-      costs = costs,
+      common = common,
       ...
     ),
     class = c(class, "sim_list")
@@ -29,15 +50,13 @@ length.sim_list <- function(x) {
 
 #' @export
 `[.sim_list` <- function(x, i, ...) {
-  new_sim_list(x$sims[i, ...], costs = x$costs)
+  new_sim_list(x$sims[i, ...], common = x$common)
 }
 
 #' @export
 `[[.sim_list` <- function(x, i, ...) {
   pre <- x$sims[[i, ...]]
-  ## restore the shared cost
-  pre$costs <- x$costs
-  pre
+  sim_restore(pre, x$common)
 }
 
 #' @export
@@ -65,10 +84,7 @@ print.sim_list <- function(x, ...) {
 
 #' @export
 as.list.sim_list <- function(x, ...) {
-  lapply(x$sims, function(y) {
-    y$costs <- x$costs
-    y
-  })
+  lapply(x$sims, sim_restore, x$common)
 }
 
 
