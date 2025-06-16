@@ -60,6 +60,17 @@ length.sim_list <- function(x) {
 }
 
 #' @export
+`[<-.sim_list` <- function(x, i, ..., value) {
+  cli::cli_abort("{.cls sim_list} objects do not support modification")
+}
+
+#' @export
+`[[<-.sim_list` <- function(x, i, ..., value) {
+  cli::cli_abort("{.cls sim_list} objects do not support modification")
+}
+
+
+#' @export
 format.sim_list <- function(x, ...) {
   one_model <- x$sims[[1]]
   cli::cli_format_method({
