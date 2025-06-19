@@ -17,15 +17,21 @@
 #' represents them with a bar plot (each bar is proportional to the incoming
 #' flow);
 #' -  `"attractiveness"`: the function uses a bar plot to represent the
-#' attractivenesses of the destination locations (as given by [attractiveness()]).
-#' This is interesting for dynamic models where those values are updated during
-#' the iterations (see [blvim()] for details). When the calculation has
-#' converged (see [sim_converged()]), both `"destination"` and `"attractiveness"` graphics should
-#' be almost identical.
+#' attractivenesses of the destination locations (as given by
+#' [attractiveness()]). This is interesting for dynamic models where those
+#' values are updated during the iterations (see [blvim()] for details). When
+#' the calculation has converged (see [sim_converged()]), both `"destination"`
+#' and `"attractiveness"` graphics should be almost identical.
 #'
+#' When the `with_names` parameter is `TRUE`, the location names ([location_names()])
+#' are used to label the axis of the graphical representation. If names are not
+#' specified, they are replaced by indexes.
 #'
 #' @param object a spatial interaction model object
-#' @param flows  `"full"` (default),  `"destination"` or `"attractiveness"`, see details.
+#' @param flows  `"full"` (default),  `"destination"` or `"attractiveness"`, see
+#'   details.
+#' @param with_names specifies whether the graphical representation include
+#'   location names (`FALSE` by default)
 #' @param ... additional parameters (not used currently)
 #'
 #' @exportS3Method ggplot2::autoplot
@@ -43,56 +49,80 @@
 #' ggplot2::autoplot(flows, "attractiveness")
 autoplot.sim <- function(object,
                          flows = c("full", "destination", "attractiveness"),
+                         with_names = FALSE,
                          ...) {
   flows <- rlang::arg_match(flows)
   if (flows == "destination" || flows == "attractiveness") {
+    destinations <- seq_along(attractiveness(object))
     if (flows == "destination") {
       dest_f <- destination_flow(object)
       sim_data <- data.frame(
-        destination = seq_along(dest_f),
+        destination = factor(seq_along(dest_f)),
         flow = dest_f
       )
       pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
         x = .data[["destination"]],
         y = .data[["flow"]]
-      ))
+      )) +
+        ggplot2::geom_col()
     } else {
       attra <- attractiveness(object)
       sim_data <- data.frame(
-        destination = seq_along(attra),
+        destination = factor(seq_along(attra)),
         attractiveness = attra
       )
       pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
         x = .data[["destination"]],
         y = .data[["attractiveness"]]
-      ))
+      )) +
+        ggplot2::geom_col()
     }
-    pre +
-      ggplot2::geom_col() +
-      ggplot2::theme(
-        panel.grid.major.x = ggplot2::element_blank(),
-        panel.grid.minor.x = ggplot2::element_blank(),
-        axis.ticks.x = ggplot2::element_blank(),
-        axis.text.x = ggplot2::element_blank()
-      )
+    if (with_names) {
+      x_labels <- destination_names(object)
+      if (is.null(x_labels)) {
+        x_labels <- 1:nrow(sim_data)
+      }
+      pre +
+        ggplot2::scale_x_discrete(labels = x_labels)
+    } else {
+      pre +
+        ggplot2::theme(
+          axis.ticks.x = ggplot2::element_blank(),
+          axis.text.x = ggplot2::element_blank()
+        )
+    }
   } else {
     full_f <- flows(object)
     sim_data <- expand.grid(
-      origin = rev(1:nrow(full_f)),
-      destination = 1:ncol(full_f)
+      origin = factor(rev(1:nrow(full_f))),
+      destination = factor(1:ncol(full_f))
     )
     sim_data$flow <- as.vector(full_f)
-    ggplot2::ggplot(sim_data, ggplot2::aes(
+    pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
       y = .data[["origin"]],
       x = .data[["destination"]],
       fill = .data[["flow"]]
     )) +
-      ggplot2::geom_raster() +
-      ggplot2::theme(
-        panel.grid.major = ggplot2::element_blank(),
-        panel.grid.minor = ggplot2::element_blank(),
-        axis.ticks = ggplot2::element_blank(),
-        axis.text = ggplot2::element_blank()
-      )
+      ggplot2::geom_raster()
+    if (with_names) {
+      x_labels <- destination_names(object)
+      if (is.null(x_labels)) {
+        x_labels <- 1:ncol(full_f)
+      }
+      y_labels <- origin_names(object)
+      if (is.null(y_labels)) {
+        y_labels <- 1:nrow(full_f)
+      }
+      y_labels <- rev(y_labels)
+      pre +
+        ggplot2::scale_x_discrete(breaks = seq_along(x_labels), labels = x_labels) +
+        ggplot2::scale_y_discrete(breaks = seq_along(y_labels), labels = y_labels)
+    } else {
+      pre +
+        ggplot2::theme(
+          axis.ticks = ggplot2::element_blank(),
+          axis.text = ggplot2::element_blank()
+        )
+    }
   }
 }

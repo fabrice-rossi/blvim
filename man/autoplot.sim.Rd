@@ -4,12 +4,21 @@
 \alias{autoplot.sim}
 \title{Create a complete ggplot for a spatial interaction model}
 \usage{
-\method{autoplot}{sim}(object, flows = c("full", "destination", "attractiveness"), ...)
+\method{autoplot}{sim}(
+  object,
+  flows = c("full", "destination", "attractiveness"),
+  with_names = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{a spatial interaction model object}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see details.}
+\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+details.}
+
+\item{with_names}{specifies whether the graphical representation include
+location names (\code{FALSE} by default)}
 
 \item{...}{additional parameters (not used currently)}
 }
@@ -35,12 +44,16 @@ incoming flows for destination locations (using \code{\link[=destination_flow]{d
 represents them with a bar plot (each bar is proportional to the incoming
 flow);
 \item \code{"attractiveness"}: the function uses a bar plot to represent the
-attractivenesses of the destination locations (as given by \code{\link[=attractiveness]{attractiveness()}}).
-This is interesting for dynamic models where those values are updated during
-the iterations (see \code{\link[=blvim]{blvim()}} for details). When the calculation has
-converged (see \code{\link[=sim_converged]{sim_converged()}}), both \code{"destination"} and \code{"attractiveness"} graphics should
-be almost identical.
+attractivenesses of the destination locations (as given by
+\code{\link[=attractiveness]{attractiveness()}}). This is interesting for dynamic models where those
+values are updated during the iterations (see \code{\link[=blvim]{blvim()}} for details). When
+the calculation has converged (see \code{\link[=sim_converged]{sim_converged()}}), both \code{"destination"}
+and \code{"attractiveness"} graphics should be almost identical.
 }
+
+When the \code{with_names} parameter is \code{TRUE}, the location names (\code{\link[=location_names]{location_names()}})
+are used to label the axis of the graphical representation. If names are not
+specified, they are replaced by indexes.
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
