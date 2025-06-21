@@ -69,6 +69,12 @@ are taken by default from names of the cost matrix \code{costs}. More precisely,
 \code{rownames(costs)} is used for origin location names and \code{colnames(costs)} for
 destination location names.
 }
+
+\subsection{Origin and destination location positions}{
+
+Spatial interaction models can store the positions of the origin and destination
+locations, using \code{\link[=origin_positions<-]{origin_positions<-()}} and \code{\link[=destination_positions<-]{destination_positions<-()}}.
+}
 }
 
 \examples{

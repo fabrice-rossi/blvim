@@ -44,6 +44,11 @@
 #' `rownames(costs)` is used for origin location names and `colnames(costs)` for
 #' destination location names.
 #'
+#' ## Origin and destination location positions
+#'
+#' Spatial interaction models can store the positions of the origin and destination
+#' locations, using [`origin_positions<-()`] and [`destination_positions<-()`].
+#'
 #' @param costs a cost matrix
 #' @param X a vector of production constraints
 #' @param alpha the return to scale parameter
