@@ -3,9 +3,11 @@
 sims_compress <- function(sims) {
   costs <- sims[[1]]$costs
   location_names <- location_names(sims[[1]])
+  location_positions <- location_positions(sims[[1]])
   sims <- lapply(sims, function(x) {
     x$costs <- NULL
     location_names(x) <- NULL
+    location_positions(x) <- NULL
     x
   })
   list(sims = sims, common = list(costs = costs, location_names = location_names))
@@ -15,6 +17,7 @@ sims_compress <- function(sims) {
 sim_restore <- function(sim, common) {
   sim$costs <- common$costs
   location_names(sim) <- common$location_names
+  location_positions(sim) <- common$location_positions
   sim
 }
 
