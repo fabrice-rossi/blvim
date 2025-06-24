@@ -8,6 +8,8 @@
   object,
   flows = c("full", "destination", "attractiveness"),
   with_names = FALSE,
+  with_positions = FALSE,
+  cut_off = 100 * .Machine$double.eps^0.5,
   ...
 )
 }
@@ -17,10 +19,16 @@
 \item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
-\item{with_names}{specifies whether the graphical representation include
+\item{with_names}{specifies whether the graphical representation includes
 location names (\code{FALSE} by default)}
 
-\item{...}{additional parameters (not used currently)}
+\item{with_positions}{specifies whether the graphical representation is based on
+location positions (\code{FALSE} by default)}
+
+\item{cut_off}{cut off limit for inclusion of a segment in the full flow
+matrix representation with \code{with_positions = TRUE}}
+
+\item{...}{additional parameters, see details}
 }
 \value{
 a ggplot object
@@ -30,7 +38,10 @@ This function represents graphical the flows of a spatial interaction model,
 in different direct or aggregated forms.
 }
 \details{
-The graphical representation depends on the value of \code{flows}:
+The graphical representation depends on the values of \code{flows} and
+\code{with_positions}. If \code{with_position} is \code{FALSE} (default value), the
+graphical representations are "abstract". De pending on \code{flows} we have the
+following representations:
 \itemize{
 \item \code{"full"}: this is the default case for which the full flow matrix is represented.
 It is extracted from the spatial interaction model with \code{\link[=flows]{flows()}} and
@@ -51,9 +62,32 @@ the calculation has converged (see \code{\link[=sim_converged]{sim_converged()}}
 and \code{"attractiveness"} graphics should be almost identical.
 }
 
-When the \code{with_names} parameter is \code{TRUE}, the location names (\code{\link[=location_names]{location_names()}})
-are used to label the axis of the graphical representation. If names are not
-specified, they are replaced by indexes.
+When the \code{with_names} parameter is \code{TRUE}, the location names
+(\code{\link[=location_names]{location_names()}}) are used to label the axis of the graphical
+representation. If names are not specified, they are replaced by indexes.
+
+When the  \code{with_positions} parameter is \code{TRUE}, the location positions
+(\code{\link[=location_positions]{location_positions()}}) are used to produce more "geographically informed"
+representations. Notice that if no positions are known for the locations, the
+use of \code{with_positions = TRUE} is an error. Depending on \code{flows} we have the
+following representations:
+\itemize{
+\item \code{"full"}: this is the default case for which the full flow matrix is represented.
+Positions for both origin and destination locations are needed. The
+representation uses arrows from origin location positions to destination
+location positions. The thickness of the lines (\code{linewidth} aesthetics) is
+proportional to the flows. Only segments that carry a flow above the
+\code{cut_off} value are included. Additional parameters in \code{...} are submitted to
+\code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}. This can be used to override defaults parameters
+used for the arrow shapes, for instance.
+\item \code{"destination"}: the function draws a disk at each destination location
+using for the \code{size} aesthetics the incoming flow at this destination
+location (using \code{\link[=destination_flow]{destination_flow()}}).
+\item \code{"attractiveness"}: the function draws a disk at each destination location
+using for the \code{size} aesthetics the attractiveness of the destination. When
+the calculation has converged (see \code{\link[=sim_converged]{sim_converged()}}), both \code{"destination"}
+and \code{"attractiveness"} graphics should be almost identical.
+}
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
@@ -62,7 +96,7 @@ production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
 flows <- blvim(distances, production, 1.5, 4, attractiveness)
 ggplot2::autoplot(flows)
-## bar plots should be almost identical if convergence occured
+## bar plots should be almost identical if convergence occurred
 sim_converged(flows)
 ggplot2::autoplot(flows, "destination")
 ggplot2::autoplot(flows, "attractiveness")

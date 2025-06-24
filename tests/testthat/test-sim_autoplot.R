@@ -48,3 +48,45 @@ test_that("autoplot.sim works as expected (with names)", {
     \() print(ggplot2::autoplot(model, with_names = TRUE))
   )
 })
+
+test_that("autoplot.sim works as expected (with positions)", {
+  config <- create_locations(20, 15, seed = 124)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  origin_positions(model) <- config$pp
+  destination_positions(model) <- config$pd
+  vdiffr::expect_doppelganger(
+    "Destination dotplot",
+    \() print(ggplot2::autoplot(model, "destination", with_positions = TRUE))
+  )
+  vdiffr::expect_doppelganger(
+    "Attractiveness dotplot",
+    \() print(ggplot2::autoplot(model, "attractiveness", with_positions = TRUE))
+  )
+  vdiffr::expect_doppelganger(
+    "Full flow graph",
+    \() print(ggplot2::autoplot(model, with_positions = TRUE))
+  )
+  vdiffr::expect_doppelganger(
+    "Full flow graph custom cut off",
+    \() print(ggplot2::autoplot(model, with_positions = TRUE, cut_off = 0.01))
+  )
+  vdiffr::expect_doppelganger(
+    "Full flow graph custom lines",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE, lineend = "butt",
+      linejoin = "bevel"
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Full flow graph no arrow",
+    \() print(ggplot2::autoplot(model, with_positions = TRUE, cut_off = 0.01) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
+  )
+  ## error cases
+  origin_positions(model) <- NULL
+  expect_error(ggplot2::autoplot(model, with_positions = TRUE))
+  destination_positions(model) <- NULL
+  expect_error(ggplot2::autoplot(model, with_positions = TRUE))
+  expect_error(ggplot2::autoplot(model, "attractiveness", with_positions = TRUE))
+  expect_error(ggplot2::autoplot(model, "destination", with_positions = TRUE))
+})
