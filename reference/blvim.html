@@ -152,6 +152,30 @@ algorithm is considered to have converged if $$\|Z^{t+1}-Z^t\|&lt;\delta
 parameter.</p>
     </div>
     <div class="section level2">
+    <h2 id="location-data">Location data<a class="anchor" aria-label="anchor" href="#location-data"></a></h2>
+    <p>While models in this package do not use location data beyond <code>X</code> and <code>Z</code>,
+additional data can be stored and used when analysing spatial interaction
+models.</p><div class="section">
+<h3 id="origin-and-destination-location-names">Origin and destination location names<a class="anchor" aria-label="anchor" href="#origin-and-destination-location-names"></a></h3>
+
+
+<p>Spatial interaction models can store names for origin and destination
+locations, using <code><a href="origin_names.html">origin_names&lt;-()</a></code> and <code><a href="destination_names.html">destination_names&lt;-()</a></code>. Names
+are taken by default from names of the cost matrix <code>costs</code>. More precisely,
+<code>rownames(costs)</code> is used for origin location names and <code>colnames(costs)</code> for
+destination location names.</p>
+</div>
+
+<div class="section">
+<h3 id="origin-and-destination-location-positions">Origin and destination location positions<a class="anchor" aria-label="anchor" href="#origin-and-destination-location-positions"></a></h3>
+
+
+<p>Spatial interaction models can store the positions of the origin and destination
+locations, using <code><a href="origin_positions.html">origin_positions&lt;-()</a></code> and <code><a href="destination_positions.html">destination_positions&lt;-()</a></code>.</p>
+</div>
+
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Harris, B., &amp; Wilson, A. G. (1978). "Equilibrium Values and
 Dynamics of Attractiveness Terms in Production-Constrained

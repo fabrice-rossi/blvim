@@ -76,28 +76,28 @@
 <span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="va">attractiveness</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">costs</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="co">## should be equal to distances above</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           1         2        3         4         5         6         7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.000000 2.5490050 1.388205 1.6206133 1.9422438 2.5749412 1.4649509</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2.549005 0.0000000 1.213445 2.1514234 1.8234315 0.5796601 1.7083567</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.388205 1.2134454 0.000000 1.6896800 1.6441470 1.4193063 1.2243721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.620613 2.1514234 1.689680 0.0000000 0.4811418 1.8053061 0.4834954</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.942244 1.8234315 1.644147 0.4811418 0.0000000 1.4018506 0.5040740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.574941 0.5796601 1.419306 1.8053061 1.4018506 0.0000000 1.4327716</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1.464951 1.7083567 1.224372 0.4834954 0.5040740 1.4327716 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.457173 1.3382685 1.695031 1.2295511 0.7550230 0.7941195 1.0360416</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  3.280104 0.9789338 2.085201 2.3983427 1.9466479 0.7051674 2.0842782</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.210161 0.8202804 1.199751 1.3922974 1.0157429 0.4226682 1.0101088</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            8         9        10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.4571731 3.2801037 2.2101614</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.3382685 0.9789338 0.8202804</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.6950310 2.0852008 1.1997512</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.2295511 2.3983427 1.3922974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.7550230 1.9466479 1.0157429</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.7941195 0.7051674 0.4226682</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1.0360416 2.0842782 1.0101088</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.0000000 1.2113365 0.5764551</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1.2113365 0.0000000 1.0972748</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.5764551 1.0972748 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            1         2         3         4        5         6         7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.0000000 1.2113365 0.5764551 0.8922384 1.233517 2.1906378 1.4819756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.2113365 0.0000000 1.0972748 1.2249255 2.203481 1.1556421 0.7874124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.5764551 1.0972748 0.0000000 1.3579652 1.108196 1.8125682 1.6524520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.8922384 1.2249255 1.3579652 0.0000000 2.100317 2.3803464 0.9426093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.2335169 2.2034812 1.1081956 2.1003175 0.000000 2.8098090 2.6773381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.1906378 1.1556421 1.8125682 2.3803464 2.809809 0.0000000 1.7763899</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1.4819756 0.7874124 1.6524520 0.9426093 2.677338 1.7763899 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1.4388866 0.4252290 1.4580271 1.1602271 2.544453 1.3630013 0.4187325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1.7612260 1.0713023 1.2815835 2.1829672 2.184521 0.6682563 1.8450198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1.0221055 2.0410276 1.5830197 1.0002971 1.726330 3.1392891 1.9390690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            8         9       10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1.4388866 1.7612260 1.022105</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.4252290 1.0713023 2.041028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.4580271 1.2815835 1.583020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.1602271 2.1829672 1.000297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2.5444530 2.1845214 1.726330</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1.3630013 0.6682563 3.139289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.4187325 1.8450198 1.939069</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.0000000 1.4404009 2.101583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1.4404009 0.0000000 2.770521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.1015831 2.7705213 0.000000</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
