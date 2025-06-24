@@ -77,6 +77,83 @@ flows.sim <- function(sim, ...) {
   sim$Y
 }
 
+#' Extract the flow matrix from a spatial interaction model object in data frame
+#' format
+#'
+#' @details This function extracts the flow matrix in a long format. Each row
+#' contains the flow between an origin location and a destination location. The
+#' resulting data frame has at least three columns:
+#'  - `origin_idx`: identifies the origin location by its index from 1 to the number
+#' of origin locations
+#'  - `destination_idx`: identifies the destination location by its index from 1
+#' to the number of destination locations
+#'  - `flow`: the flow between the corresponding location
+#'
+#' In addition, if location information is available, it will be included in
+#' the data frame as follows:
+#' - location names are included using columns `origin_name` or `destination_name`
+#' - positions are included using 2 or 3 columns (per location type, origin or
+#' destination) depending on the number of dimensions used for the location. The
+#' names of the columns are by default `origin_x`, `origin_y` and `origin_z` (
+#' and equivalent names for destination location) unless coordinate names are
+#' specified in the location positions. In this latter case, the names are
+#' prefixed by `origin_` or `destination_`. For instance, if the destination
+#' location position coordinates are named `"longitude"` and `"latitude"`, the
+#' resulting columns will be `destination_longitude` and `destination_latitude`.
+#'
+#' @param sim a spatial interaction model object
+#' @param ... additional parameters (not used currently)
+#'
+#' @returns a data frame of flows between origin locations and destination
+#'   locations with additional content if available (see Details).
+#' @seealso [location_positions()],  [location_names()]
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 10)
+#' attractiveness <- c(2, rep(1, 9))
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' flows_df(model)
+flows_df <- function(sim, ...) {
+  UseMethod("flows_df")
+}
+
+#' @export
+flows_df.sim <- function(sim, ...) {
+  indexes <- expand.grid(
+    origin_idx = 1:nrow(sim$Y),
+    destination_idx = 1:ncol(sim$Y)
+  )
+  pre <- cbind(indexes, flow = as.vector(sim$Y))
+  if (!is.null(origin_names(sim))) {
+    pre <- cbind(pre,
+      origin_name = origin_names(sim)[pre$origin_idx]
+    )
+  }
+  if (!is.null(origin_positions(sim))) {
+    pos_df <- positions_as_df(origin_positions(sim), "origin")
+    pre <- cbind(
+      pre,
+      pos_df[pre$origin_idx, ]
+    )
+  }
+  if (!is.null(destination_names(sim))) {
+    pre <- cbind(pre,
+      destination_name = destination_names(sim)[pre$destination_idx]
+    )
+  }
+  if (!is.null(destination_positions(sim))) {
+    pos_df <- positions_as_df(destination_positions(sim), "destination")
+    pre <- cbind(
+      pre,
+      pos_df[pre$destination_idx, ]
+    )
+  }
+  pre
+}
+
 #' Extract the production constraints from a spatial interaction model object
 #'
 #' @param sim a spatial interaction model object
