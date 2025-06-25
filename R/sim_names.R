@@ -1,3 +1,15 @@
+check_names <- function(value, location_number, call = rlang::caller_env()) {
+  if (!is.null(value)) {
+    value <- as.character(value)
+    if (length(value) != location_number) {
+      cli::cli_abort("{.arg values} must be of length {.val {location_number}}",
+        call = call
+      )
+    }
+  }
+  value
+}
+
 #' Names of origin and destination locations in a spatial interaction model
 #'
 #' These functions provide low level access to origin and destination local
@@ -105,12 +117,7 @@ origin_names <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  if (!is.null(value)) {
-    value <- as.character(value)
-    if (length(value) != nrow(sim$Y)) {
-      cli::cli_abort("{.arg value} must be of length {.val {nrow(sim$Y)}}")
-    }
-  }
+  value <- check_names(value, nrow(sim$Y))
   if (is.null(sim$location_names)) {
     sim$location_names <- list(origin = value)
   } else {
@@ -164,10 +171,7 @@ destination_names <- function(sim) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
   if (!is.null(value)) {
-    value <- as.character(value)
-    if (length(value) != ncol(sim$Y)) {
-      cli::cli_abort("{.arg value} must be of length {.val {ncol(sim$Y)}}")
-    }
+    value <- check_names(value, ncol(sim$Y))
   }
   if (is.null(sim$location_names)) {
     sim$location_names <- list(destination = value)
