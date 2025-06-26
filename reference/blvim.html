@@ -69,6 +69,9 @@ attractivenesses according the received flows.</p>
 <span>  <span class="va">alpha</span>,</span>
 <span>  <span class="va">beta</span>,</span>
 <span>  <span class="va">Z</span>,</span>
+<span>  bipartite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  origin_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  destination_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  epsilon <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  iter_max <span class="op">=</span> <span class="fl">50000</span>,</span>
 <span>  conv_check <span class="op">=</span> <span class="fl">100</span>,</span>
@@ -99,6 +102,23 @@ attractivenesses according the received flows.</p>
 
 <dt id="arg-z">Z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
 <dd><p>a vector of initial destination attractivenesses</p></dd>
+
+
+<dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
+<dd><p>when <code>TRUE</code> (default value), the origin and destination
+locations are considered to be distinct. When <code>FALSE</code>, a single set of
+locations plays the both roles. This has only consequences in functions
+specific to this latter case such as <code><a href="terminals.html">terminals()</a></code>.</p></dd>
+
+
+<dt id="arg-origin-data">origin_data<a class="anchor" aria-label="anchor" href="#arg-origin-data"></a></dt>
+<dd><p><code>NULL</code> or a list of additional data about the origin
+locations (see details)</p></dd>
+
+
+<dt id="arg-destination-data">destination_data<a class="anchor" aria-label="anchor" href="#arg-destination-data"></a></dt>
+<dd><p><code>NULL</code> or a list of additional data about the
+destination locations (see details)</p></dd>
 
 
 <dt id="arg-epsilon">epsilon<a class="anchor" aria-label="anchor" href="#arg-epsilon"></a></dt>
@@ -170,9 +190,24 @@ destination location names.</p>
 <h3 id="origin-and-destination-location-positions">Origin and destination location positions<a class="anchor" aria-label="anchor" href="#origin-and-destination-location-positions"></a></h3>
 
 
-<p>Spatial interaction models can store the positions of the origin and destination
-locations, using <code><a href="origin_positions.html">origin_positions&lt;-()</a></code> and <code><a href="destination_positions.html">destination_positions&lt;-()</a></code>.</p>
+<p>Spatial interaction models can store the positions of the origin and
+destination locations, using <code><a href="origin_positions.html">origin_positions&lt;-()</a></code> and
+<code><a href="destination_positions.html">destination_positions&lt;-()</a></code>.</p>
 </div>
+
+<div class="section">
+<h3 id="specifying-location-data">Specifying location data<a class="anchor" aria-label="anchor" href="#specifying-location-data"></a></h3>
+
+
+<p>In addition to the functions mentioned above, location data can be specified
+directly using the <code>origin_data</code> and <code>destination_data</code> parameters. Data are
+given by a list whose components are not interpreted excepted the following
+ones:</p><ul><li><p><code>names</code> is used to specify location names and its content has to follow
+the restrictions documented in <code><a href="origin_names.html">origin_names&lt;-()</a></code> and <code><a href="destination_names.html">destination_names&lt;-()</a></code></p></li>
+<li><p><code>positions</code> is used to specify location positions and its content has
+to follow the restrictions documented in <code><a href="origin_positions.html">origin_positions&lt;-()</a></code> and
+<code><a href="destination_positions.html">destination_positions&lt;-()</a></code></p></li>
+</ul></div>
 
     </div>
     <div class="section level2">
@@ -193,7 +228,11 @@ Soc. Interface.5865–871 <a href="https://doi.org/10.1098/rsif.2007.1288" class
 <span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="va">attractiveness</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">flows</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Spatial interaction model with <span style="color: #0000BB;">10</span> origin locations and <span style="color: #0000BB;">10</span> destination locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Model: Wilson's production constrained</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Parameters: return to scale (alpha) = <span style="color: #0000BB;">1.5</span> and inverse cost scale (beta) = <span style="color: #0000BB;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ℹ The BLV model converged after <span style="color: #0000BB;">1700</span> iterations.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

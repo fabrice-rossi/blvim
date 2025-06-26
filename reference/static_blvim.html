@@ -54,7 +54,16 @@ proposed by A. Wilson.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">static_blvim</span><span class="op">(</span><span class="va">costs</span>, <span class="va">X</span>, <span class="va">alpha</span>, <span class="va">beta</span>, <span class="va">Z</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">static_blvim</span><span class="op">(</span></span>
+<span>  <span class="va">costs</span>,</span>
+<span>  <span class="va">X</span>,</span>
+<span>  <span class="va">alpha</span>,</span>
+<span>  <span class="va">beta</span>,</span>
+<span>  <span class="va">Z</span>,</span>
+<span>  bipartite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  origin_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  destination_data <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,6 +88,23 @@ proposed by A. Wilson.</p>
 
 <dt id="arg-z">Z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
 <dd><p>a vector of destination attractivenesses</p></dd>
+
+
+<dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
+<dd><p>when <code>TRUE</code> (default value), the origin and destination
+locations are considered to be distinct. When <code>FALSE</code>, a single set of
+locations plays the both roles. This has only consequences in functions
+specific to this latter case such as <code><a href="terminals.html">terminals()</a></code>.</p></dd>
+
+
+<dt id="arg-origin-data">origin_data<a class="anchor" aria-label="anchor" href="#arg-origin-data"></a></dt>
+<dd><p><code>NULL</code> or a list of additional data about the origin
+locations (see details)</p></dd>
+
+
+<dt id="arg-destination-data">destination_data<a class="anchor" aria-label="anchor" href="#arg-destination-data"></a></dt>
+<dd><p><code>NULL</code> or a list of additional data about the
+destination locations (see details)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -129,9 +155,24 @@ destination location names.</p>
 <h3 id="origin-and-destination-location-positions">Origin and destination location positions<a class="anchor" aria-label="anchor" href="#origin-and-destination-location-positions"></a></h3>
 
 
-<p>Spatial interaction models can store the positions of the origin and destination
-locations, using <code><a href="origin_positions.html">origin_positions&lt;-()</a></code> and <code><a href="destination_positions.html">destination_positions&lt;-()</a></code>.</p>
+<p>Spatial interaction models can store the positions of the origin and
+destination locations, using <code><a href="origin_positions.html">origin_positions&lt;-()</a></code> and
+<code><a href="destination_positions.html">destination_positions&lt;-()</a></code>.</p>
 </div>
+
+<div class="section">
+<h3 id="specifying-location-data">Specifying location data<a class="anchor" aria-label="anchor" href="#specifying-location-data"></a></h3>
+
+
+<p>In addition to the functions mentioned above, location data can be specified
+directly using the <code>origin_data</code> and <code>destination_data</code> parameters. Data are
+given by a list whose components are not interpreted excepted the following
+ones:</p><ul><li><p><code>names</code> is used to specify location names and its content has to follow
+the restrictions documented in <code><a href="origin_names.html">origin_names&lt;-()</a></code> and <code><a href="destination_names.html">destination_names&lt;-()</a></code></p></li>
+<li><p><code>positions</code> is used to specify location positions and its content has
+to follow the restrictions documented in <code><a href="origin_positions.html">origin_positions&lt;-()</a></code> and
+<code><a href="destination_positions.html">destination_positions&lt;-()</a></code></p></li>
+</ul></div>
 
     </div>
     <div class="section level2">
@@ -151,8 +192,48 @@ associated developments", Environment and Planning A: Economy and Space,
 <span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">static_blvim</span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="va">attractiveness</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">static_blvim</span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  origin_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  destination_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Spatial interaction model with <span style="color: #0000BB;">10</span> origin locations and <span style="color: #0000BB;">10</span> destination locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Model: Wilson's production constrained</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • Parameters: return to scale (alpha) = <span style="color: #0000BB;">1.5</span> and inverse cost scale (beta) = <span style="color: #0000BB;">1</span></span>
+<span class="r-in"><span><span class="fu"><a href="location_names.html">location_names</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $origin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $destination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="location_positions.html">location_positions</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $origin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]       [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -1.42153475  0.9480316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  1.17005617 -0.1742460</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -1.40471454 -1.1062360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  1.10170810 -0.9459850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.69798626  0.2890896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.86434980  0.8769131</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -1.09147035 -1.1489039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.03705146 -1.1376128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  0.81005379 -1.4372467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.49935541 -0.4941435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $destination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]       [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -1.42153475  0.9480316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  1.17005617 -0.1742460</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -1.40471454 -1.1062360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  1.10170810 -0.9459850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.69798626  0.2890896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.86434980  0.8769131</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -1.09147035 -1.1489039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.03705146 -1.1376128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  0.81005379 -1.4372467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.49935541 -0.4941435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
