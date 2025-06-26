@@ -1,3 +1,17 @@
+check_positions <- function(value, location_number, call = rlang::caller_env()) {
+  if (!is.null(value)) {
+    if (!is.matrix(value)) {
+      cli::cli_abort("{.arg value} must be a matrix", call)
+    }
+    if (nrow(value) != location_number) {
+      cli::cli_abort("{.arg value} must have {.val {location_number}} rows", call)
+    }
+    if (ncol(value) < 2 || ncol(value) > 3) {
+      cli::cli_abort("{.arg value} must have 2 or 3 columns", call)
+    }
+  }
+}
+
 #' Positions of origin and destination locations in a spatial interaction model
 #'
 #' These functions provide low level access to origin and destination local
@@ -33,7 +47,10 @@
 #' destination_positions(model)
 #' origin_positions(model)
 location_positions <- function(sim) {
-  sim$location_positions
+  list(
+    origin = sim$origin[["positions"]],
+    destination = sim$destination[["positions"]]
+  )
 }
 
 #' @rdname location_positions
@@ -47,30 +64,11 @@ location_positions <- function(sim) {
     if (!identical(names(value), c("origin", "destination"))) {
       cli::cli_abort("{.arg value} must have exactly two elements: {.field origin} and {.field destination}")
     }
-    if (!is.null(value$origin)) {
-      if (!is.matrix(value$origin)) {
-        cli::cli_abort("{.arg value$origin} must be a matrix")
-      }
-      if (nrow(value$origin) != nrow(sim$Y)) {
-        cli::cli_abort("{.arg value$origin} must have {.val {nrow(sim$Y)}} rows")
-      }
-      if (ncol(value$origin) < 2 || ncol(value$origin) > 3) {
-        cli::cli_abort("{.arg value$origin} must have 2 or 3 columns")
-      }
-    }
-    if (!is.null(value$destination)) {
-      if (!is.matrix(value$destination)) {
-        cli::cli_abort("{.arg value$destination} must be a matrix")
-      }
-      if (nrow(value$destination) != ncol(sim$Y)) {
-        cli::cli_abort("{.arg value$destination} must have {.val {ncol(sim$Y)}} rows")
-      }
-      if (ncol(value$destination) < 2 || ncol(value$destination) > 3) {
-        cli::cli_abort("{.arg value$destination} must have 2 or 3 columns")
-      }
-    }
+    check_positions(value$origin, nrow(sim$Y))
+    check_positions(value$destination, ncol(sim$Y))
   }
-  sim$location_positions <- value
+  sim$origin[["positions"]] <- value$origin
+  sim$destination[["positions"]] <- value$destination
   sim
 }
 
@@ -100,12 +98,7 @@ origin_positions <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  full_positions <- sim$location_positions
-  if (!is.null(full_positions)) {
-    full_positions$origin
-  } else {
-    NULL
-  }
+  sim$origin[["positions"]]
 }
 
 
@@ -117,22 +110,8 @@ origin_positions <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  if (!is.null(value)) {
-    if (!is.matrix(value)) {
-      cli::cli_abort("{.arg value} must be a matrix")
-    }
-    if (nrow(value) != nrow(sim$Y)) {
-      cli::cli_abort("{.arg value} must have {.val {nrow(sim$Y)}} rows")
-    }
-    if (ncol(value) < 2 || ncol(value) > 3) {
-      cli::cli_abort("{.arg value} must have 2 or 3 columns")
-    }
-  }
-  if (is.null(sim$location_positions)) {
-    sim$location_positions <- list(origin = value)
-  } else {
-    sim$location_positions["origin"] <- list(value)
-  }
+  check_positions(value, nrow(sim$Y))
+  sim$origin[["positions"]] <- value
   sim
 }
 
@@ -163,12 +142,7 @@ destination_positions <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  full_positions <- sim$location_positions
-  if (!is.null(full_positions)) {
-    full_positions$destination
-  } else {
-    NULL
-  }
+  sim$destination[["positions"]]
 }
 
 #' @export
@@ -179,21 +153,7 @@ destination_positions <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  if (!is.null(value)) {
-    if (!is.matrix(value)) {
-      cli::cli_abort("{.arg value} must be a matrix")
-    }
-    if (nrow(value) != ncol(sim$Y)) {
-      cli::cli_abort("{.arg value} must have {.val {ncol(sim$Y)}} rows")
-    }
-    if (ncol(value) < 2 || ncol(value) > 3) {
-      cli::cli_abort("{.arg value} must have 2 or 3 columns")
-    }
-  }
-  if (is.null(sim$location_positions)) {
-    sim$location_positions <- list(destination = value)
-  } else {
-    sim$location_positions["destination"] <- list(value)
-  }
+  check_positions(value, ncol(sim$Y))
+  sim$destination[["positions"]] <- value
   sim
 }

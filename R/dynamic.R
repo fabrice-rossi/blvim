@@ -35,10 +35,6 @@
 #' (\|Z^{t+1}\|+\delta),} where \eqn{\delta} is given by the `precision`
 #' parameter.
 #'
-#' @param costs a cost matrix
-#' @param X a vector of production constraints
-#' @param alpha the return to scale parameter
-#' @param beta the inverse cost scale parameter
 #' @param Z a vector of initial destination attractivenesses
 #' @param epsilon the update intensity
 #' @param iter_max the maximal number of steps of the BLV dynamic
@@ -46,6 +42,7 @@
 #' @param precision convergence threshold
 #' @param quadratic selects the update rule, see details.
 #'
+#' @inheritParams static_blvim
 #' @returns an object of class `sim`(and `sim_blvim`) for spatial interaction
 #'   model that contains the matrix of flows between the origin and the
 #'   destination locations as well as the final attractivenesses computed by the
@@ -70,6 +67,7 @@
 #'   Soc. Interface.5865–871 \doi{10.1098/rsif.2007.1288}
 #'
 blvim <- function(costs, X, alpha, beta, Z,
+                  bipartite = TRUE, origin_data = NULL, destination_data = NULL,
                   epsilon = 0.01,
                   iter_max = 50000,
                   conv_check = 100,
@@ -78,6 +76,7 @@ blvim <- function(costs, X, alpha, beta, Z,
   check_configuration(costs, X, alpha, beta, Z)
   pre <- blv(costs, X, alpha, beta, Z, epsilon, iter_max, conv_check, precision, quadratic)
   new_sim_blvim(pre$Y, pre$Z[, 1], costs, alpha, beta,
+    bipartite, origin_data, destination_data,
     iteration = pre$iter + 1L,
     converged = pre$iter < iter_max
   )

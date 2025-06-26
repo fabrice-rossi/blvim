@@ -1,8 +1,20 @@
-new_sim_wpc <- function(Y, Z, costs, alpha, beta, ..., class = character()) {
+insert_names <- function(data, names) {
+  if (!is.null(names)) {
+    if (is.null(data)) {
+      data <- list(names = names)
+    } else if (!rlang::has_name(data, "names")) {
+      data$names <- names
+    }
+  }
+  data
+}
+
+new_sim_wpc <- function(Y, Z, costs, alpha, beta, bipartite, origin_data, destination_data, ..., class = character()) {
   new_sim(Y,
     Z,
-    origin_names = rownames(costs),
-    destination_names = colnames(costs),
+    bipartite,
+    insert_names(origin_data, rownames(costs)),
+    insert_names(destination_data, colnames(costs)),
     costs = costs,
     alpha = alpha,
     beta = beta,

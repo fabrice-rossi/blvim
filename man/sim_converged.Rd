@@ -15,7 +15,7 @@ sim_converged(sim, ...)
 \code{TRUE}, \code{FALSE} or \code{NA}, as described above
 }
 \description{
-Some spatial interaction models are the result of an iteration calculation,
+Some spatial interaction models are the result of an iterative calculation,
 see for instance \code{\link[=blvim]{blvim()}}. This calculation may have been interrupted before
 convergence. The present function returns \code{TRUE} if the calculation converged,
 \code{FALSE} if this was not the case and \code{NA} if the spatial interaction model

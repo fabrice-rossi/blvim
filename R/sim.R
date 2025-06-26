@@ -1,35 +1,42 @@
-validate_sim <- function(Y, Z, origin_names, destination_names) {
-  if (ncol(Y) != length(Z)) {
-    cli::cli_abort("{.arg Z} must be of length {.val {ncol(Y)}}")
+check_location_data <- function(bipartite, origin_data, destination_data, Y) {
+  if (is.null(origin_data)) {
+    origin_data <- list()
+  } else {
+    if (rlang::has_name(origin_data, "names")) {
+      origin_data$names <- check_names(origin_data$names, nrow(Y))
+    }
+    if (rlang::has_name(origin_data, "positions")) {
+      check_positions(origin_data$positions, nrow(Y))
+    }
   }
-  if (!is.null(origin_names) && length(origin_names) != nrow(Y)) {
-    cli::cli_abort("{.arg origin_names} must be of length {.val {nrow(Y)}}")
+  if (is.null(destination_data)) {
+    destination_data <- list()
+  } else {
+    if (rlang::has_name(destination_data, "names")) {
+      destination_data$names <- check_names(destination_data$names, ncol(Y))
+    }
+    if (rlang::has_name(destination_data, "positions")) {
+      check_positions(destination_data$positions, ncol(Y))
+    }
   }
-  if (!is.null(destination_names) && length(destination_names) != ncol(Y)) {
-    cli::cli_abort("{.arg destination_names} must be of length {.val {ncol(Y)}}")
-  }
+  list(origin = origin_data, destination = destination_data)
 }
 
 new_sim <- function(Y,
                     Z,
-                    origin_names = NULL,
-                    destination_names = NULL,
+                    bipartite,
+                    origin_data,
+                    destination_data,
                     ...,
                     class = character()) {
-  validate_sim(Y, Z, origin_names, destination_names)
-  if (is.null(origin_names) && is.null(destination_names)) {
-    location_names <- NULL
-  } else {
-    location_names <- list(
-      origin = origin_names,
-      destination = destination_names
-    )
-  }
+  location_data <- check_location_data(bipartite, origin_data, destination_data, Y)
   structure(
     list(
       Y = Y,
       Z = Z,
-      location_names = location_names,
+      bipartite = bipartite,
+      origin = location_data$origin,
+      destination = location_data$destination,
       ...
     ),
     class = c(class, "sim")
@@ -81,25 +88,26 @@ flows.sim <- function(sim, ...) {
 #' format
 #'
 #' @details This function extracts the flow matrix in a long format. Each row
-#' contains the flow between an origin location and a destination location. The
-#' resulting data frame has at least three columns:
+#'   contains the flow between an origin location and a destination location.
+#'   The resulting data frame has at least three columns:
 #'  - `origin_idx`: identifies the origin location by its index from 1 to the number
-#' of origin locations
+#'   of origin locations
 #'  - `destination_idx`: identifies the destination location by its index from 1
-#' to the number of destination locations
+#'   to the number of destination locations
 #'  - `flow`: the flow between the corresponding location
 #'
-#' In addition, if location information is available, it will be included in
-#' the data frame as follows:
+#'   In addition, if location information is available, it will be included in
+#'   the data frame as follows:
 #' - location names are included using columns `origin_name` or `destination_name`
 #' - positions are included using 2 or 3 columns (per location type, origin or
-#' destination) depending on the number of dimensions used for the location. The
-#' names of the columns are by default `origin_x`, `origin_y` and `origin_z` (
-#' and equivalent names for destination location) unless coordinate names are
-#' specified in the location positions. In this latter case, the names are
-#' prefixed by `origin_` or `destination_`. For instance, if the destination
-#' location position coordinates are named `"longitude"` and `"latitude"`, the
-#' resulting columns will be `destination_longitude` and `destination_latitude`.
+#'   destination) depending on the number of dimensions used for the location.
+#'   The names of the columns are by default `origin_x`, `origin_y` and
+#'   `origin_z` ( and equivalent names for destination location) unless
+#'   coordinate names are specified in the location positions. In this latter
+#'   case, the names are prefixed by `origin_` or `destination_`. For instance,
+#'   if the destination location position coordinates are named `"longitude"`
+#'   and `"latitude"`, the resulting columns will be `destination_longitude` and
+#'   `destination_latitude`.
 #'
 #' @param sim a spatial interaction model object
 #' @param ... additional parameters (not used currently)
@@ -254,7 +262,7 @@ sim_iterations.sim <- function(sim, ...) {
 
 #' Reports whether the spatial interaction model construction converged
 #'
-#' Some spatial interaction models are the result of an iteration calculation,
+#' Some spatial interaction models are the result of an iterative calculation,
 #' see for instance [blvim()]. This calculation may have been interrupted before
 #' convergence. The present function returns `TRUE` if the calculation converged,
 #' `FALSE` if this was not the case and `NA` if the spatial interaction model

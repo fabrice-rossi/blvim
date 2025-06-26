@@ -30,5 +30,5 @@ r_blvim <- function(costs, X, alpha, beta, Z_init,
       }
     }
   }
-  new_sim(Y, Z, iteration = iter)
+  new_sim(Y, Z, TRUE, NULL, NULL, iteration = iter)
 }

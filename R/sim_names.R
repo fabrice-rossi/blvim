@@ -37,7 +37,7 @@ check_names <- function(value, location_number, call = rlang::caller_env()) {
 #' destination_names(model)
 #' origin_names(model)
 location_names <- function(sim) {
-  sim$location_names
+  list(origin = sim$origin[["names"]], destination = sim$destination[["names"]])
 }
 
 #' @rdname location_names
@@ -68,7 +68,8 @@ location_names <- function(sim) {
       }
     }
   }
-  sim$location_names <- value
+  sim$origin[["names"]] <- value$origin
+  sim$destination[["names"]] <- value$destination
   sim
 }
 
@@ -100,12 +101,7 @@ origin_names <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  full_names <- sim$location_names
-  if (!is.null(full_names)) {
-    full_names$origin
-  } else {
-    NULL
-  }
+  sim$origin[["names"]]
 }
 
 
@@ -117,12 +113,7 @@ origin_names <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  value <- check_names(value, nrow(sim$Y))
-  if (is.null(sim$location_names)) {
-    sim$location_names <- list(origin = value)
-  } else {
-    sim$location_names["origin"] <- list(value)
-  }
+  sim$origin[["names"]] <- check_names(value, nrow(sim$Y))
   sim
 }
 
@@ -154,12 +145,7 @@ destination_names <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  full_names <- sim$location_names
-  if (!is.null(full_names)) {
-    full_names$destination
-  } else {
-    NULL
-  }
+  sim$destination[["names"]]
 }
 
 #' @export
@@ -170,13 +156,6 @@ destination_names <- function(sim) {
   if (!inherits(sim, "sim")) {
     cli::cli_abort("{.arg sim} must be a {.cls sim}")
   }
-  if (!is.null(value)) {
-    value <- check_names(value, ncol(sim$Y))
-  }
-  if (is.null(sim$location_names)) {
-    sim$location_names <- list(destination = value)
-  } else {
-    sim$location_names["destination"] <- list(value)
-  }
+  sim$destination[["names"]] <- check_names(value, ncol(sim$Y))
   sim
 }

@@ -1,9 +1,12 @@
-new_sim_blvim <- function(Y, Z, costs, alpha, beta, iteration, converged, ..., class = character()) {
+new_sim_blvim <- function(Y, Z, costs, alpha, beta, bipartite, origin_data, destination_data, iteration, converged, ..., class = character()) {
   new_sim_wpc(Y,
     Z,
     costs = costs,
     alpha = alpha,
     beta = beta,
+    bipartite,
+    origin_data,
+    destination_data,
     iteration = iteration,
     converged = converged,
     ...,

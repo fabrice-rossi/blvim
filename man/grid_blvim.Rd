@@ -10,6 +10,9 @@ grid_blvim(
   alphas,
   betas,
   Z,
+  bipartite = TRUE,
+  origin_data = NULL,
+  destination_data = NULL,
   epsilon = 0.01,
   iter_max = 50000,
   conv_check = 100,
@@ -28,6 +31,17 @@ grid_blvim(
 \item{betas}{a vector of cost inverse scale parameters}
 
 \item{Z}{a vector of initial destination attractivenesses}
+
+\item{bipartite}{when \code{TRUE} (default value), the origin and destination
+locations are considered to be distinct. When \code{FALSE}, a single set of
+locations plays the both roles. This has only consequences in functions
+specific to this latter case such as \code{\link[=terminals]{terminals()}}.}
+
+\item{origin_data}{\code{NULL} or a list of additional data about the origin
+locations (see details)}
+
+\item{destination_data}{\code{NULL} or a list of additional data about the
+destination locations (see details)}
 
 \item{epsilon}{the update intensity}
 
@@ -53,6 +67,42 @@ flow is computed using one of all the pairwise combinations between the alpha
 values given by \code{alphas} and the beta values given by \code{betas}. The function
 returns an object of class \code{sim_list} which contains the resulting flows.
 }
+\section{Location data}{
+While models in this package do not use location data beyond \code{X} and \code{Z},
+additional data can be stored and used when analysing spatial interaction
+models.
+\subsection{Origin and destination location names}{
+
+Spatial interaction models can store names for origin and destination
+locations, using \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}. Names
+are taken by default from names of the cost matrix \code{costs}. More precisely,
+\code{rownames(costs)} is used for origin location names and \code{colnames(costs)} for
+destination location names.
+}
+
+\subsection{Origin and destination location positions}{
+
+Spatial interaction models can store the positions of the origin and
+destination locations, using \code{\link[=origin_positions<-]{origin_positions<-()}} and
+\code{\link[=destination_positions<-]{destination_positions<-()}}.
+}
+
+\subsection{Specifying location data}{
+
+In addition to the functions mentioned above, location data can be specified
+directly using the \code{origin_data} and \code{destination_data} parameters. Data are
+given by a list whose components are not interpreted excepted the following
+ones:
+\itemize{
+\item \code{names} is used to specify location names and its content has to follow
+the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}
+\item \code{positions} is used to specify location positions and its content has
+to follow the restrictions documented in \code{\link[=origin_positions<-]{origin_positions<-()}} and
+\code{\link[=destination_positions<-]{destination_positions<-()}}
+}
+}
+}
+
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))

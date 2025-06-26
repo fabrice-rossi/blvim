@@ -33,6 +33,42 @@ test_that("positions are reported and modified as expected", {
   expect_equal(origin_positions(model), pp)
 })
 
+test_that("positions are correctly set in sim calculation functions", {
+  config <- create_locations(40, 50, seed = 0)
+  model <- static_blvim(config$costs, config$X, 1.5, 1, config$Z,
+    origin_data = list(positions = config$pp),
+    destination_data = list(positions = config$pd)
+  )
+  expect_equal(origin_positions(model), config$pp)
+  expect_equal(destination_positions(model), config$pd)
+  full_positions <- location_positions(model)
+  expect_equal(full_positions$origin, config$pp)
+  expect_equal(full_positions$destination, config$pd)
+  expect_named(full_positions, c("origin", "destination"))
+  ## and remove the positions
+  origin_positions(model) <- NULL
+  destination_positions(model) <- NULL
+  expect_null(origin_positions(model))
+  expect_null(destination_positions(model))
+  ## do that again for dynamic models
+  config <- create_locations(40, 50, seed = 12)
+  model <- blvim(config$costs, config$X, 1.5, 1, config$Z,
+    origin_data = list(positions = config$pp),
+    destination_data = list(positions = config$pd)
+  )
+  expect_equal(origin_positions(model), config$pp)
+  expect_equal(destination_positions(model), config$pd)
+  full_positions <- location_positions(model)
+  expect_equal(full_positions$origin, config$pp)
+  expect_equal(full_positions$destination, config$pd)
+  expect_named(full_positions, c("origin", "destination"))
+  ## and remove the positions
+  origin_positions(model) <- NULL
+  destination_positions(model) <- NULL
+  expect_null(origin_positions(model))
+  expect_null(destination_positions(model))
+})
+
 test_that("erroneous position settings are detected", {
   config <- create_locations(40, 50, seed = 0)
   model <- static_blvim(config$costs, config$X, 1.5, 1, config$Z)

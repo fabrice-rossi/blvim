@@ -7,6 +7,7 @@
 #' values given by `alphas` and the beta values given by `betas`. The function
 #' returns an object of class `sim_list` which contains the resulting flows.
 #'
+#' @inheritSection static_blvim Location data
 #' @inheritParams blvim
 #' @param alphas a vector of return to scale parameters
 #' @param betas a vector of cost inverse scale parameters
@@ -24,6 +25,7 @@
 #' length(all_flows)
 #' all_flows[[2]]
 grid_blvim <- function(costs, X, alphas, betas, Z,
+                       bipartite = TRUE, origin_data = NULL, destination_data = NULL,
                        epsilon = 0.01,
                        iter_max = 50000,
                        conv_check = 100,
@@ -41,6 +43,9 @@ grid_blvim <- function(costs, X, alphas, betas, Z,
       params$alpha[k],
       params$beta[k],
       Z,
+      bipartite,
+      origin_data,
+      destination_data,
       epsilon = epsilon,
       iter_max = iter_max,
       conv_check = conv_check,

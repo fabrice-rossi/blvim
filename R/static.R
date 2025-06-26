@@ -46,14 +46,35 @@
 #'
 #' ## Origin and destination location positions
 #'
-#' Spatial interaction models can store the positions of the origin and destination
-#' locations, using [`origin_positions<-()`] and [`destination_positions<-()`].
+#' Spatial interaction models can store the positions of the origin and
+#' destination locations, using [`origin_positions<-()`] and
+#' [`destination_positions<-()`].
+#'
+#' ## Specifying location data
+#'
+#' In addition to the functions mentioned above, location data can be specified
+#' directly using the `origin_data` and `destination_data` parameters. Data are
+#' given by a list whose components are not interpreted excepted the following
+#' ones:
+#'   - `names` is used to specify location names and its content has to follow
+#'   the restrictions documented in [`origin_names<-()`] and [`destination_names<-()`]
+#'   - `positions` is used to specify location positions and its content has
+#'   to follow the restrictions documented in [`origin_positions<-()`] and
+#'   [`destination_positions<-()`]
 #'
 #' @param costs a cost matrix
 #' @param X a vector of production constraints
 #' @param alpha the return to scale parameter
 #' @param beta the inverse cost scale parameter
 #' @param Z a vector of destination attractivenesses
+#' @param bipartite when `TRUE` (default value), the origin and destination
+#'   locations are considered to be distinct. When `FALSE`, a single set of
+#'   locations plays the both roles. This has only consequences in functions
+#'   specific to this latter case such as [terminals()].
+#' @param origin_data `NULL` or a list of additional data about the origin
+#'   locations (see details)
+#' @param destination_data `NULL` or a list of additional data about the
+#'   destination locations (see details)
 #'
 #' @returns an object of class `sim` (and `sim_wpc`) for spatial interaction
 #'   model that contains the matrix of flows from the origin locations to the
@@ -73,8 +94,8 @@
 #'   associated developments", Environment and Planning A: Economy and Space,
 #'   3(1), 1-32 \doi{10.1068/a030001}
 #' @seealso [origin_names()], [destination_names()]
-static_blvim <- function(costs, X, alpha, beta, Z) {
+static_blvim <- function(costs, X, alpha, beta, Z, bipartite = TRUE, origin_data = NULL, destination_data = NULL) {
   check_configuration(costs, X, alpha, beta, Z)
   Y <- we_oc(costs, X, alpha, beta, Z)
-  new_sim_wpc(Y, Z, costs, alpha, beta)
+  new_sim_wpc(Y, Z, costs, alpha, beta, bipartite, origin_data, destination_data)
 }

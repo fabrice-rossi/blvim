@@ -22,8 +22,8 @@ format
 }
 \details{
 This function extracts the flow matrix in a long format. Each row
-contains the flow between an origin location and a destination location. The
-resulting data frame has at least three columns:
+contains the flow between an origin location and a destination location.
+The resulting data frame has at least three columns:
 \itemize{
 \item \code{origin_idx}: identifies the origin location by its index from 1 to the number
 of origin locations
@@ -37,13 +37,14 @@ the data frame as follows:
 \itemize{
 \item location names are included using columns \code{origin_name} or \code{destination_name}
 \item positions are included using 2 or 3 columns (per location type, origin or
-destination) depending on the number of dimensions used for the location. The
-names of the columns are by default \code{origin_x}, \code{origin_y} and \code{origin_z} (
-and equivalent names for destination location) unless coordinate names are
-specified in the location positions. In this latter case, the names are
-prefixed by \code{origin_} or \code{destination_}. For instance, if the destination
-location position coordinates are named \code{"longitude"} and \code{"latitude"}, the
-resulting columns will be \code{destination_longitude} and \code{destination_latitude}.
+destination) depending on the number of dimensions used for the location.
+The names of the columns are by default \code{origin_x}, \code{origin_y} and
+\code{origin_z} ( and equivalent names for destination location) unless
+coordinate names are specified in the location positions. In this latter
+case, the names are prefixed by \code{origin_} or \code{destination_}. For instance,
+if the destination location position coordinates are named \code{"longitude"}
+and \code{"latitude"}, the resulting columns will be \code{destination_longitude} and
+\code{destination_latitude}.
 }
 }
 \examples{

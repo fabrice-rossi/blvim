@@ -4,7 +4,16 @@
 \alias{static_blvim}
 \title{Compute flows between origin and destination locations}
 \usage{
-static_blvim(costs, X, alpha, beta, Z)
+static_blvim(
+  costs,
+  X,
+  alpha,
+  beta,
+  Z,
+  bipartite = TRUE,
+  origin_data = NULL,
+  destination_data = NULL
+)
 }
 \arguments{
 \item{costs}{a cost matrix}
@@ -16,6 +25,17 @@ static_blvim(costs, X, alpha, beta, Z)
 \item{beta}{the inverse cost scale parameter}
 
 \item{Z}{a vector of destination attractivenesses}
+
+\item{bipartite}{when \code{TRUE} (default value), the origin and destination
+locations are considered to be distinct. When \code{FALSE}, a single set of
+locations plays the both roles. This has only consequences in functions
+specific to this latter case such as \code{\link[=terminals]{terminals()}}.}
+
+\item{origin_data}{\code{NULL} or a list of additional data about the origin
+locations (see details)}
+
+\item{destination_data}{\code{NULL} or a list of additional data about the
+destination locations (see details)}
 }
 \value{
 an object of class \code{sim} (and \code{sim_wpc}) for spatial interaction
@@ -72,8 +92,24 @@ destination location names.
 
 \subsection{Origin and destination location positions}{
 
-Spatial interaction models can store the positions of the origin and destination
-locations, using \code{\link[=origin_positions<-]{origin_positions<-()}} and \code{\link[=destination_positions<-]{destination_positions<-()}}.
+Spatial interaction models can store the positions of the origin and
+destination locations, using \code{\link[=origin_positions<-]{origin_positions<-()}} and
+\code{\link[=destination_positions<-]{destination_positions<-()}}.
+}
+
+\subsection{Specifying location data}{
+
+In addition to the functions mentioned above, location data can be specified
+directly using the \code{origin_data} and \code{destination_data} parameters. Data are
+given by a list whose components are not interpreted excepted the following
+ones:
+\itemize{
+\item \code{names} is used to specify location names and its content has to follow
+the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}
+\item \code{positions} is used to specify location positions and its content has
+to follow the restrictions documented in \code{\link[=origin_positions<-]{origin_positions<-()}} and
+\code{\link[=destination_positions<-]{destination_positions<-()}}
+}
 }
 }
 

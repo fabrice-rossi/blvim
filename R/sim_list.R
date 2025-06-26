@@ -2,22 +2,22 @@
 ## the first sim is assumed to contain the common content
 sims_compress <- function(sims) {
   costs <- sims[[1]]$costs
-  location_names <- location_names(sims[[1]])
-  location_positions <- location_positions(sims[[1]])
+  origin <- sims[[1]]$origin
+  destination <- sims[[1]]$destination
   sims <- lapply(sims, function(x) {
     x$costs <- NULL
-    location_names(x) <- NULL
-    location_positions(x) <- NULL
+    x$origin <- NULL
+    x$destination <- NULL
     x
   })
-  list(sims = sims, common = list(costs = costs, location_names = location_names))
+  list(sims = sims, common = list(costs = costs, origin = origin, destination = destination))
 }
 
 ## reverse of compression for one sim
 sim_restore <- function(sim, common) {
   sim$costs <- common$costs
-  location_names(sim) <- common$location_names
-  location_positions(sim) <- common$location_positions
+  sim$origin <- common$origin
+  sim$destination <- common$destination
   sim
 }
 
