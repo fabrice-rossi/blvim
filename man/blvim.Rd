@@ -138,7 +138,7 @@ distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
 flows <- blvim(distances, production, 1.5, 1, attractiveness)
-
+flows
 }
 \references{
 Harris, B., & Wilson, A. G. (1978). "Equilibrium Values and

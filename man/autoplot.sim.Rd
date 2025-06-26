@@ -94,10 +94,21 @@ positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
-flows <- blvim(distances, production, 1.5, 4, attractiveness)
+flows <- blvim(distances, production, 1.5, 4, attractiveness,
+  origin_data = list(names = LETTERS[1:10], positions = positions),
+  destination_data = list(names = LETTERS[1:10], positions = positions)
+)
 ggplot2::autoplot(flows)
 ## bar plots should be almost identical if convergence occurred
 sim_converged(flows)
 ggplot2::autoplot(flows, "destination")
 ggplot2::autoplot(flows, "attractiveness")
+## names inclusion
+ggplot2::autoplot(flows, "destination", with_names = TRUE)
+ggplot2::autoplot(flows, with_names = TRUE)
+## positions
+ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
+  ggplot2::scale_size_continuous(range = c(0, 6))
+ggplot2::autoplot(flows, with_positions = TRUE) +
+  ggplot2::scale_linewidth_continuous(range = c(0, 2))
 }

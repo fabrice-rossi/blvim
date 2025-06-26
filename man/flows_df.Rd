@@ -52,8 +52,15 @@ positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
+## simple case (no positions and default names)
 model <- static_blvim(distances, production, 1.5, 1, attractiveness)
-flows_df(model)
+head(flows_df(model))
+## with location data
+model <- static_blvim(distances, production, 1.5, 1, attractiveness,
+  origin_data = list(positions = positions),
+  destination_data = list(positions = positions)
+)
+head(flows_df(model))
 }
 \seealso{
 \code{\link[=location_positions]{location_positions()}},  \code{\link[=location_names]{location_names()}}

@@ -56,7 +56,7 @@
 #' production <- rep(1, 10)
 #' attractiveness <- c(2, rep(1, 9))
 #' flows <- blvim(distances, production, 1.5, 1, attractiveness)
-#'
+#' flows
 #' @references Harris, B., & Wilson, A. G. (1978). "Equilibrium Values and
 #'   Dynamics of Attractiveness Terms in Production-Constrained
 #'   Spatial-Interaction Models", Environment and Planning A: Economy and Space,

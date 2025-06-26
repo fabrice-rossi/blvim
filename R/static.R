@@ -88,8 +88,13 @@
 #' distances <- as.matrix(dist(positions))
 #' production <- rep(1, 10)
 #' attractiveness <- c(2, rep(1, 9))
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
-#'
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness,
+#'   origin_data = list(names = letters[1:10], positions = positions),
+#'   destination_data = list(names = letters[1:10], positions = positions)
+#' )
+#' model
+#' location_names(model)
+#' location_positions(model)
 #' @references Wilson, A. (1971), "A family of spatial interaction models, and
 #'   associated developments", Environment and Planning A: Economy and Space,
 #'   3(1), 1-32 \doi{10.1068/a030001}
