@@ -19,6 +19,20 @@ check_location_data <- function(bipartite, origin_data, destination_data, Y) {
       check_positions(destination_data$positions, ncol(Y))
     }
   }
+  if (!bipartite) {
+    if (length(origin_data) > 0) {
+      ## we keep only origin_data after checking that it is equal
+      ## to destination_data
+      if (length(destination_data) > 0) {
+        if (!identical(origin_data, destination_data)) {
+          cli::cli_abort("If {.arg bipartite} is {.val FALSE}, {.arg origin_data} and {.arg destination_data} must be identical.")
+        }
+      }
+      destination_data <- origin_data
+    } else {
+      origin_data <- destination_data
+    }
+  }
   list(origin = origin_data, destination = destination_data)
 }
 
@@ -295,4 +309,36 @@ sim_converged <- function(sim, ...) {
 #' @export
 sim_converged.sim <- function(sim, ...) {
   NA
+}
+
+#' Reports whether the spatial interaction model is bipartite
+#'
+#' The function returns `TRUE` is the spatial interaction model (SIM) is bipartite, that
+#' is if the origin locations are distinct from the destination locations (at least
+#' from the analysis point of view). The function return `FALSE` when the SIM
+#' uses the same locations for origin and destination.
+#'
+#' @param sim a spatial interaction model object
+#'
+#' @returns `TRUE` if the spatial interaction model is bipartite, `FALSE` if not.
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 10)
+#' attractiveness <- c(2, rep(1, 9))
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' ## returns TRUE despite the use of a single set of positions
+#' sim_is_bipartite(model)
+#' ## now we are clear about the non bipartite nature of the model
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness, bipartite = FALSE)
+#' sim_is_bipartite(model)
+sim_is_bipartite <- function(sim) {
+  UseMethod("sim_is_bipartite")
+}
+
+#' @export
+sim_is_bipartite.sim <- function(sim) {
+  sim$bipartite
 }

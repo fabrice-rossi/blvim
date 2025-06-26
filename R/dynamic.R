@@ -73,7 +73,7 @@ blvim <- function(costs, X, alpha, beta, Z,
                   conv_check = 100,
                   precision = 1e-6,
                   quadratic = FALSE) {
-  check_configuration(costs, X, alpha, beta, Z)
+  check_configuration(costs, X, alpha, beta, Z, bipartite)
   pre <- blv(costs, X, alpha, beta, Z, epsilon, iter_max, conv_check, precision, quadratic)
   new_sim_blvim(pre$Y, pre$Z[, 1], costs, alpha, beta,
     bipartite, origin_data, destination_data,

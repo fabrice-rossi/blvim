@@ -7,6 +7,7 @@ test_that("autoplot.sim_list works as expected", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     precision = .Machine$double.eps^0.5
   )
   vdiffr::expect_doppelganger(
@@ -45,6 +46,7 @@ test_that("autoplot.sim_list border cases", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     precision = .Machine$double.eps^0.5
   )
   vdiffr::expect_doppelganger(
@@ -63,6 +65,7 @@ test_that("autoplot.sim_list border cases", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     precision = .Machine$double.eps^0.5
   )
   vdiffr::expect_doppelganger(
@@ -81,6 +84,7 @@ test_that("autoplot.sim_list border cases", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     precision = .Machine$double.eps^0.5
   )
   vdiffr::expect_doppelganger(

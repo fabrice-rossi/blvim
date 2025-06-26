@@ -51,8 +51,8 @@
 #' In addition to those entropy based definition, terminal based calculations
 #' are also provided. Using any definition supported by the [terminals()] function,
 #' the diversity is the number of terminals identified. Notice this applies only
-#' to interaction models in which origin and destination locations are identical.
-#' Current values of definitions are:
+#' to interaction models in which origin and destination locations are identical,
+#' i.e. when the model is not bipartite. Current values of definitions are:
 #'
 #'   - `"ND"` for the original Nystuen and Dacey definition
 #'   - `"RW"` for the variant by Rihll and Wilson
@@ -72,7 +72,7 @@
 #'
 #' @returns the diversity of destination flows (one value per spatial
 #'   interaction model)
-#' @seealso [destination_flow()], [terminals()]
+#' @seealso [destination_flow()], [terminals()], [sim_is_bipartite()]
 #' @export
 #'
 #' @references Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
@@ -82,7 +82,7 @@
 #' distances <- as.matrix(dist(positions))
 #' production <- rep(1, 10)
 #' attractiveness <- c(2, rep(1, 9))
-#' flows <- blvim(distances, production, 1.5, 3, attractiveness)
+#' flows <- blvim(distances, production, 1.5, 3, attractiveness, bipartite = FALSE)
 #' diversity(flows)
 #' diversity(flows, "renyi", 2)
 #' diversity(flows, "RW")

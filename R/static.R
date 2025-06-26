@@ -100,7 +100,7 @@
 #'   3(1), 1-32 \doi{10.1068/a030001}
 #' @seealso [origin_names()], [destination_names()]
 static_blvim <- function(costs, X, alpha, beta, Z, bipartite = TRUE, origin_data = NULL, destination_data = NULL) {
-  check_configuration(costs, X, alpha, beta, Z)
+  check_configuration(costs, X, alpha, beta, Z, bipartite)
   Y <- we_oc(costs, X, alpha, beta, Z)
   new_sim_wpc(Y, Z, costs, alpha, beta, bipartite, origin_data, destination_data)
 }

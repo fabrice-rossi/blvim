@@ -81,8 +81,8 @@ min-entropy instead of the exact Rényi entropy.
 In addition to those entropy based definition, terminal based calculations
 are also provided. Using any definition supported by the \code{\link[=terminals]{terminals()}} function,
 the diversity is the number of terminals identified. Notice this applies only
-to interaction models in which origin and destination locations are identical.
-Current values of definitions are:
+to interaction models in which origin and destination locations are identical,
+i.e. when the model is not bipartite. Current values of definitions are:
 \itemize{
 \item \code{"ND"} for the original Nystuen and Dacey definition
 \item \code{"RW"} for the variant by Rihll and Wilson
@@ -99,7 +99,7 @@ positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
-flows <- blvim(distances, production, 1.5, 3, attractiveness)
+flows <- blvim(distances, production, 1.5, 3, attractiveness, bipartite = FALSE)
 diversity(flows)
 diversity(flows, "renyi", 2)
 diversity(flows, "RW")
@@ -109,5 +109,5 @@ Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 \doi{10.1111/j.2006.0030-1299.14714.x}
 }
 \seealso{
-\code{\link[=destination_flow]{destination_flow()}}, \code{\link[=terminals]{terminals()}}
+\code{\link[=destination_flow]{destination_flow()}}, \code{\link[=terminals]{terminals()}}, \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}
 }

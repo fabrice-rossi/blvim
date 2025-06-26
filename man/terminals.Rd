@@ -24,7 +24,7 @@ spatial interaction model. Terminals are locally dominating locations that
 essentially send less to other locations than they receive (see details for
 formal definitions). As we compare incoming flows to outgoing flows, terminal
 computation is restricted to interaction models in which origin and
-destination locations are identical.
+destination locations are identical, i.e. models that are not \code{bipartite}.
 }
 \details{
 The notion of terminal used in this function is based on seminal work by J.
@@ -65,7 +65,7 @@ positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-model <- blvim(distances, production, 1.3, 2, attractiveness)
+model <- blvim(distances, production, 1.3, 2, attractiveness, bipartite = FALSE)
 terminals(model)
 }
 \references{
@@ -81,4 +81,7 @@ Rihll, T., and Wilson, A. (1991), "Modelling settlement structures in
 ancient Greece: new approaches to the polis", In City and Country in the
 Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
 London: Routledge.
+}
+\seealso{
+\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}
 }

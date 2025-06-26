@@ -7,6 +7,7 @@ test_that("autoplot.sim_df works as expected", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     epsilon = 0.1,
     iter_max = 1000,
     precision = .Machine$double.eps^0.5
@@ -54,6 +55,7 @@ test_that("autoplot.sim_df border cases", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     precision = .Machine$double.eps^0.5
   )
   models_df <- sim_df(models)
@@ -73,6 +75,7 @@ test_that("autoplot.sim_df border cases", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     precision = .Machine$double.eps^0.5
   )
   models_df <- sim_df(models)
@@ -92,6 +95,7 @@ test_that("autoplot.sim_df border cases", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     precision = .Machine$double.eps^0.5
   )
   models_df <- sim_df(models)

@@ -16,18 +16,21 @@
 TRUE, that is to model inclusion)}
 }
 \value{
-a data frame representation of the spatial interaction model collection
+a data frame representation of the spatial interaction model
+collection
 }
 \description{
-This function build a data frame from a collection of spatial interaction model.
+This function build a data frame from a collection of spatial interaction
+model.
 }
 \details{
-The data frame has one row per spatial interaction model and the following columns:
+The data frame has one row per spatial interaction model and the following
+columns:
 \itemize{
 \item \code{alpha}: the return to scale parameter used to build the model
 \item \code{beta}: the cost inverse scale parameter used to build the model
 \item \code{diversity}: model diversity
-\item \code{terminals}: if the origin and destination locations are identical, the
+\item \code{terminals}: if the model is not bipartite, the
 terminals of the model
 \item \code{model}: if \code{models=TRUE}, the model
 }
@@ -37,7 +40,9 @@ positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
-all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness)
+all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness,
+  bipartite = FALSE
+)
 as.data.frame(all_flows, models = FALSE)
 
 }

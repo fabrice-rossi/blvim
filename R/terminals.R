@@ -5,7 +5,7 @@
 #' essentially send less to other locations than they receive (see details for
 #' formal definitions). As we compare incoming flows to outgoing flows, terminal
 #' computation is restricted to interaction models in which origin and
-#' destination locations are identical.
+#' destination locations are identical, i.e. models that are not `bipartite`.
 #'
 #' The notion of terminal used in this function is based on seminal work by J.
 #' D. Nystuen and M. F. Dacey (Nystuen & Dacey, 1961), as well as on the follow
@@ -48,13 +48,14 @@
 #' @returns a vector containing the indexes of the terminals identified from the
 #'   flow matrix of the interaction model.
 #' @export
+#' @seealso [sim_is_bipartite()]
 #'
 #' @examples
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
 #' distances <- as.matrix(dist(positions))
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
-#' model <- blvim(distances, production, 1.3, 2, attractiveness)
+#' model <- blvim(distances, production, 1.3, 2, attractiveness, bipartite = FALSE)
 #' terminals(model)
 #' @references Nystuen, J.D. and Dacey, M.F. (1961), "A graph theory
 #'   interpretation of nodal regions", Papers and Proceedings of the Regional
@@ -75,12 +76,10 @@ terminals <- function(sim, definition = c("ND", "RW"), ...) {
 #' @export
 terminals.sim <- function(sim, definition = c("ND", "RW"), ...) {
   definition <- rlang::arg_match(definition, c("ND", "RW"))
-  Y <- flows(sim)
-  if (nrow(Y) != ncol(Y)) {
-    cli::cli_abort(c("Terminals can only be extracted when origin and destination match",
-      "x" = "This spatial interaction model has {.val {nrow(Y)}} origin locations and {.val {ncol(Y)}} destination locations"
-    ))
+  if (sim_is_bipartite(sim)) {
+    cli::cli_abort("Terminals can only be extracted when the spatial interactive model is not bipartite")
   }
+  Y <- flows(sim)
   if (definition == "ND") {
     # Nystuen and Dacey definition
     # maximum output

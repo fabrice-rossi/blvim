@@ -31,7 +31,10 @@ test_that("diversity computes what is expected", {
   expect_error(diversity(model, "ND"))
   ## squared version
   config <- create_locations(40, 40, seed = 3, symmetric = TRUE)
-  model <- blvim(config$costs, config$X, 1.5, 6, config$Z, precision = .Machine$double.eps^0.5)
+  model <- blvim(config$costs, config$X, 1.5, 6, config$Z,
+    bipartite = FALSE,
+    precision = .Machine$double.eps^0.5
+  )
   expect_equal(diversity(model, "RW"), length(terminals(model, "RW")))
   expect_equal(diversity(model, "ND"), length(terminals(model, "ND")))
 })
@@ -45,6 +48,7 @@ test_that("diversity computes what is expected on sim lists", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     precision = .Machine$double.eps^0.5
   )
   orders <- c(0, 0.5, 1, 1.5, 3, Inf)

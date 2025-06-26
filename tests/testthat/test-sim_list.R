@@ -40,7 +40,7 @@ test_that("sim_list prints as expected", {
 })
 
 test_that("sim_list is converted correctly to a data frame", {
-  config <- create_locations(25, 25, seed = 10)
+  config <- create_locations(25, 25, seed = 10, symmetric = TRUE)
   alphas <- seq(1.25, 2, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 4)
   models <- grid_blvim(config$costs,
@@ -48,6 +48,7 @@ test_that("sim_list is converted correctly to a data frame", {
     alphas,
     betas,
     config$Z,
+    bipartite = FALSE,
     epsilon = 0.1,
     iter_max = 5000,
     precision = .Machine$double.eps^0.5

@@ -28,6 +28,7 @@
 #' all_flows <- grid_blvim(distances, production, seq(1.05, 1.55, by = 0.05),
 #'   seq(1, 3, by = 0.5),
 #'   attractiveness,
+#'   bipartite = FALSE,
 #'   epsilon = 0.1, iter_max = 1000
 #' )
 #' all_flows_df <- sim_df(all_flows)
