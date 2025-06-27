@@ -10,14 +10,14 @@ grid_destination_flow(sim_list, ...)
 \item{sim_list}{a collection of spatial interaction models, an object of class
 \code{sim_list}}
 
-\item{...}{additional parameters of the \code{\link[=destination_flow]{destination_flow()}} function}
+\item{...}{additional parameters for the \code{\link[=destination_flow]{destination_flow()}} function}
 }
 \value{
 a matrix of destination flows at the destination locations
 }
 \description{
 The function extract destination flows from all the spatial interaction models
-of the collection and returns then in a matrix in which each row corresponds
+of the collection and returns them in a matrix in which each row corresponds
 to a model and each column to a destination location.
 }
 \examples{
@@ -34,7 +34,7 @@ all_flows <- grid_blvim(distances,
 )
 g_df <- grid_destination_flow(all_flows)
 ## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
-## sites)
+## locations)
 dim(g_df)
 }
 \seealso{

@@ -153,12 +153,12 @@ as.data.frame.sim_list <- function(x, ..., models = TRUE) {
 #' Extract all the attractivenesses from a collection of spatial interaction models
 #'
 #' The function extract attractivenesses from all the spatial interaction models
-#' of the collection and returns then in a matrix in which each row corresponds
+#' of the collection and returns them in a matrix in which each row corresponds
 #' to a model and each column to a destination location.
 #'
 #' @param sim_list a collection of spatial interaction models, an object of class
 #'   `sim_list`
-#' @param ... additional parameters of the [attractiveness()] function
+#' @param ... additional parameters for the [attractiveness()] function
 #'
 #' @returns a matrix of attractivenesses at the destination locations
 #' @seealso [attractiveness()] and [grid_blvim()]
@@ -178,7 +178,7 @@ as.data.frame.sim_list <- function(x, ..., models = TRUE) {
 #' )
 #' g_Z <- grid_attractiveness(all_flows)
 #' ## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
-#' ## sites)
+#' ## locations)
 #' dim(g_Z)
 grid_attractiveness <- function(sim_list, ...) {
   if (!inherits(sim_list, "sim_list")) {
@@ -190,12 +190,12 @@ grid_attractiveness <- function(sim_list, ...) {
 #' Extract all the destination flows from a collection of spatial interaction models
 #'
 #' The function extract destination flows from all the spatial interaction models
-#' of the collection and returns then in a matrix in which each row corresponds
+#' of the collection and returns them in a matrix in which each row corresponds
 #' to a model and each column to a destination location.
 #'
 #' @param sim_list a collection of spatial interaction models, an object of class
 #'   `sim_list`
-#' @param ... additional parameters of the [destination_flow()] function
+#' @param ... additional parameters for the [destination_flow()] function
 #'
 #' @returns a matrix of destination flows at the destination locations
 #' @seealso [destination_flow()] and [grid_blvim()]
@@ -215,7 +215,7 @@ grid_attractiveness <- function(sim_list, ...) {
 #' )
 #' g_df <- grid_destination_flow(all_flows)
 #' ## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
-#' ## sites)
+#' ## locations)
 #' dim(g_df)
 grid_destination_flow <- function(sim_list, ...) {
   if (!inherits(sim_list, "sim_list")) {
