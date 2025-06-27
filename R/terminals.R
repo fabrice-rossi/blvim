@@ -48,7 +48,7 @@
 #' @returns a vector containing the indexes of the terminals identified from the
 #'   flow matrix of the interaction model.
 #' @export
-#' @seealso [sim_is_bipartite()]
+#' @seealso [sim_is_bipartite()], [is_terminal()], [grid_is_terminal()]
 #'
 #' @examples
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
@@ -79,6 +79,39 @@ terminals.sim <- function(sim, definition = c("ND", "RW"), ...) {
   if (sim_is_bipartite(sim)) {
     cli::cli_abort("Terminals can only be extracted when the spatial interactive model is not bipartite")
   }
+  which(is_terminal(sim, definition, ...))
+}
+
+#' Report whether locations are terminal sites or not
+#'
+#' This function returns a logical vector whose length equals the number of
+#' locations. The value in position `i` is `TRUE` if location number `i` is
+#' a terminal and `FALSE` if it is not. For the definition of terminals,
+#' see [terminals()].
+#'
+#' @inheritParams terminals
+#' @seealso [terminals()]
+#' @returns a logical vector with `TRUE` at the positions of locations that are
+#' terminals and `FALSE` for other locations.
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 10)
+#' attractiveness <- rep(1, 10)
+#' model <- blvim(distances, production, 1.3, 2, attractiveness, bipartite = FALSE)
+#' is_terminal(model)
+is_terminal <- function(sim, definition = c("ND", "RW"), ...) {
+  UseMethod("is_terminal")
+}
+
+#' @export
+is_terminal.sim <- function(sim, definition = c("ND", "RW"), ...) {
+  definition <- rlang::arg_match(definition, c("ND", "RW"))
+  if (sim_is_bipartite(sim)) {
+    cli::cli_abort("Terminals can only be extracted when the spatial interactive model is not bipartite")
+  }
   Y <- flows(sim)
   if (definition == "ND") {
     # Nystuen and Dacey definition
@@ -89,7 +122,6 @@ terminals.sim <- function(sim, definition = c("ND", "RW"), ...) {
     # subordination is when the max flow from A to B is such that B has a
     # larger total inflow that A
     is_terminal <- inputs >= inputs[to_max_flow]
-    which(is_terminal)
   } else {
     # Rihll and Wilson definition
     # maximum output
@@ -99,6 +131,9 @@ terminals.sim <- function(sim, definition = c("ND", "RW"), ...) {
     # subordination is when the max flow from A to B is larger than the
     # inflow of A
     is_terminal <- inputs >= max_flow
-    which(is_terminal)
   }
+  if (!is.null(destination_names(sim))) {
+    names(is_terminal) <- destination_names(sim)
+  }
+  is_terminal
 }

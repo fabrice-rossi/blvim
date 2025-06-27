@@ -83,5 +83,5 @@ Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
 London: Routledge.
 }
 \seealso{
-\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}
+\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}, \code{\link[=is_terminal]{is_terminal()}}, \code{\link[=grid_is_terminal]{grid_is_terminal()}}
 }

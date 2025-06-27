@@ -83,7 +83,7 @@ test_that("sim_list is converted correctly to a data frame", {
   expect_null(models_df$terminals)
 })
 
-test_that("sim_list attractivenesses extraction", {
+test_that("sim_list attractivenesses extraction works", {
   config <- create_locations(20, 30, seed = 4)
   alphas <- seq(1.25, 2, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 4)
@@ -104,7 +104,7 @@ test_that("sim_list attractivenesses extraction", {
   }
 })
 
-test_that("sim_list destination flows extraction", {
+test_that("sim_list destination flows extraction works", {
   config <- create_locations(20, 30, seed = 4)
   alphas <- seq(1.25, 2, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 4)
@@ -125,9 +125,32 @@ test_that("sim_list destination flows extraction", {
   }
 })
 
+test_that("sim_list is_terminal extraction works", {
+  config <- create_locations(20, 20, seed = 42, symmetric = TRUE)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    bipartite = FALSE,
+    epsilon = 0.1,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5
+  )
+  grid_term <- grid_is_terminal(models)
+  expect_true(inherits(grid_term, "matrix"))
+  expect_equal(dim(grid_term), c(length(alphas) * length(betas), length(config$Z)))
+  for (k in seq_along(models)) {
+    expect_equal(grid_term[k, ], is_terminal(models[[k]]))
+  }
+})
+
 test_that("sim_list extraction functions detect errors", {
   expect_error(grid_destination_flow(list()))
   expect_error(grid_attractiveness(2))
+  expect_error(grid_is_terminal(data.frame(x = 1:10)))
 })
 
 test_that("sim_list common information restoration works", {

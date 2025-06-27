@@ -223,3 +223,46 @@ grid_destination_flow <- function(sim_list, ...) {
   }
   t(sapply(sim_list, destination_flow, ...))
 }
+
+#' Extract all terminal status from a collection of spatial interaction models
+#'
+#' The function extract terminal status from all the spatial interaction models
+#' of the collection and returns them in a matrix in which each row corresponds
+#' to a model and each column to a destination location. The value at row `i`
+#' and column `j` is `TRUE` if destination `j` is a terminal in model `i`.
+#' This function applies only to non bipartite models.
+#'
+#' See [terminals()] for the definition of terminal locations.
+#'
+#' @param sim_list a collection of non bipartite spatial interaction models, an object of class
+#'   `sim_list`
+#' @inheritParams is_terminal
+#' @param ... additional parameters for the [is_terminal()] function
+#'
+#' @returns a matrix of terminal status at the destination locations
+#' @seealso [is_terminal()] and [grid_blvim()]
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(15 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 15)
+#' attractiveness <- rep(1, 15)
+#' all_flows <- grid_blvim(distances,
+#'   production,
+#'   c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3),
+#'   attractiveness,
+#'   bipartite = FALSE,
+#'   epsilon = 0.1
+#' )
+#' g_df <- grid_is_terminal(all_flows)
+#' ## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
+#' ## locations)
+#' dim(g_df)
+grid_is_terminal <- function(sim_list, definition = c("ND", "RW"), ...) {
+  if (!inherits(sim_list, "sim_list")) {
+    cli::cli_abort("{.var sim_list} must be an object of class {.cls sim_list}")
+  }
+  t(sapply(sim_list, is_terminal, definition, ...))
+}
