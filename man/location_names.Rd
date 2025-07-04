@@ -10,17 +10,19 @@ location_names(sim)
 location_names(sim) <- value
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
+collection of spatial interaction  models (an object of class \code{sim_list})}
 
 \item{value}{a list with two components (see the returned value) or \code{NULL}}
 }
 \value{
 for \code{location_names} \code{NULL} or a list with two components: \code{origin}
 for the origin location names and \code{destination} for the destination
-location names. For \verb{location_names<-()} the modified \code{sim} object.
+location names. For \verb{location_names<-()} the modified \code{sim} object or
+\code{sim_list} object.
 }
 \description{
-These functions provide low level access to origin and destination local
+Those functions provide low level access to origin and destination local
 names. It is recommended to use \code{\link[=origin_names]{origin_names()}} and \code{\link[=destination_names]{destination_names()}}
 instead of \code{location_names} and \verb{location_names<-}.
 }

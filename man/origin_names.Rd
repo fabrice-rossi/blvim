@@ -10,19 +10,20 @@ origin_names(sim)
 origin_names(sim) <- value
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
+collection of spatial interaction  models (an object of class \code{sim_list})}
 
 \item{value}{a character vector of length equal to the number of origin
 locations, or \code{NULL} (vectors of adapted length are converted to character vectors)}
 }
 \value{
-for \code{origin_names} \code{NULL} or a character vector with one name
-per origin locations in the model. for \verb{origin_names<-} the modified
-\code{sim} object
+for \code{origin_names} \code{NULL} or a character vector with one name per
+origin locations in the model. for \verb{origin_names<-} the modified \code{sim}
+object or \code{sim_list} object.
 }
 \description{
 Functions to get or set the names of the origin locations in a spatial
-interaction model.
+interaction model (or in a collection of spatial interaction models).
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)

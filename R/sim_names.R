@@ -10,16 +10,64 @@ check_names <- function(value, location_number, call = rlang::caller_env()) {
   value
 }
 
+check_location_names <- function(sim, value, call = rlang::caller_env()) {
+  if (!is.null(value)) {
+    if (!is.list(value)) {
+      cli::cli_abort("{.arg value} must be a {.cls list}",
+        call = call
+      )
+    }
+    if (!identical(names(value), c("origin", "destination"))) {
+      cli::cli_abort("{.arg value} must have exactly two elements: {.field origin} and {.field destination}",
+        call = call
+      )
+    }
+    if (!is.null(value$origin)) {
+      if (!is.character(value$origin)) {
+        cli::cli_abort("{.arg value$origin} must be a character vector",
+          call = call
+        )
+      }
+      if (length(value$origin) != nrow(sim$Y)) {
+        cli::cli_abort("{.arg value$origin} must be of length {.val {nrow(sim$Y)}}",
+          call = call
+        )
+      }
+    }
+    if (!is.null(value$destination)) {
+      if (!is.character(value$destination)) {
+        cli::cli_abort("{.arg value$destination} must be a character vector",
+          call = call
+        )
+      }
+      if (length(value$destination) != ncol(sim$Y)) {
+        cli::cli_abort("{.arg value$destination} must be of length {.val {ncol(sim$Y)}}",
+          call = call
+        )
+      }
+    }
+  }
+  if (!sim_is_bipartite(sim)) {
+    if (!identical(value$origin, value$destination)) {
+      cli::cli_abort("{.arg sim} is not bipartite but origin and destination location names differ.",
+        call = call
+      )
+    }
+  }
+}
+
 #' Names of origin and destination locations in a spatial interaction model
 #'
-#' These functions provide low level access to origin and destination local
+#' Those functions provide low level access to origin and destination local
 #' names. It is recommended to use [origin_names()] and [destination_names()]
 #' instead of `location_names` and `location_names<-`.
 #'
-#' @param sim a spatial interaction model object
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction  models (an object of class `sim_list`)
 #' @returns for `location_names` `NULL` or a list with two components: `origin`
 #'   for the origin location names and `destination` for the destination
-#'   location names. For `location_names<-()` the modified `sim` object.
+#'   location names. For `location_names<-()` the modified `sim` object or
+#'   `sim_list` object.
 #'
 #' @export
 #' @seealso [origin_names()], [destination_names()]
@@ -54,35 +102,7 @@ location_names.sim <- function(sim) {
 
 #' @export
 `location_names<-.sim` <- function(sim, value) {
-  if (!is.null(value)) {
-    if (!is.list(value)) {
-      cli::cli_abort("{.arg value} must be a {.cls list}")
-    }
-    if (!identical(names(value), c("origin", "destination"))) {
-      cli::cli_abort("{.arg value} must have exactly two elements: {.field origin} and {.field destination}")
-    }
-    if (!is.null(value$origin)) {
-      if (!is.character(value$origin)) {
-        cli::cli_abort("{.arg value$origin} must be a character vector")
-      }
-      if (length(value$origin) != nrow(sim$Y)) {
-        cli::cli_abort("{.arg value$origin} must be of length {.val {nrow(sim$Y)}}")
-      }
-    }
-    if (!is.null(value$destination)) {
-      if (!is.character(value$destination)) {
-        cli::cli_abort("{.arg value$destination} must be a character vector")
-      }
-      if (length(value$destination) != ncol(sim$Y)) {
-        cli::cli_abort("{.arg value$destination} must be of length {.val {ncol(sim$Y)}}")
-      }
-    }
-  }
-  if (!sim_is_bipartite(sim)) {
-    if (!identical(value$origin, value$destination)) {
-      cli::cli_abort("{.arg sim} is not bipartite but origin and destination location names differ.")
-    }
-  }
+  check_location_names(sim, value)
   sim$origin[["names"]] <- value$origin
   sim$destination[["names"]] <- value$destination
   sim
@@ -91,13 +111,14 @@ location_names.sim <- function(sim) {
 #' Names of origin locations in a spatial interaction model
 #'
 #' Functions to get or set the names of the origin locations in a spatial
-#' interaction model.
+#' interaction model (or in a collection of spatial interaction models).
 #'
-#' @param sim a spatial interaction model object
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction  models (an object of class `sim_list`)
 #'
-#' @returns for `origin_names` `NULL` or a character vector with one name
-#'   per origin locations in the model. for `origin_names<-` the modified
-#'   `sim` object
+#' @returns for `origin_names` `NULL` or a character vector with one name per
+#'   origin locations in the model. for `origin_names<-` the modified `sim`
+#'   object or `sim_list` object.
 #' @export
 #'
 #' @examples
@@ -142,13 +163,14 @@ origin_names.sim <- function(sim) {
 #' Names of destination locations in a spatial interaction model
 #'
 #' Functions to get or set the names of the destination locations in a spatial
-#' interaction model.
+#' interaction model (or in a collection of spatial interaction models).
 #'
-#' @param sim a spatial interaction model object
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction  models (an object of class `sim_list`)
 #'
 #' @returns for `destination_names` `NULL` or a character vector with one name
-#'   per destination locations in the model. for `destination_names<-` the modified
-#'   `sim` object
+#'   per destination locations in the model. for `destination_names<-` the
+#'   modified `sim` object or `sim_list` object.
 #' @export
 #'
 #' @examples
