@@ -47,6 +47,11 @@ check_positions <- function(value, location_number, call = rlang::caller_env()) 
 #' destination_positions(model)
 #' origin_positions(model)
 location_positions <- function(sim) {
+  UseMethod("location_positions")
+}
+
+#' @export
+location_positions.sim <- function(sim) {
   list(
     origin = sim$origin[["positions"]],
     destination = sim$destination[["positions"]]
@@ -57,6 +62,11 @@ location_positions <- function(sim) {
 #' @param value a list with two components (see the returned value) or `NULL`
 #' @export
 `location_positions<-` <- function(sim, value) {
+  UseMethod("location_positions<-")
+}
+
+#' @export
+`location_positions<-.sim` <- function(sim, value) {
   if (!is.null(value)) {
     if (!is.list(value)) {
       cli::cli_abort("{.arg value} must be a {.cls list}")
@@ -95,9 +105,11 @@ location_positions <- function(sim) {
 #' origin_positions(model)
 #' @seealso [location_positions()], [destination_positions()]
 origin_positions <- function(sim) {
-  if (!inherits(sim, "sim")) {
-    cli::cli_abort("{.arg sim} must be a {.cls sim}")
-  }
+  UseMethod("origin_positions")
+}
+
+#' @export
+origin_positions.sim <- function(sim) {
   sim$origin[["positions"]]
 }
 
@@ -107,9 +119,11 @@ origin_positions <- function(sim) {
 #' @param value a matrix with as many rows as  the number of origin locations
 #'   and 2 or 3 columns, or `NULL`
 `origin_positions<-` <- function(sim, value) {
-  if (!inherits(sim, "sim")) {
-    cli::cli_abort("{.arg sim} must be a {.cls sim}")
-  }
+  UseMethod("origin_positions<-")
+}
+
+#' @export
+`origin_positions<-.sim` <- function(sim, value) {
   check_positions(value, nrow(sim$Y))
   sim$origin[["positions"]] <- value
   sim
@@ -139,9 +153,11 @@ origin_positions <- function(sim) {
 #' destination_positions(model)
 #' @seealso [location_positions()], [origin_positions()]
 destination_positions <- function(sim) {
-  if (!inherits(sim, "sim")) {
-    cli::cli_abort("{.arg sim} must be a {.cls sim}")
-  }
+  UseMethod("destination_positions")
+}
+
+#' @export
+destination_positions.sim <- function(sim) {
   sim$destination[["positions"]]
 }
 
@@ -150,9 +166,11 @@ destination_positions <- function(sim) {
 #' @param value a matrix with as many rows as  the number of destination locations
 #'   and 2 or 3 columns, or `NULL`
 `destination_positions<-` <- function(sim, value) {
-  if (!inherits(sim, "sim")) {
-    cli::cli_abort("{.arg sim} must be a {.cls sim}")
-  }
+  UseMethod("destination_positions<-")
+}
+
+#' @export
+`destination_positions<-.sim` <- function(sim, value) {
   check_positions(value, ncol(sim$Y))
   sim$destination[["positions"]] <- value
   sim
