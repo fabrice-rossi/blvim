@@ -1,13 +1,13 @@
 check_positions <- function(value, location_number, call = rlang::caller_env()) {
   if (!is.null(value)) {
     if (!is.matrix(value)) {
-      cli::cli_abort("{.arg value} must be a matrix", call)
+      cli::cli_abort("{.arg value} must be a matrix", call = call)
     }
     if (nrow(value) != location_number) {
-      cli::cli_abort("{.arg value} must have {.val {location_number}} rows", call)
+      cli::cli_abort("{.arg value} must have {.val {location_number}} rows", call = call)
     }
     if (ncol(value) < 2 || ncol(value) > 3) {
-      cli::cli_abort("{.arg value} must have 2 or 3 columns", call)
+      cli::cli_abort("{.arg value} must have 2 or 3 columns", call = call)
     }
   }
 }
