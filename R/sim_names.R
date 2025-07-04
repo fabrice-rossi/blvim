@@ -37,6 +37,11 @@ check_names <- function(value, location_number, call = rlang::caller_env()) {
 #' destination_names(model)
 #' origin_names(model)
 location_names <- function(sim) {
+  UseMethod("location_names")
+}
+
+#' @export
+location_names.sim <- function(sim) {
   list(origin = sim$origin[["names"]], destination = sim$destination[["names"]])
 }
 
@@ -44,6 +49,11 @@ location_names <- function(sim) {
 #' @param value a list with two components (see the returned value) or `NULL`
 #' @export
 `location_names<-` <- function(sim, value) {
+  UseMethod("location_names<-")
+}
+
+#' @export
+`location_names<-.sim` <- function(sim, value) {
   if (!is.null(value)) {
     if (!is.list(value)) {
       cli::cli_abort("{.arg value} must be a {.cls list}")
@@ -98,9 +108,11 @@ location_names <- function(sim) {
 #' origin_names(model)
 #' @seealso [location_names()], [destination_names()]
 origin_names <- function(sim) {
-  if (!inherits(sim, "sim")) {
-    cli::cli_abort("{.arg sim} must be a {.cls sim}")
-  }
+  UseMethod("origin_names")
+}
+
+#' @export
+origin_names.sim <- function(sim) {
   sim$origin[["names"]]
 }
 
@@ -110,9 +122,11 @@ origin_names <- function(sim) {
 #' @param value a character vector of length equal to the number of origin
 #'  locations, or `NULL` (vectors of adapted length are converted to character vectors)
 `origin_names<-` <- function(sim, value) {
-  if (!inherits(sim, "sim")) {
-    cli::cli_abort("{.arg sim} must be a {.cls sim}")
-  }
+  UseMethod("origin_names<-")
+}
+
+#' @export
+`origin_names<-.sim` <- function(sim, value) {
   sim$origin[["names"]] <- check_names(value, nrow(sim$Y))
   sim
 }
@@ -142,9 +156,11 @@ origin_names <- function(sim) {
 #' destination_names(model)
 #' @seealso [location_names()], [origin_names()]
 destination_names <- function(sim) {
-  if (!inherits(sim, "sim")) {
-    cli::cli_abort("{.arg sim} must be a {.cls sim}")
-  }
+  UseMethod("destination_names")
+}
+
+#' @export
+destination_names.sim <- function(sim) {
   sim$destination[["names"]]
 }
 
@@ -153,9 +169,11 @@ destination_names <- function(sim) {
 #' @param value a character vector of length equal to the number of destination
 #'  locations, or `NULL` (vectors of adapted length are converted to character vectors)
 `destination_names<-` <- function(sim, value) {
-  if (!inherits(sim, "sim")) {
-    cli::cli_abort("{.arg sim} must be a {.cls sim}")
-  }
+  UseMethod("destination_names<-")
+}
+
+#' @export
+`destination_names<-.sim` <- function(sim, value) {
   sim$destination[["names"]] <- check_names(value, ncol(sim$Y))
   sim
 }
