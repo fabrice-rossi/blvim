@@ -121,3 +121,28 @@ test_that("erroneous position settings are detected", {
     destination = matrix(rnorm(40 * 2), nrow = 40)
   ))
 })
+
+test_that("positions are handled consistantly in the non bipartite case", {
+  config <- create_locations(40, 40, symmetric = TRUE, seed = 420)
+  model <- static_blvim(config$costs, config$X, 1.5, 1, config$Z, bipartite = FALSE)
+  ## arbitrary reorder for testing purposes
+  config$pd <- config$pd[sample(1:nrow(config$pd)), ]
+  ## set positions
+  origin_positions(model) <- config$pp
+  expect_equal(origin_positions(model), config$pp)
+  expect_equal(destination_positions(model), config$pp)
+  destination_positions(model) <- config$pd
+  expect_equal(destination_positions(model), config$pd)
+  expect_equal(origin_positions(model), config$pd)
+  full_positions <- location_positions(model)
+  expect_equal(full_positions$origin, config$pd)
+  expect_equal(full_positions$destination, config$pd)
+  expect_named(full_positions, c("origin", "destination"))
+  ## and remove them
+  origin_positions(model) <- NULL
+  expect_null(origin_positions(model))
+  expect_null(destination_positions(model))
+  location_positions(model) <- list(origin = config$pd, destination = config$pd)
+  expect_equal(location_positions(model), list(origin = config$pd, destination = config$pd))
+  expect_error(location_positions(model) <- list(origin = config$pp, destination = config$pd))
+})

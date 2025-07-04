@@ -78,6 +78,11 @@ location_names.sim <- function(sim) {
       }
     }
   }
+  if (!sim_is_bipartite(sim)) {
+    if (!identical(value$origin, value$destination)) {
+      cli::cli_abort("{.arg sim} is not bipartite but origin and destination location names differ.")
+    }
+  }
   sim$origin[["names"]] <- value$origin
   sim$destination[["names"]] <- value$destination
   sim
@@ -128,6 +133,9 @@ origin_names.sim <- function(sim) {
 #' @export
 `origin_names<-.sim` <- function(sim, value) {
   sim$origin[["names"]] <- check_names(value, nrow(sim$Y))
+  if (!sim_is_bipartite(sim)) {
+    sim$destination[["names"]] <- sim$origin[["names"]]
+  }
   sim
 }
 
@@ -175,5 +183,8 @@ destination_names.sim <- function(sim) {
 #' @export
 `destination_names<-.sim` <- function(sim, value) {
   sim$destination[["names"]] <- check_names(value, ncol(sim$Y))
+  if (!sim_is_bipartite(sim)) {
+    sim$origin[["names"]] <- sim$destination[["names"]]
+  }
   sim
 }

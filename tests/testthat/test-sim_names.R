@@ -111,3 +111,31 @@ test_that("erroneous name settings are detected", {
   expect_error(location_names(model) <- list(origin = as.character(1:40), destination = as.character(1:40)))
   expect_error(location_names(model) <- list(origin = as.character(1:20), destination = as.character(1:50)))
 })
+
+test_that("names are handled consistantly in the non bipartite case", {
+  config <- create_locations(40, 40, symmetric = TRUE, seed = 420)
+  model <- static_blvim(config$costs, config$X, 1.5, 1, config$Z, bipartite = FALSE)
+  ## set on names
+  on <- paste(sample(letters, 40, replace = TRUE), 1:40, sep = "_")
+  origin_names(model) <- on
+  expect_equal(origin_names(model), on)
+  ## non bipartite -> equal names
+  expect_equal(destination_names(model), on)
+  ## set dn names
+  dn <- paste(sample(LETTERS, 40, replace = TRUE), 1:40, sep = "_")
+  destination_names(model) <- dn
+  expect_equal(destination_names(model), dn)
+  expect_equal(origin_names(model), dn)
+  full_names <- location_names(model)
+  expect_equal(full_names$origin, dn)
+  expect_equal(full_names$destination, dn)
+  expect_named(full_names, c("origin", "destination"))
+  ## and remove them
+  origin_names(model) <- NULL
+  ## should remove both
+  expect_null(origin_names(model))
+  expect_null(destination_names(model))
+  location_names(model) <- list(origin = dn, destination = dn)
+  expect_equal(location_names(model), list(origin = dn, destination = dn))
+  expect_error(location_names(model) <- list(origin = on, destination = dn))
+})

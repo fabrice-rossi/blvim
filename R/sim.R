@@ -36,6 +36,10 @@ check_location_data <- function(bipartite, origin_data, destination_data, Y) {
   list(origin = origin_data, destination = destination_data)
 }
 
+## we make sure that the origin and destination members of a sim are lists which
+## can be empty if no data has been provided for the corresponding locations
+## if the sim is not bipartite, origin and location lists are identical and
+## should remain like this.
 new_sim <- function(Y,
                     Z,
                     bipartite,

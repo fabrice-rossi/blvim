@@ -77,6 +77,11 @@ location_positions.sim <- function(sim) {
     check_positions(value$origin, nrow(sim$Y))
     check_positions(value$destination, ncol(sim$Y))
   }
+  if (!sim_is_bipartite(sim)) {
+    if (!identical(value$origin, value$destination)) {
+      cli::cli_abort("{.arg sim} is not bipartite but origin and destination location positions differ.")
+    }
+  }
   sim$origin[["positions"]] <- value$origin
   sim$destination[["positions"]] <- value$destination
   sim
@@ -126,6 +131,9 @@ origin_positions.sim <- function(sim) {
 `origin_positions<-.sim` <- function(sim, value) {
   check_positions(value, nrow(sim$Y))
   sim$origin[["positions"]] <- value
+  if (!sim_is_bipartite(sim)) {
+    sim$destination[["positions"]] <- value
+  }
   sim
 }
 
@@ -173,5 +181,8 @@ destination_positions.sim <- function(sim) {
 `destination_positions<-.sim` <- function(sim, value) {
   check_positions(value, ncol(sim$Y))
   sim$destination[["positions"]] <- value
+  if (!sim_is_bipartite(sim)) {
+    sim$origin[["positions"]] <- value
+  }
   sim
 }
