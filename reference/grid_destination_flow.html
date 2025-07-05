@@ -6,9 +6,9 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Extract all the destination flows from a collection of spatial interaction models — grid_destination_flow"><meta name="description" content="The function extract destination flows from all the spatial interaction models
-of the collection and returns then in a matrix in which each row corresponds
+of the collection and returns them in a matrix in which each row corresponds
 to a model and each column to a destination location."><meta property="og:description" content="The function extract destination flows from all the spatial interaction models
-of the collection and returns then in a matrix in which each row corresponds
+of the collection and returns them in a matrix in which each row corresponds
 to a model and each column to a destination location."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -48,7 +48,7 @@ to a model and each column to a destination location."></head><body>
 
     <div class="ref-description section level2">
     <p>The function extract destination flows from all the spatial interaction models
-of the collection and returns then in a matrix in which each row corresponds
+of the collection and returns them in a matrix in which each row corresponds
 to a model and each column to a destination location.</p>
     </div>
 
@@ -67,7 +67,7 @@ to a model and each column to a destination location.</p>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>additional parameters of the <code><a href="destination_flow.html">destination_flow()</a></code> function</p></dd>
+<dd><p>additional parameters for the <code><a href="destination_flow.html">destination_flow()</a></code> function</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -94,7 +94,7 @@ to a model and each column to a destination location.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g_df</span> <span class="op">&lt;-</span> <span class="fu">grid_destination_flow</span><span class="op">(</span><span class="va">all_flows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination</span></span></span>
-<span class="r-in"><span><span class="co">## sites)</span></span></span>
+<span class="r-in"><span><span class="co">## locations)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">g_df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  9 15</span>
 </code></pre></div>
