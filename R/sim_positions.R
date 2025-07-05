@@ -12,6 +12,30 @@ check_positions <- function(value, location_number, call = rlang::caller_env()) 
   }
 }
 
+check_location_positions <- function(sim, value, call = rlang::caller_env()) {
+  if (!is.null(value)) {
+    if (!is.list(value)) {
+      cli::cli_abort("{.arg value} must be a {.cls list}",
+        call = call
+      )
+    }
+    if (!identical(names(value), c("origin", "destination"))) {
+      cli::cli_abort("{.arg value} must have exactly two elements: {.field origin} and {.field destination}",
+        call = call
+      )
+    }
+    check_positions(value$origin, nrow(sim$Y), call = call)
+    check_positions(value$destination, ncol(sim$Y), call = call)
+  }
+  if (!sim_is_bipartite(sim)) {
+    if (!identical(value$origin, value$destination)) {
+      cli::cli_abort("{.arg sim} is not bipartite but origin and destination location positions differ.",
+        call = call
+      )
+    }
+  }
+}
+
 #' Positions of origin and destination locations in a spatial interaction model
 #'
 #' These functions provide low level access to origin and destination local
@@ -67,21 +91,7 @@ location_positions.sim <- function(sim) {
 
 #' @export
 `location_positions<-.sim` <- function(sim, value) {
-  if (!is.null(value)) {
-    if (!is.list(value)) {
-      cli::cli_abort("{.arg value} must be a {.cls list}")
-    }
-    if (!identical(names(value), c("origin", "destination"))) {
-      cli::cli_abort("{.arg value} must have exactly two elements: {.field origin} and {.field destination}")
-    }
-    check_positions(value$origin, nrow(sim$Y))
-    check_positions(value$destination, ncol(sim$Y))
-  }
-  if (!sim_is_bipartite(sim)) {
-    if (!identical(value$origin, value$destination)) {
-      cli::cli_abort("{.arg sim} is not bipartite but origin and destination location positions differ.")
-    }
-  }
+  check_location_positions(sim, value)
   sim$origin[["positions"]] <- value$origin
   sim$destination[["positions"]] <- value$destination
   sim
