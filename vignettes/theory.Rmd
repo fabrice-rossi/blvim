@@ -203,6 +203,56 @@ $$
 \forall j,\  D_j=\sum_{i=1}^nY_{ij}.
 $$
 
+
+## Self-Exchange Configurations
+
+In the general case, exchanges in spatial interaction models follow a bipartite
+scheme: production locations send their productions to destination locations.
+These locations are two distinct sets. The non-bipartite case is when production
+and destination locations are identical. This does not change anything in the
+definition of the models (static and dynamic), but new tools can be defined
+specifically for this particular case.
+
+### Location Domination and Terminals
+
+These tools are based on notions proposed by J. D. Nystuen and M. F. Dacey (1961).
+As any location is both a production and a destination location, one can compare
+the outgoing flows to the incoming ones. In particular, Nystuen and Dacey focus
+on the maximum output flow and on the total incoming flow (the $(D_j)_{1\leq j\leq p}$).
+More precisely, they define the importance of location $j$ as $D_j$ and introduce
+the notion of *domination*: a location $k$ is *dominated* if its importance is smaller
+than the importance of the location to which it is sending its largest flow. In
+equation:
+
+$$
+D_k < D_{\arg\max_{j} Y_{kj}}.
+$$
+
+A *terminal* is a location that is not dominated. Rihll and Wilson (1991) propose a
+relaxed version in which a terminal is a location that receives a total incoming
+flow larger than all its individual outgoing flows. Thus, location $k$ is dominated
+according to this definition if:
+
+$$
+D_k < \max_{j}Y_{kj}.
+$$
+
+It is easy to see that a terminal in the Nystuen and Dacey definition is also a
+terminal for Rihll and Wilson, but the reverse is false. The functions
+`terminals()` and `is_terminal()` compute the terminals according to either
+definition. In addition, the number of terminals can be seen as a diversity measure
+and is thus included in the definitions supported by `diversity()`.
+
+### Domination Graphs
+
+In addition to extracting terminals from a non-bipartite model, Nystuen and Dacey
+propose to analyse the so-called *nodal structure* of the flows. It consists of
+the *nodal flows*, i.e. the links between each non-terminal location and the
+location to which it is sending its largest flow. This defines a graph on the
+locations which is very sparse (it has $p-t$ edges, where $p$ is the number of
+locations and $t$ the number of terminals). The function `nd_graph()` computes
+this graph according to both terminal definitions.
+
 ## References
 
 Harris, B. (1964). "A model of locational equilibrium for retail trade", 
@@ -215,6 +265,15 @@ Spatial-Interaction Models", Environment and Planning A: Economy and Space,
 
 Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 <https://dx.doi.org/10.1111/j.2006.0030-1299.14714.x>
+
+Nystuen, J.D. and Dacey, M.F. (1961), "A graph theory
+interpretation of nodal regions", Papers and Proceedings of the Regional
+Science Association 7: 29–42. <https://dx.doi.org/10.1007/bf01969070>
+
+Rihll, T., and Wilson, A. (1991), "Modelling settlement structures in
+ancient Greece: new approaches to the polis", In City and Country in the
+Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
+London: Routledge.
 
 Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
