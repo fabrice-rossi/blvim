@@ -1,8 +1,8 @@
 ---
-title: "Theoretical background"
+title: "Theoretical Background"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Theoretical background}
+  %\VignetteIndexEntry{Theoretical Background}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,41 +18,175 @@ knitr::opts_chunk$set(
 library(blvim)
 ```
 
-## Spatial interaction models
+## Static Models
 
-Spatial interaction models try to estimate flows between locations, for instance 
+### Spatial Interaction Models
+
+Spatial interaction models aim to estimate flows between locations, for instance, 
 workers commuting from residential zones to employment zones. Models are built from:
 
--   a collection of $n$ origin locations described by a some characteristics $(X_i)_{1\leq i\leq n}$
--   a collection of $p$ destination locations described by a some characteristics $(Z_j)_{1\leq j\leq p}$
--   a collection of $n\times p$ characteristics of the difficulty of travelling (in a broad sense) from origin $i$ to destination $j$, $c_{ij}$
+-   A collection of $n$ origin locations described by some characteristics 
+$(X_i)_{1\leq i\leq n}$
+-   A collection of $p$ destination locations described by some characteristics 
+$(Z_j)_{1\leq j\leq p}$
+-   A collection of $n\times p$ characteristics of the difficulty of travelling 
+(in a broad sense) from origin $i$ to destination $j$, $c_{ij}$
 
-The goal is to estimate flows $(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}$ from origin locations to destinations locations. A typical hypothesis is for the flows to depend on characteristics as follows
+The goal is to estimate flows $(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}$ from 
+origin locations to destination locations. A typical hypothesis is for the flows 
+to depend on characteristics as follows:
 
 $$
 Y_{ij}=f(X_i, Z_j, c_{ij}),
-$$ 
-for a well chosen function $f$. The most well known spatial interaction model
-is the so called *gravity model* which takes the form
+$$
+
+for a well-chosen function $f$. The most well-known spatial interaction model is 
+the so-called *gravity model*, which takes the form:
+
 $$
 Y_{ij}\propto \frac{X_iZ_j}{c_{ij}^2},
-$$ 
-where $\propto$ means proportional to, $c_{ij}$ is supposed to be the distance
+$$
+
+where $\propto$ means proportional to, $c_{ij}$ is supposed to be the distance 
 between origin $i$ and destination $j$, and the characteristics $X_i$ and $Z_j$ 
 are assumed to be numerical.
 
-## Maximum entropy models
-In the late 60s, Alan Wilson developed a collection of spatial interaction models
-based of a maximum entropy principle. In those models, the flow is given by
+### Constraints
+
+Spatial interaction models can be instantiated with different constraints:
+
+-   On production: the $(X_i)$ are interpreted as production values. Then the
+model is *production-constrained* if $\sum_{j=1}^pY_{ij}=X_i$ for all $i$;
+-   On capacity: the $(Z_j)$ are interpreted as destination capacities. Then the 
+model is *capacity-constrained* if $\sum_{i=1}^pY_{ij}=Z_j$ for all $j$;
+-   On both: the *doubly-constrained* models are both production- and 
+capacity-constrained. One of the most common models used in practice is the 
+doubly-constrained gravity model.
+
+### Maximum Entropy Models
+
+In the late 1960s, Alan Wilson developed a collection of spatial interaction 
+models based on a maximum entropy principle. In those models, the flow is given by:
+
 $$
 Y_{ij} \propto X_iZ_j^{\alpha}\exp(-\beta c_{ij}),
 $$
+
 where $\alpha$ and $\beta$ are two parameters interpreted as follows:
 
--   $Z_j$ is the attractiveness of the destination location $j$
--   $\alpha$ is then a *return to scale* parameter: if $Z_j$ grows above $1$, its
-    actual attractiveness can increase in a super-linear way ($\alpha>1$) or in a
-    sub-linear way $\alpha<1$
--   $\beta$ acts as the *inverse of the scale of the costs* $c_{ij}$. If those costs
-    are distances, for instance, $\frac{1}{\beta}$ can be seen as a cut off distance. 
-    
+-   $\alpha$ is a *return to scale* parameter: if $Z_j$ grows above $1$, its 
+actual attractiveness can increase in a super-linear way ($\alpha>1$) or in a 
+sub-linear way ($\alpha<1$);
+-   $\beta$ acts as the *inverse of the scale of the costs* $c_{ij}$. If those 
+osts are distances, for instance, $\frac{1}{\beta}$ can be seen as a cut-off distance.
+
+As with other spatial interaction models, maximum entropy models are constrained. 
+In `blvim`, we focus on production-constrained models and thus we have:
+
+$$
+Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},
+$$
+
+which ensures:
+
+$$
+\forall i,\ \sum_{j=1}^pY_{ij}=X_i.
+$$
+
+This model is implemented in `blvim` by the `static_blvim()` function.
+
+## Dynamic Models
+
+The models described above are *static*: they correspond to a frozen view of the 
+exchanges with no retroaction of the flow received at one destination location 
+on its attractiveness, for instance.
+
+In the 1970s, Harris and Wilson developed dynamic models that assume a form of 
+etroaction, initially in terms of an equilibrium state.
+
+### Harris and Wilson Equilibrium Values
+
+The main idea from Harris (1964) is that if we interpret incoming flows as 
+revenues, then the capacity/attractiveness of a destination location should be 
+adapted to those revenues (for production-constrained models). Essentially, this 
+could be written as:
+
+$$
+\forall j,\ Z_j=\kappa D_j,
+$$
+
+where $\kappa$ is a conversion factor between capacity and revenues, and where 
+$D_j$ is the total flow incoming in $Z_j$, i.e.:
+
+$$
+\forall j,\  D_j=\sum_{i=1}^nY_{ij}.
+$$
+
+Applied to the maximum entropy production-constrained model, this leads to a 
+spatial interaction model defined implicitly as follows. We assume given the 
+production constraints $(X_i)_{1\leq i\leq n}$ and the cost matrix 
+$(c_{ij})_{1\leq i\leq n, 1\leq j\leq p}$, then the attractiveness $(Z_j)_{1\leq j\leq p}$ 
+is a solution of the following collection of fixed-point equations:
+
+$$
+\forall j,\  Z_j=\kappa\sum_{i=1}^n\left(\frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})}\right),
+$$
+
+where $\alpha$, $\beta$, and $\kappa$ are fixed parameters.
+
+From the $(Z_j)_{1\leq j\leq p}$, the flows are computed using the standard 
+production-constrained maximum entropy model.
+
+### A Dynamic Model: The Boltzmann–Lotka–Volterra Model
+
+The collection of fixed-point equations can be solved using different techniques, 
+for instance, Newton's method. The simplest solution is probably to perform fixed-point 
+iterations, as discussed in Harris & Wilson (1978). We start with some initial 
+values of the $Z$s, denoted $(Z^{0}_j)_{1\leq j\leq p}$, and then iterate:
+
+$$
+\forall j,\ Z_j^{t+1} := \kappa\sum_{i=1}^n\left(\frac{X_i{(Z^{t}_j)}^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^p{(Z^{t}_k)}^{\alpha}\exp(-\beta c_{ik})}\right),
+$$
+
+until convergence.
+
+This iterative scheme can also be interpreted as a dynamic model in which the 
+attractiveness of a location is updated to match its incoming flow. The update 
+is not instantaneous, and thus an update parameter is introduced, $\epsilon$. 
+Then we start again with some initial values of the $Z$s and then iterate:
+
+$$
+\begin{align*}
+\forall j,\ D_j^{t} &:= \sum_{i=1}^n\left(\frac{X_i{(Z^{t}_j)}^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^p{(Z^{t}_k)}^{\alpha}\exp(-\beta c_{ik})}\right),\\
+\forall j,\ Z_j^{t+1} &:= Z_j^t +\epsilon(\kappa D^{t}_j-Z^{t}_j).
+\end{align*}
+$$
+
+Using $\epsilon<1$, typically a small value of $0.01$, gives a full trajectory 
+for the $Z$s with the added value of preventing oscillation behaviour.
+
+A variant of the dynamic model has been proposed by Wilson in 2008, replacing 
+the second update by a quadratic version:
+
+$$
+\forall j,\ Z_j^{t+1} := Z_j^t +\epsilon(\kappa D^{t}_j-Z^{t}_j)Z^{t}_j.
+$$
+
+Both solutions are implemented in `blvim()`.
+
+## References
+
+Harris, B. (1964). "A model of locational equilibrium for retail trade", 
+Penn-Jersey Transportation Study, Philadelphia, Pennsylvania (mimeo).
+
+Harris, B., & Wilson, A. G. (1978). "Equilibrium Values and
+Dynamics of Attractiveness Terms in Production-Constrained
+Spatial-Interaction Models", Environment and Planning A: Economy and Space,
+10(4), 371-388. <https://dx.doi.org/10.1068/a100371>
+
+Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
+evolution: an integrated methodology for some dynamical systems", J. R.
+Soc. Interface.5865–871 <https://dx.doi.org/10.1098/rsif.2007.1288>
+
+
+
