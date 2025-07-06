@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Theoretical background • blvim</title>
+<title>Theoretical Background • blvim</title>
 <!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
   window.MathJax = {
     chtml: {
@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Theoretical background">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Theoretical Background">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -39,7 +39,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/theory.html">Theoretical background</a></li>
+<li><a class="dropdown-item" href="../articles/theory.html">Theoretical Background</a></li>
   </ul>
 </li>
       </ul>
@@ -61,7 +61,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Theoretical background</h1>
+      <h1>Theoretical Background</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/fabrice-rossi/blvim/blob/main/vignettes/theory.Rmd" class="external-link"><code>vignettes/theory.Rmd</code></a></small>
@@ -73,64 +73,288 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://fabrice-rossi.github.io/blvim/">blvim</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="spatial-interaction-models">Spatial interaction models<a class="anchor" aria-label="anchor" href="#spatial-interaction-models"></a>
+<h2 id="static-models">Static Models<a class="anchor" aria-label="anchor" href="#static-models"></a>
 </h2>
-<p>Spatial interaction models try to estimate flows between locations,
-for instance workers commuting from residential zones to employment
+<div class="section level3">
+<h3 id="spatial-interaction-models">Spatial Interaction Models<a class="anchor" aria-label="anchor" href="#spatial-interaction-models"></a>
+</h3>
+<p>Spatial interaction models aim to estimate flows between locations,
+for instance, workers commuting from residential zones to employment
 zones. Models are built from:</p>
 <ul>
-<li>a collection of <span class="math inline">\(n\)</span> origin
-locations described by a some characteristics <span class="math inline">\((X_i)_{1\leq i\leq n}\)</span>
+<li>A collection of <span class="math inline">\(n\)</span> origin
+locations described by some characteristics <span class="math inline">\((X_i)_{1\leq i\leq n}\)</span>
 </li>
-<li>a collection of <span class="math inline">\(p\)</span> destination
-locations described by a some characteristics <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span>
+<li>A collection of <span class="math inline">\(p\)</span> destination
+locations described by some characteristics <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span>
 </li>
-<li>a collection of <span class="math inline">\(n\times p\)</span>
+<li>A collection of <span class="math inline">\(n\times p\)</span>
 characteristics of the difficulty of travelling (in a broad sense) from
 origin <span class="math inline">\(i\)</span> to destination <span class="math inline">\(j\)</span>, <span class="math inline">\(c_{ij}\)</span>
 </li>
 </ul>
 <p>The goal is to estimate flows <span class="math inline">\((Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}\)</span>
-from origin locations to destinations locations. A typical hypothesis is
-for the flows to depend on characteristics as follows</p>
+from origin locations to destination locations. A typical hypothesis is
+for the flows to depend on characteristics as follows:</p>
 <p><span class="math display">\[
 Y_{ij}=f(X_i, Z_j, c_{ij}),
-\]</span> for a well chosen function <span class="math inline">\(f\)</span>. The most well known spatial
-interaction model is the so called <em>gravity model</em> which takes
-the form <span class="math display">\[
+\]</span></p>
+<p>for a well-chosen function <span class="math inline">\(f\)</span>.
+The most well-known spatial interaction model is the so-called
+<em>gravity model</em>, which takes the form:</p>
+<p><span class="math display">\[
 Y_{ij}\propto \frac{X_iZ_j}{c_{ij}^2},
-\]</span> where <span class="math inline">\(\propto\)</span> means
-proportional to, <span class="math inline">\(c_{ij}\)</span> is supposed
-to be the distance between origin <span class="math inline">\(i\)</span>
-and destination <span class="math inline">\(j\)</span>, and the
+\]</span></p>
+<p>where <span class="math inline">\(\propto\)</span> means proportional
+to, <span class="math inline">\(c_{ij}\)</span> is supposed to be the
+distance between origin <span class="math inline">\(i\)</span> and
+destination <span class="math inline">\(j\)</span>, and the
 characteristics <span class="math inline">\(X_i\)</span> and <span class="math inline">\(Z_j\)</span> are assumed to be numerical.</p>
 </div>
-<div class="section level2">
-<h2 id="maximum-entropy-models">Maximum entropy models<a class="anchor" aria-label="anchor" href="#maximum-entropy-models"></a>
-</h2>
-<p>In the late 60s, Alan Wilson developed a collection of spatial
-interaction models based of a maximum entropy principle. In those
-models, the flow is given by <span class="math display">\[
+<div class="section level3">
+<h3 id="constraints">Constraints<a class="anchor" aria-label="anchor" href="#constraints"></a>
+</h3>
+<p>Spatial interaction models can be instantiated with different
+constraints:</p>
+<ul>
+<li>On production: the <span class="math inline">\((X_i)\)</span> are
+interpreted as production values. Then the model is
+<em>production-constrained</em> if <span class="math inline">\(\sum_{j=1}^pY_{ij}=X_i\)</span> for all <span class="math inline">\(i\)</span>;</li>
+<li>On capacity: the <span class="math inline">\((Z_j)\)</span> are
+interpreted as destination capacities. Then the model is
+<em>capacity-constrained</em> if <span class="math inline">\(\sum_{i=1}^pY_{ij}=Z_j\)</span> for all <span class="math inline">\(j\)</span>;</li>
+<li>On both: the <em>doubly-constrained</em> models are both production-
+and capacity-constrained. One of the most common models used in practice
+is the doubly-constrained gravity model.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="maximum-entropy-models">Maximum Entropy Models<a class="anchor" aria-label="anchor" href="#maximum-entropy-models"></a>
+</h3>
+<p>In the late 1960s, Alan Wilson developed a collection of spatial
+interaction models based on a maximum entropy principle. In those
+models, the flow is given by:</p>
+<p><span class="math display">\[
 Y_{ij} \propto X_iZ_j^{\alpha}\exp(-\beta c_{ij}),
-\]</span> where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are two parameters interpreted as
+\]</span></p>
+<p>where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are two parameters interpreted as
 follows:</p>
 <ul>
 <li>
-<span class="math inline">\(Z_j\)</span> is the attractiveness of
-the destination location <span class="math inline">\(j\)</span>
-</li>
-<li>
-<span class="math inline">\(\alpha\)</span> is then a <em>return to
+<span class="math inline">\(\alpha\)</span> is a <em>return to
 scale</em> parameter: if <span class="math inline">\(Z_j\)</span> grows
 above <span class="math inline">\(1\)</span>, its actual attractiveness
-can increase in a super-linear way (<span class="math inline">\(\alpha&gt;1\)</span>) or in a sub-linear way <span class="math inline">\(\alpha&lt;1\)</span>
-</li>
+can increase in a super-linear way (<span class="math inline">\(\alpha&gt;1\)</span>) or in a sub-linear way
+(<span class="math inline">\(\alpha&lt;1\)</span>);</li>
 <li>
 <span class="math inline">\(\beta\)</span> acts as the <em>inverse
-of the scale of the costs</em> <span class="math inline">\(c_{ij}\)</span>. If those costs are distances, for
+of the scale of the costs</em> <span class="math inline">\(c_{ij}\)</span>. If those osts are distances, for
 instance, <span class="math inline">\(\frac{1}{\beta}\)</span> can be
-seen as a cut off distance.</li>
+seen as a cut-off distance.</li>
 </ul>
+<p>As with other spatial interaction models, maximum entropy models are
+constrained. In <code>blvim</code>, we focus on production-constrained
+models and thus we have:</p>
+<p><span class="math display">\[
+Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta
+c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},
+\]</span></p>
+<p>which ensures:</p>
+<p><span class="math display">\[
+\forall i,\ \sum_{j=1}^pY_{ij}=X_i.
+\]</span></p>
+<p>This model is implemented in <code>blvim</code> by the
+<code><a href="../reference/static_blvim.html">static_blvim()</a></code> function.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="dynamic-models">Dynamic Models<a class="anchor" aria-label="anchor" href="#dynamic-models"></a>
+</h2>
+<p>The models described above are <em>static</em>: they correspond to a
+frozen view of the exchanges with no retroaction of the flow received at
+one destination location on its attractiveness, for instance.</p>
+<p>In the 1970s, Harris and Wilson developed dynamic models that assume
+a form of etroaction, initially in terms of an equilibrium state.</p>
+<div class="section level3">
+<h3 id="harris-and-wilson-equilibrium-values">Harris and Wilson Equilibrium Values<a class="anchor" aria-label="anchor" href="#harris-and-wilson-equilibrium-values"></a>
+</h3>
+<p>The main idea from Harris (1964) is that if we interpret incoming
+flows as revenues, then the capacity/attractiveness of a destination
+location should be adapted to those revenues (for production-constrained
+models). Essentially, this could be written as:</p>
+<p><span class="math display">\[
+\forall j,\ Z_j=\kappa D_j,
+\]</span></p>
+<p>where <span class="math inline">\(\kappa\)</span> is a conversion
+factor between capacity and revenues, and where <span class="math inline">\(D_j\)</span> is the total flow incoming in <span class="math inline">\(Z_j\)</span>, i.e.:</p>
+<p><span class="math display">\[
+\forall j,\  D_j=\sum_{i=1}^nY_{ij}.
+\]</span></p>
+<p>Applied to the maximum entropy production-constrained model, this
+leads to a spatial interaction model defined implicitly as follows. We
+assume given the production constraints <span class="math inline">\((X_i)_{1\leq i\leq n}\)</span> and the cost matrix
+<span class="math inline">\((c_{ij})_{1\leq i\leq n, 1\leq j\leq
+p}\)</span>, then the attractiveness <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span> is a solution of
+the following collection of fixed-point equations:</p>
+<p><span class="math display">\[
+\forall
+j,\  Z_j=\kappa\sum_{i=1}^n\left(\frac{X_iZ_j^{\alpha}\exp(-\beta
+c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})}\right),
+\]</span></p>
+<p>where <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(\kappa\)</span> are fixed parameters.</p>
+<p>From the <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span>,
+the flows are computed using the standard production-constrained maximum
+entropy model.</p>
+</div>
+<div class="section level3">
+<h3 id="a-dynamic-model-the-boltzmannlotkavolterra-model">A Dynamic Model: The Boltzmann–Lotka–Volterra Model<a class="anchor" aria-label="anchor" href="#a-dynamic-model-the-boltzmannlotkavolterra-model"></a>
+</h3>
+<p>The collection of fixed-point equations can be solved using different
+techniques, for instance, Newton’s method. The simplest solution is
+probably to perform fixed-point iterations, as discussed in Harris &amp;
+Wilson (1978). We start with some initial values of the <span class="math inline">\(Z\)</span>s, denoted <span class="math inline">\((Z^{0}_j)_{1\leq j\leq p}\)</span>, and then
+iterate:</p>
+<p><span class="math display">\[
+\forall j,\ Z_j^{t+1} :=
+\kappa\sum_{i=1}^n\left(\frac{X_i{(Z^{t}_j)}^{\alpha}\exp(-\beta
+c_{ij})}{\sum_{k=1}^p{(Z^{t}_k)}^{\alpha}\exp(-\beta c_{ik})}\right),
+\]</span></p>
+<p>until convergence.</p>
+<p>This iterative scheme can also be interpreted as a dynamic model in
+which the attractiveness of a location is updated to match its incoming
+flow. The update is not instantaneous, and thus an update parameter is
+introduced, <span class="math inline">\(\epsilon\)</span>. Then we start
+again with some initial values of the <span class="math inline">\(Z\)</span>s and then iterate:</p>
+<p><span class="math display">\[
+\begin{align*}
+\forall j,\ D_j^{t} &amp;:=
+\sum_{i=1}^n\left(\frac{X_i{(Z^{t}_j)}^{\alpha}\exp(-\beta
+c_{ij})}{\sum_{k=1}^p{(Z^{t}_k)}^{\alpha}\exp(-\beta c_{ik})}\right),\\
+\forall j,\ Z_j^{t+1} &amp;:= Z_j^t +\epsilon(\kappa D^{t}_j-Z^{t}_j).
+\end{align*}
+\]</span></p>
+<p>Using <span class="math inline">\(\epsilon&lt;1\)</span>, typically a
+small value of <span class="math inline">\(0.01\)</span>, gives a full
+trajectory for the <span class="math inline">\(Z\)</span>s with the
+added value of preventing oscillation behaviour.</p>
+<p>A variant of the dynamic model has been proposed by Wilson in 2008,
+replacing the second update by a quadratic version:</p>
+<p><span class="math display">\[
+\forall j,\ Z_j^{t+1} := Z_j^t +\epsilon(\kappa D^{t}_j-Z^{t}_j)Z^{t}_j.
+\]</span></p>
+<p>Both solutions are implemented in <code><a href="../reference/blvim.html">blvim()</a></code>.</p>
+</div>
+<div class="section level3">
+<h3 id="diversity">Diversity<a class="anchor" aria-label="anchor" href="#diversity"></a>
+</h3>
+<p>A typical behaviour of the equilibrium solutions is a concentration
+of the attractiveness on a subset of the destination locations. This can
+be measured by the <code><a href="../reference/diversity.html">diversity()</a></code> function. It uses the notion
+of diversity outlined in, for example, Jost (2006). The main idea of
+this notion, rephrased in the context of locations, is to find from the
+<span class="math inline">\(Z\)</span>s an equivalent number of
+locations, say <span class="math inline">\(m\)</span>, for which the
+attractiveness would be evenly spread (that is, proportional to <span class="math inline">\(\frac{1}{m}\)</span>).</p>
+<p>If we normalise the <span class="math inline">\((Z_j)_{1\leq j\leq
+p}\)</span> such that they sum to 1, we get the probability distribution
+<span class="math inline">\(\mathcal{P}=(p_j)_{1\leq j\leq p}\)</span>
+over <span class="math inline">\(\{1, \ldots, p\}\)</span>. One way to
+interpret the notion of diversity is to measure how “random” <span class="math inline">\(\mathcal{P}\)</span> is. Indeed, if it is
+concentrated on 1, for instance, with <span class="math inline">\(p_1\simeq 1\)</span>, then samples generated in an
+i.i.d. manner from <span class="math inline">\(\mathcal{P}\)</span> will
+not be diverse, as they will mostly consist of the value 1. Then an
+<em>entropy</em> is a rather natural diversity index. For instance, the
+Shannon entropy <span class="math inline">\(H(\mathcal{P})=-\sum_{j}p_j\log p_j\)</span>
+provides a good diversity index. Based on the principle outlined above,
+the diversity of <span class="math inline">\(\mathcal{P}\)</span> is the
+number <span class="math inline">\(m\)</span> such that the diversity
+index of <span class="math inline">\(\mathcal{P}\)</span> is equal to
+the diversity index of the uniform distribution on <span class="math inline">\(\{1, \ldots, m\}\)</span>. It can be shown that
+for the Shannon entropy, the diversity of <span class="math inline">\(\mathcal{P}\)</span> is <span class="math inline">\(\exp(H(\mathcal{P}))\)</span>. This holds also for
+all the Rényi entropies.</p>
+<p>Notice that in <code><a href="../reference/diversity.html">diversity()</a></code> the diversities are computed
+according to the incoming flows, i.e., not using the <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span> but rather the
+<span class="math inline">\(D_j\)</span> defined above by <span class="math display">\[
+\forall j,\  D_j=\sum_{i=1}^nY_{ij}.
+\]</span></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="self-exchange-configurations">Self-Exchange Configurations<a class="anchor" aria-label="anchor" href="#self-exchange-configurations"></a>
+</h2>
+<p>In the general case, exchanges in spatial interaction models follow a
+bipartite scheme: production locations send their productions to
+destination locations. These locations are two distinct sets. The
+non-bipartite case is when production and destination locations are
+identical. This does not change anything in the definition of the models
+(static and dynamic), but new tools can be defined specifically for this
+particular case.</p>
+<div class="section level3">
+<h3 id="location-domination-and-terminals">Location Domination and Terminals<a class="anchor" aria-label="anchor" href="#location-domination-and-terminals"></a>
+</h3>
+<p>These tools are based on notions proposed by J. D. Nystuen and M. F.
+Dacey (1961). As any location is both a production and a destination
+location, one can compare the outgoing flows to the incoming ones. In
+particular, Nystuen and Dacey focus on the maximum output flow and on
+the total incoming flow (the <span class="math inline">\((D_j)_{1\leq
+j\leq p}\)</span>). More precisely, they define the importance of
+location <span class="math inline">\(j\)</span> as <span class="math inline">\(D_j\)</span> and introduce the notion of
+<em>domination</em>: a location <span class="math inline">\(k\)</span>
+is <em>dominated</em> if its importance is smaller than the importance
+of the location to which it is sending its largest flow. In
+equation:</p>
+<p><span class="math display">\[
+D_k &lt; D_{\arg\max_{j} Y_{kj}}.
+\]</span></p>
+<p>A <em>terminal</em> is a location that is not dominated. Rihll and
+Wilson (1991) propose a relaxed version in which a terminal is a
+location that receives a total incoming flow larger than all its
+individual outgoing flows. Thus, location <span class="math inline">\(k\)</span> is dominated according to this
+definition if:</p>
+<p><span class="math display">\[
+D_k &lt; \max_{j}Y_{kj}.
+\]</span></p>
+<p>It is easy to see that a terminal in the Nystuen and Dacey definition
+is also a terminal for Rihll and Wilson, but the reverse is false. The
+functions <code><a href="../reference/terminals.html">terminals()</a></code> and <code><a href="../reference/is_terminal.html">is_terminal()</a></code>
+compute the terminals according to either definition. In addition, the
+number of terminals can be seen as a diversity measure and is thus
+included in the definitions supported by <code><a href="../reference/diversity.html">diversity()</a></code>.</p>
+</div>
+<div class="section level3">
+<h3 id="domination-graphs">Domination Graphs<a class="anchor" aria-label="anchor" href="#domination-graphs"></a>
+</h3>
+<p>In addition to extracting terminals from a non-bipartite model,
+Nystuen and Dacey propose to analyse the so-called <em>nodal
+structure</em> of the flows. It consists of the <em>nodal flows</em>,
+i.e. the links between each non-terminal location and the location to
+which it is sending its largest flow. This defines a graph on the
+locations which is very sparse (it has <span class="math inline">\(p-t\)</span> edges, where <span class="math inline">\(p\)</span> is the number of locations and <span class="math inline">\(t\)</span> the number of terminals). The function
+<code><a href="../reference/nd_graph.html">nd_graph()</a></code> computes this graph according to both terminal
+definitions.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Harris, B. (1964). “A model of locational equilibrium for retail
+trade”, Penn-Jersey Transportation Study, Philadelphia, Pennsylvania
+(mimeo).</p>
+<p>Harris, B., &amp; Wilson, A. G. (1978). “Equilibrium Values and
+Dynamics of Attractiveness Terms in Production-Constrained
+Spatial-Interaction Models”, Environment and Planning A: Economy and
+Space, 10(4), 371-388. <a href="https://dx.doi.org/10.1068/a100371" class="external-link uri">https://dx.doi.org/10.1068/a100371</a></p>
+<p>Jost, L. (2006), “Entropy and diversity”, Oikos, 113: 363-375. <a href="https://dx.doi.org/10.1111/j.2006.0030-1299.14714.x" class="external-link uri">https://dx.doi.org/10.1111/j.2006.0030-1299.14714.x</a></p>
+<p>Nystuen, J.D. and Dacey, M.F. (1961), “A graph theory interpretation
+of nodal regions”, Papers and Proceedings of the Regional Science
+Association 7: 29–42. <a href="https://dx.doi.org/10.1007/bf01969070" class="external-link uri">https://dx.doi.org/10.1007/bf01969070</a></p>
+<p>Rihll, T., and Wilson, A. (1991), “Modelling settlement structures in
+ancient Greece: new approaches to the polis”, In City and Country in the
+Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
+London: Routledge.</p>
+<p>Wilson, A. (2008), “Boltzmann, Lotka and Volterra and spatial
+structural evolution: an integrated methodology for some dynamical
+systems”, J. R. Soc. Interface.5865–871 <a href="https://dx.doi.org/10.1098/rsif.2007.1288" class="external-link uri">https://dx.doi.org/10.1098/rsif.2007.1288</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -41,7 +41,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/theory.html">Theoretical background</a></li>
+<li><a class="dropdown-item" href="articles/theory.html">Theoretical Background</a></li>
   </ul>
 </li>
       </ul>
@@ -63,7 +63,7 @@
 <!-- badges: start -->
 
 <!-- badges: end -->
-<p><code>blvim</code> implements A. Wilson’s Boltzmann–Lotka–Volterra (BLV) interaction model. The model is described in <a href="http://dx.doi.org/10.1098/rsif.2007.1288" class="external-link">Wilson, A. (2008), “Boltzmann, Lotka and Volterra and spatial structural evolution: an integrated methodology for some dynamical systems”, J. R. Soc. Interface.5865–871</a></p>
+<p><code>blvim</code> implements A. Wilson’s Boltzmann–Lotka–Volterra (BLV) interaction model. The model is described in <a href="http://dx.doi.org/10.1098/rsif.2007.1288" class="external-link">Wilson, A. (2008), “Boltzmann, Lotka and Volterra and spatial structural evolution: an integrated methodology for some dynamical systems”, J. R. Soc. Interface, 5:865–871</a>. The first goal of the package is to provide a fast implementation of the BLV model with a collection of tools designed to explore the results via statistical summaries and graphical representations. The second goal of the package is to facilitate systematic assessment of the impact of the model parameters on the results, again through summaries and graphical representations.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -75,8 +75,8 @@
 <div class="section level2">
 <h2 id="spatial-interaction-models">Spatial interaction models<a class="anchor" aria-label="anchor" href="#spatial-interaction-models"></a>
 </h2>
-<p>Spatial interaction models try to estimate flows between locations, for instance workers commuting from residential zones to employment zones. The focus of the <code>blvim</code> package is on maximum entropy models developed by Alan Wilson. See <code><a href="articles/theory.html">vignette("theory")</a></code> for a theoretical background.</p>
-<p>In practice, if we have <span class="math inline">\(n\)</span> origin locations and <span class="math inline">\(p\)</span> destination locations, the aim is to compute a matrix of flows <span class="math inline">\((Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}\)</span>, where <span class="math inline">\(Y_{ij}\)</span> is the flow from origin <span class="math inline">\(i\)</span> to destination <span class="math inline">\(j\)</span>. This is done using characteristics of the origin and destination locations, together with a matrix of exchange difficulties, a <em>cost matrix</em>, <span class="math inline">\((c_{ij})_{1\leq i\leq n, 1\leq j\leq p}\)</span>. For instance <span class="math inline">\(c_{ij}\)</span> can be the distance between origin <span class="math inline">\(i\)</span> and destination <span class="math inline">\(j\)</span>.</p>
+<p>Spatial interaction models aim to estimate flows between locations, for instance, workers commuting from residential zones to employment zones. The focus of the <code>blvim</code> package is on maximum entropy models developed by Alan Wilson. See <code><a href="articles/theory.html">vignette("theory")</a></code> for a theoretical background.</p>
+<p>In practice, if we have <span class="math inline">\(n\)</span> origin locations and <span class="math inline">\(p\)</span> destination locations, the aim is to compute a matrix of flows <span class="math inline">\((Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}\)</span>, where <span class="math inline">\(Y_{ij}\)</span> is the flow from origin <span class="math inline">\(i\)</span> to destination <span class="math inline">\(j\)</span>. This is done using characteristics of the origin and destination locations, together with a matrix of exchange difficulties, a <em>cost matrix</em>, <span class="math inline">\((c_{ij})_{1\leq i\leq n, 1\leq j\leq p}\)</span>. For instance, <span class="math inline">\(c_{ij}\)</span> can be the distance between origin <span class="math inline">\(i\)</span> and destination <span class="math inline">\(j\)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -97,19 +97,19 @@
 <span><span class="co">## cost matrix</span></span>
 <span><span class="va">full_costs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">origins</span>, <span class="va">destinations</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cost_matrix</span> <span class="op">&lt;-</span> <span class="va">full_costs</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">origins</span><span class="op">)</span>, <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">origins</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">origins</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">destinations</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<p>In addition, we focus on production constrained models which means that we need to specify the production of each origin location (a vector of positive values <span class="math inline">\((X_i)_{1\leq i\leq n}\)</span>). In this example we assume a common unitary production.</p>
+<p>In addition, we focus on production-constrained models, which means that we need to specify the production of each origin location (a vector of positive values <span class="math inline">\((X_i)_{1\leq i\leq n}\)</span>). In this example, we assume a common unitary production.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">origins</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, the simple <em>static</em> model needs an attractiveness value of each destination location, a vector of positive values <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span>. We assume again a common unitary attractiveness.</p>
+<p>Finally, the simple <em>static</em> model needs an attractiveness value of each destination location, a vector of positive values <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span>. We again assume a common unitary attractiveness.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">destinations</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="static-models">Static models<a class="anchor" aria-label="anchor" href="#static-models"></a>
 </h3>
-<p>In Wilson’s production constrained maximum entropy model, the flows are given by</p>
+<p>In Wilson’s production-constrained maximum entropy model, the flows are given by</p>
 <p><span class="math display">\[Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},\]</span></p>
-<p>where <span class="math inline">\(\alpha\)</span> is a return to scale parameter and <span class="math inline">\(\beta\)</span> is the inverse of a cost scale parameter. Notice that the flow matrix is <em>production constrained</em>, which means that the total outgoing flow from any origin location is equal to the production of this location, i.e.</p>
+<p>where <span class="math inline">\(\alpha\)</span> is a return-to-scale parameter and <span class="math inline">\(\beta\)</span> is the inverse of a cost scale parameter. Notice that the flow matrix is <em>production-constrained</em>, which means that the total outgoing flow from any origin location is equal to the production of this location, i.e.,</p>
 <p><span class="math display">\[\forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.\]</span></p>
 <p>The model is obtained using the <code><a href="reference/static_blvim.html">static_blvim()</a></code> function as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -130,7 +130,7 @@
 <span>  frame <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_flow-1.png" width="25%" style="display: block; margin: auto;"></p>
-<p>In this representation, each row gives the flows from one origin location to all the destination location. The package provides a <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">ggplot2::autoplot()</a></code> function that can be used as follows</p>
+<p>In this representation, each row gives the flows from one origin location to all the destination location. The package provides a <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">ggplot2::autoplot()</a></code> function that can be used as follows:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">a_model</span>, <span class="st">"full"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -148,12 +148,12 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-b_flow-1.png" width="40%" style="display: block; margin: auto;"></p>
-<p>Different values of the parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> lead to more or less concentrated flows as exemplified by the two above figures.</p>
+<p>Different values of the parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> lead to more or less concentrated flows, as exemplified by the two figures above.</p>
 </div>
 <div class="section level3">
 <h3 id="dynamic-models">Dynamic models<a class="anchor" aria-label="anchor" href="#dynamic-models"></a>
 </h3>
-<p>A. Wilson’s Boltzmann–Lotka–Volterra (BLV) interaction model is based on the production constrained maximum entropy model. The main idea consists in updating the attractivenesses of the destination locations based on their incoming flows. In the limit we want to have</p>
+<p>A. Wilson’s Boltzmann–Lotka–Volterra (BLV) interaction model is based on the production-constrained maximum entropy model. The main idea consists in updating the attractiveness of the destination locations based on their incoming flows. In the limit, we want to have</p>
 <p><span class="math display">\[Z_j =\sum_{i=1}^{n}Y_{ij}, \]</span></p>
 <p>where the flows are given by the equations above. The model is estimated using the <code><a href="reference/blvim.html">blvim()</a></code> function as follows.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -163,7 +163,7 @@
 <span><span class="co">#&gt; • Model: Wilson's production constrained</span></span>
 <span><span class="co">#&gt; • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) = 2</span></span>
 <span><span class="co">#&gt; ℹ The BLV model converged after 5800 iterations.</span></span></code></pre></div>
-<p>Notice that we start with some initial values of the attractivenesses but the final values are different. They can be obtained using the <code><a href="reference/attractiveness.html">attractiveness()</a></code> function as follows (we show the values using a bar plot).</p>
+<p>Notice that we start with some initial values of the attractiveness, but the final values are different. They can be obtained using the <code><a href="reference/attractiveness.html">attractiveness()</a></code> function as follows (we show the values using a bar plot).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">a_final_Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/attractiveness.html">attractiveness</a></span><span class="op">(</span><span class="va">a_blv_model</span><span class="op">)</span></span>
@@ -177,7 +177,7 @@
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">a_blv_model</span>, <span class="st">"attractiveness"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_blv_Z_ggplot2-1.png" width="100%"></p>
-<p>Results are of course strongly influenced by the parameters, as shown by this second example.</p>
+<p>Results are, of course, strongly influenced by the parameters, as shown by this second example.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b_blv_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blvim.html">blvim</a></span><span class="op">(</span><span class="va">cost_matrix</span>, <span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">1.1</span>, beta <span class="op">=</span> <span class="fl">15</span>, <span class="va">Z</span><span class="op">)</span></span>
 <span><span class="va">b_blv_model</span></span>
