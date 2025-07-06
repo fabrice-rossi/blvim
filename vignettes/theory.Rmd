@@ -174,6 +174,35 @@ $$
 
 Both solutions are implemented in `blvim()`.
 
+### Diversity
+
+A typical behaviour of the equilibrium solutions is a concentration of the
+attractiveness on a subset of the destination locations. This can be measured by
+the `diversity()` function. It uses the notion of diversity outlined in, for
+example, Jost (2006). The main idea of this notion, rephrased in the context of
+locations, is to find from the $Z$s an equivalent number of locations, say $m$,
+for which the attractiveness would be evenly spread (that is, proportional to $\frac{1}{m}$).
+
+If we normalise the $(Z_j)_{1\leq j\leq p}$ such that they sum to 1, we get the
+probability distribution $\mathcal{P}=(p_j)_{1\leq j\leq p}$ over $\{1, \ldots, p\}$.
+One way to interpret the notion of diversity is to measure how "random"
+$\mathcal{P}$ is. Indeed, if it is concentrated on 1, for instance, with $p_1\simeq 1$,
+then samples generated in an i.i.d. manner from $\mathcal{P}$ will not be diverse,
+as they will mostly consist of the value 1. Then an *entropy* is a rather natural
+diversity index. For instance, the Shannon entropy $H(\mathcal{P})=-\sum_{j}p_j\log p_j$
+provides a good diversity index. Based on the principle outlined above, the
+diversity of $\mathcal{P}$ is the number $m$ such that the diversity index of
+$\mathcal{P}$ is equal to the diversity index of the uniform distribution on
+$\{1, \ldots, m\}$. It can be shown that for the Shannon entropy, the diversity of
+$\mathcal{P}$ is $\exp(H(\mathcal{P}))$. This holds also for all the Rényi entropies.
+
+Notice that in `diversity()` the diversities are computed according to the incoming
+flows, i.e., not using the $(Z_j)_{1\leq j\leq p}$ but rather the $D_j$ defined
+above by
+$$
+\forall j,\  D_j=\sum_{i=1}^nY_{ij}.
+$$
+
 ## References
 
 Harris, B. (1964). "A model of locational equilibrium for retail trade", 
@@ -183,6 +212,9 @@ Harris, B., & Wilson, A. G. (1978). "Equilibrium Values and
 Dynamics of Attractiveness Terms in Production-Constrained
 Spatial-Interaction Models", Environment and Planning A: Economy and Space,
 10(4), 371-388. <https://dx.doi.org/10.1068/a100371>
+
+Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
+<https://dx.doi.org/10.1111/j.2006.0030-1299.14714.x>
 
 Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
