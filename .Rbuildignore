@@ -8,3 +8,5 @@ devtools
 ^pkgdown$
 ^\.github$
 ^codemeta\.json$
+^doc$
+^Meta$
