@@ -2,3 +2,44 @@ url: https://fabrice-rossi.github.io/blvim/
 template:
   bootstrap: 5
   math-rendering: mathjax
+reference:
+- title: "Creating spatial interaction models"
+  desc: "Functions for creating spatial interaction models and extracting their parameters."
+  contents:
+  - static_blvim
+  - blvim
+  - costs
+  - inverse_cost
+  - return_to_scale
+  - sim_is_bipartite
+  - matches("names")
+  - matches("positions")
+- title: "Using spatial interaction models"
+  desc: "Functions for getting properties of spatial interaction models."
+  contents:
+  - attractiveness
+  - destination_flow
+  - diversity
+  - flows
+  - flows_df
+  - production
+  - sim_converged
+  - sim_iterations
+- title: "Non bipartite models"
+  desc: "Functions that apply only to non bipartite models."
+  contents:
+  - is_terminal
+  - terminals
+  - nd_graph
+- title: "Multiple models"
+  desc: "Functions to create and use multiple spatial interaction models using a grid of parameters."
+  contents:
+  - starts_with("grid_")
+  - costs.sim_list
+  - sim_df
+  - as.data.frame.sim_list
+  - sim_distance
+- title: "Graphical representations"
+  desc: "Functions that provide graphical representations of spatial interaction models."
+  contents:
+  - starts_with("autoplot")
