@@ -6,6 +6,7 @@
 #'
 #' The value to display is specified via an expression evaluated in the context
 #' of the data frame. It defaults to the diversity as computed by [diversity()].
+#' See the below for examples of use.
 #'
 #' The horizontal axis is used by default for the cost scale parameter, that is
 #' \eqn{1/\beta}. This is in general easier to read than using the inverse cost
@@ -39,7 +40,10 @@
 #' ggplot2::autoplot(all_flows_df, iterations)
 #' ## we leverage non standard evaluation to compute a different diversity
 #' ggplot2::autoplot(all_flows_df, diversity(sim, "RW"))
-#' ## we can also add variables
+#' ## or to refer to columns of the data frame, either default ones
+#' ggplot2::autoplot(all_flows_df, converged)
+#' ggplot2::autoplot(all_flows_df, iterations)
+#' ## or added ones
 #' all_flows_df["Nystuen & Dacey"] <- diversity(all_flows_df$sim, "ND")
 #' ggplot2::autoplot(all_flows_df, `Nystuen & Dacey`)
 autoplot.sim_df <- function(object,
