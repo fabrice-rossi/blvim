@@ -101,55 +101,6 @@ as.list.sim_list <- function(x, ...) {
   lapply(x$sims, sim_restore, x$common)
 }
 
-
-#' Convert a collection of spatial interaction model into a Data Frame
-#'
-#' This function build a data frame from a collection of spatial interaction
-#' model.
-#'
-#' The data frame has one row per spatial interaction model and the following
-#' columns:
-#' - `alpha`: the return to scale parameter used to build the model
-#' - `beta`: the cost inverse scale parameter used to build the model
-#' - `diversity`: model diversity
-#' - `terminals`: if the model is not bipartite, the
-#' terminals of the model
-#' - `model`: if `models=TRUE`, the model
-#'
-#' @param x a collection of spatial interaction models, an object of class
-#'   `sim_list`
-#' @param models whether to include the models in the data frame (defaults to
-#'   TRUE, that is to model inclusion)
-#' @param ... additional parameters (not used currently)
-#'
-#' @returns a data frame representation of the spatial interaction model
-#'   collection
-#' @export
-#' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness,
-#'   bipartite = FALSE
-#' )
-#' as.data.frame(all_flows, models = FALSE)
-#'
-as.data.frame.sim_list <- function(x, ..., models = TRUE) {
-  pre_result <- data.frame(
-    alpha = x$alphas,
-    beta = x$betas,
-    diversity = grid_diversity(x)
-  )
-  if (!sim_is_bipartite(x$sims[[1]])) {
-    pre_result$terminals <- I(lapply(x, terminals))
-  }
-  if (models) {
-    pre_result$model <- I(as.list(x))
-  }
-  pre_result
-}
-
 #' Extract all the attractivenesses from a collection of spatial interaction models
 #'
 #' The function extract attractivenesses from all the spatial interaction models
