@@ -5,7 +5,7 @@
 #' spatial interaction models.
 #'
 #' The value to display is selected with the `statistics` parameter and defaults
-#' to the Shannon diversity with `"shannon"` (see [diversity()]). Othervalues
+#' to the Shannon diversity with `"shannon"` (see [diversity()]). Other values
 #' include:
 #'
 #' - `"renyi"` (coupled with the `order` parameter) for Rényi diversity (see
@@ -58,20 +58,17 @@ autoplot.sim_list <- function(object,
   sim_data <- data.frame(xmin = xc$min, xmax = xc$max, ymin = yc$min, ymax = yc$max)
   if (statistics == "shannon") {
     sname <- "Shannon diversity"
-    val <- sapply(object, diversity)
+    val <- diversity(object)
   } else if (statistics == "renyi") {
     sname <- paste0("Renyi diversity (order = ", order, ")")
-    val <- sapply(object, diversity, definition = "renyi", order = order)
+    val <- diversity(object, definition = "renyi", order = order)
   } else if (statistics == "terminals") {
     sname <- "Number of terminals"
-    val <- sapply(object, function(x) {
-      length(terminals(x, definition))
-    })
+    definition <- rlang::arg_match(definition)
+    val <- diversity(object, definition)
   } else {
     sname <- "Iterations"
-    val <- sapply(object, function(x) {
-      x$iteration
-    })
+    val <- sapply(object, sim_iterations)
   }
   sim_data[sname] <- val
   pre <- ggplot2::ggplot(sim_data, ggplot2::aes(

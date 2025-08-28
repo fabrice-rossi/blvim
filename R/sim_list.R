@@ -139,7 +139,7 @@ as.data.frame.sim_list <- function(x, ..., models = TRUE) {
   pre_result <- data.frame(
     alpha = x$alphas,
     beta = x$betas,
-    diversity = sapply(x, diversity)
+    diversity = diversity(x)
   )
   if (!sim_is_bipartite(x$sims[[1]])) {
     pre_result$terminals <- I(lapply(x, terminals))

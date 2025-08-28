@@ -39,7 +39,7 @@ spatial interaction models.
 }
 \details{
 The value to display is selected with the \code{statistics} parameter and defaults
-to the Shannon diversity with \code{"shannon"} (see \code{\link[=diversity]{diversity()}}). Othervalues
+to the Shannon diversity with \code{"shannon"} (see \code{\link[=diversity]{diversity()}}). Other values
 include:
 \itemize{
 \item \code{"renyi"} (coupled with the \code{order} parameter) for Rényi diversity (see

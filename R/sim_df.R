@@ -7,7 +7,7 @@ new_sim_df <- function(sim_list, ..., class = character()) {
   pre_result <- data.frame(
     alpha = sim_list$alphas,
     beta = sim_list$betas,
-    diversity = sapply(sim_list, diversity),
+    diversity = diversity(sim_list),
     iterations = iterations,
     converged = converged,
     sim = I(sim_list)
