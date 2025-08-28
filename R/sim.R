@@ -291,12 +291,15 @@ sim_iterations.sim <- function(sim, ...) {
 #' see for instance [blvim()]. This calculation may have been interrupted before
 #' convergence. The present function returns `TRUE` if the calculation converged,
 #' `FALSE` if this was not the case and `NA` if the spatial interaction model
-#' is not the result of an interative calculation .
+#' is not the result of an iterative calculation. The function applies also to a
+#' collection of spatial interaction models as represented by a `sim_list`.
 #'
-#' @param sim a spatial interaction model object
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction  models (an object of class `sim_list`)
 #' @param ... additional parameters
 #'
-#' @returns `TRUE`, `FALSE` or `NA`, as described above
+#' @returns `TRUE`, `FALSE` or `NA`, as described above. In the case of a `sim_list`
+#' the function returns a logical vector with one value per model.
 #' @export
 #' @seealso [sim_iterations()]
 #' @examples

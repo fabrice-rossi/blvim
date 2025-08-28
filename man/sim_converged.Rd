@@ -7,19 +7,22 @@
 sim_converged(sim, ...)
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
+collection of spatial interaction  models (an object of class \code{sim_list})}
 
 \item{...}{additional parameters}
 }
 \value{
-\code{TRUE}, \code{FALSE} or \code{NA}, as described above
+\code{TRUE}, \code{FALSE} or \code{NA}, as described above. In the case of a \code{sim_list}
+the function returns a logical vector with one value per model.
 }
 \description{
 Some spatial interaction models are the result of an iterative calculation,
 see for instance \code{\link[=blvim]{blvim()}}. This calculation may have been interrupted before
 convergence. The present function returns \code{TRUE} if the calculation converged,
 \code{FALSE} if this was not the case and \code{NA} if the spatial interaction model
-is not the result of an interative calculation .
+is not the result of an iterative calculation. The function applies also to a
+collection of spatial interaction models as represented by a \code{sim_list}.
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)

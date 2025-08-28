@@ -161,6 +161,7 @@ test_that("sim_list grid_* redundant functions work as expected", {
     iter_max = 5000,
     precision = .Machine$double.eps^0.5
   )
+  expect_equal(grid_sim_converged(models), sim_converged(models))
   expect_equal(grid_diversity(models), diversity(models))
 })
 
