@@ -7,13 +7,15 @@
 sim_iterations(sim, ...)
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
+collection of spatial interaction  models (an object of class \code{sim_list})}
 
 \item{...}{additional parameters}
 }
 \value{
 a number of iterations that may be one if the spatial interaction model
-has been obtained using a static model (see \code{\link[=static_blvim]{static_blvim()}}).
+has been obtained using a static model (see \code{\link[=static_blvim]{static_blvim()}}). In the case of a \code{sim_list}
+the function returns a vector with iteration number per model.
 }
 \description{
 Returns the number of iterations used to produce this spatial interaction model

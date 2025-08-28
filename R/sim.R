@@ -262,11 +262,13 @@ destination_flow.sim <- function(sim, ...) {
 
 #' Returns the number of iterations used to produce this spatial interaction model
 #'
-#' @param sim a spatial interaction model object
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction  models (an object of class `sim_list`)
 #' @param ... additional parameters
 #'
 #' @returns a number of iterations that may be one if the spatial interaction model
-#'  has been obtained using a static model (see [static_blvim()]).
+#'  has been obtained using a static model (see [static_blvim()]). In the case of a `sim_list`
+#' the function returns a vector with iteration number per model.
 #' @export
 #' @seealso [sim_converged()]
 #' @examples
