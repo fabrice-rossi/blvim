@@ -56,7 +56,8 @@
 
 
 <dl><dt id="arg-sim">sim<a class="anchor" aria-label="anchor" href="#arg-sim"></a></dt>
-<dd><p>a spatial interaction model object</p></dd>
+<dd><p>a spatial interaction model object (an object of class <code>sim</code>) or a
+collection of spatial interaction  models (an object of class <code>sim_list</code>)</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -66,7 +67,8 @@
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a number of iterations that may be one if the spatial interaction model
-has been obtained using a static model (see <code><a href="static_blvim.html">static_blvim()</a></code>).</p>
+has been obtained using a static model (see <code><a href="static_blvim.html">static_blvim()</a></code>). In the case of a <code>sim_list</code>
+the function returns a vector with iteration number per model.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

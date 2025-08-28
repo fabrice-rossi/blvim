@@ -5,13 +5,12 @@
 <url><loc>https://fabrice-rossi.github.io/blvim/articles/theory.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/authors.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/index.html</loc></url>
-<url><loc>https://fabrice-rossi.github.io/blvim/reference/as.data.frame.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/attractiveness.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/autoplot.sim.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_df.html</loc></url>
-<url><loc>https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/blvim.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/costs.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/costs.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/destination_flow.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/destination_names.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/destination_positions.html</loc></url>
@@ -21,7 +20,10 @@
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_attractiveness.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_blvim.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_destination_flow.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_diversity.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_is_terminal.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_sim_converged.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_sim_iterations.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/index.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/inverse_cost.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/is_terminal.html</loc></url>

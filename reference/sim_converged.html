@@ -9,11 +9,13 @@
 see for instance blvim(). This calculation may have been interrupted before
 convergence. The present function returns TRUE if the calculation converged,
 FALSE if this was not the case and NA if the spatial interaction model
-is not the result of an interative calculation ."><meta property="og:description" content="Some spatial interaction models are the result of an iterative calculation,
+is not the result of an iterative calculation. The function applies also to a
+collection of spatial interaction models as represented by a sim_list."><meta property="og:description" content="Some spatial interaction models are the result of an iterative calculation,
 see for instance blvim(). This calculation may have been interrupted before
 convergence. The present function returns TRUE if the calculation converged,
 FALSE if this was not the case and NA if the spatial interaction model
-is not the result of an interative calculation ."></head><body>
+is not the result of an iterative calculation. The function applies also to a
+collection of spatial interaction models as represented by a sim_list."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -55,7 +57,8 @@ is not the result of an interative calculation ."></head><body>
 see for instance <code><a href="blvim.html">blvim()</a></code>. This calculation may have been interrupted before
 convergence. The present function returns <code>TRUE</code> if the calculation converged,
 <code>FALSE</code> if this was not the case and <code>NA</code> if the spatial interaction model
-is not the result of an interative calculation .</p>
+is not the result of an iterative calculation. The function applies also to a
+collection of spatial interaction models as represented by a <code>sim_list</code>.</p>
     </div>
 
     <div class="section level2">
@@ -68,7 +71,8 @@ is not the result of an interative calculation .</p>
 
 
 <dl><dt id="arg-sim">sim<a class="anchor" aria-label="anchor" href="#arg-sim"></a></dt>
-<dd><p>a spatial interaction model object</p></dd>
+<dd><p>a spatial interaction model object (an object of class <code>sim</code>) or a
+collection of spatial interaction  models (an object of class <code>sim_list</code>)</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -77,7 +81,8 @@ is not the result of an interative calculation .</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>TRUE</code>, <code>FALSE</code> or <code>NA</code>, as described above</p>
+    <p><code>TRUE</code>, <code>FALSE</code> or <code>NA</code>, as described above. In the case of a <code>sim_list</code>
+the function returns a logical vector with one value per model.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -41,9 +41,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="creating-spatial-interaction-models">Creating spatial interaction models<a class="anchor" aria-label="anchor" href="#creating-spatial-interaction-models"></a></h2>
 
-
+      <div class="section-desc"><p>Functions for creating spatial interaction models and extracting their parameters.</p></div>
 
 
     </div><div class="section level2">
@@ -53,34 +53,10 @@
 
       <dl><dt>
 
-          <code><a href="as.data.frame.sim_list.html">as.data.frame(<i>&lt;sim_list&gt;</i>)</a></code>
+          <code><a href="static_blvim.html">static_blvim()</a></code>
 
         </dt>
-        <dd>Convert a collection of spatial interaction model into a Data Frame</dd>
-      </dl><dl><dt>
-
-          <code><a href="attractiveness.html">attractiveness()</a></code>
-
-        </dt>
-        <dd>Extract the attractivenesses from a spatial interaction model object</dd>
-      </dl><dl><dt>
-
-          <code><a href="autoplot.sim.html">autoplot(<i>&lt;sim&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Create a complete ggplot for a spatial interaction model</dd>
-      </dl><dl><dt>
-
-          <code><a href="autoplot.sim_df.html">autoplot(<i>&lt;sim_df&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Create a complete ggplot for a spatial interaction models data frame</dd>
-      </dl><dl><dt>
-
-          <code><a href="autoplot.sim_list.html">autoplot(<i>&lt;sim_list&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Create a complete ggplot for a collection of spatial interaction models</dd>
+        <dd>Compute flows between origin and destination locations</dd>
       </dl><dl><dt>
 
           <code><a href="blvim.html">blvim()</a></code>
@@ -92,13 +68,25 @@
           <code><a href="costs.html">costs()</a></code>
 
         </dt>
-        <dd>Extract the inverse cost matrix used to compute this model</dd>
+        <dd>Extract the cost matrix used to compute this model</dd>
       </dl><dl><dt>
 
-          <code><a href="destination_flow.html">destination_flow()</a></code>
+          <code><a href="inverse_cost.html">inverse_cost()</a></code>
 
         </dt>
-        <dd>Compute the flows incoming at each destination location</dd>
+        <dd>Extract the inverse cost scale parameter used to compute this model</dd>
+      </dl><dl><dt>
+
+          <code><a href="return_to_scale.html">return_to_scale()</a></code>
+
+        </dt>
+        <dd>Extract the return to scale parameter used to compute this model</dd>
+      </dl><dl><dt>
+
+          <code><a href="sim_is_bipartite.html">sim_is_bipartite()</a></code>
+
+        </dt>
+        <dd>Reports whether the spatial interaction model is bipartite</dd>
       </dl><dl><dt>
 
           <code><a href="destination_names.html">destination_names()</a></code> <code><a href="destination_names.html">`destination_names&lt;-`()</a></code>
@@ -107,10 +95,57 @@
         <dd>Names of destination locations in a spatial interaction model</dd>
       </dl><dl><dt>
 
+          <code><a href="location_names.html">location_names()</a></code> <code><a href="location_names.html">`location_names&lt;-`()</a></code>
+
+        </dt>
+        <dd>Names of origin and destination locations in a spatial interaction model</dd>
+      </dl><dl><dt>
+
+          <code><a href="origin_names.html">origin_names()</a></code> <code><a href="origin_names.html">`origin_names&lt;-`()</a></code>
+
+        </dt>
+        <dd>Names of origin locations in a spatial interaction model</dd>
+      </dl><dl><dt>
+
           <code><a href="destination_positions.html">destination_positions()</a></code> <code><a href="destination_positions.html">`destination_positions&lt;-`()</a></code>
 
         </dt>
         <dd>positions of destination locations in a spatial interaction model</dd>
+      </dl><dl><dt>
+
+          <code><a href="location_positions.html">location_positions()</a></code> <code><a href="location_positions.html">`location_positions&lt;-`()</a></code>
+
+        </dt>
+        <dd>Positions of origin and destination locations in a spatial interaction model</dd>
+      </dl><dl><dt>
+
+          <code><a href="origin_positions.html">origin_positions()</a></code> <code><a href="origin_positions.html">`origin_positions&lt;-`()</a></code>
+
+        </dt>
+        <dd>Positions of origin locations in a spatial interaction model</dd>
+      </dl></div><div class="section level2">
+      <h2 id="using-spatial-interaction-models">Using spatial interaction models<a class="anchor" aria-label="anchor" href="#using-spatial-interaction-models"></a></h2>
+
+      <div class="section-desc"><p>Functions for getting properties of spatial interaction models.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="attractiveness.html">attractiveness()</a></code>
+
+        </dt>
+        <dd>Extract the attractivenesses from a spatial interaction model object</dd>
+      </dl><dl><dt>
+
+          <code><a href="destination_flow.html">destination_flow()</a></code>
+
+        </dt>
+        <dd>Compute the flows incoming at each destination location</dd>
       </dl><dl><dt>
 
           <code><a href="diversity.html">diversity()</a></code>
@@ -131,6 +166,64 @@
         <dd>Extract the flow matrix from a spatial interaction model object in data frame format</dd>
       </dl><dl><dt>
 
+          <code><a href="production.html">production()</a></code>
+
+        </dt>
+        <dd>Extract the production constraints from a spatial interaction model object</dd>
+      </dl><dl><dt>
+
+          <code><a href="sim_converged.html">sim_converged()</a></code>
+
+        </dt>
+        <dd>Reports whether the spatial interaction model construction converged</dd>
+      </dl><dl><dt>
+
+          <code><a href="sim_iterations.html">sim_iterations()</a></code>
+
+        </dt>
+        <dd>Returns the number of iterations used to produce this spatial interaction model</dd>
+      </dl></div><div class="section level2">
+      <h2 id="non-bipartite-models">Non bipartite models<a class="anchor" aria-label="anchor" href="#non-bipartite-models"></a></h2>
+
+      <div class="section-desc"><p>Functions that apply only to non bipartite models.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="is_terminal.html">is_terminal()</a></code>
+
+        </dt>
+        <dd>Report whether locations are terminal sites or not</dd>
+      </dl><dl><dt>
+
+          <code><a href="terminals.html">terminals()</a></code>
+
+        </dt>
+        <dd>Compute terminals for a spatial interaction model</dd>
+      </dl><dl><dt>
+
+          <code><a href="nd_graph.html">nd_graph()</a></code>
+
+        </dt>
+        <dd>Compute the Nystuen and Dacey graph for a spatial interaction model</dd>
+      </dl></div><div class="section level2">
+      <h2 id="multiple-models">Multiple models<a class="anchor" aria-label="anchor" href="#multiple-models"></a></h2>
+
+      <div class="section-desc"><p>Functions to create and use multiple spatial interaction models using a grid of parameters.</p></div>
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
           <code><a href="grid_attractiveness.html">grid_attractiveness()</a></code>
 
         </dt>
@@ -149,70 +242,34 @@
         <dd>Extract all the destination flows from a collection of spatial interaction models</dd>
       </dl><dl><dt>
 
+          <code><a href="grid_diversity.html">grid_diversity()</a></code>
+
+        </dt>
+        <dd>Compute diversities for a collection of spatial interaction models</dd>
+      </dl><dl><dt>
+
           <code><a href="grid_is_terminal.html">grid_is_terminal()</a></code>
 
         </dt>
         <dd>Extract all terminal status from a collection of spatial interaction models</dd>
       </dl><dl><dt>
 
-          <code><a href="inverse_cost.html">inverse_cost()</a></code>
+          <code><a href="grid_sim_converged.html">grid_sim_converged()</a></code>
 
         </dt>
-        <dd>Extract the inverse cost scale parameter used to compute this model</dd>
+        <dd>Reports the convergence statuses of a collection of spatial interaction models</dd>
       </dl><dl><dt>
 
-          <code><a href="is_terminal.html">is_terminal()</a></code>
+          <code><a href="grid_sim_iterations.html">grid_sim_iterations()</a></code>
 
         </dt>
-        <dd>Report whether locations are terminal sites or not</dd>
+        <dd>Returns the number of iterations used to produce of a collection of spatial interaction models</dd>
       </dl><dl><dt>
 
-          <code><a href="location_names.html">location_names()</a></code> <code><a href="location_names.html">`location_names&lt;-`()</a></code>
+          <code><a href="costs.sim_list.html">costs(<i>&lt;sim_list&gt;</i>)</a></code>
 
         </dt>
-        <dd>Names of origin and destination locations in a spatial interaction model</dd>
-      </dl><dl><dt>
-
-          <code><a href="location_positions.html">location_positions()</a></code> <code><a href="location_positions.html">`location_positions&lt;-`()</a></code>
-
-        </dt>
-        <dd>Positions of origin and destination locations in a spatial interaction model</dd>
-      </dl><dl><dt>
-
-          <code><a href="nd_graph.html">nd_graph()</a></code>
-
-        </dt>
-        <dd>Compute the Nystuen and Dacey graph for a spatial interaction model</dd>
-      </dl><dl><dt>
-
-          <code><a href="origin_names.html">origin_names()</a></code> <code><a href="origin_names.html">`origin_names&lt;-`()</a></code>
-
-        </dt>
-        <dd>Names of origin locations in a spatial interaction model</dd>
-      </dl><dl><dt>
-
-          <code><a href="origin_positions.html">origin_positions()</a></code> <code><a href="origin_positions.html">`origin_positions&lt;-`()</a></code>
-
-        </dt>
-        <dd>Positions of origin locations in a spatial interaction model</dd>
-      </dl><dl><dt>
-
-          <code><a href="production.html">production()</a></code>
-
-        </dt>
-        <dd>Extract the production constraints from a spatial interaction model object</dd>
-      </dl><dl><dt>
-
-          <code><a href="return_to_scale.html">return_to_scale()</a></code>
-
-        </dt>
-        <dd>Extract the return to scale parameter used to compute this model</dd>
-      </dl><dl><dt>
-
-          <code><a href="sim_converged.html">sim_converged()</a></code>
-
-        </dt>
-        <dd>Reports whether the spatial interaction model construction converged</dd>
+        <dd>Extract the common cost matrix from a collection of spatial interaction models</dd>
       </dl><dl><dt>
 
           <code><a href="sim_df.html">sim_df()</a></code>
@@ -225,32 +282,32 @@
 
         </dt>
         <dd>Compute all pairwise distances between the spatial interaction models in a collection</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="graphical-representations">Graphical representations<a class="anchor" aria-label="anchor" href="#graphical-representations"></a></h2>
 
-          <code><a href="sim_is_bipartite.html">sim_is_bipartite()</a></code>
+      <div class="section-desc"><p>Functions that provide graphical representations of spatial interaction models.</p></div>
 
-        </dt>
-        <dd>Reports whether the spatial interaction model is bipartite</dd>
-      </dl><dl><dt>
 
-          <code><a href="sim_iterations.html">sim_iterations()</a></code>
+    </div><div class="section level2">
 
-        </dt>
-        <dd>Returns the number of iterations used to produce this spatial interaction model</dd>
-      </dl><dl><dt>
 
-          <code><a href="static_blvim.html">static_blvim()</a></code>
 
-        </dt>
-        <dd>Compute flows between origin and destination locations</dd>
-      </dl><dl><dt>
 
-          <code><a href="terminals.html">terminals()</a></code>
+      <dl><dt>
+
+          <code><a href="autoplot.sim.html">autoplot(<i>&lt;sim&gt;</i>)</a></code>
 
         </dt>
-        <dd>Compute terminals for a spatial interaction model</dd>
+        <dd>Create a complete ggplot for a spatial interaction model</dd>
+      </dl><dl><dt>
+
+          <code><a href="autoplot.sim_df.html">autoplot(<i>&lt;sim_df&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Create a complete ggplot for a spatial interaction models data frame</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
