@@ -17,7 +17,7 @@
 #' @param value the value to display, default to `diversity` if unspecified
 #' @param inverse whether to use the cost scale parameter (default)
 #' @param ... additional parameters (not used currently)
-#' @seealso [sim_df()]
+#' @seealso [sim_df()], [diversity()]
 #' @returns a ggplot object
 #' @exportS3Method ggplot2::autoplot
 #' @examples

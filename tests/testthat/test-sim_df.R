@@ -29,7 +29,7 @@ test_that("sim_df creation obeys to its documentation", {
   expect_equal(models_df$alpha, params$alpha)
   expect_equal(models_df$beta, params$beta)
   ## characteristics
-  expect_equal(models_df$diversity, diversity(models))
+  expect_equal(models_df$diversity, grid_diversity(models))
   expect_equal(models_df$iterations, sapply(models, sim_iterations))
   expect_equal(models_df$converged, sapply(models, sim_converged))
 })
@@ -49,10 +49,10 @@ test_that("sim_df modifications remove or keep the sim_df class", {
   models_df <- sim_df(models)
   names_before <- names(models_df)
   ## standard modification data.frame style
-  models_df$renyi <- diversity(models, "renyi", 3)
+  models_df$renyi <- grid_diversity(models, "renyi", 3)
   expect_s3_class(models_df, "data.frame")
   expect_s3_class(models_df, "sim_df")
-  expect_equal(models_df$renyi, diversity(models, "renyi", 3))
+  expect_equal(models_df$renyi, grid_diversity(models, "renyi", 3))
   expect_equal(names(models_df), c(names_before, "renyi"))
   ## extraction without the sim column
   models_df_nosim <- models_df[c(1:3)]
@@ -68,7 +68,7 @@ test_that("sim_df modifications remove or keep the sim_df class", {
   expect_s3_class(models_df_nosim, "data.frame")
   expect_false(inherits(models_df_nosim, "sim_df"))
   models_df_nosim <- models_df
-  models_df_nosim$sim <- diversity(models, "renyi", 1.5)
+  models_df_nosim$sim <- grid_diversity(models, "renyi", 1.5)
   expect_s3_class(models_df_nosim, "data.frame")
   expect_false(inherits(models_df_nosim, "sim_df"))
   ## replacing sim by a sim_list

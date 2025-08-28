@@ -53,14 +53,18 @@ test_that("diversity computes what is expected on sim lists", {
   )
   orders <- c(0, 0.5, 1, 1.5, 3, Inf)
   for (gamma in orders) {
-    divs <- diversity(models, "renyi", order = gamma)
+    divs <- grid_diversity(models, "renyi", order = gamma)
+    ddivs <- diversity(models, "renyi", order = gamma)
+    expect_equal(divs, ddivs)
     expect_length(divs, length(models))
     for (k in seq_along(models)) {
       expect_equal(divs[k], diversity(models[[k]], "renyi", order = gamma))
     }
   }
   for (term_def in c("ND", "RW")) {
-    divs <- diversity(models, term_def)
+    divs <- grid_diversity(models, term_def)
+    ddivs <- diversity(models, term_def)
+    expect_equal(divs, ddivs)
     for (k in seq_along(models)) {
       expect_equal(divs[k], diversity(models[[k]], term_def))
     }

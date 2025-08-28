@@ -148,6 +148,22 @@ test_that("sim_list is_terminal extraction works", {
   }
 })
 
+test_that("sim_list grid_* redundant functions work as expected", {
+  config <- create_locations(20, 30, seed = 4)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    epsilon = 0.1,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5
+  )
+  expect_equal(grid_diversity(models), diversity(models))
+})
+
 test_that("sim_list extraction functions detect errors", {
   expect_error(grid_destination_flow(list()))
   expect_error(grid_attractiveness(2))

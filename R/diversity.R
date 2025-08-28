@@ -61,7 +61,8 @@
 #'
 #' When applied to a collection of spatial interaction  models (an object of
 #' class `sim_list`) the function uses the same parameters (`definition` and
-#' `order`) for all models and returns a vector of diversities.
+#' `order`) for all models and returns a vector of diversities. This is
+#' completely equivalent to [grid_diversity()].
 #'
 #' @param sim a spatial interaction model object (an object of class `sim`) or a
 #'   collection of spatial interaction  models (an object of class `sim_list`)

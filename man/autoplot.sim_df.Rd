@@ -57,5 +57,5 @@ all_flows_df["Nystuen & Dacey"] <- diversity(all_flows_df$sim, "ND")
 ggplot2::autoplot(all_flows_df, `Nystuen & Dacey`)
 }
 \seealso{
-\code{\link[=sim_df]{sim_df()}}
+\code{\link[=sim_df]{sim_df()}}, \code{\link[=diversity]{diversity()}}
 }

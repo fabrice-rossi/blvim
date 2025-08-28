@@ -92,7 +92,8 @@ See \code{\link[=terminals]{terminals()}} for details.
 
 When applied to a collection of spatial interaction  models (an object of
 class \code{sim_list}) the function uses the same parameters (\code{definition} and
-\code{order}) for all models and returns a vector of diversities.
+\code{order}) for all models and returns a vector of diversities. This is
+completely equivalent to \code{\link[=grid_diversity]{grid_diversity()}}.
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)

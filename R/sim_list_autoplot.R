@@ -58,14 +58,14 @@ autoplot.sim_list <- function(object,
   sim_data <- data.frame(xmin = xc$min, xmax = xc$max, ymin = yc$min, ymax = yc$max)
   if (statistics == "shannon") {
     sname <- "Shannon diversity"
-    val <- diversity(object)
+    val <- grid_diversity(object)
   } else if (statistics == "renyi") {
     sname <- paste0("Renyi diversity (order = ", order, ")")
-    val <- diversity(object, definition = "renyi", order = order)
+    val <- grid_diversity(object, definition = "renyi", order = order)
   } else if (statistics == "terminals") {
     sname <- "Number of terminals"
     definition <- rlang::arg_match(definition)
-    val <- diversity(object, definition)
+    val <- grid_diversity(object, definition)
   } else {
     sname <- "Iterations"
     val <- sapply(object, sim_iterations)

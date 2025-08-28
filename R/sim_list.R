@@ -139,7 +139,7 @@ as.data.frame.sim_list <- function(x, ..., models = TRUE) {
   pre_result <- data.frame(
     alpha = x$alphas,
     beta = x$betas,
-    diversity = diversity(x)
+    diversity = grid_diversity(x)
   )
   if (!sim_is_bipartite(x$sims[[1]])) {
     pre_result$terminals <- I(lapply(x, terminals))
@@ -265,4 +265,45 @@ grid_is_terminal <- function(sim_list, definition = c("ND", "RW"), ...) {
     cli::cli_abort("{.var sim_list} must be an object of class {.cls sim_list}")
   }
   t(sapply(sim_list, is_terminal, definition, ...))
+}
+
+#' Compute diversities for a collection of spatial interaction models
+#'
+#' The function computes for each spatial interaction model of its `sim_list`
+#' parameter the [diversity()] of the corresponding destination flows and
+#' returns the values as a vector. The type of diversity and the associated
+#' parameters are identical for all models.
+#'
+#' See [diversity()] for the definition of the diversities. Notice that
+#' [diversity()] is generic and can be applied directly to `sim_list` objects.
+#' The current function is provided to be explicit in R code about what is a
+#' unique model and what is a collection of models (using function names that
+#' start with `"grid_"`)
+#'
+#' @param sim a collection of spatial interaction models, an object of class
+#'   `sim_list`
+#' @inheritParams diversity
+#'
+#' @returns a vector of diversities, one per spatial interaction model
+#' @seealso [diversity()] and [grid_blvim()]
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(15 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 15)
+#' attractiveness <- rep(1, 15)
+#' all_flows <- grid_blvim(distances,
+#'   production,
+#'   c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3),
+#'   attractiveness,
+#'   bipartite = FALSE,
+#'   epsilon = 0.1
+#' )
+#' diversities <- grid_diversity(all_flows)
+#' diversities ## should be a length 9 vector
+#' grid_diversity(all_flows, "renyi", 3)
+grid_diversity <- function(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...) {
+  diversity(sim, definition, order, ...)
 }
