@@ -84,7 +84,7 @@ inverse_cost.sim_wpc <- function(sim, ...) {
   sim$beta
 }
 
-#' Extract the inverse cost matrix used to compute this model
+#' Extract the cost matrix used to compute this model
 #'
 #' @param sim a spatial interaction model with a cost matrix
 #' @param ... additional parameters

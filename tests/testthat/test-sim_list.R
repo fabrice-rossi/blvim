@@ -21,6 +21,7 @@ test_that("sim_list is a list", {
   params <- expand.grid(alpha = alphas, beta = betas)
   expect_equal(params$alpha, sapply(models, return_to_scale))
   expect_equal(params$beta, sapply(models, inverse_cost))
+  expect_equal(config$costs, costs(models))
 })
 
 test_that("sim_list prints as expected", {
@@ -171,10 +172,11 @@ test_that("sim_list common information restoration works", {
     epsilon = 0.1,
     precision = .Machine$double.eps^0.5
   )
+  expect_equal(costs(models), config$costs)
   for (k in seq_along(models)) {
     expect_equal(origin_names(models[[k]]), on)
     expect_equal(destination_names(models[[k]]), dn)
-    expect_equal(models[[k]]$costs, config$costs)
+    expect_equal(costs(models[[k]]), config$costs)
   }
 })
 

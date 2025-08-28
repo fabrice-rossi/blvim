@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_wpc.R
 \name{costs}
 \alias{costs}
-\title{Extract the inverse cost matrix used to compute this model}
+\title{Extract the cost matrix used to compute this model}
 \usage{
 costs(sim, ...)
 }
@@ -15,7 +15,7 @@ costs(sim, ...)
 the cost matrix
 }
 \description{
-Extract the inverse cost matrix used to compute this model
+Extract the cost matrix used to compute this model
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
