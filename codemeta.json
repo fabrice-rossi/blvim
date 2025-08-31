@@ -59,6 +59,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "ggplot2",
       "name": "ggplot2",
       "provider": {
@@ -218,7 +230,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "7638.541KB",
+  "fileSize": "7639.569KB",
   "relatedLink": "https://fabrice-rossi.github.io/blvim/",
   "readme": "https://github.com/fabrice-rossi/blvim/blob/main/README.md",
   "contIntegration": ["https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/fabrice-rossi/blvim"],
