@@ -35,31 +35,22 @@ new_sim_list <- function(sims, common = NULL, ..., class = character()) {
   }
   ## when common is specified, we assume the common elements were removed from the sim objects
   structure(
-    list(
-      sims = sims,
-      alphas = sapply(sims, return_to_scale),
-      betas = sapply(sims, inverse_cost),
-      common = common,
-      ...
-    ),
-    class = c(class, "sim_list")
+    sims,
+    common = common,
+    class = c(class, "sim_list", "list"),
+    ...
   )
 }
 
-#' @export
-length.sim_list <- function(x) {
-  length(x$sims)
-}
 
 #' @export
 `[.sim_list` <- function(x, i, ...) {
-  new_sim_list(x$sims[i, ...], common = x$common)
+  new_sim_list(NextMethod(), common = attr(x, "common"))
 }
 
 #' @export
 `[[.sim_list` <- function(x, i, ...) {
-  pre <- x$sims[[i, ...]]
-  sim_restore(pre, x$common)
+  sim_restore(NextMethod(), attr(x, "common"))
 }
 
 #' @export
@@ -75,17 +66,17 @@ length.sim_list <- function(x) {
 
 #' @export
 format.sim_list <- function(x, ...) {
-  one_model <- x$sims[[1]]
+  one_model <- x[[1]]
   cli::cli_format_method({
     cli::cli_text(
-      "Collection of {.val {length(x$sims)}} spatial interaction models with ",
+      "Collection of {.val {length(x)}} spatial interaction models with ",
       "{.val {nrow(one_model$Y)}} origin locations and ",
       "{.val {ncol(one_model$Y)}} destination locations ",
       "computed on the following grid: "
     )
     sl <- cli::cli_ul()
-    cli::cli_li("alpha: {.val {unique(x$alphas)}}")
-    cli::cli_li("beta: {.val {unique(x$betas)}}")
+    cli::cli_li("alpha: {.val {unique(sapply(unclass(x), return_to_scale))}}")
+    cli::cli_li("beta: {.val {unique(sapply(unclass(x), inverse_cost))}}")
     cli::cli_end(sl)
   })
 }
@@ -98,7 +89,7 @@ print.sim_list <- function(x, ...) {
 
 #' @export
 as.list.sim_list <- function(x, ...) {
-  lapply(x$sims, sim_restore, x$common)
+  lapply(unclass(x), sim_restore, attr(x, "common"))
 }
 
 #' Extract all the attractivenesses from a collection of spatial interaction models

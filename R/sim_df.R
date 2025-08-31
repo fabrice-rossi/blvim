@@ -5,8 +5,8 @@ new_sim_df <- function(sim_list, ..., class = character()) {
   iterations <- sapply(sim_list, sim_iterations)
   converged <- sapply(sim_list, sim_converged)
   pre_result <- data.frame(
-    alpha = sim_list$alphas,
-    beta = sim_list$betas,
+    alpha = sapply(sim_list, return_to_scale),
+    beta = sapply(sim_list, inverse_cost),
     diversity = grid_diversity(sim_list),
     iterations = iterations,
     converged = converged,

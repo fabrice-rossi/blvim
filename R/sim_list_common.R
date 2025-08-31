@@ -25,5 +25,5 @@
 #' identical(distances, costs(all_flows))
 #'
 costs.sim_list <- function(sim, ...) {
-  sim$common$costs
+  attr(sim, "common")$costs
 }
