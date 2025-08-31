@@ -16,6 +16,12 @@ test_that("test .onLoad no package", {
   } else {
     autoplot_s3_registered <- callr::r(function() {
       library(blvim)
+      s3_method_exists <- function(method) {
+        !inherits(
+          try(sloop::s3_get_method({{ method }}), silent = TRUE),
+          "try-error"
+        )
+      }
       if (covr::in_covr()) {
         ## should not be needed
         blvim:::.onLoad()
@@ -46,6 +52,12 @@ test_that("test .onLoad ggplot2", {
   } else {
     autoplot_s3_registered <- callr::r(function() {
       library(blvim)
+      s3_method_exists <- function(method) {
+        !inherits(
+          try(sloop::s3_get_method({{ method }}), silent = TRUE),
+          "try-error"
+        )
+      }
       if (covr::in_covr()) {
         ## should not be needed
         blvim:::.onLoad()
@@ -75,6 +87,12 @@ test_that("test .onLoad dplyr", {
   } else {
     autoplot_s3_registered <- callr::r(function() {
       library(blvim)
+      s3_method_exists <- function(method) {
+        !inherits(
+          try(sloop::s3_get_method({{ method }}), silent = TRUE),
+          "try-error"
+        )
+      }
       if (covr::in_covr()) {
         ## should not be needed
         blvim:::.onLoad()
