@@ -1,50 +1,87 @@
 skip_on_cran()
-test_that("test .onLoad", {
-  ## first we test without loading ggplot2
-  autoplot_sim_list_registered <- FALSE
+test_that("test .onLoad no package", {
+  ## first we test without loading ggplot2 or dplyr
+  autoplot_s3_registered <- TRUE
   if (pkgload::is_dev_package("blvim")) {
-    autoplot_sim_list_registered <- callr::r(function() {
+    autoplot_s3_registered <- callr::r(function() {
       pkgload::load_all()
       if (covr::in_covr()) {
         ## should not be needed
         blvim:::.onLoad()
       }
-      sloop::is_s3_method("autoplot.sim_list")
+      s3_method_exists("autoplot.sim") |
+        s3_method_exists("autoplot.sim_df") |
+        s3_method_exists("dplyr_row_slice.sim_df")
     })
   } else {
-    autoplot_sim_list_registered <- callr::r(function() {
+    autoplot_s3_registered <- callr::r(function() {
       library(blvim)
       if (covr::in_covr()) {
         ## should not be needed
         blvim:::.onLoad()
       }
-      sloop::is_s3_method("autoplot.sim_list")
+      s3_method_exists("autoplot.sim") |
+        s3_method_exists("autoplot.sim_df") |
+        s3_method_exists("dplyr_row_slice.sim_df")
     })
   }
-  expect_false(autoplot_sim_list_registered)
+  expect_false(autoplot_s3_registered)
+})
+
+test_that("test .onLoad ggplot2", {
   ## then we test only if ggplot2 is installed
   skip_if_not_installed("ggplot2")
-  autoplot_sim_list_registered <- FALSE
+  autoplot_s3_registered <- FALSE
   if (pkgload::is_dev_package("blvim")) {
-    autoplot_sim_list_registered <- callr::r(function() {
+    autoplot_s3_registered <- callr::r(function() {
       pkgload::load_all()
       if (covr::in_covr()) {
         ## should not be needed
         blvim:::.onLoad()
       }
       library(ggplot2)
-      sloop::is_s3_method("autoplot.sim_list")
+      s3_method_exists("autoplot.sim") &
+        s3_method_exists("autoplot.sim_df")
     })
   } else {
-    autoplot_sim_list_registered <- callr::r(function() {
+    autoplot_s3_registered <- callr::r(function() {
       library(blvim)
       if (covr::in_covr()) {
         ## should not be needed
         blvim:::.onLoad()
       }
       library(ggplot2)
-      sloop::is_s3_method("autoplot.sim_list")
+      s3_method_exists("autoplot.sim") &
+        s3_method_exists("autoplot.sim_df")
     })
   }
-  expect_true(autoplot_sim_list_registered)
+  expect_true(autoplot_s3_registered)
+})
+
+test_that("test .onLoad dplyr", {
+  ## then we test only if dplyr is installed
+  skip_if_not_installed("dplyr")
+  autoplot_s3_registered <- FALSE
+  if (pkgload::is_dev_package("blvim")) {
+    autoplot_s3_registered <- callr::r(function() {
+      pkgload::load_all()
+      if (covr::in_covr()) {
+        ## should not be needed
+        blvim:::.onLoad()
+      }
+      library(dplyr)
+      s3_method_exists("dplyr_row_slice.sim_df")
+    })
+  } else {
+    autoplot_s3_registered <- callr::r(function() {
+      library(blvim)
+      if (covr::in_covr()) {
+        ## should not be needed
+        blvim:::.onLoad()
+      }
+      library(dplyr)
+      s3_method_exists("dplyr_row_slice.sim_df")
+    })
+  }
+  expect_true(autoplot_s3_registered)
 })
