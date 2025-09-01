@@ -10,6 +10,7 @@
   with_names = FALSE,
   with_positions = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
+  adjust_limits = FALSE,
   ...
 )
 }
@@ -22,11 +23,19 @@ details.}
 \item{with_names}{specifies whether the graphical representation includes
 location names (\code{FALSE} by default)}
 
-\item{with_positions}{specifies whether the graphical representation is based on
-location positions (\code{FALSE} by default)}
+\item{with_positions}{specifies whether the graphical representation is based
+on location positions (\code{FALSE} by default)}
 
-\item{cut_off}{cut off limit for inclusion of a segment in the full flow
-matrix representation with \code{with_positions = TRUE}}
+\item{cut_off}{cut off limit for inclusion of a graphical primitive. In the
+full flow matrix representation with \code{with_positions = TRUE}, segments are
+removed when their flow is smaller than the cut off. In the attractiveness
+or destination representation, disks are removed when the corresponding
+value is below the cut off.}
+
+\item{adjust_limits}{if \code{FALSE} (default value), the limits of the position
+based graph are not adjusted after removing graphical primitives. This eases
+comparison between graphical representations with different cut off value. If
+\code{TRUE}, limits are adjusted to the data using the standard ggplot2 behaviour.}
 
 \item{...}{additional parameters, see details}
 }
@@ -82,11 +91,13 @@ proportional to the flows. Only segments that carry a flow above the
 used for the arrow shapes, for instance.
 \item \code{"destination"}: the function draws a disk at each destination location
 using for the \code{size} aesthetics the incoming flow at this destination
-location (using \code{\link[=destination_flow]{destination_flow()}}).
+location (using \code{\link[=destination_flow]{destination_flow()}}). Only destinations with an incoming
+flow above  the \code{cut_off} value are included.
 \item \code{"attractiveness"}: the function draws a disk at each destination location
 using for the \code{size} aesthetics the attractiveness of the destination. When
 the calculation has converged (see \code{\link[=sim_converged]{sim_converged()}}), both \code{"destination"}
-and \code{"attractiveness"} graphics should be almost identical.
+and \code{"attractiveness"} graphics should be almost identical. Only destinations
+with an attractiveness above  the \code{cut_off} value are included.
 }
 }
 \examples{

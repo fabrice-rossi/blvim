@@ -46,21 +46,30 @@
 #' used for the arrow shapes, for instance.
 #' -  `"destination"`: the function draws a disk at each destination location
 #' using for the `size` aesthetics the incoming flow at this destination
-#' location (using [destination_flow()]).
+#' location (using [destination_flow()]). Only destinations with an incoming
+#' flow above  the `cut_off` value are included.
 #' -  `"attractiveness"`: the function draws a disk at each destination location
 #' using for the `size` aesthetics the attractiveness of the destination. When
 #' the calculation has converged (see [sim_converged()]), both `"destination"`
-#' and `"attractiveness"` graphics should be almost identical.
+#' and `"attractiveness"` graphics should be almost identical. Only destinations
+#' with an attractiveness above  the `cut_off` value are included.
 #'
 #' @param object a spatial interaction model object
 #' @param flows  `"full"` (default),  `"destination"` or `"attractiveness"`, see
 #'   details.
 #' @param with_names specifies whether the graphical representation includes
 #'   location names (`FALSE` by default)
-#' @param with_positions specifies whether the graphical representation is based on
-#'   location positions (`FALSE` by default)
-#' @param cut_off cut off limit for inclusion of a segment in the full flow
-#'   matrix representation with `with_positions = TRUE`
+#' @param with_positions specifies whether the graphical representation is based
+#'   on location positions (`FALSE` by default)
+#' @param cut_off cut off limit for inclusion of a graphical primitive. In the
+#'   full flow matrix representation with `with_positions = TRUE`, segments are
+#'   removed when their flow is smaller than the cut off. In the attractiveness
+#'   or destination representation, disks are removed when the corresponding
+#'   value is below the cut off.
+#' @param adjust_limits if `FALSE` (default value), the limits of the position
+#' based graph are not adjusted after removing graphical primitives. This eases
+#' comparison between graphical representations with different cut off value. If
+#' `TRUE`, limits are adjusted to the data using the standard ggplot2 behaviour.
 #' @param ... additional parameters, see details
 #'
 #' @exportS3Method ggplot2::autoplot
@@ -92,6 +101,7 @@ autoplot.sim <- function(object,
                          with_names = FALSE,
                          with_positions = FALSE,
                          cut_off = 100 * .Machine$double.eps^0.5,
+                         adjust_limits = FALSE,
                          ...) {
   flows <- rlang::arg_match(flows)
   if (with_positions) {
@@ -108,7 +118,8 @@ autoplot.sim <- function(object,
       sim_data <- positions_as_df(positions[["destination"]], NULL)
       sim_data_pos_names <- names(sim_data)
       sim_data[[flows]] <- value
-      ggplot2::ggplot(
+      sim_data <- sim_data[value >= cut_off, ]
+      pre <- ggplot2::ggplot(
         sim_data,
         ggplot2::aes(
           x = .data[[sim_data_pos_names[1]]],
@@ -117,6 +128,13 @@ autoplot.sim <- function(object,
         )
       ) +
         ggplot2::geom_point()
+      if (!adjust_limits) {
+        pre <- pre + ggplot2::lims(
+          x = range(positions[["destination"]][, 1]),
+          y = range(positions[["destination"]][, 2])
+        )
+      }
+      pre
     } else {
       if (is.null(positions) ||
         is.null(positions[["origin"]]) ||
@@ -139,7 +157,7 @@ autoplot.sim <- function(object,
         flows(object),
         cut_off
       )
-      ggplot2::ggplot(
+      pre <- ggplot2::ggplot(
         sim_data,
         ggplot2::aes(
           x = .data[["x"]],
@@ -150,6 +168,19 @@ autoplot.sim <- function(object,
         )
       ) +
         do.call(ggplot2::geom_segment, segment_parameters)
+      if (!adjust_limits) {
+        pre <- pre + ggplot2::lims(
+          x = range(
+            positions[["destination"]][, 1],
+            positions[["origin"]][, 1]
+          ),
+          y = range(
+            positions[["destination"]][, 2],
+            positions[["origin"]][, 2]
+          )
+        )
+      }
+      pre
     }
   } else {
     if (flows == "destination" || flows == "attractiveness") {

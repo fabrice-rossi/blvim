@@ -63,12 +63,30 @@ test_that("autoplot.sim works as expected (with positions)", {
     \() print(ggplot2::autoplot(model, "attractiveness", with_positions = TRUE))
   )
   vdiffr::expect_doppelganger(
+    "Attractiveness dotplot filtered",
+    \() print(ggplot2::autoplot(model, "attractiveness", with_positions = TRUE, cut_off = 0.1))
+  )
+  vdiffr::expect_doppelganger(
+    "Attractiveness dotplot filtered zoomed",
+    \() print(ggplot2::autoplot(model, "attractiveness",
+      with_positions = TRUE, cut_off = 0.1,
+      adjust_limits = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
     "Full flow graph",
     \() print(ggplot2::autoplot(model, with_positions = TRUE))
   )
   vdiffr::expect_doppelganger(
     "Full flow graph custom cut off",
     \() print(ggplot2::autoplot(model, with_positions = TRUE, cut_off = 0.01))
+  )
+  vdiffr::expect_doppelganger(
+    "Full flow graph custom cut off zoomed",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE, cut_off = 0.5,
+      adjust_limits = TRUE
+    ))
   )
   vdiffr::expect_doppelganger(
     "Full flow graph custom lines",
