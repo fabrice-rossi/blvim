@@ -11,7 +11,8 @@ test_that("test .onLoad no package", {
       }
       s3_method_exists("autoplot.sim") |
         s3_method_exists("autoplot.sim_df") |
-        s3_method_exists("dplyr_row_slice.sim_df")
+        s3_method_exists("dplyr_row_slice.sim_df") |
+        s3_method_exists("dplyr_reconstruct.sim_df")
     })
   } else {
     autoplot_s3_registered <- callr::r(function() {
@@ -28,7 +29,8 @@ test_that("test .onLoad no package", {
       }
       s3_method_exists("autoplot.sim") |
         s3_method_exists("autoplot.sim_df") |
-        s3_method_exists("dplyr_row_slice.sim_df")
+        s3_method_exists("dplyr_row_slice.sim_df") |
+        s3_method_exists("dplyr_reconstruct.sim_df")
     })
   }
   expect_false(autoplot_s3_registered)
@@ -82,7 +84,8 @@ test_that("test .onLoad dplyr", {
         blvim:::.onLoad()
       }
       library(dplyr)
-      s3_method_exists("dplyr_row_slice.sim_df")
+      s3_method_exists("dplyr_row_slice.sim_df") &
+        s3_method_exists("dplyr_reconstruct.sim_df")
     })
   } else {
     autoplot_s3_registered <- callr::r(function() {
@@ -98,7 +101,8 @@ test_that("test .onLoad dplyr", {
         blvim:::.onLoad()
       }
       library(dplyr)
-      s3_method_exists("dplyr_row_slice.sim_df")
+      s3_method_exists("dplyr_row_slice.sim_df") &
+        s3_method_exists("dplyr_reconstruct.sim_df")
     })
   }
   expect_true(autoplot_s3_registered)
