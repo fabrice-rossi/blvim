@@ -63,3 +63,52 @@ test_that("sim_df are supported by dplyr joins", {
   expect_equal(location_names(models_df_joined$sim), location_names(models_df$sim))
   expect_equal(location_positions(models_df_joined$sim), location_positions(models_df$sim))
 })
+
+test_that("sim_df are supported by dplyr mutate and co", {
+  config <- create_locations(20, 30, seed = 38)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    epsilon = 0.1,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5
+  )
+  origin_positions(models) <- config$pp
+  destination_positions(models) <- config$pd
+  on <- paste(sample(letters, 20, replace = TRUE), 1:20, sep = "_")
+  origin_names(models) <- on
+  dn <- paste(sample(letters, 30, replace = TRUE), 1:30, sep = "_")
+  destination_names(models) <- dn
+  models_df <- sim_df(models)
+  models_df_mutated <- dplyr::mutate(models_df, X = iterations / 10)
+  expect_s3_class(
+    models_df_mutated$sim,
+    class(models)
+  )
+  expect_equal(location_names(models_df_mutated$sim), location_names(models_df$sim))
+  expect_equal(location_positions(models_df_mutated$sim), location_positions(models_df$sim))
+  models_df_subset <- dplyr::distinct(models_df, iterations, .keep_all = TRUE)
+  expect_s3_class(
+    models_df_subset$sim,
+    class(models)
+  )
+  models_df_subset <- dplyr::distinct(dplyr::group_by(models_df, iterations), beta, .keep_all = TRUE)
+  expect_s3_class(
+    models_df_subset$sim,
+    class(models)
+  )
+  models_df_grp <- dplyr::group_by(models_df, iterations)
+  expect_s3_class(
+    models_df_grp,
+    class(models_df)
+  )
+  models_df_ungrp <- dplyr::ungroup(models_df_grp)
+  expect_s3_class(
+    models_df_ungrp,
+    class(models_df)
+  )
+})

@@ -77,11 +77,12 @@ sim_df <- function(x) {
   ## if ... is empty and i does not contain sim, we have to remove the sim_df
   ## class.
   pre <- NextMethod()
-  if (inherits(pre, "sim_df")) {
-    if (!"sim" %in% names(pre)) {
-      class(pre) <- setdiff(class(pre), "sim_df")
-      return(pre)
+  if ("sim" %in% names(pre)) {
+    if (!inherits(pre, "sim_df")) {
+      class(pre) <- c("sim_df", class(pre))
     }
+  } else {
+    class(pre) <- setdiff(class(pre), "sim_df")
   }
   pre
 }
