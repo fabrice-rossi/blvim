@@ -58,6 +58,7 @@ in different direct or aggregated forms.</p>
 <span>  with_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  with_positions <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cut_off <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.5</span>,</span>
+<span>  adjust_limits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -81,13 +82,23 @@ location names (<code>FALSE</code> by default)</p></dd>
 
 
 <dt id="arg-with-positions">with_positions<a class="anchor" aria-label="anchor" href="#arg-with-positions"></a></dt>
-<dd><p>specifies whether the graphical representation is based on
-location positions (<code>FALSE</code> by default)</p></dd>
+<dd><p>specifies whether the graphical representation is based
+on location positions (<code>FALSE</code> by default)</p></dd>
 
 
 <dt id="arg-cut-off">cut_off<a class="anchor" aria-label="anchor" href="#arg-cut-off"></a></dt>
-<dd><p>cut off limit for inclusion of a segment in the full flow
-matrix representation with <code>with_positions = TRUE</code></p></dd>
+<dd><p>cut off limit for inclusion of a graphical primitive. In the
+full flow matrix representation with <code>with_positions = TRUE</code>, segments are
+removed when their flow is smaller than the cut off. In the attractiveness
+or destination representation, disks are removed when the corresponding
+value is below the cut off.</p></dd>
+
+
+<dt id="arg-adjust-limits">adjust_limits<a class="anchor" aria-label="anchor" href="#arg-adjust-limits"></a></dt>
+<dd><p>if <code>FALSE</code> (default value), the limits of the position
+based graph are not adjusted after removing graphical primitives. This eases
+comparison between graphical representations with different cut off value. If
+<code>TRUE</code>, limits are adjusted to the data using the standard ggplot2 behaviour.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -137,11 +148,13 @@ proportional to the flows. Only segments that carry a flow above the
 used for the arrow shapes, for instance.</p></li>
 <li><p><code>"destination"</code>: the function draws a disk at each destination location
 using for the <code>size</code> aesthetics the incoming flow at this destination
-location (using <code><a href="destination_flow.html">destination_flow()</a></code>).</p></li>
+location (using <code><a href="destination_flow.html">destination_flow()</a></code>). Only destinations with an incoming
+flow above  the <code>cut_off</code> value are included.</p></li>
 <li><p><code>"attractiveness"</code>: the function draws a disk at each destination location
 using for the <code>size</code> aesthetics the attractiveness of the destination. When
 the calculation has converged (see <code><a href="sim_converged.html">sim_converged()</a></code>), both <code>"destination"</code>
-and <code>"attractiveness"</code> graphics should be almost identical.</p></li>
+and <code>"attractiveness"</code> graphics should be almost identical. Only destinations
+with an attractiveness above  the <code>cut_off</code> value are included.</p></li>
 </ul></div>
 
     <div class="section level2">
