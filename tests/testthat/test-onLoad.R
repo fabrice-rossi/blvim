@@ -10,6 +10,7 @@ test_that("test .onLoad no package", {
         blvim:::.onLoad()
       }
       s3_method_exists("autoplot.sim") |
+        s3_method_exists("fortify.sim") |
         s3_method_exists("autoplot.sim_df") |
         s3_method_exists("dplyr_row_slice.sim_df") |
         s3_method_exists("dplyr_reconstruct.sim_df") |
@@ -31,6 +32,7 @@ test_that("test .onLoad no package", {
         blvim:::.onLoad()
       }
       s3_method_exists("autoplot.sim") |
+        s3_method_exists("fortify.sim") |
         s3_method_exists("autoplot.sim_df") |
         s3_method_exists("dplyr_row_slice.sim_df") |
         s3_method_exists("dplyr_reconstruct.sim_df") |
@@ -55,6 +57,7 @@ test_that("test .onLoad ggplot2", {
       }
       library(ggplot2)
       s3_method_exists("autoplot.sim") &
+        s3_method_exists("fortify.sim") &
         s3_method_exists("autoplot.sim_df")
     })
   } else {
@@ -72,6 +75,7 @@ test_that("test .onLoad ggplot2", {
       }
       library(ggplot2)
       s3_method_exists("autoplot.sim") &
+        s3_method_exists("fortify.sim") &
         s3_method_exists("autoplot.sim_df")
     })
   }

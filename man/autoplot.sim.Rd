@@ -26,16 +26,17 @@ location names (\code{FALSE} by default)}
 \item{with_positions}{specifies whether the graphical representation is based
 on location positions (\code{FALSE} by default)}
 
-\item{cut_off}{cut off limit for inclusion of a graphical primitive. In the
-full flow matrix representation with \code{with_positions = TRUE}, segments are
-removed when their flow is smaller than the cut off. In the attractiveness
-or destination representation, disks are removed when the corresponding
-value is below the cut off.}
+\item{cut_off}{cut off limit for inclusion of a graphical primitive when
+\code{with_positions = TRUE}. In the full flow matrix representation, segments
+are removed when their flow is smaller than the cut off. In the
+attractiveness or destination representation, disks are removed when the
+corresponding value is below the cut off.}
 
 \item{adjust_limits}{if \code{FALSE} (default value), the limits of the position
-based graph are not adjusted after removing graphical primitives. This eases
-comparison between graphical representations with different cut off value. If
-\code{TRUE}, limits are adjusted to the data using the standard ggplot2 behaviour.}
+based graph are not adjusted after removing graphical primitives. This
+eases comparison between graphical representations with different cut off
+value. If \code{TRUE}, limits are adjusted to the data using the standard
+ggplot2 behaviour.}
 
 \item{...}{additional parameters, see details}
 }
@@ -48,9 +49,11 @@ in different direct or aggregated forms.
 }
 \details{
 The graphical representation depends on the values of \code{flows} and
-\code{with_positions}. If \code{with_position} is \code{FALSE} (default value), the
-graphical representations are "abstract". De pending on \code{flows} we have the
-following representations:
+\code{with_positions}. It is based on the data frame representation produced by
+\code{\link[=fortify.sim]{fortify.sim()}}.
+
+If \code{with_position} is \code{FALSE} (default value), the graphical representations
+are "abstract". Depending on \code{flows} we have the following representations:
 \itemize{
 \item \code{"full"}: this is the default case for which the full flow matrix is represented.
 It is extracted from the spatial interaction model with \code{\link[=flows]{flows()}} and
@@ -122,4 +125,7 @@ ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
   ggplot2::scale_size_continuous(range = c(0, 6))
 ggplot2::autoplot(flows, with_positions = TRUE) +
   ggplot2::scale_linewidth_continuous(range = c(0, 2))
+}
+\seealso{
+\code{\link[=fortify.sim]{fortify.sim()}}
 }

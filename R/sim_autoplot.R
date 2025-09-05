@@ -1,12 +1,131 @@
+sim_autoplot <- function(sim, sim_data,
+                         flows,
+                         with_names,
+                         with_positions,
+                         adjust_limits,
+                         ...) {
+  if (with_positions) {
+    if (flows == "destination" || flows == "attractiveness") {
+      sim_data_pos_names <- names(sim_data)
+      pre <- ggplot2::ggplot(
+        sim_data,
+        ggplot2::aes(
+          x = .data[[sim_data_pos_names[1]]],
+          y = .data[[sim_data_pos_names[2]]],
+          size = .data[[flows]]
+        )
+      ) +
+        ggplot2::geom_point()
+      if (!adjust_limits) {
+        positions <- location_positions(sim)
+        pre <- pre + ggplot2::lims(
+          x = range(positions[["destination"]][, 1]),
+          y = range(positions[["destination"]][, 2])
+        )
+      }
+      pre
+    } else {
+      segment_parameters <- list(...)
+      if (!rlang::has_name(segment_parameters, "arrow")) {
+        segment_parameters$arrow <- ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
+      }
+      if (!rlang::has_name(segment_parameters, "lineend")) {
+        segment_parameters$lineend <- "round"
+      }
+      if (!rlang::has_name(segment_parameters, "linejoin")) {
+        segment_parameters$linejoin <- "round"
+      }
+      pre <- ggplot2::ggplot(
+        sim_data,
+        ggplot2::aes(
+          x = .data[["x"]],
+          xend = .data[["xend"]],
+          y = .data[["y"]],
+          yend = .data[["yend"]],
+          linewidth = .data[["flow"]]
+        )
+      ) +
+        do.call(ggplot2::geom_segment, segment_parameters)
+      if (!adjust_limits) {
+        positions <- location_positions(sim)
+        pre <- pre + ggplot2::lims(
+          x = range(
+            positions[["destination"]][, 1],
+            positions[["origin"]][, 1]
+          ),
+          y = range(
+            positions[["destination"]][, 2],
+            positions[["origin"]][, 2]
+          )
+        )
+      }
+      pre
+    }
+  } else {
+    if (flows == "destination" || flows == "attractiveness") {
+      var_name <- ifelse(flows == "destination", "flow", flows)
+      pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
+        x = .data[["destination"]],
+        y = .data[[var_name]]
+      )) +
+        ggplot2::geom_col()
+      if (with_names) {
+        x_labels <- destination_names(sim)
+        if (is.null(x_labels)) {
+          x_labels <- 1:nrow(sim_data)
+        }
+        pre +
+          ggplot2::scale_x_discrete(labels = x_labels)
+      } else {
+        pre +
+          ggplot2::theme(
+            axis.ticks.x = ggplot2::element_blank(),
+            axis.text.x = ggplot2::element_blank()
+          )
+      }
+    } else {
+      pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
+        y = .data[["origin"]],
+        x = .data[["destination"]],
+        fill = .data[["flow"]]
+      )) +
+        ggplot2::geom_raster()
+      if (with_names) {
+        full_f <- flows(sim)
+        x_labels <- destination_names(sim)
+        if (is.null(x_labels)) {
+          x_labels <- 1:ncol(full_f)
+        }
+        y_labels <- origin_names(sim)
+        if (is.null(y_labels)) {
+          y_labels <- 1:nrow(full_f)
+        }
+        y_labels <- rev(y_labels)
+        pre +
+          ggplot2::scale_x_discrete(breaks = seq_along(x_labels), labels = x_labels) +
+          ggplot2::scale_y_discrete(breaks = seq_along(y_labels), labels = y_labels)
+      } else {
+        pre +
+          ggplot2::theme(
+            axis.ticks = ggplot2::element_blank(),
+            axis.text = ggplot2::element_blank()
+          )
+      }
+    }
+  }
+}
+
 #' Create a complete ggplot for a spatial interaction model
 #'
 #' This function represents graphical the flows of a spatial interaction model,
 #' in different direct or aggregated forms.
 #'
 #' The graphical representation depends on the values of `flows` and
-#' `with_positions`. If `with_position` is `FALSE` (default value), the
-#' graphical representations are "abstract". De pending on `flows` we have the
-#' following representations:
+#' `with_positions`. It is based on the data frame representation produced by
+#' [fortify.sim()].
+#'
+#' If `with_position` is `FALSE` (default value), the graphical representations
+#' are "abstract". Depending on `flows` we have the following representations:
 #'
 #' -  `"full"`: this is the default case for which the full flow matrix is represented.
 #' It is extracted from the spatial interaction model with [flows()] and
@@ -61,17 +180,18 @@
 #'   location names (`FALSE` by default)
 #' @param with_positions specifies whether the graphical representation is based
 #'   on location positions (`FALSE` by default)
-#' @param cut_off cut off limit for inclusion of a graphical primitive. In the
-#'   full flow matrix representation with `with_positions = TRUE`, segments are
-#'   removed when their flow is smaller than the cut off. In the attractiveness
-#'   or destination representation, disks are removed when the corresponding
-#'   value is below the cut off.
+#' @param cut_off cut off limit for inclusion of a graphical primitive when
+#'   `with_positions = TRUE`. In the full flow matrix representation, segments
+#'   are removed when their flow is smaller than the cut off. In the
+#'   attractiveness or destination representation, disks are removed when the
+#'   corresponding value is below the cut off.
 #' @param adjust_limits if `FALSE` (default value), the limits of the position
-#' based graph are not adjusted after removing graphical primitives. This eases
-#' comparison between graphical representations with different cut off value. If
-#' `TRUE`, limits are adjusted to the data using the standard ggplot2 behaviour.
+#'   based graph are not adjusted after removing graphical primitives. This
+#'   eases comparison between graphical representations with different cut off
+#'   value. If `TRUE`, limits are adjusted to the data using the standard
+#'   ggplot2 behaviour.
 #' @param ... additional parameters, see details
-#'
+#' @seealso [fortify.sim()]
 #' @exportS3Method ggplot2::autoplot
 #' @returns a ggplot object
 #' @examples
@@ -104,157 +224,6 @@ autoplot.sim <- function(object,
                          adjust_limits = FALSE,
                          ...) {
   flows <- rlang::arg_match(flows)
-  if (with_positions) {
-    positions <- location_positions(object)
-    if (flows == "destination" || flows == "attractiveness") {
-      if (is.null(positions[["destination"]])) {
-        cli::cli_abort("Missing destination location positions")
-      }
-      if (flows == "destination") {
-        value <- destination_flow(object)
-      } else {
-        value <- attractiveness(object)
-      }
-      sim_data <- positions_as_df(positions[["destination"]], NULL)
-      sim_data_pos_names <- names(sim_data)
-      sim_data[[flows]] <- value
-      sim_data <- sim_data[value >= cut_off, ]
-      pre <- ggplot2::ggplot(
-        sim_data,
-        ggplot2::aes(
-          x = .data[[sim_data_pos_names[1]]],
-          y = .data[[sim_data_pos_names[2]]],
-          size = .data[[flows]]
-        )
-      ) +
-        ggplot2::geom_point()
-      if (!adjust_limits) {
-        pre <- pre + ggplot2::lims(
-          x = range(positions[["destination"]][, 1]),
-          y = range(positions[["destination"]][, 2])
-        )
-      }
-      pre
-    } else {
-      if (is.null(positions) ||
-        is.null(positions[["origin"]]) ||
-        is.null(positions[["destination"]])) {
-        cli::cli_abort("Missing location positions")
-      }
-      segment_parameters <- list(...)
-      if (!rlang::has_name(segment_parameters, "arrow")) {
-        segment_parameters$arrow <- ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
-      }
-      if (!rlang::has_name(segment_parameters, "lineend")) {
-        segment_parameters$lineend <- "round"
-      }
-      if (!rlang::has_name(segment_parameters, "linejoin")) {
-        segment_parameters$linejoin <- "round"
-      }
-      sim_data <- flow_to_lines(
-        positions$origin,
-        positions$destination,
-        flows(object),
-        cut_off
-      )
-      pre <- ggplot2::ggplot(
-        sim_data,
-        ggplot2::aes(
-          x = .data[["x"]],
-          xend = .data[["xend"]],
-          y = .data[["y"]],
-          yend = .data[["yend"]],
-          linewidth = .data[["flow"]]
-        )
-      ) +
-        do.call(ggplot2::geom_segment, segment_parameters)
-      if (!adjust_limits) {
-        pre <- pre + ggplot2::lims(
-          x = range(
-            positions[["destination"]][, 1],
-            positions[["origin"]][, 1]
-          ),
-          y = range(
-            positions[["destination"]][, 2],
-            positions[["origin"]][, 2]
-          )
-        )
-      }
-      pre
-    }
-  } else {
-    if (flows == "destination" || flows == "attractiveness") {
-      destinations <- seq_along(attractiveness(object))
-      if (flows == "destination") {
-        dest_f <- destination_flow(object)
-        sim_data <- data.frame(
-          destination = factor(seq_along(dest_f)),
-          flow = dest_f
-        )
-        pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
-          x = .data[["destination"]],
-          y = .data[["flow"]]
-        )) +
-          ggplot2::geom_col()
-      } else {
-        attra <- attractiveness(object)
-        sim_data <- data.frame(
-          destination = factor(seq_along(attra)),
-          attractiveness = attra
-        )
-        pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
-          x = .data[["destination"]],
-          y = .data[["attractiveness"]]
-        )) +
-          ggplot2::geom_col()
-      }
-      if (with_names) {
-        x_labels <- destination_names(object)
-        if (is.null(x_labels)) {
-          x_labels <- 1:nrow(sim_data)
-        }
-        pre +
-          ggplot2::scale_x_discrete(labels = x_labels)
-      } else {
-        pre +
-          ggplot2::theme(
-            axis.ticks.x = ggplot2::element_blank(),
-            axis.text.x = ggplot2::element_blank()
-          )
-      }
-    } else {
-      full_f <- flows(object)
-      sim_data <- expand.grid(
-        origin = factor(rev(1:nrow(full_f))),
-        destination = factor(1:ncol(full_f))
-      )
-      sim_data$flow <- as.vector(full_f)
-      pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
-        y = .data[["origin"]],
-        x = .data[["destination"]],
-        fill = .data[["flow"]]
-      )) +
-        ggplot2::geom_raster()
-      if (with_names) {
-        x_labels <- destination_names(object)
-        if (is.null(x_labels)) {
-          x_labels <- 1:ncol(full_f)
-        }
-        y_labels <- origin_names(object)
-        if (is.null(y_labels)) {
-          y_labels <- 1:nrow(full_f)
-        }
-        y_labels <- rev(y_labels)
-        pre +
-          ggplot2::scale_x_discrete(breaks = seq_along(x_labels), labels = x_labels) +
-          ggplot2::scale_y_discrete(breaks = seq_along(y_labels), labels = y_labels)
-      } else {
-        pre +
-          ggplot2::theme(
-            axis.ticks = ggplot2::element_blank(),
-            axis.text = ggplot2::element_blank()
-          )
-      }
-    }
-  }
+  sim_data <- ggplot2::fortify(object, data = NULL, flows, with_positions, cut_off, ...)
+  sim_autoplot(object, sim_data, flows, with_names, with_positions, adjust_limits, ...)
 }
