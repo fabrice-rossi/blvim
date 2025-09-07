@@ -42,4 +42,5 @@ reference:
   desc: "Functions that provide graphical representations of spatial interaction models."
   contents:
   - starts_with("autoplot")
+  - grid_autoplot
   - starts_with("fortify")
