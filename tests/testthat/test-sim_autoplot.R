@@ -97,7 +97,7 @@ test_that("autoplot.sim works as expected (with positions)", {
   )
   vdiffr::expect_doppelganger(
     "Full flow graph no arrow",
-    \() print(ggplot2::autoplot(model, with_positions = TRUE, cut_off = 0.01) +
+    \() print(ggplot2::autoplot(model, with_positions = TRUE, cut_off = 0.01, arrow = NULL) +
       ggplot2::scale_linewidth_continuous(range = c(0, 2)))
   )
   ## error cases
