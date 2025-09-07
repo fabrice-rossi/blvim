@@ -87,18 +87,19 @@ on location positions (<code>FALSE</code> by default)</p></dd>
 
 
 <dt id="arg-cut-off">cut_off<a class="anchor" aria-label="anchor" href="#arg-cut-off"></a></dt>
-<dd><p>cut off limit for inclusion of a graphical primitive. In the
-full flow matrix representation with <code>with_positions = TRUE</code>, segments are
-removed when their flow is smaller than the cut off. In the attractiveness
-or destination representation, disks are removed when the corresponding
-value is below the cut off.</p></dd>
+<dd><p>cut off limit for inclusion of a graphical primitive when
+<code>with_positions = TRUE</code>. In the full flow matrix representation, segments
+are removed when their flow is smaller than the cut off. In the
+attractiveness or destination representation, disks are removed when the
+corresponding value is below the cut off.</p></dd>
 
 
 <dt id="arg-adjust-limits">adjust_limits<a class="anchor" aria-label="anchor" href="#arg-adjust-limits"></a></dt>
 <dd><p>if <code>FALSE</code> (default value), the limits of the position
-based graph are not adjusted after removing graphical primitives. This eases
-comparison between graphical representations with different cut off value. If
-<code>TRUE</code>, limits are adjusted to the data using the standard ggplot2 behaviour.</p></dd>
+based graph are not adjusted after removing graphical primitives. This
+eases comparison between graphical representations with different cut off
+value. If <code>TRUE</code>, limits are adjusted to the data using the standard
+ggplot2 behaviour.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -112,9 +113,10 @@ comparison between graphical representations with different cut off value. If
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The graphical representation depends on the values of <code>flows</code> and
-<code>with_positions</code>. If <code>with_position</code> is <code>FALSE</code> (default value), the
-graphical representations are "abstract". De pending on <code>flows</code> we have the
-following representations:</p><ul><li><p><code>"full"</code>: this is the default case for which the full flow matrix is represented.
+<code>with_positions</code>. It is based on the data frame representation produced by
+<code><a href="fortify.sim.html">fortify.sim()</a></code>.</p>
+<p>If <code>with_position</code> is <code>FALSE</code> (default value), the graphical representations
+are "abstract". Depending on <code>flows</code> we have the following representations:</p><ul><li><p><code>"full"</code>: this is the default case for which the full flow matrix is represented.
 It is extracted from the spatial interaction model with <code><a href="flows.html">flows()</a></code> and
 displayed using a matrix representation with origin locations in rows and
 destination locations in columns. The colour of a cell corresponds to the
@@ -156,6 +158,10 @@ the calculation has converged (see <code><a href="sim_converged.html">sim_conver
 and <code>"attractiveness"</code> graphics should be almost identical. Only destinations
 with an attractiveness above  the <code>cut_off</code> value are included.</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="fortify.sim.html">fortify.sim()</a></code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
