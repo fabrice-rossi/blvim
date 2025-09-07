@@ -194,7 +194,7 @@ sim_autoplot <- function(sim, sim_data,
 #' @seealso [fortify.sim()]
 #' @exportS3Method ggplot2::autoplot
 #' @returns a ggplot object
-#' @examples
+#' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
 #' distances <- as.matrix(dist(positions))
 #' production <- rep(1, 10)

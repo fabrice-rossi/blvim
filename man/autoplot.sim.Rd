@@ -104,6 +104,7 @@ with an attractiveness above  the \code{cut_off} value are included.
 }
 }
 \examples{
+\dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
@@ -125,6 +126,7 @@ ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
   ggplot2::scale_size_continuous(range = c(0, 6))
 ggplot2::autoplot(flows, with_positions = TRUE) +
   ggplot2::scale_linewidth_continuous(range = c(0, 2))
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=fortify.sim]{fortify.sim()}}

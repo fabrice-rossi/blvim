@@ -35,6 +35,7 @@ scale. The \code{inverse} parameter can be used to turn off this feature. The
 vertical axis is used by default for the return to scale parameter.
 }
 \examples{
+\dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 positions <- matrix(rnorm(10 * 2), ncol = 2)
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
@@ -59,6 +60,7 @@ ggplot2::autoplot(all_flows_df, iterations)
 ## or added ones
 all_flows_df["Nystuen & Dacey"] <- diversity(all_flows_df$sim, "ND")
 ggplot2::autoplot(all_flows_df, `Nystuen & Dacey`)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=sim_df]{sim_df()}}, \code{\link[=diversity]{diversity()}}

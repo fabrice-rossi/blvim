@@ -21,7 +21,7 @@
 #' @seealso [sim_df()], [diversity()]
 #' @returns a ggplot object
 #' @exportS3Method ggplot2::autoplot
-#' @examples
+#' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
 #' distances <- as.matrix(dist(positions))
 #' production <- rep(1, 10)
