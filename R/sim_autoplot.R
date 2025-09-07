@@ -25,6 +25,10 @@ sim_autoplot <- function(sim, sim_data,
       }
       pre
     } else {
+      if (!sim_is_bipartite(sim)) {
+        ## we remove zero length segments
+        sim_data <- sim_data[sim_data$x != sim_data$xend | sim_data$y != sim_data$yend, ]
+      }
       segment_parameters <- list(...)
       if (!rlang::has_name(segment_parameters, "arrow")) {
         segment_parameters$arrow <- ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
@@ -160,7 +164,9 @@ sim_autoplot <- function(sim, sim_data,
 #' representation uses arrows from origin location positions to destination
 #' location positions. The thickness of the lines (`linewidth` aesthetics) is
 #' proportional to the flows. Only segments that carry a flow above the
-#' `cut_off` value are included. Additional parameters in `...` are submitted to
+#' `cut_off` value are included. When the spatial interaction model is not bipartite
+#' (see [sim_is_bipartite()]), zero length segments corresponding to self exchange are
+#' removed. Additional parameters in `...` are submitted to
 #' [ggplot2::geom_segment()]. This can be used to override defaults parameters
 #' used for the arrow shapes, for instance.
 #' -  `"destination"`: the function draws a disk at each destination location

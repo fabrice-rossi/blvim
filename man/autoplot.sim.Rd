@@ -89,7 +89,9 @@ Positions for both origin and destination locations are needed. The
 representation uses arrows from origin location positions to destination
 location positions. The thickness of the lines (\code{linewidth} aesthetics) is
 proportional to the flows. Only segments that carry a flow above the
-\code{cut_off} value are included. Additional parameters in \code{...} are submitted to
+\code{cut_off} value are included. When the spatial interaction model is not bipartite
+(see \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}), zero length segments corresponding to self exchange are
+removed. Additional parameters in \code{...} are submitted to
 \code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}. This can be used to override defaults parameters
 used for the arrow shapes, for instance.
 \item \code{"destination"}: the function draws a disk at each destination location
