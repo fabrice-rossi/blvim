@@ -58,6 +58,12 @@ test_that("grid_autoplot works as expected", {
     ) +
       ggplot2::scale_size_continuous(range = c(0, 5)))
   )
+  vdiffr::expect_doppelganger(
+    "Destination bars with free scales",
+    \() print(grid_autoplot(models_df, paste(alpha, "~", round(beta, 3)),
+                            flows = "destination", fw_params=list(scale="free_y")) +
+      ggplot2::scale_size_continuous(range = c(0, 5)))
+  )
 })
 
 test_that("grid_autoplot works as expected in borderline cases", {

@@ -13,6 +13,7 @@ grid_autoplot(
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
   max_sims = 25,
+  fw_params = NULL,
   ...
 )
 }
@@ -47,7 +48,9 @@ ggplot2 behaviour.}
 \item{max_sims}{the maximum number of spatial interaction models allowed in
 the \code{sim_df} data frame}
 
-\item{...}{additional parameters, see details in \code{\link[=autoplot.sim]{autoplot.sim()}}}
+\item{fw_params}{parameters for the \link[ggplot2:facet_wrap]{ggplot2::facet_wrap} call (if non \code{NULL})}
+
+\item{...}{additional parameters passed to \code{\link[=autoplot.sim]{autoplot.sim()}}}
 }
 \value{
 a ggplot object
@@ -75,7 +78,8 @@ number of SIMs in the \code{sim_df} data frame. If specified, it is evaluated in
 the context of the data frame and used for wrapping. Notice that if the
 expression evaluates to identical values for different SIMs, they will be
 drawn on the same panel of the final figure, which may end up with
-meaningless representations.
+meaningless representations. Parameters of \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} can
+be set using the \code{fw_params} parameter (in a list).
 }
 \examples{
 \dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}

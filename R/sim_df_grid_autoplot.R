@@ -21,7 +21,8 @@
 #' the context of the data frame and used for wrapping. Notice that if the
 #' expression evaluates to identical values for different SIMs, they will be
 #' drawn on the same panel of the final figure, which may end up with
-#' meaningless representations.
+#' meaningless representations. Parameters of [ggplot2::facet_wrap()] can
+#' be set using the `fw_params` parameter (in a list).
 #'
 #' @param sim_df a data frame of spatial interaction models, an object of class
 #'   `sim_df`
@@ -30,7 +31,8 @@
 #' @inheritParams autoplot.sim
 #' @param max_sims the maximum number of spatial interaction models allowed in
 #'   the `sim_df` data frame
-#' @param ... additional parameters, see details in [autoplot.sim()]
+#' @param fw_params parameters for the [ggplot2::facet_wrap] call (if non `NULL`)
+#' @param ... additional parameters passed to [autoplot.sim()]
 #' @export
 #' @returns a ggplot object
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
@@ -66,6 +68,7 @@ grid_autoplot <- function(sim_df, key,
                           cut_off = 100 * .Machine$double.eps^0.5,
                           adjust_limits = FALSE,
                           max_sims = 25,
+                          fw_params = NULL,
                           ...) {
   rlang::check_installed("ggplot2", reason = "to use `grid_autoplot()`")
   if (nrow(sim_df) > max_sims) {
@@ -99,6 +102,10 @@ grid_autoplot <- function(sim_df, key,
     final_df[[val_name]] <- val
   }
   pre <- sim_autoplot(sim_df$sim[[1]], final_df, flows, with_names, with_positions, adjust_limits, ...)
+  fw_parameters <- list(facets = ggplot2::vars(.data[[val_name]]))
+  if (!is.null(fw_params)) {
+    fw_parameters <- c(fw_parameters, fw_params)
+  }
   pre +
-    ggplot2::facet_wrap(ggplot2::vars(.data[[val_name]]))
+    do.call(ggplot2::facet_wrap, fw_parameters)
 }
