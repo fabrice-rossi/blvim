@@ -92,6 +92,7 @@ grid_autoplot <- function(sim_df, key,
     for (k in 2:length(pre_data)) {
       next_idx <- start_idx + final_sizes[k]
       final_df[(start_idx + 1):next_idx, 1:ncol(pre_data[[k]])] <- pre_data[[k]]
+      start_idx <- next_idx
     }
   } else {
     final_df <- pre_data[[1]]
