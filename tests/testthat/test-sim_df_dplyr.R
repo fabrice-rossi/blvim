@@ -105,3 +105,36 @@ test_that("sim_df are supported by dplyr mutate, distinct and group_by", {
   models_df_grp_mut_slice <- dplyr::slice_sample(models_df_grp_mut, n = 1)
   expect_true(is_sim_df(models_df_grp_mut_slice))
 })
+
+test_that("sim_df data frame modified by tidyverse functions still behave as expected", {
+  config <- create_locations(20, 30, seed = 38)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    epsilon = 0.1,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5
+  )
+  models_df <- sim_df(models)
+  ## mutate
+  models_df_mutated <- dplyr::mutate(models_df, X = iterations / 10)
+  test_sim_df_modifications(models_df_mutated, models)
+  test_sim_df_names(models_df_mutated, models)
+  ## group by
+  models_df_grp <- dplyr::group_by(models_df, iterations)
+  test_sim_df_modifications(models_df_grp, models)
+  test_sim_df_names(models_df_grp, models)
+  ## slice
+  models_df_sliced <- dplyr::slice_sample(dplyr::group_by(models_df, iterations), n = 1)
+  test_sim_df_modifications(models_df_sliced, sim_column(models_df_sliced))
+  test_sim_df_names(models_df_sliced, sim_column(models_df_sliced))
+  ## group + distinct + mutate
+  models_df_many <- dplyr::distinct(dplyr::group_by(models_df, iterations), alpha, .keep_all = TRUE)
+  models_df_many <- dplyr::mutate(models_df_many, n = dplyr::n())
+  test_sim_df_modifications(models_df_many, sim_column(models_df_many))
+  test_sim_df_names(models_df_many, sim_column(models_df_many))
+})

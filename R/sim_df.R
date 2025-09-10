@@ -92,8 +92,9 @@ sim_column <- function(sim_df) {
 
 #' @export
 `$<-.sim_df` <- function(x, name, value) {
+  sim_column <- attr(x, "sim_column")
   pre <- NextMethod()
-  if (name == attr(x, "sim_column")) {
+  if (name == sim_column) {
     if (is.null(value) || !inherits(value, "sim_list")) {
       ## remove the sim_df class
       class(pre) <- setdiff(class(pre), "sim_df")
@@ -111,6 +112,10 @@ sim_column <- function(sim_df) {
 `[[<-.sim_df` <- function(x, i, value) {
   sim_column <- attr(x, "sim_column")
   pre <- NextMethod()
+  if (!inherits(pre, "sim_df")) {
+    class(pre) <- c("sim_df", class(pre))
+    attr(pre, "sim_column") <- sim_column
+  }
   if ((is.character(i) && i == sim_column) ||
     (!is.character(i) && names(x)[i] == sim_column)) {
     if (is.null(value) || !inherits(value, "sim_list")) {
@@ -129,10 +134,11 @@ sim_column <- function(sim_df) {
 `[.sim_df` <- function(x, i, j, ..., drop) {
   sim_column <- attr(x, "sim_column")
   pre <- NextMethod()
+  if (!inherits(pre, "sim_df")) {
+    class(pre) <- c("sim_df", class(pre))
+    attr(pre, "sim_column") <- sim_column
+  }
   if (sim_column %in% names(pre)) {
-    if (!inherits(pre, "sim_df")) {
-      class(pre) <- c("sim_df", class(pre))
-    }
     attr(pre, "sim_column") <- attr(x, "sim_column")
   } else {
     class(pre) <- setdiff(class(pre), "sim_df")
@@ -159,6 +165,10 @@ sim_column <- function(sim_df) {
     }
   } else {
     pre <- NextMethod()
+    if (!inherits(pre, "sim_df")) {
+      class(pre) <- c("sim_df", class(pre))
+      attr(pre, "sim_column") <- sim_column
+    }
     return(pre)
   }
 }
@@ -172,6 +182,9 @@ sim_column <- function(sim_df) {
   new_names <- names(pre)
   if (!is.null(new_names[position]) && !is.na(new_names[position])) {
     attr(pre, "sim_column") <- new_names[position]
+    if (!inherits(pre, "sim_df")) {
+      class(pre) <- c("sim_df", class(pre))
+    }
   } else {
     class(pre) <- setdiff(class(pre), "sim_df")
     attr(pre, "sim_column") <- NULL
