@@ -2,9 +2,12 @@
 dplyr_row_slice.sim_df <- function(data, i, ...) {
   sim_column <- attr(data, "sim_column")
   pre <- NextMethod()
-  if (!is.null(sim_column) && sim_column %in% names(pre)) {
-    pre[[sim_column]] <- new_sim_list(pre[[sim_column]], common = attr(data[[sim_column]], "common"))
+  if (sim_column %in% names(pre)) {
+    pre[[sim_column]] <- I(new_sim_list(pre[[sim_column]], common = attr(data[[sim_column]], "common")))
     attr(pre, "sim_column") <- sim_column
+    if (!inherits(pre, "sim_df")) {
+      class(pre) <- c("sim_df", class(pre))
+    }
   }
   pre
 }
@@ -14,8 +17,23 @@ dplyr_reconstruct.sim_df <- function(data, template) {
   sim_column <- attr(template, "sim_column")
   pre <- NextMethod()
   if (sim_column %in% names(pre)) {
-    pre[[sim_column]] <- new_sim_list(sim_column(pre), common = attr(template[[sim_column]], "common"))
+    pre[[sim_column]] <- I(new_sim_list(sim_column(pre), common = attr(template[[sim_column]], "common")))
     attr(pre, "sim_column") <- sim_column
+  }
+  pre
+}
+
+#' @exportS3Method dplyr::dplyr_col_modify
+dplyr_col_modify.sim_df <- function(data, cols) {
+  sim_column <- attr(data, "sim_column")
+  pre <- NextMethod()
+  if (!inherits(pre, "sim_df")) {
+    if (sim_column %in% names(pre)) {
+      if (inherits(pre[[sim_column]], "sim_list")) {
+        class(pre) <- c("sim_df", class(pre))
+        attr(pre, "sim_column") <- sim_column
+      }
+    }
   }
   pre
 }

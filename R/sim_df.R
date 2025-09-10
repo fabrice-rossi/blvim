@@ -98,6 +98,10 @@ sim_column <- function(sim_df) {
       ## remove the sim_df class
       class(pre) <- setdiff(class(pre), "sim_df")
       attr(pre, "sim_column") <- NULL
+    } else {
+      if (!inherits(pre[[name]], "AsIs")) {
+        class(pre[[name]]) <- c("AsIs", class(pre[[name]]))
+      }
     }
   }
   pre
@@ -112,6 +116,10 @@ sim_column <- function(sim_df) {
     if (is.null(value) || !inherits(value, "sim_list")) {
       class(pre) <- setdiff(class(pre), "sim_df")
       attr(pre, "sim_column") <- NULL
+    } else {
+      if (!inherits(pre[[i]], "AsIs")) {
+        class(pre[[i]]) <- c("AsIs", class(pre[[i]]))
+      }
     }
   }
   pre

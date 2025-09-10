@@ -10,7 +10,7 @@ is_sim_df <- function(x) {
   if (sim_df_class) {
     sim_column <- attr(x, "sim_column")
     if (!is.null(sim_column)) {
-      return(inherits(x[[sim_column]], "sim_list"))
+      return(inherits(x[[sim_column]], "sim_list") && inherits(x[[sim_column]], "AsIs"))
     }
   }
   FALSE

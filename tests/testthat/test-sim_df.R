@@ -97,6 +97,9 @@ test_that("sim_df modifications remove or keep the sim_df class", {
   models_df_sim <- models_df
   models_df_sim$sim <- models
   expect_true(is_sim_df(models_df_sim))
+  models_df_sim <- models_df
+  models_df_sim[[6]] <- models
+  expect_true(is_sim_df(models_df_sim))
   ## internal modifications
   models_df_sim <- models_df
   models_df_sim[2, 5] <- 12
