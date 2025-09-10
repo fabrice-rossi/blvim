@@ -69,6 +69,7 @@ alternative graphical representation to the one produced by
 <span>  cut_off <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.5</span>,</span>
 <span>  adjust_limits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  max_sims <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>  fw_params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -123,8 +124,12 @@ ggplot2 behaviour.</p></dd>
 the <code>sim_df</code> data frame</p></dd>
 
 
+<dt id="arg-fw-params">fw_params<a class="anchor" aria-label="anchor" href="#arg-fw-params"></a></dt>
+<dd><p>parameters for the <a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap</a> call (if non <code>NULL</code>)</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>additional parameters, see details in <code><a href="autoplot.sim.html">autoplot.sim()</a></code></p></dd>
+<dd><p>additional parameters passed to <code><a href="autoplot.sim.html">autoplot.sim()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -147,7 +152,8 @@ number of SIMs in the <code>sim_df</code> data frame. If specified, it is evalua
 the context of the data frame and used for wrapping. Notice that if the
 expression evaluates to identical values for different SIMs, they will be
 drawn on the same panel of the final figure, which may end up with
-meaningless representations.</p>
+meaningless representations. Parameters of <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code> can
+be set using the <code>fw_params</code> parameter (in a list).</p>
     </div>
 
     <div class="section level2">
