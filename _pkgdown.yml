@@ -37,6 +37,7 @@ reference:
   - starts_with("grid_")
   - costs.sim_list
   - sim_df
+  - sim_column
   - sim_distance
 - title: "Graphical representations"
   desc: "Functions that provide graphical representations of spatial interaction models."
