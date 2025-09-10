@@ -2,36 +2,42 @@
 % Please edit documentation in R/sim_df.R
 \name{sim_df}
 \alias{sim_df}
-\title{Create a spatial interaction models data frame from a collection of interaction models}
+\title{Create a spatial interaction models data frame from a collection of
+interaction models}
 \usage{
-sim_df(x)
+sim_df(x, sim_column = "sim")
 }
 \arguments{
 \item{x}{a collection of spatial interaction models, an object of class
 \code{sim_list}}
+
+\item{sim_column}{the name of the \code{sim_list} column (default \code{"sim"})}
 }
 \value{
-a data frame representation of the spatial interaction model collection
-with classes \code{sim_df} and \code{data.frame}
+a data frame representation of the spatial interaction model
+collection with classes \code{sim_df} and \code{data.frame}
 }
 \description{
 This function build a data frame from a collection of spatial interaction
-models. The data frame has a list column \code{sim} which stores the collection
-of models and classical columns that contain characteristics of the models.
-See details for the default columns.
+models. The data frame has a list column \code{sim} of type \code{sim_list} which
+stores the collection of models and classical columns that contain
+characteristics of the models. The name of the list column can be set to
+something else than \code{sim} (but not a name used by other default columns). See
+details for the default columns.
 }
 \details{
-The data frame has one row per spatial interaction model and the following columns:
+The data frame has one row per spatial interaction model and the following
+columns:
 \itemize{
-\item \code{sim}: the last column that contains the model
+\item \code{sim} (default name): the last column that contains the models
 \item \code{alpha}: the return to scale parameter used to build the model
 \item \code{beta}: the cost inverse scale parameter used to build the model
 \item \code{diversity}: model default \code{\link[=diversity]{diversity()}} (Shannon's diversity)
 \item \code{iterations}: the number of iterations used to produce the model (1 for a
 static model)
 \item \code{converged}: \code{TRUE} is the iterative calculation of the model converged (for
-models produced by \code{\link[=blvim]{blvim()}} and related approaches), \code{FALSE} for no convergence
-and \code{NA} for static models
+models produced by \code{\link[=blvim]{blvim()}} and related approaches), \code{FALSE} for no
+convergence and \code{NA} for static models
 }
 }
 \examples{

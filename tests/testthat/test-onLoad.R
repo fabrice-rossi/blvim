@@ -97,8 +97,7 @@ test_that("test .onLoad dplyr", {
       s3_method_exists("dplyr_row_slice.sim_df") &
         s3_method_exists("dplyr_reconstruct.sim_df") &
         s3_method_exists("group_by.sim_df") &
-        s3_method_exists("ungroup.sim_df") &
-        s3_method_exists("distinct.sim_df")
+        s3_method_exists("ungroup.sim_df")
     })
   } else {
     autoplot_s3_registered <- callr::r(function() {
@@ -117,8 +116,7 @@ test_that("test .onLoad dplyr", {
       s3_method_exists("dplyr_row_slice.sim_df") &
         s3_method_exists("dplyr_reconstruct.sim_df") &
         s3_method_exists("group_by.sim_df") &
-        s3_method_exists("ungroup.sim_df") &
-        s3_method_exists("distinct.sim_df")
+        s3_method_exists("ungroup.sim_df")
     })
   }
   expect_true(autoplot_s3_registered)
