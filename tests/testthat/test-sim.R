@@ -34,7 +34,7 @@ test_that("flow extraction in long format works", {
   model_flows <- flows(model)
   all_equal <- TRUE
   tested <- matrix(FALSE, ncol = ncol(model_flows), nrow = nrow(model_flows))
-  for (k in 1:nrow(mf_df)) {
+  for (k in seq_len(nrow(mf_df))) {
     oidx <- mf_df$origin_idx[k]
     didx <- mf_df$destination_idx[k]
     if (mf_df$flow[k] != model_flows[oidx, didx]) {

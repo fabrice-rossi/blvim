@@ -66,7 +66,7 @@ nd_graph.sim <- function(sim, definition = c("ND", "RW"), ...) {
   } else {
     is_dominated <- inputs < max_flow
   }
-  links <- data.frame(from = (1:nrow(Y))[is_dominated], to = to_max_flow[is_dominated])
+  links <- data.frame(from = seq_len(nrow(Y))[is_dominated], to = to_max_flow[is_dominated])
   links$flow <- Y[as.matrix(links)]
   links
 }

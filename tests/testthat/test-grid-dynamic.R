@@ -11,7 +11,7 @@ test_that("grid_blvim computes the models it is expected to compute", {
     precision = .Machine$double.eps^0.5
   )
   params <- expand.grid(alpha = alphas, beta = betas)
-  for (k in 1:nrow(params)) {
+  for (k in seq_len(nrow(params))) {
     a_model <- blvim(config$costs,
       config$X,
       params$alpha[k],

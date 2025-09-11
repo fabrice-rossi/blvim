@@ -156,8 +156,8 @@ flows_df <- function(sim, ...) {
 #' @export
 flows_df.sim <- function(sim, ...) {
   indexes <- expand.grid(
-    origin_idx = 1:nrow(sim$Y),
-    destination_idx = 1:ncol(sim$Y)
+    origin_idx = seq_len(nrow(sim$Y)),
+    destination_idx = seq_len(ncol(sim$Y))
   )
   pre <- cbind(indexes, flow = as.vector(sim$Y))
   if (!is.null(origin_names(sim))) {

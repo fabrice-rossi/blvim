@@ -76,7 +76,7 @@ sim_autoplot <- function(sim, sim_data,
       if (with_names) {
         x_labels <- destination_names(sim)
         if (is.null(x_labels)) {
-          x_labels <- 1:nrow(sim_data)
+          x_labels <- seq_len(nrow(sim_data))
         }
         pre +
           ggplot2::scale_x_discrete(labels = x_labels)
@@ -98,11 +98,11 @@ sim_autoplot <- function(sim, sim_data,
         full_f <- flows(sim)
         x_labels <- destination_names(sim)
         if (is.null(x_labels)) {
-          x_labels <- 1:ncol(full_f)
+          x_labels <- seq_len(ncol(full_f))
         }
         y_labels <- origin_names(sim)
         if (is.null(y_labels)) {
-          y_labels <- 1:nrow(full_f)
+          y_labels <- seq_len(nrow(full_f))
         }
         y_labels <- rev(y_labels)
         pre +

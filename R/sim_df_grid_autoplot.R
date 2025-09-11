@@ -76,10 +76,8 @@ grid_autoplot <- function(sim_df, key,
   }
   flows <- rlang::arg_match(flows)
   expr <- rlang::enquo(key)
-  use_id <- FALSE
   if (rlang::quo_is_missing(expr)) {
-    use_id <- TRUE
-    val <- 1:nrow(sim_df)
+    val <- seq_len(nrow(sim_df))
     val_name <- "id"
   } else {
     val <- rlang::eval_tidy({{ expr }}, sim_df)
@@ -94,7 +92,7 @@ grid_autoplot <- function(sim_df, key,
     start_idx <- final_sizes[1]
     for (k in 2:length(pre_data)) {
       next_idx <- start_idx + final_sizes[k]
-      final_df[(start_idx + 1):next_idx, 1:ncol(pre_data[[k]])] <- pre_data[[k]]
+      final_df[(start_idx + 1):next_idx, seq_len(ncol(pre_data[[k]]))] <- pre_data[[k]]
       start_idx <- next_idx
     }
   } else {

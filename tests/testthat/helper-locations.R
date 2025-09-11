@@ -1,5 +1,5 @@
 create_locations <- function(nprod, ndest, seed = 0, symmetric = FALSE) {
-  if (symmetric & nprod != ndest) {
+  if (symmetric && nprod != ndest) {
     cli::cli_abort(
       c("symmetric settings must have the same number of production and destination locations",
         "x" = "{.val {nprod}} (production) is different from {.val {ndest}} (destination)"

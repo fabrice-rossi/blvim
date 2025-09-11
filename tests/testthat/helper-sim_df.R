@@ -41,10 +41,10 @@ test_sim_df_modifications <- function(models_df, models) {
   models_df_sim[2, 3] <- 12
   expect_true(is_sim_df(models_df_sim))
   models_df_sim <- models_df
-  models_df_sim[, 6] <- models[1:nrow(models_df)]
+  models_df_sim[, 6] <- models[seq_len(nrow(models_df))]
   expect_true(is_sim_df(models_df_sim))
   models_df_sim <- models_df
-  models_df_sim[, "sim"] <- models[1:nrow(models_df)]
+  models_df_sim[, "sim"] <- models[seq_len(nrow(models_df))]
   expect_true(is_sim_df(models_df_sim))
   models_df_sim <- models_df
   models_df_sim[, 6] <- models_df$alpha

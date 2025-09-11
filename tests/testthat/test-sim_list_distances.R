@@ -15,7 +15,7 @@ test_that("sim_distance works as expected", {
   expect_error(sim_distance(list()))
   ## full flows
   m_dist <- as.matrix(sim_distance(models, "full"))
-  from_to <- sample(1:length(models), 8)
+  from_to <- sample(seq_along(models), 8)
   from <- from_to[1:4]
   to <- from_to[5:8]
   for (k in from) {
@@ -27,7 +27,7 @@ test_that("sim_distance works as expected", {
   }
   ## destination flows
   m_dist <- as.matrix(sim_distance(models, "destination"))
-  from_to <- sample(1:length(models), 8)
+  from_to <- sample(seq_along(models), 8)
   from <- from_to[1:4]
   to <- from_to[5:8]
   for (k in from) {
@@ -39,7 +39,7 @@ test_that("sim_distance works as expected", {
   }
   ## full flows
   m_dist <- as.matrix(sim_distance(models, "attractiveness"))
-  from_to <- sample(1:length(models), 8)
+  from_to <- sample(seq_along(models), 8)
   from <- from_to[1:4]
   to <- from_to[5:8]
   for (k in from) {

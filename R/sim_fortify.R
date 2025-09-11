@@ -104,7 +104,6 @@ fortify.sim <- function(model, data,
         value <- attractiveness(model)
       }
       sim_data <- positions_as_df(positions[["destination"]], NULL)
-      sim_data_pos_names <- names(sim_data)
       sim_data[[flows]] <- value
       sim_data <- sim_data[value >= cut_off, ]
       sim_data
@@ -124,7 +123,6 @@ fortify.sim <- function(model, data,
     }
   } else {
     if (flows == "destination" || flows == "attractiveness") {
-      destinations <- seq_along(attractiveness(model))
       if (flows == "destination") {
         dest_f <- destination_flow(model)
         sim_data <- data.frame(
@@ -143,8 +141,8 @@ fortify.sim <- function(model, data,
     } else {
       full_f <- flows(model)
       sim_data <- expand.grid(
-        origin = factor(rev(1:nrow(full_f))),
-        destination = factor(1:ncol(full_f))
+        origin = factor(rev(seq_len(nrow(full_f)))),
+        destination = factor(seq_len(ncol(full_f)))
       )
       sim_data$flow <- as.vector(full_f)
       sim_data

@@ -50,14 +50,14 @@ test_that("terminals returns all terminals", {
     Y <- flows(model)
     D <- destination_flow(model)
     nd_term <- terminals(model, "ND")
-    for (k in setdiff(1:length(D), nd_term)) {
+    for (k in setdiff(seq_along(D), nd_term)) {
       ## max_k is the location to which k is sending the most
       max_k <- which.max(Y[k, ])
       ## k should be less important
       expect_lt(D[k], D[max_k])
     }
     rw_term <- terminals(model, "RW")
-    for (k in setdiff(1:length(D), rw_term)) {
+    for (k in setdiff(seq_along(D), rw_term)) {
       expect_lt(D[k], max(Y[k, ]))
     }
   }
