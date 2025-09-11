@@ -29,13 +29,13 @@ reference:
   desc: "Functions that apply only to non bipartite models."
   contents:
   - is_terminal
-  - terminals
   - nd_graph
+  - terminals
 - title: "Multiple models"
   desc: "Functions to create and use multiple spatial interaction models using a grid of parameters."
   contents:
-  - starts_with("grid_")
   - costs.sim_list
+  - starts_with("grid_")
   - sim_df
   - sim_column
   - sim_distance
@@ -43,5 +43,5 @@ reference:
   desc: "Functions that provide graphical representations of spatial interaction models."
   contents:
   - starts_with("autoplot")
-  - grid_autoplot
   - starts_with("fortify")
+  - grid_autoplot
