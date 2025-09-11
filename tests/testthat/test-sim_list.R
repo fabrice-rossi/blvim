@@ -1,3 +1,33 @@
+test_that("sim_list construction", {
+  config <- create_locations(20, 30, seed = 120)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  model_list <- as.list(models)
+  models_2 <- sim_list(model_list)
+  expect_equal(models, models_2)
+  ## error detection
+  expect_error(sim_list(12))
+  expect_error(sim_list(list(model_list[[1]], "foo")))
+  model_list_bug <- model_list
+  model_list_bug[[2]]$costs <- model_list_bug[[2]]$costs + 1
+  expect_error(sim_list(model_list_bug))
+  model_list_bug <- model_list
+  origin_names(model_list_bug[[2]]) <- letters[1:20]
+  expect_error(sim_list(model_list_bug))
+  model_list_bug <- model_list
+  destination_positions(model_list_bug[[2]]) <- config$pd
+  expect_error(sim_list(model_list_bug))
+})
+
 test_that("sim_list is a list", {
   config <- create_locations(20, 30, seed = 4)
   alphas <- seq(1.25, 2, by = 0.25)

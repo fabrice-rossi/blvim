@@ -1,3 +1,60 @@
+#' Validate a collection of sims
+#'
+#' This function validates its inputs and abort in case of problems. To be valid,
+#' sims has to verify the following properties:
+#'
+#' 1) it must be a list of sim objects
+#' 2) if it contains more than one object, they need to share
+#'   a) the same cost matrix
+#'   b) the same origin data (if any)
+#'   c) the same destination data (if any)
+#'
+#' @param sims a list of sim objects
+#' @param call caller environment for proper error reporting
+#'
+#' @returns nothing
+#' @noRd
+validate_sim_list <- function(sims, call = rlang::caller_env()) {
+  if (!is.list(sims) || !all(sapply(sims, inherits, "sim"))) {
+    cli::cli_abort("{.arg sims} must be a list of {.class sim} objects",
+      call = call
+    )
+  }
+  if (length(sims) > 1) {
+    ## we want consistency between the sims
+    costs <- costs(sims[[1]])
+    origin <- sims[[1]]$origin
+    destination <- sims[[1]]$destination
+    costs_test <- sapply(sims, function(x) isTRUE(all.equal(costs(x), costs)))
+    if (!all(costs_test)) {
+      cli::cli_abort(
+        c("all sim objects in {.arg sims} must share the same costs",
+          x = "{.arg sims[[1]]} and {.arg sims[[{which(!costs_test)[1]}]]} have different costs"
+        ),
+        call = call
+      )
+    }
+    origin_test <- sapply(sims, function(x) isTRUE(all.equal(x$origin, origin)))
+    if (!all(origin_test)) {
+      cli::cli_abort(
+        c("all sim objects in {.arg sims} must share the same origin data",
+          x = "{.arg sims[[1]]} and {.arg sims[[{which(!origin_test)[1]}]]} have different origin data"
+        ),
+        call = call
+      )
+    }
+    destination_test <- sapply(sims, function(x) isTRUE(all.equal(x$destination, destination)))
+    if (!all(destination_test)) {
+      cli::cli_abort(
+        c("all sim objects in {.arg sims} must share the same destination data",
+          x = "{.arg sims[[1]]} and {.arg sims[[{which(!destination_test)[1]}]]} have different destination data"
+        ),
+        call = call
+      )
+    }
+  }
+}
+
 ## remove from the sims common content
 ## the first sim is assumed to contain the common content
 sims_compress <- function(sims) {
@@ -40,6 +97,34 @@ new_sim_list <- function(sims, common = NULL, ..., class = character()) {
     class = c(class, "sim_list", "list"),
     ...
   )
+}
+
+#' Create a sim_list object from a list of spatial interaction objects
+#'
+#' The collection of `sim` objects represented by a `sim_list` object is assumed
+#' to be homogeneous, that is to correspond to a fix set of origin and
+#' destination locations, associated to a fixed cost matrix.
+#'
+#' @param sims a list of homogeneous spatial interaction objects
+#' @param validate should the function validate the homogeneity of the list of
+#'   spatial interaction objects (defaults to `TRUE`)
+#'
+#' @returns a `sim_list` object
+#' @export
+#'
+#' @examples
+#' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' distances <- as.matrix(dist(positions))
+#' production <- rep(1, 10)
+#' attractiveness <- c(2, rep(1, 9))
+#' flows_1 <- blvim(distances, production, 1.5, 1, attractiveness)
+#' flows_2 <- blvim(distances, production, 1.25, 2, attractiveness)
+#' all_flows <- sim_list(list(flows_1, flows_2))
+sim_list <- function(sims, validate = TRUE) {
+  if (validate) {
+    validate_sim_list(sims)
+  }
+  new_sim_list(sims)
 }
 
 
