@@ -228,9 +228,14 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "767.642KB",
+  "fileSize": "9596.235KB",
   "relatedLink": "https://fabrice-rossi.github.io/blvim/",
   "readme": "https://github.com/fabrice-rossi/blvim/blob/main/README.md",
   "contIntegration": ["https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/fabrice-rossi/blvim"],

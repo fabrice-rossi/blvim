@@ -20,7 +20,8 @@ Imports:
     cli,
     collapse,
     Rcpp,
-    rlang
+    rlang,
+    stats
 Suggests: 
     callr,
     covr,
