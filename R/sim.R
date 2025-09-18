@@ -99,7 +99,10 @@ flows <- function(sim, ...) {
 
 #' @export
 flows.sim <- function(sim, ...) {
-  sim$Y
+  pre <- sim$Y
+  colnames(pre) <- destination_names(sim)
+  rownames(pre) <- origin_names(sim)
+  pre
 }
 
 #' Extract the flow matrix from a spatial interaction model object in data frame
@@ -208,7 +211,7 @@ production <- function(sim, ...) {
 
 #' @export
 production.sim <- function(sim, ...) {
-  rowSums(sim$Y)
+  rowSums(flows(sim))
 }
 
 #' Extract the attractivenesses from a spatial interaction model object
@@ -232,7 +235,9 @@ attractiveness <- function(sim, ...) {
 
 #' @export
 attractiveness.sim <- function(sim, ...) {
-  sim$Z
+  pre <- sim$Z
+  names(pre) <- destination_names(sim)
+  pre
 }
 
 #' Compute the flows incoming at each destination location
@@ -256,7 +261,7 @@ destination_flow <- function(sim, ...) {
 
 #' @export
 destination_flow.sim <- function(sim, ...) {
-  colSums(sim$Y)
+  colSums(flows(sim))
 }
 
 
