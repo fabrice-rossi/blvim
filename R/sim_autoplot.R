@@ -230,6 +230,9 @@ autoplot.sim <- function(object,
                          adjust_limits = FALSE,
                          ...) {
   flows <- rlang::arg_match(flows)
-  sim_data <- ggplot2::fortify(object, data = NULL, flows, with_positions, cut_off, ...)
+  sim_data <- fortify.sim(object,
+    data = NULL, flows = flows,
+    with_positions = with_positions, cut_off = cut_off, ...
+  )
   sim_autoplot(object, sim_data, flows, with_names, with_positions, adjust_limits, ...)
 }
