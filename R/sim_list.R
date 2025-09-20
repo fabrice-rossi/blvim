@@ -130,11 +130,24 @@ sim_list <- function(sims, validate = TRUE) {
 
 #' @export
 `[.sim_list` <- function(x, i, ...) {
+  ## validate the indexes
+  out_of_range <- i > length(x)
+  if (any(out_of_range)) {
+    cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x} with length {.val {length(x)}}",
+      x = "out of range value(s): {.val {i[out_of_range]}}"
+    ))
+  }
   new_sim_list(NextMethod(), common = attr(x, "common"))
 }
 
 #' @export
 `[[.sim_list` <- function(x, i, ...) {
+  out_of_range <- i > length(x)
+  if (any(out_of_range)) {
+    cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x} with length {.val {length(x)}}",
+      x = "out of range value(s): {.val {i[out_of_range]}}"
+    ))
+  }
   sim_restore(NextMethod(), attr(x, "common"))
 }
 

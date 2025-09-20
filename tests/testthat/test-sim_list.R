@@ -200,3 +200,20 @@ test_that("sim_list modifications are prohibited", {
   expect_error(models[[1]] <- models[[2]])
   expect_error(models[1:3] <- models[5:7])
 })
+
+test_that("sim_list out of range access tentative are detected", {
+  config <- create_locations(20, 30, seed = 480)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  expect_error(models[c(1, 5, 20)], regexp = "out of range value")
+  expect_error(models[[14:18]], regexp = "out of range value")
+})
