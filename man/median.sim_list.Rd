@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_stats.R
 \name{median.sim_list}
 \alias{median.sim_list}
-\title{Compute the median of a collection of spatial interaction models}
+\title{Compute the "median" of a collection of spatial interaction models}
 \usage{
 \method{median}{sim_list}(
   x,
@@ -31,19 +31,26 @@ returned as a \code{distances} attribute of the resulting object? (defaults to
 \item{...}{additional parameters (not used currently)}
 }
 \value{
-a spatial interaction model, an object of class \code{sim}
+a spatial interaction model, an object of class \code{sim} with
+additional attributes
 }
 \description{
 This function computes all pairwise distances between spatial interaction
 models (SIMs) of its \code{x} parameter, using \code{sim_distance()} with the specified
-distance parameters. Then it returns the median of the collection defined as
-the SIM that is in average the closest to all the other SIMs. Tie breaking
+distance parameters. Then it returns the "median" of the collection defined
+as the SIM that is in average the closest to all the other SIMs. Tie breaking
 uses the order of the SIMs in the collection.
 }
 \details{
 As distance calculation can be slow in a large collection of SIMs, the
 distance object can be returned as a \code{distances} attribute of the median SIM
-by setting the \code{return_distances} parameter to \code{TRUE}.
+by setting the \code{return_distances} parameter to \code{TRUE}. In addition, the
+returned SIM has always two attributes:
+\itemize{
+\item \code{index} gives the index of the mode in the original \code{sim_list}
+\item \code{distortion} gives the mean of the distances from the median SIM to all
+the other SIMs
+}
 }
 \examples{
 positions <- matrix(rnorm(15 * 2), ncol = 2)
@@ -57,7 +64,9 @@ all_flows <- grid_blvim(distances,
   attractiveness,
   epsilon = 0.1
 )
-median(all_flows)
+all_flows_median <- median(all_flows)
+attr(all_flows_median, "index")
+attr(all_flows_median, "distortion")
 median(all_flows, flows = "destination")
 median(all_flows, flows = "attractiveness")
 }
