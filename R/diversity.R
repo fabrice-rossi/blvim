@@ -96,8 +96,8 @@ diversity <- function(sim, definition = c("shannon", "renyi", "ND", "RW"), order
 diversity.sim <- function(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...) {
   definition <- rlang::arg_match(definition)
   if (definition == "renyi" && order < 0) {
-    cli::cli_abort(c("{.var order} must be non negative",
-      "x" = "{.var order} is {.val {order}}"
+    cli::cli_abort(c("{.arg order} must be non negative",
+      "x" = "{.arg order} is {.val {order}}"
     ))
   }
   if (definition == "shannon" || definition == "renyi") {

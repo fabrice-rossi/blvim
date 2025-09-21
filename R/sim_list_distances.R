@@ -43,7 +43,7 @@ sim_distance <- function(sim_list,
                          method = c("euclidean"),
                          ...) {
   if (!inherits(sim_list, "sim_list")) {
-    cli::cli_abort("{.var sim_list} must be an object of class {.cls sim_list}")
+    cli::cli_abort("{.arg sim_list} must be an object of class {.cls sim_list}")
   }
   flows <- rlang::arg_match(flows)
   method <- rlang::arg_match(method)

@@ -22,38 +22,38 @@ check_configuration <- function(costs, X, alpha, beta, Z, bipartite, call = rlan
     )
   }
   if (!is.matrix(costs)) {
-    cli::cli_abort("{.var costs} must be a matrix",
+    cli::cli_abort("{.arg costs} must be a matrix",
       call = call
     )
   }
   if (nrow(costs) != length(X)) {
     cli::cli_abort(
-      c("{.var costs} must have {.val {length(X)}} rows",
-        "x" = "{.var costs} has {.val {nrow(costs)}} rows"
+      c("{.arg costs} must have {.val {length(X)}} rows",
+        "x" = "{.arg costs} has {.val {nrow(costs)}} rows"
       ),
       call = call
     )
   }
   if (ncol(costs) != length(Z)) {
     cli::cli_abort(
-      c("{.var costs} must have {.val {length(Z)}} columns",
-        "x" = "{.var costs} has {.val {ncol(costs)}} columns"
+      c("{.arg costs} must have {.val {length(Z)}} columns",
+        "x" = "{.arg costs} has {.val {ncol(costs)}} columns"
       ),
       call = call
     )
   }
   if (!is.numeric(alpha) || length(alpha) != 1 || alpha <= 0) {
     cli::cli_abort(
-      c("{.var alpha} must be a positive number",
-        "x" = "{.var alpha} is {.val {head(alpha)}}"
+      c("{.arg alpha} must be a positive number",
+        "x" = "{.arg alpha} is {.val {head(alpha)}}"
       ),
       call = call
     )
   }
   if (!is.numeric(beta) || length(beta) != 1 || beta <= 0) {
     cli::cli_abort(
-      c("{.var beta} must be a positive number",
-        "x" = "{.var beta} is {.val {head(beta)}}"
+      c("{.arg beta} must be a positive number",
+        "x" = "{.arg beta} is {.val {head(beta)}}"
       ),
       call = call
     )
