@@ -59,3 +59,41 @@ check_configuration <- function(costs, X, alpha, beta, Z, bipartite, call = rlan
     )
   }
 }
+
+#' Validate quantile specification
+#'
+#' The function verifies that qmin and qmax are numerical values such that
+#' 0<=qmin<qmax<=1. It aborts in case of problem.
+#'
+#' @param qmin low quantile
+#' @param qmax high quantile
+#' @param call caller environment for proper error reporting
+#'
+#' @returns nothing
+#' @noRd
+check_quantiles <- function(qmin, qmax, call = rlang::caller_env()) {
+  if (!is.numeric(qmin) || length(qmin) != 1 || qmin < 0 || qmin > 1) {
+    cli::cli_abort(
+      c("{.arg qmin} must be a number between 0 and 1",
+        "x" = "{.arg qmin} is {.val {qmin}}"
+      ),
+      call = call
+    )
+  }
+  if (!is.numeric(qmax) || length(qmax) != 1 || qmax < 0 || qmax > 1) {
+    cli::cli_abort(
+      c("{.arg qmax} must be a number between 0 and 1",
+        "x" = "{.arg qmax} is {.val {qmax}}"
+      ),
+      call = call
+    )
+  }
+  if (qmin > qmax) {
+    cli::cli_abort(
+      c("{.arg qmin} cannot be larger than or equal to {.arg qmax}",
+        "x" = "{.arg qmin} = {.val {qmin}} > {.val {qmax}} = {.arg qmax}"
+      ),
+      call = call
+    )
+  }
+}

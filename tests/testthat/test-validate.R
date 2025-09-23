@@ -1,0 +1,10 @@
+test_that("check_quantile detects problematic specification", {
+  expect_error(check_quantiles(TRUE, 0.5))
+  expect_error(check_quantiles(0.1, "b"))
+  expect_error(check_quantiles(seq(0, 1, length.out = 2), 1))
+  expect_error(check_quantiles(1, seq(0, 1, length.out = 3)))
+  expect_error(check_quantiles(-0.1, 1))
+  expect_error(check_quantiles(0.5, 2))
+  expect_error(check_quantiles(0.5, 0.2))
+  expect_no_error(check_quantiles(0.2, 0.7))
+})
