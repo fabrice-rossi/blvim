@@ -3,7 +3,7 @@ new_sim_df <- function(sim_list, sim_column, ..., class = character()) {
     cli::cli_abort("{.arg sim_list} must be a {.cls sim_list}")
   }
   if (sim_column %in% c("alpha", "beta", "diversity", "iterations", "converged")) {
-    cli::cli_abort("{.arg sim_column} cannot be the reserved column name \"{.val {sim_column}}\"")
+    cli::cli_abort("{.arg sim_column} cannot be the reserved column name {.str {sim_column}}")
   }
   iterations <- sapply(sim_list, sim_iterations)
   converged <- sapply(sim_list, sim_converged)
