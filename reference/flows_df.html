@@ -107,32 +107,32 @@ and <code>"latitude"</code>, the resulting columns will be <code>destination_lon
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="va">attractiveness</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">flows_df</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   origin_idx destination_idx       flow origin_name destination_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1               1 0.53416792           1                1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          2               1 0.36380059           2                1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          3               1 0.03734417           3                1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4               1 0.37889403           4                1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5               1 0.12041408           5                1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          6               1 0.16920466           6                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1               1 0.46998569           1                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          2               1 0.31109488           2                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          3               1 0.11040722           3                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4               1 0.09529015           4                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5               1 0.24912639           5                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          6               1 0.27224132           6                1</span>
 <span class="r-in"><span><span class="co">## with location data</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="va">attractiveness</span>,</span></span>
 <span class="r-in"><span>  origin_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  destination_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">flows_df</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   origin_idx destination_idx       flow origin_name    origin_x   origin_y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1               1 0.53416792           1  1.10018974 -1.1936412</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          2               1 0.36380059           2  1.20376784 -0.7517233</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          3               1 0.03734417           3 -1.43127078  1.4558414</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4               1 0.37889403           4  1.38291086 -0.8286035</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5               1 0.12041408           5  0.00312594  0.2897745</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          6               1 0.16920466           6 -0.07788682 -0.4800535</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   origin_idx destination_idx       flow origin_name   origin_x    origin_y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1               1 0.46998569           1 -0.2122360 0.112294787</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          2               1 0.31109488           2 -0.9063402 0.007886198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          3               1 0.11040722           3 -2.1021525 1.877743872</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4               1 0.09529015           4  1.8933605 2.158756554</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5               1 0.24912639           5 -0.9681258 0.709714522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          6               1 0.27224132           6 -0.1026030 0.766983379</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   destination_name destination_x destination_y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                1       1.10019     -1.193641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                1       1.10019     -1.193641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                1       1.10019     -1.193641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                1       1.10019     -1.193641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                1       1.10019     -1.193641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                1       1.10019     -1.193641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                1     -0.212236     0.1122948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                1     -0.212236     0.1122948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                1     -0.212236     0.1122948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                1     -0.212236     0.1122948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                1     -0.212236     0.1122948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                1     -0.212236     0.1122948</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
