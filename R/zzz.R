@@ -4,8 +4,10 @@
   s3_register("dplyr::dplyr_col_modify", "sim_df")
   s3_register("dplyr::group_by", "sim_df")
   s3_register("dplyr::ungroup", "sim_df")
-  s3_register("ggplot2::autoplot", "sim")
   s3_register("ggplot2::fortify", "sim")
+  s3_register("ggplot2::fortify", "sim_list")
+  s3_register("ggplot2::autoplot", "sim")
+  s3_register("ggplot2::autoplot", "sim_list")
   s3_register("ggplot2::autoplot", "sim_df")
   invisible()
 }
