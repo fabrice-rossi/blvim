@@ -94,8 +94,8 @@ sim_autoplot <- function(sim, sim_data,
         fill = .data[["flow"]]
       )) +
         ggplot2::geom_raster()
+      full_f <- flows(sim)
       if (with_names) {
-        full_f <- flows(sim)
         x_labels <- destination_names(sim)
         if (is.null(x_labels)) {
           x_labels <- seq_len(ncol(full_f))
@@ -104,16 +104,25 @@ sim_autoplot <- function(sim, sim_data,
         if (is.null(y_labels)) {
           y_labels <- seq_len(nrow(full_f))
         }
-        y_labels <- rev(y_labels)
         pre +
-          ggplot2::scale_x_discrete(breaks = seq_along(x_labels), labels = x_labels) +
-          ggplot2::scale_y_discrete(breaks = seq_along(y_labels), labels = y_labels)
+          ggplot2::scale_x_discrete(
+            breaks = seq_along(x_labels),
+            labels = x_labels,
+            limits = levels(sim_data$destination)
+          ) +
+          ggplot2::scale_y_discrete(
+            breaks = seq_along(y_labels),
+            labels = y_labels,
+            limits = rev(levels(sim_data$origin))
+          )
       } else {
         pre +
           ggplot2::theme(
             axis.ticks = ggplot2::element_blank(),
             axis.text = ggplot2::element_blank()
-          )
+          ) +
+          ggplot2::scale_x_discrete(limits = levels(sim_data$destination)) +
+          ggplot2::scale_y_discrete(limits = rev(levels(sim_data$origin)))
       }
     }
   }

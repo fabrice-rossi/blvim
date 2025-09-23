@@ -141,8 +141,12 @@ fortify.sim <- function(model, data,
     } else {
       full_f <- flows(model)
       sim_data <- expand.grid(
-        origin = factor(rev(seq_len(nrow(full_f)))),
-        destination = factor(seq_len(ncol(full_f)))
+        origin = factor(seq_len(nrow(full_f)),
+          levels = seq_len(nrow(full_f))
+        ),
+        destination = factor(seq_len(ncol(full_f)),
+          levels = seq_len(ncol(full_f))
+        )
       )
       sim_data$flow <- as.vector(full_f)
       sim_data
