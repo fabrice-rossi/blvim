@@ -231,13 +231,14 @@ autoplot.sim_list <- function(object,
     sim_data_stat <- stat_sim_list(sim_data, flow_name, quantiles = c(qmin, qmax))
     if (with_positions) {
       pos_data <- positions_as_df(positions[["destination"]], NULL)
+      sim_data_pos_names <- names(pos_data)
       full_data <- cbind(pos_data, sim_data_stat)
       full_data <- full_data[full_data$Q_max >= cut_off, ]
       pre <- ggplot2::ggplot(
         full_data,
         ggplot2::aes(
-          x = .data[["x"]],
-          y = .data[["y"]]
+          x = .data[[sim_data_pos_names[1]]],
+          y = .data[[sim_data_pos_names[2]]],
         )
       ) +
         ggplot2::geom_point(

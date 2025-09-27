@@ -175,6 +175,34 @@ test_that("autoplot.sim_list works as expected (destination with positions)", {
   )
 })
 
+test_that("autoplot.sim_list works as expected (destination with named positions)", {
+  config <- create_locations(20, 30, seed = 20)
+  alphas <- seq(1.25, 2.25, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 5)
+  models <- grid_blvim(config$costs,
+                       config$X,
+                       alphas,
+                       betas,
+                       config$Z,
+                       iter_max = 5000,
+                       epsilon = 0.1,
+                       precision = .Machine$double.eps^0.5
+  )
+  origin_positions(models) <- config$pp
+  colnames(config$pd) <- c("A", "B")
+  destination_positions(models) <- config$pd
+  vdiffr::expect_doppelganger(
+    "Destination pos named",
+    \() print(ggplot2::autoplot(models, flow = "destination", with_positions = TRUE))
+  )
+  colnames(config$pd) <- c("My first coordinate", "My second coordinate")
+  destination_positions(models) <- config$pd
+  vdiffr::expect_doppelganger(
+    "Destination pos named 2",
+    \() print(ggplot2::autoplot(models, flow = "destination", with_positions = TRUE))
+  )
+})
+
 test_that("autoplot.sim_list works as expected (full flows no names)", {
   config <- create_locations(20, 18, seed = 50)
   alphas <- seq(1.25, 2.25, by = 0.25)
