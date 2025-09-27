@@ -232,7 +232,7 @@ autoplot.sim_list <- function(object,
     if (with_positions) {
       pos_data <- positions_as_df(positions[["destination"]], NULL)
       full_data <- cbind(pos_data, sim_data_stat)
-      full_data <- full_data[full_data$max >= cut_off, ]
+      full_data <- full_data[full_data$Q_max >= cut_off, ]
       pre <- ggplot2::ggplot(
         full_data,
         ggplot2::aes(
