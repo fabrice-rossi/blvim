@@ -39,15 +39,18 @@ test_that("fortify.sim_list returns the expected data frame (destination case)",
     ## verify names
     models_df_names <- fortify.sim_list(models, flows = flows, with_names = TRUE)
     expect_s3_class(models_df_names, "data.frame")
-    expect_named(models_df_names, c("destination", flow_name, "configuration"))
+    expect_named(models_df_names, c("destination", flow_name, "configuration", "name"))
     expect_equal(unique(models_df_names$configuration), seq_along(models))
     expect_equal(nrow(models_df_names), length(models) * nb_destinations)
     expect_equal(
-      models_df_names$destination,
+      models_df_names$name,
       destination_names(models)[models_df$destination]
     )
-    ## make sure missing names does not break the fortify function
+    ## make sure missing names do not break the fortify function
     destination_names(models) <- NULL
+    expect_no_error(fortify.sim_list(models, flows = flows, with_names = TRUE))
+    ## make sure duplicated names do not break the fortify function
+    destination_names(models) <- c("a", letters[seq_len(nb_destinations - 1)])
     expect_no_error(fortify.sim_list(models, flows = flows, with_names = TRUE))
   }
 })

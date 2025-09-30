@@ -1,3 +1,168 @@
+sim_list_autoplot <- function(sim_list,
+                              sim_data_stat,
+                              flows,
+                              with_names,
+                              with_positions,
+                              cut_off,
+                              adjust_limits,
+                              normalisation,
+                              ...) {
+  flow_name <- ifelse(flows == "destination", "flow", "attractiveness")
+  if (flows == "full") {
+    one_flow <- flows(sim_list[[1]])
+    if (normalisation != "origin") {
+      ## we rescale everything globally
+      the_max <- max(sim_data_stat$Q_max)
+      sim_data_stat$Q_min <- sim_data_stat$Q_min / the_max
+      sim_data_stat$Q_max <- sim_data_stat$Q_max / the_max
+      sim_data_stat$flow <- sim_data_stat$flow / the_max
+    }
+    sim_data_stat <- sim_data_stat[sim_data_stat$Q_max >= cut_off, ]
+    sim_data_stat$Q_min <- sqrt(sim_data_stat$Q_min)
+    sim_data_stat$Q_max <- sqrt(sim_data_stat$Q_max)
+    sim_data_stat$flow <- sqrt(sim_data_stat$flow)
+    x_pos <- seq_len(ncol(one_flow))
+    y_pos <- seq_len(nrow(one_flow))
+    x_labels <- NULL
+    y_labels <- NULL
+    if (with_names) {
+      x_labels <- destination_names(sim_list)
+      y_labels <- origin_names(sim_list)
+    }
+    if (is.null(x_labels)) {
+      x_labels <- as.character(x_pos)
+    }
+    if (is.null(y_labels)) {
+      y_labels <- as.character(y_pos)
+    }
+    sim_data_stat$origin_idx <- nrow(one_flow) + 1 - sim_data_stat$origin_idx
+    background <- "#00000000"
+    border <- "black"
+    pre <- ggplot2::ggplot(
+      sim_data_stat,
+      ggplot2::aes(
+        x = .data[["destination_idx"]],
+        y = .data[["origin_idx"]]
+      )
+    ) +
+      ggplot2::geom_tile(
+        mapping = ggplot2::aes(
+          height = .data[["Q_max"]],
+          width = .data[["Q_max"]]
+        ),
+        colour = border,
+        fill = background,
+        linewidth = 0.25
+      ) +
+      ggplot2::geom_tile(
+        mapping = ggplot2::aes(
+          height = .data[["flow"]],
+          width = .data[["flow"]]
+        ),
+        colour = border,
+        fill = background,
+        linewidth = 0.5
+      ) +
+      ggplot2::geom_tile(
+        mapping = ggplot2::aes(
+          height = .data[["Q_min"]],
+          width = .data[["Q_min"]]
+        ),
+        colour = border,
+        fill = background,
+        linewidth = 0.25
+      ) +
+      ggplot2::scale_x_discrete("destination",
+        breaks = x_pos,
+        labels = x_labels,
+        limits = as.character(x_pos)
+      ) +
+      ggplot2::scale_y_discrete("origin",
+        breaks = y_pos,
+        labels = y_labels,
+        limits = rev(as.character(y_pos))
+      ) +
+      ggplot2::coord_fixed()
+    pre
+  } else {
+    if (with_positions) {
+      positions <- location_positions(sim_list)
+      pos_data <- positions_as_df(positions[["destination"]], NULL)
+      sim_data_pos_names <- names(pos_data)
+      if (nrow(pos_data) == nrow(sim_data_stat)) {
+        full_data <- cbind(pos_data, sim_data_stat)
+      } else {
+        pos_data$destination <- seq_len(nrow(pos_data))
+        full_data <- merge(sim_data_stat, pos_data, by = "destination")
+      }
+      full_data <- full_data[full_data$Q_max >= cut_off, ]
+      pre <- ggplot2::ggplot(
+        full_data,
+        ggplot2::aes(
+          x = .data[[sim_data_pos_names[1]]],
+          y = .data[[sim_data_pos_names[2]]],
+        )
+      ) +
+        ggplot2::geom_point(
+          mapping = ggplot2::aes(size = .data[["Q_min"]]),
+          shape = 21,
+          stroke = 0.5
+        ) +
+        ggplot2::geom_point(
+          mapping = ggplot2::aes(size = .data[[flow_name]]),
+          shape = 21,
+          stroke = 1
+        ) +
+        ggplot2::geom_point(
+          mapping = ggplot2::aes(size = .data[["Q_max"]]),
+          shape = 21,
+          stroke = 0.25
+        ) +
+        ggplot2::labs(size = flow_name)
+      if (!adjust_limits) {
+        pre <- pre + ggplot2::lims(
+          x = range(
+            positions[["destination"]][, 1],
+            positions[["origin"]][, 1]
+          ),
+          y = range(
+            positions[["destination"]][, 2],
+            positions[["origin"]][, 2]
+          )
+        )
+      }
+      pre
+    } else {
+      sim_data_stat$destination <- as.factor(sim_data_stat$destination)
+      pre <-
+        ggplot2::ggplot(
+          sim_data_stat,
+          ggplot2::aes(
+            x = .data[["destination"]],
+            y = .data[[flow_name]],
+            ymin = .data[["Q_min"]],
+            ymax = .data[["Q_max"]]
+          )
+        ) +
+        ggplot2::geom_crossbar()
+      if (with_names) {
+        x_labels <- destination_names(sim_list)
+        if (is.null(x_labels)) {
+          x_labels <- seq_len(ncol(flows(sim_list[[1]])))
+        }
+        pre +
+          ggplot2::scale_x_discrete(labels = x_labels)
+      } else {
+        pre +
+          ggplot2::theme(
+            axis.ticks.x = ggplot2::element_blank(),
+            axis.text.x = ggplot2::element_blank()
+          )
+      }
+    }
+  }
+}
+
 #' Create a complete ggplot for a collection of spatial interaction model
 #'
 #' This function represents graphically the variability of the flows represented
@@ -120,7 +285,6 @@ autoplot.sim_list <- function(object,
                               ...) {
   flows <- rlang::arg_match(flows)
   normalisation <- rlang::arg_match(normalisation)
-  check_quantiles(qmin, qmax)
   if (with_positions) {
     positions <- location_positions(object)
     if (flows == "destination" || flows == "attractiveness") {
@@ -141,146 +305,9 @@ autoplot.sim_list <- function(object,
     normalisation = normalisation,
     ...
   )
-  ## make sure plotting will respect the natural ordering of the destinations
-  the_levels <- destination_names(object)
-  if (is.null(the_levels) || !with_names) {
-    the_levels <- seq_len(ncol(flows(object[[1]])))
-  }
-  sim_data$destination <- factor(sim_data$destination,
-    levels = the_levels
+  sim_data_stat <- stat_sim_list(sim_data, flows, quantiles = c(qmin, qmax))
+  sim_list_autoplot(
+    object, sim_data_stat, flows, with_names, with_positions,
+    cut_off, adjust_limits, normalisation
   )
-  flow_name <- ifelse(flows == "destination", "flow", "attractiveness")
-  if (flows == "full") {
-    one_flow <- flows(object[[1]])
-    sim_data_stat <- stat_flow_sim_list(sim_data, quantiles = c(qmin, qmax))
-    if (normalisation != "origin") {
-      ## we rescale everything globally
-      the_max <- max(sim_data_stat$Q_max)
-      sim_data_stat$Q_min <- sim_data_stat$Q_min / the_max
-      sim_data_stat$Q_max <- sim_data_stat$Q_max / the_max
-      sim_data_stat$flow <- sim_data_stat$flow / the_max
-    }
-    sim_data_stat <- sim_data_stat[sim_data_stat$Q_max >= cut_off, ]
-    sim_data_stat$Q_min <- sqrt(sim_data_stat$Q_min)
-    sim_data_stat$Q_max <- sqrt(sim_data_stat$Q_max)
-    sim_data_stat$flow <- sqrt(sim_data_stat$flow)
-    x_pos <- seq_len(ncol(one_flow))
-    y_pos <- seq_len(nrow(one_flow))
-    x_labels <- NULL
-    y_labels <- NULL
-    if (with_names) {
-      x_labels <- destination_names(object)
-      y_labels <- origin_names(object)
-    }
-    if (is.null(x_labels)) {
-      x_labels <- as.character(x_pos)
-    }
-    if (is.null(y_labels)) {
-      y_labels <- as.character(y_pos)
-    }
-    sim_data_stat$origin_idx <- nrow(one_flow) + 1 - sim_data_stat$origin_idx
-    background <- "#00000000"
-    border <- "black"
-    pre <- ggplot2::ggplot(
-      sim_data_stat,
-      ggplot2::aes(
-        x = .data[["destination_idx"]],
-        y = .data[["origin_idx"]]
-      )
-    ) +
-      ggplot2::geom_tile(
-        mapping = ggplot2::aes(
-          height = .data[["Q_max"]],
-          width = .data[["Q_max"]]
-        ),
-        colour = border,
-        fill = background,
-        linewidth = 0.25
-      ) +
-      ggplot2::geom_tile(
-        mapping = ggplot2::aes(
-          height = .data[["flow"]],
-          width = .data[["flow"]]
-        ),
-        colour = border,
-        fill = background,
-        linewidth = 0.5
-      ) +
-      ggplot2::geom_tile(
-        mapping = ggplot2::aes(
-          height = .data[["Q_min"]],
-          width = .data[["Q_min"]]
-        ),
-        colour = border,
-        fill = background,
-        linewidth = 0.25
-      ) +
-      ggplot2::scale_x_discrete("destination",
-        breaks = x_pos,
-        labels = x_labels,
-        limits = as.character(x_pos)
-      ) +
-      ggplot2::scale_y_discrete("origin",
-        breaks = y_pos,
-        labels = y_labels,
-        limits = rev(as.character(y_pos))
-      ) +
-      ggplot2::coord_fixed()
-    pre
-  } else {
-    sim_data_stat <- stat_sim_list(sim_data, flow_name, quantiles = c(qmin, qmax))
-    if (with_positions) {
-      pos_data <- positions_as_df(positions[["destination"]], NULL)
-      sim_data_pos_names <- names(pos_data)
-      full_data <- cbind(pos_data, sim_data_stat)
-      full_data <- full_data[full_data$Q_max >= cut_off, ]
-      pre <- ggplot2::ggplot(
-        full_data,
-        ggplot2::aes(
-          x = .data[[sim_data_pos_names[1]]],
-          y = .data[[sim_data_pos_names[2]]],
-        )
-      ) +
-        ggplot2::geom_point(
-          mapping = ggplot2::aes(size = .data[["Q_min"]]),
-          shape = 21,
-          stroke = 0.5
-        ) +
-        ggplot2::geom_point(
-          mapping = ggplot2::aes(size = .data[[flow_name]]),
-          shape = 21,
-          stroke = 1
-        ) +
-        ggplot2::geom_point(
-          mapping = ggplot2::aes(size = .data[["Q_max"]]),
-          shape = 21,
-          stroke = 0.25
-        ) +
-        ggplot2::labs(size = flow_name)
-      if (!adjust_limits) {
-        pre <- pre + ggplot2::lims(
-          x = range(
-            positions[["destination"]][, 1],
-            positions[["origin"]][, 1]
-          ),
-          y = range(
-            positions[["destination"]][, 2],
-            positions[["origin"]][, 2]
-          )
-        )
-      }
-      pre
-    } else {
-      ggplot2::ggplot(
-        sim_data_stat,
-        ggplot2::aes(
-          x = .data[["destination"]],
-          y = .data[[flow_name]],
-          ymin = .data[["Q_min"]],
-          ymax = .data[["Q_max"]]
-        )
-      ) +
-        ggplot2::geom_crossbar()
-    }
-  }
 }

@@ -28,14 +28,15 @@
 #'     normalised.
 #'    - `configuration`: the spatial interaction model index
 #' - if `flows="destination"` or `flows="attractiveness"`, the data frame contains
-#' 3 columns:
+#' 3 or 4 columns:
 #'    - `destination`: identifies the destination location by its index from 1
-#' to the number of destination locations when `with_names=FALSE` or by its
-#' name.
+#' to the number of destination locations
 #'    - `flow` or `attractiveness` depending on the value of `"flows"`: this contains
 #' either the [destination_flow()] or the [attractiveness()] of the destination
 #' location
 #'    - `configuration`: the spatial interaction model index
+#'    - `name`: the destination location names if `with_names=TRUE` (the column is
+#'    not present if `with_names=FALSE`)
 #'
 #' The normalisation operated when `flows="full"` can improve the readability
 #' of the graphical representation proposed in [autoplot.sim_list()] when the
@@ -105,14 +106,7 @@ fortify.sim_list <- function(model, data,
     } else {
       sim_data <- grid_attractiveness(model)
     }
-    sim_names <- destination_names(model)
-    if (is.null(sim_names)) {
-      sim_names <- as.character(seq_len(ncol(sim_data)))
-      colnames(sim_data) <- sim_names
-    }
-    if (!with_names) {
-      colnames(sim_data) <- as.character(seq_len(ncol(sim_data)))
-    }
+    colnames(sim_data) <- as.character(seq_len(ncol(sim_data)))
     loc_name <- ifelse(flows == "destination", "flow", "attractiveness")
     sim_data_long <- stats::reshape(as.data.frame(sim_data),
       direction = "long",
@@ -123,14 +117,32 @@ fortify.sim_list <- function(model, data,
       idvar = "configuration"
     )
     rownames(sim_data_long) <- NULL
-    if (!with_names) {
-      sim_data_long$destination <- as.integer(sim_data_long$destination)
+    sim_data_long$destination <- as.integer(sim_data_long$destination)
+    if (with_names) {
+      sim_names <- destination_names(model)
+      if (is.null(sim_names)) {
+        sim_names <- as.character(seq_len(ncol(sim_data)))
+      }
+      sim_data_long$name <- sim_names[sim_data_long$destination]
     }
     sim_data_long
   }
 }
 
-stat_sim_list <- function(sim_data, flow_name, quantiles = c(0.05, 0.95)) {
+stat_sim_list <- function(sim_data, flows, quantiles = c(0.05, 0.95)) {
+  check_quantiles(quantiles[1], quantiles[2])
+  if (flows == "full") {
+    stat_flow_sim_list(sim_data, quantiles)
+  } else {
+    stat_destination_sim_list(
+      sim_data,
+      ifelse(flows == "destination", "flow", "attractiveness"),
+      quantiles
+    )
+  }
+}
+
+stat_destination_sim_list <- function(sim_data, flow_name, quantiles = c(0.05, 0.95)) {
   all_stats <- tapply(
     sim_data[[flow_name]],
     sim_data$destination,
@@ -150,9 +162,7 @@ stat_sim_list <- function(sim_data, flow_name, quantiles = c(0.05, 0.95)) {
   }
   colnames(m_all_stats) <- c("min", "Q_min", flow_name, "Q_max", "max")
   m_all_stats <- as.data.frame(m_all_stats)
-  m_all_stats$destination <- factor(levels(sim_data$destination),
-    levels = levels(sim_data$destination)
-  )
+  m_all_stats$destination <- as.integer(names(all_stats))
   m_all_stats
 }
 

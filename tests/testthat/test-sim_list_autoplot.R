@@ -180,13 +180,13 @@ test_that("autoplot.sim_list works as expected (destination with named positions
   alphas <- seq(1.25, 2.25, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 5)
   models <- grid_blvim(config$costs,
-                       config$X,
-                       alphas,
-                       betas,
-                       config$Z,
-                       iter_max = 5000,
-                       epsilon = 0.1,
-                       precision = .Machine$double.eps^0.5
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
   )
   origin_positions(models) <- config$pp
   colnames(config$pd) <- c("A", "B")

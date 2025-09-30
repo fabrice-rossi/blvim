@@ -63,15 +63,16 @@ normalised.
 \item \code{configuration}: the spatial interaction model index
 }
 \item if \code{flows="destination"} or \code{flows="attractiveness"}, the data frame contains
-3 columns:
+3 or 4 columns:
 \itemize{
 \item \code{destination}: identifies the destination location by its index from 1
-to the number of destination locations when \code{with_names=FALSE} or by its
-name.
+to the number of destination locations
 \item \code{flow} or \code{attractiveness} depending on the value of \code{"flows"}: this contains
 either the \code{\link[=destination_flow]{destination_flow()}} or the \code{\link[=attractiveness]{attractiveness()}} of the destination
 location
 \item \code{configuration}: the spatial interaction model index
+\item \code{name}: the destination location names if \code{with_names=TRUE} (the column is
+not present if \code{with_names=FALSE})
 }
 }
 
