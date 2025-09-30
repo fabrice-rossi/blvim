@@ -71,6 +71,9 @@ grid_autoplot <- function(sim_df, key,
                           fw_params = NULL,
                           ...) {
   rlang::check_installed("ggplot2", reason = "to use `grid_autoplot()`")
+  if (!inherits(sim_df, "sim_df")) {
+    cli::cli_abort("{.arg sim_df} must be a {.cls sim_df} object")
+  }
   if (nrow(sim_df) > max_sims) {
     cli::cli_abort("Too many spatial interaction models ({.val {nrow(sim_df)}} > {.arf max_sims} = {.val {max_sims}})")
   }

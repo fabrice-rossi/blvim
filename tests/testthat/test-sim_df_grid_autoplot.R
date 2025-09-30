@@ -95,3 +95,8 @@ test_that("grid_autoplot works as expected in borderline cases", {
     \() print(grid_autoplot(models_df[1, ]))
   )
 })
+
+
+test_that("grid_autoplot detects errors", {
+  expect_error(grid_autoplot(list()))
+})
