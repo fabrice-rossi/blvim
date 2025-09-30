@@ -86,23 +86,15 @@ grid_autoplot <- function(sim_df, key,
     val <- rlang::eval_tidy({{ expr }}, sim_df)
     val_name <- rlang::as_label(expr)
   }
-  pre_data <- lapply(sim_column(sim_df), fortify.sim, data = NULL, flows, with_positions, cut_off)
-  if (length(pre_data) > 1) {
-    final_sizes <- sapply(pre_data, nrow)
-    final_nrow <- sum(final_sizes)
-    final_df <- as.data.frame(lapply(pre_data[[1]], function(x) rep(x, length.out = final_nrow)))
-    final_df[[val_name]] <- rep(val, times = final_sizes)
-    start_idx <- final_sizes[1]
-    for (k in 2:length(pre_data)) {
-      next_idx <- start_idx + final_sizes[k]
-      final_df[(start_idx + 1):next_idx, seq_len(ncol(pre_data[[k]]))] <- pre_data[[k]]
-      start_idx <- next_idx
-    }
-  } else {
-    final_df <- pre_data[[1]]
-    final_df[[val_name]] <- val
-  }
-  pre <- sim_autoplot(sim_column(sim_df)[[1]], final_df, flows, with_names, with_positions, adjust_limits, ...)
+  pre_data <- lapply(sim_column(sim_df), fortify.sim,
+    data = NULL, flows,
+    with_positions, cut_off
+  )
+  final_df <- combine_df(pre_data, val, val_name)
+  pre <- sim_autoplot(
+    sim_column(sim_df)[[1]], final_df, flows, with_names,
+    with_positions, adjust_limits, ...
+  )
   fw_parameters <- list(facets = ggplot2::vars(.data[[val_name]]))
   if (!is.null(fw_params)) {
     fw_parameters <- c(fw_parameters, fw_params)
