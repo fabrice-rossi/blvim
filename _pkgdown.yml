@@ -47,3 +47,4 @@ reference:
   - starts_with("autoplot")
   - starts_with("fortify")
   - grid_autoplot
+  - grid_var_autoplot

@@ -171,7 +171,7 @@ sim_list_autoplot <- function(sim_list,
   }
 }
 
-#' Create a complete ggplot for a collection of spatial interaction model
+#' Create a complete variability for a collection of spatial interaction models
 #'
 #' This function represents graphically the variability of the flows represented
 #' by the spatial interaction models contained in a collection (a `sim_list`

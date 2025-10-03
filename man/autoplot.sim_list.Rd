@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_list_autoplot.R
 \name{autoplot.sim_list}
 \alias{autoplot.sim_list}
-\title{Create a complete ggplot for a collection of spatial interaction model}
+\title{Create a complete variability for a collection of spatial interaction models}
 \usage{
 \method{autoplot}{sim_list}(
   object,
