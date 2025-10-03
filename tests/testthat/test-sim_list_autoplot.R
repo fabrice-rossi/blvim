@@ -93,6 +93,40 @@ test_that("autoplot.sim_list works as expected (destination with names)", {
       with_names = TRUE
     ))
   )
+  ## empty names
+  destination_names(models) <- NULL
+  vdiffr::expect_doppelganger(
+    "Destination empty names",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_names = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Destination empty names set quantiles",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      qmin = 0.1,
+      qmax = 0.7,
+      with_names = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Attractiveness empty names",
+    \() print(ggplot2::autoplot(models,
+      flow = "attractiveness",
+      with_names = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Attractiveness empty names set quantiles",
+    \() print(ggplot2::autoplot(models,
+      flow = "attractiveness",
+      qmin = 0.2,
+      qmax = 1,
+      with_names = TRUE
+    ))
+  )
 })
 
 test_that("autoplot.sim_list works as expected (destination with positions)", {
