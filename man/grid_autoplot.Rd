@@ -93,7 +93,7 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
   bipartite = FALSE,
   epsilon = 0.1, iter_max = 1000,
   destination_data = list(names = LETTERS[1:10], positions = positions),
-  origin_data = list(names = LETTERS[1:10], positions = positions),
+  origin_data = list(names = LETTERS[1:10], positions = positions)
 )
 all_flows_df <- sim_df(all_flows)
 ## default display: flows as matrices
