@@ -119,3 +119,12 @@ test_that("autoplot.sim works as expected (with positions, non bipartite)", {
       ggplot2::scale_linewidth(range = c(0, 2)))
   )
 })
+
+test_that("autoplot.sim tolerates duplicate names", {
+  config <- create_locations(20, 15, seed = 12)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  destination_names(model) <- sample(letters[1:10], 15, replace = TRUE)
+  origin_names(model) <- sample(LETTERS[1:10], 20, replace = TRUE)
+  expect_no_error(ggplot2::autoplot(model, with_names = TRUE))
+  expect_no_error(ggplot2::autoplot(model, flow = "destination", with_names = TRUE))
+})

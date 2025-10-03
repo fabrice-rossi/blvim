@@ -350,3 +350,22 @@ test_that("autoplot.sim_list errors and warnings are triggered", {
   expect_warning(ggplot2::autoplot(models, with_positions = TRUE))
   expect_error(ggplot2::autoplot(models, flows = "destination", with_positions = TRUE))
 })
+
+test_that("autoplot.sim_list tolerates duplicate names", {
+  config <- create_locations(20, 18, seed = 50)
+  alphas <- seq(1.25, 2.25, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 5)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  destination_names(models) <- sample(letters[1:10], 18, replace = TRUE)
+  origin_names(models) <- sample(LETTERS[1:10], 20, replace = TRUE)
+  expect_no_error(ggplot2::autoplot(models, with_names = TRUE))
+  expect_no_error(ggplot2::autoplot(models, flow = "destination", with_names = TRUE))
+})
