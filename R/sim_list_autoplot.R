@@ -83,7 +83,15 @@ sim_list_autoplot <- function(sim_list,
         limits = rev(as.character(y_pos))
       ) +
       ggplot2::coord_fixed()
-    pre
+    if (with_names) {
+      pre
+    } else {
+      pre +
+        ggplot2::theme(
+          axis.ticks = ggplot2::element_blank(),
+          axis.text = ggplot2::element_blank()
+        )
+    }
   } else {
     if (with_positions) {
       positions <- location_positions(sim_list)
