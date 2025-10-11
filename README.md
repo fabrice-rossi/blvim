@@ -14,13 +14,14 @@ coverage](https://codecov.io/gh/fabrice-rossi/blvim/graph/badge.svg)](https://ap
 interaction model**. The model is described in [Wilson, A. (2008),
 “Boltzmann, Lotka and Volterra and spatial structural evolution: an
 integrated methodology for some dynamical systems”, J. R. Soc.
-Interface, 5:865–871](http://dx.doi.org/10.1098/rsif.2007.1288). The
-first goal of the package is to provide a fast implementation of the BLV
-model with a collection of tools designed to explore the results via
-statistical summaries and graphical representations. The second goal of
-the package is to facilitate systematic assessment of the impact of the
-model parameters on the results, again through summaries and graphical
-representations.
+Interface, 5:865–871](http://dx.doi.org/10.1098/rsif.2007.1288).
+
+The package’s primary goal is to provide a fast implementation of the
+BLV model, complete with a collection of tools designed to explore the
+results through statistical summaries and graphical representations. The
+secondary goal is to facilitate the systematic assessment of how model
+parameters impact the results, again using summaries and graphical
+representations (see `vignette("grid")` for details on this aspect).
 
 ## Installation
 
