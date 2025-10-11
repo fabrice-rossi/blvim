@@ -10,8 +10,8 @@ coverage](https://codecov.io/gh/fabrice-rossi/blvim/graph/badge.svg)](https://ap
 
 <!-- badges: end -->
 
-`blvim` implements A. Wilson’s Boltzmann–Lotka–Volterra (BLV)
-interaction model. The model is described in [Wilson, A. (2008),
+`blvim` implements A. Wilson’s **Boltzmann–Lotka–Volterra (BLV)
+interaction model**. The model is described in [Wilson, A. (2008),
 “Boltzmann, Lotka and Volterra and spatial structural evolution: an
 integrated methodology for some dynamical systems”, J. R. Soc.
 Interface, 5:865–871](http://dx.doi.org/10.1098/rsif.2007.1288). The
@@ -34,19 +34,19 @@ pak::pak("fabrice-rossi/blvim")
 
 ## Spatial interaction models
 
-Spatial interaction models aim to estimate flows between locations, for
-instance, workers commuting from residential zones to employment zones.
-The focus of the `blvim` package is on maximum entropy models developed
-by Alan Wilson. See `vignette("theory")` for a theoretical background.
+**Spatial interaction models** aim to estimate flows between locations,
+such as workers commuting from residential zones to employment zones.
+The `blvim` package focuses on the maximum entropy models developed by
+Alan Wilson. See `vignette("theory")` for the theoretical background.
 
 In practice, if we have $`n`$ origin locations and $`p`$ destination
-locations, the aim is to compute a matrix of flows
+locations, the goal is to compute a flow matrix
 $`(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}`$, where $`Y_{ij}`$ is the
-flow from origin $`i`$ to destination $`j`$. This is done using
-characteristics of the origin and destination locations, together with a
-matrix of exchange difficulties, a *cost matrix*,
-$`(c_{ij})_{1\leq i\leq n, 1\leq j\leq p}`$. For instance, $`c_{ij}`$
-can be the distance between origin $`i`$ and destination $`j`$.
+flow from origin $`i`$ to destination $`j`$. This computation relies on
+characteristics of the origin and destination locations, along with a
+matrix of exchange difficulties, known as a **cost matrix**,
+$`(c_{ij})_{1\leq i\leq n, 1\leq j\leq p}`$. For example, $`c_{ij}`$ can
+represent the distance between origin $`i`$ and destination $`j`$.
 
 ## Usage
 
@@ -58,8 +58,8 @@ library(blvim)
 
 ### Input data
 
-To compute a spatial interaction model with `blvim`, one needs at least
-a cost matrix. In this example, we use the distance between some random
+To compute a spatial interaction model with `blvim`, you need at least a
+cost matrix. In this example, we use the distance between some random
 locations.
 
 ``` r
@@ -73,17 +73,17 @@ full_costs <- as.matrix(dist(rbind(origins, destinations)))
 cost_matrix <- full_costs[1:nrow(origins), (nrow(origins) + 1):(nrow(origins) + nrow(destinations))]
 ```
 
-In addition, we focus on production-constrained models, which means that
-we need to specify the production of each origin location (a vector of
-positive values $`(X_i)_{1\leq i\leq n}`$). In this example, we assume a
-common unitary production.
+Additionally, since we focus on **production-constrained models**, we
+must s pecify the production for each origin location (a vector of
+positive values $`(X_i)_{1\leq i\leq n}`$). Here, we assume a common
+unitary production.
 
 ``` r
 X <- rep(1, nrow(origins))
 ```
 
-Finally, the simple *static* model needs an attractiveness value of each
-destination location, a vector of positive values
+Finally, the simple **static** model requires an attractiveness value
+for each destination location, a vector of positive values
 $`(Z_j)_{1\leq j\leq p}`$. We again assume a common unitary
 attractiveness.
 
@@ -97,19 +97,21 @@ In Wilson’s production-constrained maximum entropy model, the flows are
 given by
 
 ``` math
+
 Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},
 ```
 
 where $`\alpha`$ is a return-to-scale parameter and $`\beta`$ is the
-inverse of a cost scale parameter. Notice that the flow matrix is
-*production-constrained*, which means that the total outgoing flow from
-any origin location is equal to the production of this location, i.e.,
+inverse of a cost scale parameter. Note that the flow matrix is
+**production-constrained**, meaning that the total outgoing flow from
+any origin location is equals the production of that location:
 
 ``` math
+
 \forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.
 ```
 
-The model is obtained using the `static_blvim()` function as follows:
+The model is obtained using the `static_blvim()` function:
 
 ``` r
 a_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 2, Z)
@@ -126,7 +128,7 @@ particular `flows()` returns the flow matrix $`Y`$.
 a_model_flows <- flows(a_model)
 ```
 
-which can be displayed using, e.g., the `image()` function.
+which can be displayed using, for instance, the `image()` function.
 
 ``` r
 par(mar = rep(0.1, 4))
@@ -139,14 +141,14 @@ image(t(a_model_flows),
 
 <img src="man/figures/README-a_flow-1.png" width="25%" style="display: block; margin: auto;" />
 
-In this representation, each row gives the flows from one origin
-location to all the destination location. The package provides a
-`ggplot2::autoplot()` function that can be used as follows:
+In this representation, each row shows the flows from one origin
+location to all destination locations. The package also provides a
+`ggplot2::autoplot()` function, which can be used as follows:
 
 ``` r
 library(ggplot2)
 autoplot(a_model, "full") +
-  scale_fill_viridis_c() +
+  scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
 ```
 
@@ -162,23 +164,26 @@ b_model
 
 ``` r
 autoplot(b_model) +
-  scale_fill_viridis_c() +
+  scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
 ```
 
 <img src="man/figures/README-b_flow-1.png" width="40%" style="display: block; margin: auto;" />
 
-Different values of the parameters $`\alpha`$ and $`\beta`$ lead to more
-or less concentrated flows, as exemplified by the two figures above.
+As the two figures above exemplify, different values of the parameters
+$`\alpha`$ and $`\beta`$ result in more or less concentrated flows.
 
 ### Dynamic models
 
-A. Wilson’s Boltzmann–Lotka–Volterra (BLV) interaction model is based on
-the production-constrained maximum entropy model. The main idea consists
-in updating the attractiveness of the destination locations based on
-their incoming flows. In the limit, we want to have
+A. Wilson’s **Boltzmann–Lotka–Volterra (BLV) interaction model** builds
+upon the production-constrained maximum entropy model. The core idea is
+to update the attractiveness of the destination locations based on their
+incoming flows.
+
+Ideally, we aim for the following condition to hold in the limit:
 
 ``` math
+
 Z_j =\sum_{i=1}^{n}Y_{ij}, 
 ```
 
@@ -195,9 +200,8 @@ a_blv_model
 ```
 
 Notice that we start with some initial values of the attractiveness, but
-the final values are different. They can be obtained using the
-`attractiveness()` function as follows (we show the values using a bar
-plot).
+the final values are different. These final values can be obtained using
+the `attractiveness()` function (and visualised here using a bar plot).
 
 ``` r
 par(mar = c(0.1, 4, 1, 0))
@@ -206,18 +210,19 @@ barplot(a_final_Z)
 ```
 
 <img src="man/figures/README-a_blv_Z-1.png" width="80%" style="display: block; margin: auto;" />
-In this example, one destination location acts as a global attractor of
-all the flows. This can be seen also on the final flow matrix.
+In this particular example, one destination location acts as a global
+attractor of all the flows. This pattern is also visible in the final
+flow matrix.
 
 ``` r
 autoplot(a_blv_model) +
-  scale_fill_viridis_c()
+  scale_fill_gradient(low = "white", high = "black")
 ```
 
 <img src="man/figures/README-a_blv_flow-1.png" width="40%" style="display: block; margin: auto;" />
 
 The `autoplot()` function can also be used to show the destination flows
-or the attractivenesses as follows.
+or the attractivenesses values:
 
 ``` r
 autoplot(a_blv_model, "attractiveness")
@@ -225,8 +230,8 @@ autoplot(a_blv_model, "attractiveness")
 
 <img src="man/figures/README-a_blv_Z_ggplot2-1.png" width="100%" />
 
-Results are, of course, strongly influenced by the parameters, as shown
-by this second example.
+Naturally, the results are strongly influenced by the parameters, as
+shown in this second example.
 
 ``` r
 b_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 15, Z)
@@ -245,7 +250,7 @@ autoplot(b_blv_model, "attractiveness")
 
 ``` r
 autoplot(b_blv_model) +
-  scale_fill_viridis_c()
+  scale_fill_gradient(low = "white", high = "black")
 ```
 
 <img src="man/figures/README-b_blv_flow-1.png" width="40%" style="display: block; margin: auto;" />
