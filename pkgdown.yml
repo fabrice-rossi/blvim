@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   grid: grid.html
   theory: theory.html
-last_built: 2025-10-11T13:02Z
+last_built: 2025-10-12T14:32Z
 urls:
   reference: https://fabrice-rossi.github.io/blvim/reference
   article: https://fabrice-rossi.github.io/blvim/articles

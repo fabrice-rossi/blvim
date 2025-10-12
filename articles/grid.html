@@ -160,7 +160,7 @@ standard matrix display and the position-based one.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  flows <span class="op">=</span> <span class="st">"full"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -421,7 +421,10 @@ as follows.</p>
 <p>The function supports all the individual representations, for
 instance flows with positions.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">models_center_df</span>, flows <span class="op">=</span> <span class="st">"full"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">models_center_df</span>,</span>
+<span>  flows <span class="op">=</span> <span class="st">"full"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.015</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="grid_files/figure-html/unnamed-chunk-25-1.png" width="816" style="display: block; margin: auto;"></p>
@@ -531,7 +534,12 @@ of their own flow, probably owing to their isolated positions.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="grid_files/figure-html/unnamed-chunk-33-1.png" width="700">
-Destination flows tell the same story.</p>
+Destination flows tell the same story. Notably, most of the cities have
+a null median incoming flow, apart from Athens, Gibraltar, Lyon and
+Stockholm. In addition, most of the cities have a 0.95 quantile of 1,
+which corresponds to local configurations, that is situations when <span class="math inline">\(\beta\)</span> is large enough to prevent any
+external flow. Only Brussels and Hook of Holland stand out (in addition
+to the four cities mentioned above).</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models</span>, flows <span class="op">=</span> <span class="st">"destination"</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -579,13 +587,15 @@ of typical behaviours.</p>
 <ul>
 <li>Clusters 1 to 3 correspond to situations where most of the flows are
 local (hence the importance of the diagonal flow), with a progressive
-shift towards sending flow to Lyon.</li>
+shift towards sending flow to Lyon. Brussels is also important in
+clusters 2 and 3.</li>
 <li>Clusters 4, 6 and 7 maintain a relatively strong diagonal (self)
-flow with more flows sent to Lyon and Hook of Holland.</li>
+flow with more flows sent to Lyon and a transition between Brussels and
+Hook of Holland</li>
 <li>Clusters 5, 8 and 9 are intermediate situations where some cities
 play the role of local attractors, e.g., Rome and Vienna, but the
-concentration on external cities and Lyon and Hook of Holland is
-progressing.</li>
+concentration on external cities and Lyon and Brussels (5 and 8) or Hook
+of Holland (9) is progressing.</li>
 <li>Clusters 10 to 12 are situations where both Lyon and Hook of Holland
 share incoming flows, with more (10) or fewer (12) flows reaching
 external cities such as Stockholm, Athens and the trio Gibraltar, Lisbon
@@ -623,7 +633,7 @@ and Madrid.</li>
 <p><img src="grid_files/figure-html/unnamed-chunk-43-1.png" width="816" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">euro_models_center_df</span>,</span>
-<span>  with_positions <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  with_positions <span class="op">=</span> <span class="cn">TRUE</span>, arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.015</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -631,15 +641,19 @@ and Madrid.</li>
 <p>To further the analysis, one can focus on a particular medoid, for
 instance cluster 1:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models_center</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, flows<span class="op">=</span><span class="st">"full"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models_center</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>  flows <span class="op">=</span> <span class="st">"full"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.015</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="grid_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
 <p>Or cluster 5:</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models_center</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>, flows<span class="op">=</span><span class="st">"full"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models_center</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>  flows <span class="op">=</span> <span class="st">"full"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.015</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="grid_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
@@ -652,7 +666,7 @@ to Hamburg and Copenhagen, whose level varies across the configurations
 (compare 6 to 7, for instance).</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">euro_models_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">euro_models_df</span><span class="op">$</span><span class="va">cluster</span><span class="op">==</span><span class="fl">4</span><span class="op">)</span>, <span class="fl">16</span><span class="op">)</span></span>
+<span><span class="va">euro_models_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">euro_models_df</span><span class="op">$</span><span class="va">cluster</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span>, <span class="fl">16</span><span class="op">)</span></span>
 <span><span class="va">euro_models_cl4_sample</span> <span class="op">&lt;-</span> <span class="va">euro_models</span><span class="op">[</span><span class="va">euro_models_idx</span><span class="op">]</span></span>
 <span><span class="va">euro_models_cl4_sample_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_df.html">sim_df</a></span><span class="op">(</span><span class="va">euro_models_cl4_sample</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">euro_models_cl4_sample_df</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
