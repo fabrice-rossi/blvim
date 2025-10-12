@@ -1,3 +1,17 @@
+test_that("autoplot.sim detects wrong parameters", {
+  config <- create_locations(25, 25, seed = 25, symmetric = TRUE)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  expect_error(ggplot2::autoplot(model, flows = "bla"))
+  expect_error(ggplot2::autoplot(model, flows = "full", 1))
+  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, "bla"))
+  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, -2))
+  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, "ab"))
+  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, 0.01, 2.5))
+  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, 0.01, TRUE, 4))
+  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, 0.01, TRUE, foo = 4, 5))
+})
+
+
 test_that("autoplot.sim works as expected (without names)", {
   config <- create_locations(25, 25, seed = 25, symmetric = TRUE)
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
@@ -127,4 +141,27 @@ test_that("autoplot.sim tolerates duplicate names", {
   origin_names(model) <- sample(LETTERS[1:10], 20, replace = TRUE)
   expect_no_error(ggplot2::autoplot(model, with_names = TRUE))
   expect_no_error(ggplot2::autoplot(model, flow = "destination", with_names = TRUE))
+})
+
+test_that("autoplot.sim works pass parameters to geom_segment as expected", {
+  config <- create_locations(20, 20, seed = 124, symmetric = TRUE)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z, bipartite = FALSE)
+  origin_positions(model) <- config$pp
+  vdiffr::expect_doppelganger(
+    "Full flow graph non bipartite arrow",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE, cut_off = 0.05,
+      arrow = ggplot2::arrow(length = ggplot2::unit(0.01, "npc"))
+    ) +
+      ggplot2::scale_linewidth(range = c(0, 2)))
+  )
+  ## ... params must be named
+  expect_error(ggplot2::autoplot(model,
+    flows = "full",
+    with_names = FALSE,
+    with_positions = TRUE,
+    cut_off = 0.05,
+    adjust_limits = FALSE,
+    ggplot2::arrow(length = ggplot2::unit(0.01, "npc"))
+  ))
 })

@@ -50,7 +50,7 @@ the \code{sim_df} data frame}
 
 \item{fw_params}{parameters for the \link[ggplot2:facet_wrap]{ggplot2::facet_wrap} call (if non \code{NULL})}
 
-\item{...}{additional parameters passed to \code{\link[=autoplot.sim]{autoplot.sim()}}}
+\item{...}{additional (named) parameters passed to \code{\link[=autoplot.sim]{autoplot.sim()}}}
 }
 \value{
 a ggplot object

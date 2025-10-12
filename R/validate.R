@@ -97,3 +97,57 @@ check_quantiles <- function(qmin, qmax, call = rlang::caller_env()) {
     )
   }
 }
+
+check_dots_named <- function(dot_list, call = rlang::caller_env()) {
+  if (length(dot_list) > 0) {
+    dot_list_names <- names(dot_list)
+    if (is.null(dot_list_names)) {
+      cli::cli_abort(
+        "arguments in ... must be named",
+        call = call
+      )
+    }
+    if (any(dot_list_names == "")) {
+      cli::cli_abort(
+        "all arguments in ... must be named",
+        call = call
+      )
+    }
+  }
+}
+
+check_autoplot_params <- function(with_names, with_positions, cut_off,
+                                  adjust_limits, call = rlang::caller_env()) {
+  if (!rlang::is_logical(with_names)) {
+    cli::cli_abort(
+      c("{.arg with_names} must be a logical value",
+        "x" = "{.arg with_names} is {.val {with_names}}"
+      ),
+      call = call
+    )
+  }
+  if (!rlang::is_logical(with_positions)) {
+    cli::cli_abort(
+      c("{.arg with_positions} must be a logical value",
+        "x" = "{.arg with_positions} is {.val {with_positions}}"
+      ),
+      call = call
+    )
+  }
+  if (!is.numeric(cut_off) || cut_off < 0) {
+    cli::cli_abort(
+      c("{.arg cut_off} must be non negative number",
+        "x" = "{.arg cut_off} is {.val {cut_off}}"
+      ),
+      call = call
+    )
+  }
+  if (!rlang::is_logical(adjust_limits)) {
+    cli::cli_abort(
+      c("{.arg adjust_limits} must be a logical value",
+        "x" = "{.arg adjust_limits} is {.val {adjust_limits}}"
+      ),
+      call = call
+    )
+  }
+}

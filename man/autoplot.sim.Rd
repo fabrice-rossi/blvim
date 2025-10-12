@@ -93,7 +93,7 @@ proportional to the flows. Only segments that carry a flow above the
 (see \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}), zero length segments corresponding to self exchange are
 removed. Additional parameters in \code{...} are submitted to
 \code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}. This can be used to override defaults parameters
-used for the arrow shapes, for instance.
+used for the arrow shapes, for instance. Those parameters must be named.
 \item \code{"destination"}: the function draws a disk at each destination location
 using for the \code{size} aesthetics the incoming flow at this destination
 location (using \code{\link[=destination_flow]{destination_flow()}}). Only destinations with an incoming
@@ -127,6 +127,11 @@ ggplot2::autoplot(flows, with_names = TRUE)
 ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
   ggplot2::scale_size_continuous(range = c(0, 6))
 ggplot2::autoplot(flows, with_positions = TRUE) +
+  ggplot2::scale_linewidth_continuous(range = c(0, 2))
+ggplot2::autoplot(flows,
+  with_positions = TRUE,
+  arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
+) +
   ggplot2::scale_linewidth_continuous(range = c(0, 2))
 \dontshow{\}) # examplesIf}
 }

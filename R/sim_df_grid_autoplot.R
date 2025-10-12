@@ -32,7 +32,7 @@
 #' @param max_sims the maximum number of spatial interaction models allowed in
 #'   the `sim_df` data frame
 #' @param fw_params parameters for the [ggplot2::facet_wrap] call (if non `NULL`)
-#' @param ... additional parameters passed to [autoplot.sim()]
+#' @param ... additional (named) parameters passed to [autoplot.sim()]
 #' @export
 #' @returns a ggplot object
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
@@ -71,12 +71,21 @@ grid_autoplot <- function(sim_df, key,
                           fw_params = NULL,
                           ...) {
   rlang::check_installed("ggplot2", reason = "to use `grid_autoplot()`")
+  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits)
+  if (!is.numeric(max_sims) || max_sims <= 0) {
+    cli::cli_abort(
+      c("{.arg max_sims} must be non negative number",
+        "x" = "{.arg max_sims} is {.val {max_sims}}"
+      )
+    )
+  }
   if (!inherits(sim_df, "sim_df")) {
     cli::cli_abort("{.arg sim_df} must be a {.cls sim_df} object")
   }
   if (nrow(sim_df) > max_sims) {
     cli::cli_abort("Too many spatial interaction models ({.val {nrow(sim_df)}} > {.arf max_sims} = {.val {max_sims}})")
   }
+  check_dots_named(list(...))
   flows <- rlang::arg_match(flows)
   expr <- rlang::enquo(key)
   if (rlang::quo_is_missing(expr)) {

@@ -291,6 +291,8 @@ autoplot.sim_list <- function(object,
                               qmax = 0.95,
                               normalisation = c("origin", "full", "none"),
                               ...) {
+  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits)
+  check_quantiles(qmin, qmax)
   flows <- rlang::arg_match(flows)
   normalisation <- rlang::arg_match(normalisation)
   if (with_positions) {

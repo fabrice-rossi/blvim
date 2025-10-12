@@ -42,6 +42,14 @@ test_that("grid_autoplot works as expected", {
       ggplot2::scale_linewidth_continuous(range = c(0, 2)))
   )
   vdiffr::expect_doppelganger(
+    "Flow graphs cut off arrow",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE, cut_off = 0.5,
+      arrow = ggplot2::arrow(length = ggplot2::unit(0.05, "npc"))
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
     "Default destination dots",
     \() print(grid_autoplot(models_df, flows = "destination", with_positions = TRUE) +
       ggplot2::scale_size_continuous(range = c(0, 5)))
@@ -99,4 +107,18 @@ test_that("grid_autoplot works as expected in borderline cases", {
 
 test_that("grid_autoplot detects errors", {
   expect_error(grid_autoplot(list()))
+  config <- create_locations(25, 25, seed = 666, symmetric = TRUE)
+  alphas <- seq(1.25, 1.75, by = 0.125)
+  betas <- 1 / seq(0.1, 0.5, length.out = 8)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    bipartite = FALSE,
+    epsilon = 0.1,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5,
+  )
+  expect_error(grid_autoplot(models, max_sims = TRUE))
 })

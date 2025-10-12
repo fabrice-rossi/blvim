@@ -177,7 +177,7 @@ sim_autoplot <- function(sim, sim_data,
 #' (see [sim_is_bipartite()]), zero length segments corresponding to self exchange are
 #' removed. Additional parameters in `...` are submitted to
 #' [ggplot2::geom_segment()]. This can be used to override defaults parameters
-#' used for the arrow shapes, for instance.
+#' used for the arrow shapes, for instance. Those parameters must be named.
 #' -  `"destination"`: the function draws a disk at each destination location
 #' using for the `size` aesthetics the incoming flow at this destination
 #' location (using [destination_flow()]). Only destinations with an incoming
@@ -231,6 +231,11 @@ sim_autoplot <- function(sim, sim_data,
 #'   ggplot2::scale_size_continuous(range = c(0, 6))
 #' ggplot2::autoplot(flows, with_positions = TRUE) +
 #'   ggplot2::scale_linewidth_continuous(range = c(0, 2))
+#' ggplot2::autoplot(flows,
+#'   with_positions = TRUE,
+#'   arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
+#' ) +
+#'   ggplot2::scale_linewidth_continuous(range = c(0, 2))
 autoplot.sim <- function(object,
                          flows = c("full", "destination", "attractiveness"),
                          with_names = FALSE,
@@ -238,10 +243,12 @@ autoplot.sim <- function(object,
                          cut_off = 100 * .Machine$double.eps^0.5,
                          adjust_limits = FALSE,
                          ...) {
+  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits)
+  check_dots_named(list(...))
   flows <- rlang::arg_match(flows)
   sim_data <- fortify.sim(object,
     data = NULL, flows = flows,
-    with_positions = with_positions, cut_off = cut_off, ...
+    with_positions = with_positions, cut_off = cut_off
   )
   sim_autoplot(object, sim_data, flows, with_names, with_positions, adjust_limits, ...)
 }

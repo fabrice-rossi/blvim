@@ -112,7 +112,7 @@ autoplot(models[[1]]) +
 ```{r}
 autoplot(models[[10]],
   flows = "full", with_positions = TRUE,
-  arrow(length = unit(0.01, "npc"))
+  arrow = arrow(length = unit(0.01, "npc"))
 ) +
   coord_fixed() +
   scale_linewidth_continuous(range = c(0, 1))
@@ -353,7 +353,10 @@ with positions.
 #| fig.height: 8
 #| fig.width: 8.5
 #| fig.align: center
-grid_autoplot(models_center_df, flows = "full", with_positions = TRUE) +
+grid_autoplot(models_center_df,
+  flows = "full", with_positions = TRUE,
+  arrow = arrow(length = unit(0.015, "npc"))
+) +
   scale_linewidth_continuous(range = c(0, 0.5)) +
   coord_fixed()
 ```
@@ -607,7 +610,7 @@ grid_autoplot(euro_models_center_df,
 #| fig.width: 8.5
 #| fig.align: center
 grid_autoplot(euro_models_center_df,
-  with_positions = TRUE
+  with_positions = TRUE, arrow = arrow(length = unit(0.015, "npc"))
 ) +
   scale_linewidth_continuous(range = c(0, 0.75)) +
   coord_sf(default_crs = sf::st_crs(4326))
@@ -616,16 +619,20 @@ grid_autoplot(euro_models_center_df,
 To further the analysis, one can focus on a particular medoid, for instance
 cluster 1:
 ```{r}
-autoplot(euro_models_center[[1]], flows="full", with_positions = TRUE,
-  arrow(length = unit(0.01, "npc"))) +
+autoplot(euro_models_center[[1]],
+  flows = "full", with_positions = TRUE,
+  arrow = arrow(length = unit(0.015, "npc"))
+) +
   scale_linewidth_continuous(range = c(0, 2)) +
   coord_sf(default_crs = sf::st_crs(4326))
 ```
 
 Or cluster 5:
 ```{r}
-autoplot(euro_models_center[[5]], flows="full", with_positions = TRUE,
-  arrow(length = unit(0.01, "npc"))) +
+autoplot(euro_models_center[[5]],
+  flows = "full", with_positions = TRUE,
+  arrow = arrow(length = unit(0.015, "npc"))
+) +
   scale_linewidth_continuous(range = c(0, 2)) +
   coord_sf(default_crs = sf::st_crs(4326))
 ```
