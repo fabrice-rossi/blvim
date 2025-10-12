@@ -486,7 +486,12 @@ of their own flow, probably owing to their isolated positions.
 autoplot(euro_models, with_names = TRUE) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
-Destination flows tell the same story. 
+Destination flows tell the same story. Notably, most of the cities have a null
+median incoming flow, apart from Athens, Gibraltar, Lyon and Stockholm. In 
+addition, most of the cities have a 0.95 quantile of 1, which corresponds to
+local configurations, that is situations when $\beta$ is large enough to prevent
+any external flow. Only Brussels and Hook of Holland stand out (in addition to 
+the four cities mentioned above). 
 
 ```{r}
 autoplot(euro_models, flows = "destination", with_names = TRUE) +
@@ -549,13 +554,15 @@ and at the flow level (below):
 
   - Clusters 1 to 3 correspond to situations where most of the flows are
     local (hence the importance of the diagonal flow), with a progressive
-    shift towards sending flow to Lyon.
+    shift towards sending flow to Lyon. Brussels is also important in clusters
+    2 and 3. 
   - Clusters 4, 6 and 7 maintain a relatively strong diagonal (self) flow
-    with more flows sent to Lyon and Hook of Holland.
+    with more flows sent to Lyon and a transition between Brussels and Hook
+    of Holland
   - Clusters 5, 8 and 9 are intermediate situations where some cities play
     the role of local attractors, e.g., Rome and Vienna, but the
-    concentration on external cities and Lyon and Hook of Holland is
-    progressing.
+    concentration on external cities and Lyon and Brussels (5 and 8) or 
+    Hook of Holland (9) is progressing.
   - Clusters 10 to 12 are situations where both Lyon and Hook of Holland
     share incoming flows, with more (10) or fewer (12) flows reaching
     external cities such as Stockholm, Athens and the trio Gibraltar,
@@ -649,7 +656,7 @@ configurations (compare 6 to 7, for instance).
 #| fig.width: 8.5
 #| fig.align: center
 set.seed(0)
-euro_models_idx <- sample(which(euro_models_df$cluster==4), 16)
+euro_models_idx <- sample(which(euro_models_df$cluster == 4), 16)
 euro_models_cl4_sample <- euro_models[euro_models_idx]
 euro_models_cl4_sample_df <- sim_df(euro_models_cl4_sample)
 grid_autoplot(euro_models_cl4_sample_df, with_positions = TRUE) +
