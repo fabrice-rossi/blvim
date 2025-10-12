@@ -76,7 +76,7 @@ cost_matrix <- full_costs[1:nrow(origins), (nrow(origins) + 1):(nrow(origins) + 
 ```
 
 Additionally, since we focus on **production-constrained models**, we
-must s pecify the production for each origin location (a vector of
+must specify the production for each origin location (a vector of
 positive values $(X_i)_{1\leq i\leq n}$). Here, we assume a common
 unitary production.
 
