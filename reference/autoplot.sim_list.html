@@ -63,6 +63,7 @@ object).</p>
 <span>  with_positions <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cut_off <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.5</span>,</span>
 <span>  adjust_limits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  with_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  qmin <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  qmax <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  normalisation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"origin"</span>, <span class="st">"full"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
@@ -96,7 +97,7 @@ on location positions (<code>FALSE</code> by default)</p></dd>
 <dt id="arg-cut-off">cut_off<a class="anchor" aria-label="anchor" href="#arg-cut-off"></a></dt>
 <dd><p>cut off limit for inclusion of a graphical primitive when
 <code>with_positions = TRUE</code>. In the attractiveness or destination
-representation, disks are removed when the corresponding upper quantile
+representation, circles are removed when the corresponding upper quantile
 value is below the cut off.</p></dd>
 
 
@@ -106,6 +107,11 @@ based graph are not adjusted after removing graphical primitives. This
 eases comparison between graphical representations with different cut off
 value. If <code>TRUE</code>, limits are adjusted to the data using the standard
 ggplot2 behaviour.</p></dd>
+
+
+<dt id="arg-with-labels">with_labels<a class="anchor" aria-label="anchor" href="#arg-with-labels"></a></dt>
+<dd><p>if <code>FALSE</code> (default value) names are displayed using plain
+texts. If <code>TRUE</code>, names are shown using labels.</p></dd>
 
 
 <dt id="arg-qmin">qmin<a class="anchor" aria-label="anchor" href="#arg-qmin"></a></dt>
@@ -158,7 +164,7 @@ models of the incoming flows for each destination location (using
 spans from its lower quantile to its upper quantile. An intermediate thicker
 bar represents the median quantile.</p></li>
 <li><p><code>"attractiveness"</code>: the function displays the quantiles over the collection of
-models of the attractivenesses of each destination location (as given by
+models of the attractiveness of each destination location (as given by
 <code><a href="attractiveness.html">attractiveness()</a></code>). The graphical representation is the same as for
 <code>"destination"</code>. This is interesting for dynamic models where those values
 are updated during the iterations (see <code><a href="blvim.html">blvim()</a></code> for details). When the
@@ -167,12 +173,24 @@ calculation has converged (see <code><a href="sim_converged.html">sim_converged(
 </ul><p>When the <code>with_names</code> parameter is <code>TRUE</code>, the location names
 (<code><a href="location_names.html">location_names()</a></code>) are used to label the axis of the graphical
 representation. If names are not specified, they are replaced by indexes.</p>
-<p>When the  <code>with_positions</code> parameter is <code>TRUE</code>, the location positions
+<p>When the <code>with_positions</code> parameter is <code>TRUE</code>, the location positions
 (<code><a href="location_positions.html">location_positions()</a></code>) are used to produce more "geographically informed"
 representations. Notice that if no positions are known for the locations, the
 use of <code>with_positions = TRUE</code> is an error. Moreover, <code>flows = "full"</code> is not
 supported: the function will issue a warning and revert to the position free
 representation if this value is used.</p>
+<p>The representations for <code>flows="destination"</code> and <code>flows="attractiveness"</code> are
+based on the same principle. Each destination location is represented by a
+collection of three nested circles centred on the corresponding location
+position, representing respectively the lower quantile, the median and the upper
+quantile of the incoming flows or of the attractivenesses. The diameters of
+the circles are proportional to the quantities they represent. The border ot
+the median circle is thicker than the ones of the other circles.</p>
+<p>When both <code>with_positions</code> and <code>with_names</code> are <code>TRUE</code>, the names
+of the destinations are added to the graphical representation. If <code>with_labels</code>
+is <code>TRUE</code> the names are represented as labels instead of plain texts
+(see <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_label()</a></code>). If the <code>ggrepel</code> package is installed, its
+functions are used instead of <code>ggplot2</code> native functions.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -213,6 +231,14 @@ representation if this value is used.</p>
 <span class="r-in"><span>  cut_off <span class="op">=</span> <span class="fl">1.1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim_list-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>,</span></span>
+<span class="r-in"><span>  flow <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  with_names <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  with_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  qmin <span class="op">=</span> <span class="fl">0</span>, qmax <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  cut_off <span class="op">=</span> <span class="fl">1.1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="autoplot.sim_list-6.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

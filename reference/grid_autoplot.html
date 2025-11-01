@@ -69,6 +69,7 @@ alternative graphical representation to the one produced by
 <span>  with_positions <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cut_off <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.5</span>,</span>
 <span>  adjust_limits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  with_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  max_sims <span class="op">=</span> <span class="fl">25</span>,</span>
 <span>  fw_params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -118,6 +119,11 @@ based graph are not adjusted after removing graphical primitives. This
 eases comparison between graphical representations with different cut off
 value. If <code>TRUE</code>, limits are adjusted to the data using the standard
 ggplot2 behaviour.</p></dd>
+
+
+<dt id="arg-with-labels">with_labels<a class="anchor" aria-label="anchor" href="#arg-with-labels"></a></dt>
+<dd><p>if <code>FALSE</code> (default value) names are displayed using plain
+texts. If <code>TRUE</code>, names are shown using labels.</p></dd>
 
 
 <dt id="arg-max-sims">max_sims<a class="anchor" aria-label="anchor" href="#arg-max-sims"></a></dt>
