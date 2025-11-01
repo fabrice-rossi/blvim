@@ -95,6 +95,8 @@ sim_list_autoplot <- function(sim_list,
   } else {
     if (with_positions) {
       positions <- location_positions(sim_list)
+      xrange <- range(positions[["destination"]][, 1])
+      yrange <- range(positions[["destination"]][, 2])
       pos_data <- positions_as_df(positions[["destination"]], NULL)
       sim_data_pos_names <- names(pos_data)
       if (nrow(pos_data) == nrow(sim_data_stat)) {
@@ -129,14 +131,8 @@ sim_list_autoplot <- function(sim_list,
         ggplot2::labs(size = flow_name)
       if (!adjust_limits) {
         pre <- pre + ggplot2::lims(
-          x = range(
-            positions[["destination"]][, 1],
-            positions[["origin"]][, 1]
-          ),
-          y = range(
-            positions[["destination"]][, 2],
-            positions[["origin"]][, 2]
-          )
+          x = xrange,
+          y = yrange
         )
       }
       pre
