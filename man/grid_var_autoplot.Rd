@@ -13,6 +13,7 @@ grid_var_autoplot(
   with_positions = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
+  with_labels = FALSE,
   qmin = 0.05,
   qmax = 0.95,
   normalisation = c("origin", "full", "none"),
@@ -38,7 +39,7 @@ on location positions (\code{FALSE} by default)}
 
 \item{cut_off}{cut off limit for inclusion of a graphical primitive when
 \code{with_positions = TRUE}. In the attractiveness or destination
-representation, disks are removed when the corresponding upper quantile
+representation, circles are removed when the corresponding upper quantile
 value is below the cut off.}
 
 \item{adjust_limits}{if \code{FALSE} (default value), the limits of the position
@@ -46,6 +47,9 @@ based graph are not adjusted after removing graphical primitives. This
 eases comparison between graphical representations with different cut off
 value. If \code{TRUE}, limits are adjusted to the data using the standard
 ggplot2 behaviour.}
+
+\item{with_labels}{if \code{FALSE} (default value) names are displayed using plain
+texts. If \code{TRUE}, names are shown using labels.}
 
 \item{qmin}{lower quantile, see details (default: 0.05)}
 

@@ -11,6 +11,7 @@
   with_positions = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
+  with_labels = FALSE,
   qmin = 0.05,
   qmax = 0.95,
   normalisation = c("origin", "full", "none"),
@@ -39,6 +40,9 @@ based graph are not adjusted after removing graphical primitives. This
 eases comparison between graphical representations with different cut off
 value. If \code{TRUE}, limits are adjusted to the data using the standard
 ggplot2 behaviour.}
+
+\item{with_labels}{if \code{FALSE} (default value) names are displayed using plain
+texts. If \code{TRUE}, names are shown using labels.}
 
 \item{qmin}{lower quantile, see details (default: 0.05)}
 
@@ -91,7 +95,7 @@ models of the incoming flows for each destination location (using
 spans from its lower quantile to its upper quantile. An intermediate thicker
 bar represents the median quantile.
 \item \code{"attractiveness"}: the function displays the quantiles over the collection of
-models of the attractivenesses of each destination location (as given by
+models of the attractiveness of each destination location (as given by
 \code{\link[=attractiveness]{attractiveness()}}). The graphical representation is the same as for
 \code{"destination"}. This is interesting for dynamic models where those values
 are updated during the iterations (see \code{\link[=blvim]{blvim()}} for details). When the
@@ -118,6 +122,11 @@ quantile of the incoming flows or of the attractivenesses. The diameters of
 the circles are proportional to the quantities they represent. The border ot
 the median circle is thicker than the ones of the other circles.
 
+When both \code{with_positions} and \code{with_names} are \code{TRUE}, the names
+of the destinations are added to the graphical representation. If \code{with_labels}
+is \code{TRUE} the names are represented as labels instead of plain texts
+(see \code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed, its
+functions are used instead of \code{ggplot2} native functions.
 }
 \examples{
 \dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
@@ -145,6 +154,13 @@ ggplot2::autoplot(all_flows,
 ) + ggplot2::scale_size_continuous(range = c(0, 6))
 ggplot2::autoplot(all_flows,
   flow = "destination", with_positions = TRUE,
+  qmin = 0, qmax = 1,
+  cut_off = 1.1
+)
+ggplot2::autoplot(all_flows,
+  flow = "destination", with_positions = TRUE,
+  with_names = TRUE,
+  with_labels = TRUE,
   qmin = 0, qmax = 1,
   cut_off = 1.1
 )

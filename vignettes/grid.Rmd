@@ -499,7 +499,10 @@ autoplot(euro_models, flows = "destination", with_names = TRUE) +
 ```
 
 ```{r}
-autoplot(euro_models, flows = "destination", with_positions = TRUE) +
+autoplot(euro_models,
+  flows = "destination", with_positions = TRUE,
+  with_names = TRUE
+) +
   scale_size_continuous(range = c(0, 6)) +
   coord_sf(default_crs = sf::st_crs(4326))
 ```
@@ -526,10 +529,12 @@ plot(euro_models_hc, hang = -1, labels = FALSE)
 The clusters are well organised on the parameter set. 
 
 ```{r}
-#| fig.width: 6
+#| fig.width: 8
 #| fig.align: center
 euro_models_df$cluster <- as.factor(cutree(euro_models_hc, k = 16))
-autoplot(euro_models_df, cluster)
+autoplot(euro_models_df, cluster) +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(nrow = 2))
 ```
 
 The variability plot shows mostly isolated circles with no inner or outer

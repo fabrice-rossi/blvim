@@ -5,6 +5,7 @@ sim_list_autoplot <- function(sim_list,
                               with_positions,
                               cut_off,
                               adjust_limits,
+                              with_labels,
                               normalisation,
                               ...) {
   flow_name <- ifelse(flows == "destination", "flow", "attractiveness")
@@ -105,6 +106,18 @@ sim_list_autoplot <- function(sim_list,
         pos_data$destination <- seq_len(nrow(pos_data))
         full_data <- merge(sim_data_stat, pos_data, by = "destination")
       }
+      if (with_names) {
+        dnames <- destination_names(sim_list)
+        if (is.null(dnames)) {
+          dnames <- seq_len(nrow(pos_data))
+        }
+        if (nrow(full_data) == length(dnames)) {
+          full_data$name <- dnames
+        } else {
+          dnames <- data.frame(destination = seq_along(dnames), name = dnames)
+          full_data <- merge(full_data, dnames, by = "destination")
+        }
+      }
       full_data <- full_data[full_data$Q_max >= cut_off, ]
       pre <- ggplot2::ggplot(
         full_data,
@@ -129,6 +142,63 @@ sim_list_autoplot <- function(sim_list,
           stroke = 0.25
         ) +
         ggplot2::labs(size = flow_name)
+      if (with_names) {
+        if (has_ggrepel()) {
+          if (with_labels) {
+            pre <- pre +
+              ggrepel::geom_label_repel(
+                mapping = ggplot2::aes(
+                  x = .data[[sim_data_pos_names[1]]],
+                  y = .data[[sim_data_pos_names[2]]],
+                  label = .data[["name"]]
+                ),
+                inherit.aes = FALSE,
+                show.legend = FALSE
+              )
+          } else {
+            pre <- pre +
+              ggrepel::geom_text_repel(
+                mapping = ggplot2::aes(
+                  x = .data[[sim_data_pos_names[1]]],
+                  y = .data[[sim_data_pos_names[2]]],
+                  label = .data[["name"]]
+                ),
+                inherit.aes = FALSE,
+                show.legend = FALSE
+              )
+          }
+        } else {
+          xnudge <- diff(xrange) / 25
+          ynudge <- diff(yrange) / 25
+          if (with_labels) {
+            pre <- pre +
+              ggplot2::geom_label(
+                mapping = ggplot2::aes(
+                  x = .data[[sim_data_pos_names[1]]],
+                  y = .data[[sim_data_pos_names[2]]],
+                  label = .data[["name"]]
+                ),
+                inherit.aes = FALSE,
+                show.legend = FALSE,
+                position = ggplot2::position_nudge(x = xnudge, y = ynudge)
+              )
+          } else {
+            pre <- pre +
+              ggplot2::geom_text(
+                mapping = ggplot2::aes(
+                  x = .data[[sim_data_pos_names[1]]],
+                  y = .data[[sim_data_pos_names[2]]],
+                  label = .data[["name"]]
+                ),
+                inherit.aes = FALSE,
+                show.legend = FALSE,
+                position = ggplot2::position_nudge(x = xnudge, y = ynudge)
+              )
+          }
+          xrange[2] <- xrange[2] + xnudge
+          yrange[2] <- yrange[2] + ynudge
+        }
+      }
       if (!adjust_limits) {
         pre <- pre + ggplot2::lims(
           x = xrange,
@@ -229,6 +299,12 @@ sim_list_autoplot <- function(sim_list,
 #' the circles are proportional to the quantities they represent. The border ot
 #' the median circle is thicker than the ones of the other circles.
 #'
+#' When both `with_positions` and `with_names` are `TRUE`, the names
+#' of the destinations are added to the graphical representation. If `with_labels`
+#' is `TRUE` the names are represented as labels instead of plain texts
+#' (see [ggplot2::geom_label()]). If the `ggrepel` package is installed, its
+#' functions are used instead of `ggplot2` native functions.
+#'
 #' @param object a collection of spatial interaction models, a `sim_list`
 #' @param flows `"full"` (default),  `"destination"` or `"attractiveness"`, see
 #'   details.
@@ -245,6 +321,8 @@ sim_list_autoplot <- function(sim_list,
 #'   eases comparison between graphical representations with different cut off
 #'   value. If `TRUE`, limits are adjusted to the data using the standard
 #'   ggplot2 behaviour.
+#' @param with_labels if `FALSE` (default value) names are displayed using plain
+#'  texts. If `TRUE`, names are shown using labels.
 #' @param qmin lower quantile, see details (default: 0.05)
 #' @param qmax upper quantile, see details (default: 0.95)
 #' @param normalisation when `flows="full"`, the flows can be reported without
@@ -285,17 +363,25 @@ sim_list_autoplot <- function(sim_list,
 #'   qmin = 0, qmax = 1,
 #'   cut_off = 1.1
 #' )
+#' ggplot2::autoplot(all_flows,
+#'   flow = "destination", with_positions = TRUE,
+#'   with_names = TRUE,
+#'   with_labels = TRUE,
+#'   qmin = 0, qmax = 1,
+#'   cut_off = 1.1
+#' )
 autoplot.sim_list <- function(object,
                               flows = c("full", "destination", "attractiveness"),
                               with_names = FALSE,
                               with_positions = FALSE,
                               cut_off = 100 * .Machine$double.eps^0.5,
                               adjust_limits = FALSE,
+                              with_labels = FALSE,
                               qmin = 0.05,
                               qmax = 0.95,
                               normalisation = c("origin", "full", "none"),
                               ...) {
-  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits, FALSE)
+  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits, with_labels)
   check_quantiles(qmin, qmax)
   flows <- rlang::arg_match(flows)
   normalisation <- rlang::arg_match(normalisation)
@@ -322,6 +408,6 @@ autoplot.sim_list <- function(object,
   sim_data_stat <- stat_sim_list(sim_data, flows, quantiles = c(qmin, qmax))
   sim_list_autoplot(
     object, sim_data_stat, flows, with_names, with_positions,
-    cut_off, adjust_limits, normalisation
+    cut_off, adjust_limits, with_labels, normalisation
   )
 }
