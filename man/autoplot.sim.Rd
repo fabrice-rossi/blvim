@@ -11,6 +11,7 @@
   with_positions = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
+  with_labels = FALSE,
   ...
 )
 }
@@ -37,6 +38,9 @@ based graph are not adjusted after removing graphical primitives. This
 eases comparison between graphical representations with different cut off
 value. If \code{TRUE}, limits are adjusted to the data using the standard
 ggplot2 behaviour.}
+
+\item{with_labels}{if \code{FALSE} (default value) names are displayed using plain
+texts. If \code{TRUE}, names are shown using labels.}
 
 \item{...}{additional parameters, see details}
 }
@@ -104,6 +108,12 @@ the calculation has converged (see \code{\link[=sim_converged]{sim_converged()}}
 and \code{"attractiveness"} graphics should be almost identical. Only destinations
 with an attractiveness above  the \code{cut_off} value are included.
 }
+
+For the last two representations and when \code{with_names} is \code{TRUE}, the names
+of the destinations are added to the graphical representation. If \code{with_labels}
+is \code{TRUE} the names are represented as labels instead of plain texts
+(see \code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed, its
+functions are used instead of \code{ggplot2} native functions.
 }
 \examples{
 \dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
@@ -125,6 +135,16 @@ ggplot2::autoplot(flows, "destination", with_names = TRUE)
 ggplot2::autoplot(flows, with_names = TRUE)
 ## positions
 ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
+  ggplot2::scale_size_continuous(range = c(0, 6))
+ggplot2::autoplot(flows, "destination",
+  with_positions = TRUE,
+  with_names = TRUE
+) +
+  ggplot2::scale_size_continuous(range = c(0, 6))
+ggplot2::autoplot(flows, "destination",
+  with_positions = TRUE,
+  with_names = TRUE, with_labels = TRUE
+) +
   ggplot2::scale_size_continuous(range = c(0, 6))
 ggplot2::autoplot(flows, with_positions = TRUE) +
   ggplot2::scale_linewidth_continuous(range = c(0, 2))

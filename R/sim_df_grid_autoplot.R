@@ -67,11 +67,12 @@ grid_autoplot <- function(sim_df, key,
                           with_positions = FALSE,
                           cut_off = 100 * .Machine$double.eps^0.5,
                           adjust_limits = FALSE,
+                          with_labels = FALSE,
                           max_sims = 25,
                           fw_params = NULL,
                           ...) {
   rlang::check_installed("ggplot2", reason = "to use `grid_autoplot()`")
-  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits)
+  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits, with_labels)
   if (!is.numeric(max_sims) || max_sims <= 0) {
     cli::cli_abort(
       c("{.arg max_sims} must be non negative number",
@@ -97,12 +98,13 @@ grid_autoplot <- function(sim_df, key,
   }
   pre_data <- lapply(sim_column(sim_df), fortify.sim,
     data = NULL, flows,
+    with_names,
     with_positions, cut_off
   )
   final_df <- combine_df(pre_data, val, val_name)
   pre <- sim_autoplot(
     sim_column(sim_df)[[1]], final_df, flows, with_names,
-    with_positions, adjust_limits, ...
+    with_positions, adjust_limits, with_labels, ...
   )
   fw_parameters <- list(facets = ggplot2::vars(.data[[val_name]]))
   if (!is.null(fw_params)) {

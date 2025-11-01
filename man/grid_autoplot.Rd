@@ -12,6 +12,7 @@ grid_autoplot(
   with_positions = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
+  with_labels = FALSE,
   max_sims = 25,
   fw_params = NULL,
   ...
@@ -44,6 +45,9 @@ based graph are not adjusted after removing graphical primitives. This
 eases comparison between graphical representations with different cut off
 value. If \code{TRUE}, limits are adjusted to the data using the standard
 ggplot2 behaviour.}
+
+\item{with_labels}{if \code{FALSE} (default value) names are displayed using plain
+texts. If \code{TRUE}, names are shown using labels.}
 
 \item{max_sims}{the maximum number of spatial interaction models allowed in
 the \code{sim_df} data frame}

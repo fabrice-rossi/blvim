@@ -3,6 +3,7 @@ sim_autoplot <- function(sim, sim_data,
                          with_names,
                          with_positions,
                          adjust_limits,
+                         with_labels,
                          ...) {
   if (with_positions) {
     if (flows == "destination" || flows == "attractiveness") {
@@ -16,11 +17,70 @@ sim_autoplot <- function(sim, sim_data,
         )
       ) +
         ggplot2::geom_point()
+      positions <- location_positions(sim)
+      xrange <- range(positions[["destination"]][, 1])
+      yrange <- range(positions[["destination"]][, 2])
+      if (with_names) {
+        if (has_ggrepel()) {
+          if (with_labels) {
+            pre <- pre +
+              ggrepel::geom_label_repel(
+                mapping = ggplot2::aes(
+                  x = .data[[sim_data_pos_names[1]]],
+                  y = .data[[sim_data_pos_names[2]]],
+                  label = .data[["name"]]
+                ),
+                inherit.aes = FALSE,
+                show.legend = FALSE
+              )
+          } else {
+            pre <- pre +
+              ggrepel::geom_text_repel(
+                mapping = ggplot2::aes(
+                  x = .data[[sim_data_pos_names[1]]],
+                  y = .data[[sim_data_pos_names[2]]],
+                  label = .data[["name"]]
+                ),
+                inherit.aes = FALSE,
+                show.legend = FALSE
+              )
+          }
+        } else {
+          xnudge <- diff(xrange) / 25
+          ynudge <- diff(yrange) / 25
+          if (with_labels) {
+            pre <- pre +
+              ggplot2::geom_label(
+                mapping = ggplot2::aes(
+                  x = .data[[sim_data_pos_names[1]]],
+                  y = .data[[sim_data_pos_names[2]]],
+                  label = .data[["name"]]
+                ),
+                inherit.aes = FALSE,
+                show.legend = FALSE,
+                position = ggplot2::position_nudge(x = xnudge, y = ynudge)
+              )
+          } else {
+            pre <- pre +
+              ggplot2::geom_text(
+                mapping = ggplot2::aes(
+                  x = .data[[sim_data_pos_names[1]]],
+                  y = .data[[sim_data_pos_names[2]]],
+                  label = .data[["name"]]
+                ),
+                inherit.aes = FALSE,
+                show.legend = FALSE,
+                position = ggplot2::position_nudge(x = xnudge, y = ynudge)
+              )
+          }
+          xrange[2] <- xrange[2] + xnudge
+          yrange[2] <- yrange[2] + ynudge
+        }
+      }
       if (!adjust_limits) {
-        positions <- location_positions(sim)
         pre <- pre + ggplot2::lims(
-          x = range(positions[["destination"]][, 1]),
-          y = range(positions[["destination"]][, 2])
+          x = xrange,
+          y = yrange
         )
       }
       pre
@@ -188,6 +248,12 @@ sim_autoplot <- function(sim, sim_data,
 #' and `"attractiveness"` graphics should be almost identical. Only destinations
 #' with an attractiveness above  the `cut_off` value are included.
 #'
+#' For the last two representations and when `with_names` is `TRUE`, the names
+#' of the destinations are added to the graphical representation. If `with_labels`
+#' is `TRUE` the names are represented as labels instead of plain texts
+#' (see [ggplot2::geom_label()]). If the `ggrepel` package is installed, its
+#' functions are used instead of `ggplot2` native functions.
+#'
 #' @param object a spatial interaction model object
 #' @param flows  `"full"` (default),  `"destination"` or `"attractiveness"`, see
 #'   details.
@@ -205,6 +271,8 @@ sim_autoplot <- function(sim, sim_data,
 #'   eases comparison between graphical representations with different cut off
 #'   value. If `TRUE`, limits are adjusted to the data using the standard
 #'   ggplot2 behaviour.
+#' @param with_labels if `FALSE` (default value) names are displayed using plain
+#'  texts. If `TRUE`, names are shown using labels.
 #' @param ... additional parameters, see details
 #' @seealso [fortify.sim()]
 #' @exportS3Method ggplot2::autoplot
@@ -229,6 +297,16 @@ sim_autoplot <- function(sim, sim_data,
 #' ## positions
 #' ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
 #'   ggplot2::scale_size_continuous(range = c(0, 6))
+#' ggplot2::autoplot(flows, "destination",
+#'   with_positions = TRUE,
+#'   with_names = TRUE
+#' ) +
+#'   ggplot2::scale_size_continuous(range = c(0, 6))
+#' ggplot2::autoplot(flows, "destination",
+#'   with_positions = TRUE,
+#'   with_names = TRUE, with_labels = TRUE
+#' ) +
+#'   ggplot2::scale_size_continuous(range = c(0, 6))
 #' ggplot2::autoplot(flows, with_positions = TRUE) +
 #'   ggplot2::scale_linewidth_continuous(range = c(0, 2))
 #' ggplot2::autoplot(flows,
@@ -242,13 +320,16 @@ autoplot.sim <- function(object,
                          with_positions = FALSE,
                          cut_off = 100 * .Machine$double.eps^0.5,
                          adjust_limits = FALSE,
+                         with_labels = FALSE,
                          ...) {
-  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits)
+  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits, with_labels)
   check_dots_named(list(...))
   flows <- rlang::arg_match(flows)
   sim_data <- fortify.sim(object,
     data = NULL, flows = flows,
-    with_positions = with_positions, cut_off = cut_off
+    with_names = with_names,
+    with_positions = with_positions,
+    cut_off = cut_off
   )
-  sim_autoplot(object, sim_data, flows, with_names, with_positions, adjust_limits, ...)
+  sim_autoplot(object, sim_data, flows, with_names, with_positions, adjust_limits, with_labels, ...)
 }

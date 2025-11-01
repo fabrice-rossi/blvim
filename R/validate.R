@@ -117,7 +117,8 @@ check_dots_named <- function(dot_list, call = rlang::caller_env()) {
 }
 
 check_autoplot_params <- function(with_names, with_positions, cut_off,
-                                  adjust_limits, call = rlang::caller_env()) {
+                                  adjust_limits, with_labels,
+                                  call = rlang::caller_env()) {
   if (!rlang::is_logical(with_names)) {
     cli::cli_abort(
       c("{.arg with_names} must be a logical value",
@@ -146,6 +147,14 @@ check_autoplot_params <- function(with_names, with_positions, cut_off,
     cli::cli_abort(
       c("{.arg adjust_limits} must be a logical value",
         "x" = "{.arg adjust_limits} is {.val {adjust_limits}}"
+      ),
+      call = call
+    )
+  }
+  if (!rlang::is_logical(with_labels)) {
+    cli::cli_abort(
+      c("{.arg with_labels} must be a logical value",
+        "x" = "{.arg with_labels} is {.val {with_labels}}"
       ),
       call = call
     )

@@ -28,3 +28,8 @@ flow_to_lines <- function(op, dp, Y, cut_off) {
   pre <- cbind(x_df, y_df, flow = as.vector(Y))
   pre[pre$flow >= cut_off, ]
 }
+
+# this function is introduced only to ease mocking in tests
+has_ggrepel <- function() {
+  rlang::is_installed("ggrepel")
+}

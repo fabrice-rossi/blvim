@@ -6,9 +6,22 @@ test_that("autoplot.sim detects wrong parameters", {
   expect_error(ggplot2::autoplot(model, flows = "full", FALSE, "bla"))
   expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, -2))
   expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, "ab"))
-  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, 0.01, 2.5))
-  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, 0.01, TRUE, 4))
-  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, 0.01, TRUE, foo = 4, 5))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", FALSE, FALSE, 0.01,
+    2.5
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", FALSE, FALSE, 0.01,
+    TRUE, 4
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", FALSE, FALSE, 0.01,
+    TRUE, FALSE, 4
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", FALSE, FALSE, 0.01,
+    TRUE, FALSE, foo = 4, 5
+  ))
 })
 
 
@@ -164,4 +177,80 @@ test_that("autoplot.sim works pass parameters to geom_segment as expected", {
     adjust_limits = FALSE,
     ggplot2::arrow(length = ggplot2::unit(0.01, "npc"))
   ))
+})
+
+test_that("autoplot.sim works as expected (with positions and names)", {
+  config <- create_locations(20, 15, seed = 123456)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  origin_positions(model) <- config$pp
+  destination_positions(model) <- config$pd
+  destination_names(model) <- sample(letters, 15, replace = FALSE)
+  origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
+  vdiffr::expect_doppelganger(
+    "Destination dotplot text",
+    \() print(ggplot2::autoplot(model, "destination",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Destination dotplot label",
+    \() print(ggplot2::autoplot(model, "destination",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0, with_labels = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Attractiveness dotplot text",
+    \() print(ggplot2::autoplot(model, "attractiveness",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Destination dotplot text filtered zoomed",
+    \() print(ggplot2::autoplot(model, "destination",
+      with_positions = TRUE, cut_off = 0.1,
+      adjust_limits = TRUE, with_names = TRUE
+    ))
+  )
+  dnames <- destination_names(model)
+  destination_names(model) <- NULL
+  vdiffr::expect_doppelganger(
+    "Destination dotplot null text",
+    \() print(ggplot2::autoplot(model, "destination",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0
+    ))
+  )
+  local_mocked_bindings(has_ggrepel = function() FALSE)
+  destination_names(model) <- dnames
+  vdiffr::expect_doppelganger(
+    "Destination dotplot text base",
+    \() print(ggplot2::autoplot(model, "destination",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Attractiveness dotplot text base",
+    \() print(ggplot2::autoplot(model, "attractiveness",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Attractiveness dotplot label base",
+    \() print(ggplot2::autoplot(model, "attractiveness",
+      with_positions = TRUE,
+      with_names = TRUE, with_labels = TRUE, cut_off = 0
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Destination dotplot text filtered zoomed base",
+    \() print(ggplot2::autoplot(model, "destination",
+      with_positions = TRUE, cut_off = 0.1,
+      adjust_limits = TRUE, with_names = TRUE
+    ))
+  )
 })

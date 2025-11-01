@@ -8,6 +8,7 @@
   model,
   data,
   flows = c("full", "destination", "attractiveness"),
+  with_names = FALSE,
   with_positions = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   ...
@@ -20,6 +21,9 @@
 
 \item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
 details.}
+
+\item{with_names}{specifies whether the extracted data frame includes
+location names (\code{FALSE} by default)}
 
 \item{with_positions}{specifies whether the extracted data frame is based on
 location positions (\code{FALSE} by default)}
@@ -60,15 +64,16 @@ to the number of destination locations
 It is recommend to use \code{\link[=flows_df]{flows_df()}} for more control over the extraction
 outside of simple graphical representations.
 }
-\item \code{"destination"}: the data frame has only two columns:
+\item \code{"destination"}: the data frame has only two or three columns:
 \itemize{
 \item \code{destination}: identifies the destination location by its index from 1
 to the number of destination locations
 \item \code{flow}: the incoming flows (see \code{\link[=destination_flow]{destination_flow()}})
+\item \code{name}: the name of the destination location if \code{with_names} is \code{TRUE}
 }
-\item \code{"attractiveness"}: the data frame has also two columns, \code{destination} as
-in the previous case and \code{attractiveness} which contains the attractivenesses
-of the destinations (see \code{\link[=attractiveness]{attractiveness()}}).
+\item \code{"attractiveness"}: the data frame has also two ot three columns,
+\code{destination} and \code{name} as in the previous case and \code{attractiveness} which
+contains the attractivenesses of the destinations (see \code{\link[=attractiveness]{attractiveness()}}).
 }
 
 When the  \code{with_positions} parameter is \code{TRUE}, the location positions
@@ -86,14 +91,15 @@ frame contains five columns:
 \item \code{flow} is used for the flows
 }
 \item \code{"destination"} and \code{"attractiveness"} produce both a data frame with three
-columns. As when \code{with_positions} is \code{FALSE}, one column is dedicated either
+or four columns. As when \code{with_positions} is \code{FALSE}, one column is dedicated either
 to the incoming flows (\code{\link[=destination_flow]{destination_flow()}}) for \code{flows="destination"} (the
 name of the column is \code{destination}) or to the attractivenesses
 (\code{\link[=attractiveness]{attractiveness()}}), in which case its name is \code{attractiveness}. The other
 two columns are used for the positions of the destination locations. Their
 names are the names of the columns of the positions
 (\code{colnames(destination_location(object))}) or \code{"x"} and \code{"y"}, when such
-names are not specified.
+names are not specified. If \code{with_names} is \code{TRUE}, a \code{name} column is included
+and contains the names of the destination locations.
 }
 
 In the position based data frames, rows are excluded from the returned data
@@ -107,17 +113,23 @@ distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
 flows <- blvim(distances, production, 1.5, 4, attractiveness,
-  origin_data = list(names = LETTERS[1:10], positions = positions),
-  destination_data = list(names = LETTERS[1:10], positions = positions)
+  origin_data =
+    list(names = LETTERS[1:10], positions = positions), destination_data =
+    list(names = LETTERS[1:10], positions = positions)
 )
 ggplot2::fortify(flows)
 ggplot2::fortify(flows, flows = "destination")
 ggplot2::fortify(flows, flows = "attractiveness")
 ## positions
 ggplot2::fortify(flows, flows = "attractiveness", with_positions = TRUE)
+## names and positions
+ggplot2::fortify(flows,
+  flows = "destination", with_positions = TRUE,
+  with_names = TRUE
+)
 ggplot2::fortify(flows, with_positions = TRUE, cut_off = 0.1)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=autoplot.sim]{autoplot.sim()}}
+\code{\link[=autoplot.sim]{autoplot.sim()}}, \code{\link[=flows_df]{flows_df()}}
 }

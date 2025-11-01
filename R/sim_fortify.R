@@ -24,13 +24,14 @@
 #'    - `flow`: the flow between the corresponding location
 #' It is recommend to use [flows_df()] for more control over the extraction
 #' outside of simple graphical representations.
-#' -  `"destination"`: the data frame has only two columns:
+#' -  `"destination"`: the data frame has only two or three columns:
 #'    - `destination`: identifies the destination location by its index from 1
 #' to the number of destination locations
 #'     - `flow`: the incoming flows (see [destination_flow()])
-#' -  `"attractiveness"`: the data frame has also two columns, `destination` as
-#' in the previous case and `attractiveness` which contains the attractivenesses
-#' of the destinations (see [attractiveness()]).
+#'     - `name`: the name of the destination location if `with_names` is `TRUE`
+#' -  `"attractiveness"`: the data frame has also two ot three columns,
+#' `destination` and `name` as in the previous case and `attractiveness` which
+#' contains the attractivenesses of the destinations (see [attractiveness()]).
 #'
 #' When the  `with_positions` parameter is `TRUE`, the location positions
 #' ([location_positions()]) are used to produce more "geographically informed"
@@ -45,14 +46,15 @@
 #'    - `xend` and `yend` are used for the coordinates of the destination locations
 #'    - `flow` is used for the flows
 #' - `"destination"` and `"attractiveness"` produce both a data frame with three
-#' columns. As when `with_positions` is `FALSE`, one column is dedicated either
+#' or four columns. As when `with_positions` is `FALSE`, one column is dedicated either
 #' to the incoming flows ([destination_flow()]) for `flows="destination"` (the
 #' name of the column is `destination`) or to the attractivenesses
 #' ([attractiveness()]), in which case its name is `attractiveness`. The other
 #' two columns are used for the positions of the destination locations. Their
 #' names are the names of the columns of the positions
 #' (`colnames(destination_location(object))`) or `"x"` and `"y"`, when such
-#' names are not specified.
+#' names are not specified. If `with_names` is `TRUE`, a `name` column is included
+#' and contains the names of the destination locations.
 #'
 #' In the position based data frames, rows are excluded from the returned data
 #' frames when the flow they represent are small, i.e. when they are smaller
@@ -62,6 +64,8 @@
 #' @param data not used
 #' @param flows  `"full"` (default),  `"destination"` or `"attractiveness"`, see
 #'   details.
+#' @param with_names specifies whether the extracted data frame includes
+#'   location names (`FALSE` by default)
 #' @param with_positions specifies whether the extracted data frame is based on
 #'   location positions (`FALSE` by default)
 #' @param cut_off cut off limit for inclusion of a flow row in the final data
@@ -69,7 +73,7 @@
 #' @param ... additional parameters, not used currently
 #'
 #' @exportS3Method ggplot2::fortify
-#' @seealso [autoplot.sim()]
+#' @seealso [autoplot.sim()], [flows_df()]
 #' @returns a data frame, see details
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
@@ -77,17 +81,24 @@
 #' production <- rep(1, 10)
 #' attractiveness <- c(2, rep(1, 9))
 #' flows <- blvim(distances, production, 1.5, 4, attractiveness,
-#'   origin_data = list(names = LETTERS[1:10], positions = positions),
-#'   destination_data = list(names = LETTERS[1:10], positions = positions)
+#'   origin_data =
+#'     list(names = LETTERS[1:10], positions = positions), destination_data =
+#'     list(names = LETTERS[1:10], positions = positions)
 #' )
 #' ggplot2::fortify(flows)
 #' ggplot2::fortify(flows, flows = "destination")
 #' ggplot2::fortify(flows, flows = "attractiveness")
 #' ## positions
 #' ggplot2::fortify(flows, flows = "attractiveness", with_positions = TRUE)
+#' ## names and positions
+#' ggplot2::fortify(flows,
+#'   flows = "destination", with_positions = TRUE,
+#'   with_names = TRUE
+#' )
 #' ggplot2::fortify(flows, with_positions = TRUE, cut_off = 0.1)
 fortify.sim <- function(model, data,
                         flows = c("full", "destination", "attractiveness"),
+                        with_names = FALSE,
                         with_positions = FALSE,
                         cut_off = 100 * .Machine$double.eps^0.5,
                         ...) {
@@ -105,6 +116,13 @@ fortify.sim <- function(model, data,
       }
       sim_data <- positions_as_df(positions[["destination"]], NULL)
       sim_data[[flows]] <- value
+      if (with_names) {
+        dnames <- destination_names(model)
+        if (is.null(dnames)) {
+          dnames <- seq_len(nrow(sim_data))
+        }
+        sim_data$name <- dnames
+      }
       sim_data <- sim_data[value >= cut_off, ]
       sim_data
     } else {
@@ -129,15 +147,17 @@ fortify.sim <- function(model, data,
           destination = factor(seq_along(dest_f)),
           flow = dest_f
         )
-        sim_data
       } else {
         attra <- attractiveness(model)
         sim_data <- data.frame(
           destination = factor(seq_along(attra)),
           attractiveness = attra
         )
-        sim_data
       }
+      if (with_names) {
+        sim_data$name <- rownames(sim_data)
+      }
+      sim_data
     } else {
       full_f <- flows(model)
       sim_data <- expand.grid(
