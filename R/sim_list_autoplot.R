@@ -203,7 +203,7 @@ sim_list_autoplot <- function(sim_list,
 #' spans from its lower quantile to its upper quantile. An intermediate thicker
 #' bar represents the median quantile.
 #' -  `"attractiveness"`: the function displays the quantiles over the collection of
-#' models of the attractivenesses of each destination location (as given by
+#' models of the attractiveness of each destination location (as given by
 #' [attractiveness()]). The graphical representation is the same as for
 #' `"destination"`. This is interesting for dynamic models where those values
 #' are updated during the iterations (see [blvim()] for details). When the
@@ -214,13 +214,21 @@ sim_list_autoplot <- function(sim_list,
 #' ([location_names()]) are used to label the axis of the graphical
 #' representation. If names are not specified, they are replaced by indexes.
 #'
-#' When the  `with_positions` parameter is `TRUE`, the location positions
+#' When the `with_positions` parameter is `TRUE`, the location positions
 #' ([location_positions()]) are used to produce more "geographically informed"
 #' representations. Notice that if no positions are known for the locations, the
 #' use of `with_positions = TRUE` is an error. Moreover, `flows = "full"` is not
 #' supported: the function will issue a warning and revert to the position free
 #' representation if this value is used.
-
+#'
+#' The representations for `flows="destination"` and `flows="attractiveness"` are
+#' based on the same principle. Each destination location is represented by a
+#' collection of three nested circles centred on the corresponding location
+#' position, representing respectively the lower quantile, the median and the upper
+#' quantile of the incoming flows or of the attractivenesses. The diameters of
+#' the circles are proportional to the quantities they represent. The border ot
+#' the median circle is thicker than the ones of the other circles.
+#'
 #' @param object a collection of spatial interaction models, a `sim_list`
 #' @param flows `"full"` (default),  `"destination"` or `"attractiveness"`, see
 #'   details.
@@ -230,7 +238,7 @@ sim_list_autoplot <- function(sim_list,
 #'   on location positions (`FALSE` by default)
 #' @param cut_off cut off limit for inclusion of a graphical primitive when
 #'   `with_positions = TRUE`. In the attractiveness or destination
-#'   representation, disks are removed when the corresponding upper quantile
+#'   representation, circles are removed when the corresponding upper quantile
 #'   value is below the cut off.
 #' @param adjust_limits if `FALSE` (default value), the limits of the position
 #'   based graph are not adjusted after removing graphical primitives. This

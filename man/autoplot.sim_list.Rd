@@ -31,7 +31,7 @@ on location positions (\code{FALSE} by default)}
 
 \item{cut_off}{cut off limit for inclusion of a graphical primitive when
 \code{with_positions = TRUE}. In the attractiveness or destination
-representation, disks are removed when the corresponding upper quantile
+representation, circles are removed when the corresponding upper quantile
 value is below the cut off.}
 
 \item{adjust_limits}{if \code{FALSE} (default value), the limits of the position
@@ -103,12 +103,21 @@ When the \code{with_names} parameter is \code{TRUE}, the location names
 (\code{\link[=location_names]{location_names()}}) are used to label the axis of the graphical
 representation. If names are not specified, they are replaced by indexes.
 
-When the  \code{with_positions} parameter is \code{TRUE}, the location positions
+When the \code{with_positions} parameter is \code{TRUE}, the location positions
 (\code{\link[=location_positions]{location_positions()}}) are used to produce more "geographically informed"
 representations. Notice that if no positions are known for the locations, the
 use of \code{with_positions = TRUE} is an error. Moreover, \code{flows = "full"} is not
 supported: the function will issue a warning and revert to the position free
 representation if this value is used.
+
+The representations for \code{flows="destination"} and \code{flows="attractiveness"} are
+based on the same principle. Each destination location is represented by a
+collection of three nested circles centred on the corresponding location
+position, representing respectively the lower quantile, the median and the upper
+quantile of the incoming flows or of the attractivenesses. The diameters of
+the circles are proportional to the quantities they represent. The border ot
+the median circle is thicker than the ones of the other circles.
+
 }
 \examples{
 \dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
