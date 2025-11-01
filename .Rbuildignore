@@ -10,3 +10,4 @@ devtools
 ^codemeta\.json$
 ^doc$
 ^Meta$
+vignettes/grid_cache
