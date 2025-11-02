@@ -280,6 +280,7 @@ test_that("autoplot.sim_list works as expected (destination with positions and n
     ))
   )
   ## null names
+  skip_on_os("mac")
   destination_names(models) <- NULL
   vdiffr::expect_doppelganger(
     "Destination pos cut off null names",
@@ -336,7 +337,6 @@ test_that("autoplot.sim_list works as expected (destination with positions and n
     ))
   )
   ## null names
-  skip_on_os("mac")
   destination_names(models) <- NULL
   vdiffr::expect_doppelganger(
     "Destination pos cut off null names ggplot",
