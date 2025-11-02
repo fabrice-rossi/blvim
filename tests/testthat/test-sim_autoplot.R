@@ -179,7 +179,7 @@ test_that("autoplot.sim works pass parameters to geom_segment as expected", {
   ))
 })
 
-test_that("autoplot.sim works as expected (with positions and names)", {
+test_that("autoplot.sim works as expected (with positions and names) ggrepel", {
   config <- create_locations(20, 15, seed = 123456)
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
   origin_positions(model) <- config$pp
@@ -187,17 +187,19 @@ test_that("autoplot.sim works as expected (with positions and names)", {
   destination_names(model) <- sample(letters, 15, replace = FALSE)
   origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
   vdiffr::expect_doppelganger(
-    "Destination dotplot text",
-    \() print(ggplot2::autoplot(model, "destination",
-      with_positions = TRUE,
-      with_names = TRUE, cut_off = 0
-    ))
-  )
-  vdiffr::expect_doppelganger(
     "Destination dotplot label",
     \() print(ggplot2::autoplot(model, "destination",
       with_positions = TRUE,
       with_names = TRUE, cut_off = 0, with_labels = TRUE
+    ))
+  )
+  skip_on_os("mac")
+  ## subtle differences appear between linux figures and mac os figures.
+  vdiffr::expect_doppelganger(
+    "Destination dotplot text",
+    \() print(ggplot2::autoplot(model, "destination",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0
     ))
   )
   vdiffr::expect_doppelganger(
@@ -223,8 +225,16 @@ test_that("autoplot.sim works as expected (with positions and names)", {
       with_names = TRUE, cut_off = 0
     ))
   )
+})
+
+test_that("autoplot.sim works as expected (with positions and names) base ggplot", {
+  config <- create_locations(20, 15, seed = 123456)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  origin_positions(model) <- config$pp
+  destination_positions(model) <- config$pd
+  destination_names(model) <- sample(letters, 15, replace = FALSE)
+  origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
   local_mocked_bindings(has_ggrepel = function() FALSE)
-  destination_names(model) <- dnames
   vdiffr::expect_doppelganger(
     "Destination dotplot text base",
     \() print(ggplot2::autoplot(model, "destination",

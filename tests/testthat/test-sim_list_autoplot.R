@@ -237,6 +237,118 @@ test_that("autoplot.sim_list works as expected (destination with named positions
   )
 })
 
+test_that("autoplot.sim_list works as expected (destination with positions and names) ggrepel", {
+  config <- create_locations(15, 15, seed = 200)
+  alphas <- seq(1.25, 2.25, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 5)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  origin_positions(models) <- config$pp
+  destination_positions(models) <- config$pd
+  destination_names(models) <- sample(letters, 15, replace = TRUE)
+  vdiffr::expect_doppelganger(
+    "Destination pos names",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE,
+      with_names = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Destination pos labels",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE,
+      with_names = TRUE,
+      with_labels = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Destination pos cut off names",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE,
+      cut_off = 4,
+      with_names = TRUE
+    ))
+  )
+  ## null names
+  destination_names(models) <- NULL
+  vdiffr::expect_doppelganger(
+    "Destination pos cut off null names",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE,
+      cut_off = 2,
+      with_names = TRUE
+    ))
+  )
+})
+
+test_that("autoplot.sim_list works as expected (destination with positions and names) base ggplot", {
+  config <- create_locations(15, 15, seed = 200)
+  alphas <- seq(1.25, 2.25, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 5)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  origin_positions(models) <- config$pp
+  destination_positions(models) <- config$pd
+  destination_names(models) <- sample(letters, 15, replace = TRUE)
+  local_mocked_bindings(has_ggrepel = function() FALSE)
+  vdiffr::expect_doppelganger(
+    "Destination pos names ggplot",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE,
+      with_names = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Destination pos labels ggplot",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE,
+      with_names = TRUE,
+      with_labels = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Destination pos cut off names ggplot",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE,
+      cut_off = 4,
+      with_names = TRUE
+    ))
+  )
+  ## null names
+  destination_names(models) <- NULL
+  vdiffr::expect_doppelganger(
+    "Destination pos cut off null names ggplot",
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE,
+      cut_off = 2,
+      with_names = TRUE
+    ))
+  )
+})
+
+
 test_that("autoplot.sim_list works as expected (full flows no names)", {
   config <- create_locations(20, 18, seed = 50)
   alphas <- seq(1.25, 2.25, by = 0.25)
