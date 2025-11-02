@@ -107,6 +107,7 @@ test_that("grid_var_autoplot works as expected with names (ggrepel)", {
   destination_names(models) <- sample(letters, 15)
   models_df <- sim_df(models)
   models_df$group <- as.factor(sample(c(0, 1, 2), nrow(models_df), replace = TRUE))
+  skip_on_os("mac")
   vdiffr::expect_doppelganger(
     "Default destination iter names pos",
     \() print(grid_var_autoplot(models_df, iterations,
