@@ -42,3 +42,6 @@ Config/testthat/parallel: true
 URL: https://fabrice-rossi.github.io/blvim/
 BugReports: https://github.com/fabrice-rossi/blvim/issues
 VignetteBuilder: knitr
+Depends: 
+    R (>= 3.5)
+LazyData: true

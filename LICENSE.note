@@ -1,0 +1,12 @@
+The blvim package as a whole is available under GPL-3.0. The blvim package
+includes data derived from data sets with different open licences:
+
+* french_cities, french_regions are french_departments derived from INSEE open
+  data and data distribution by the Geo API, which are available under the
+  french "Open Licence"
+* french_cities_distance and french_cities_durantion are derived from the previous
+  data and from OpenStreetMap data with are available unde the Open Data Commons
+  Open Database License (ODbL)
+
+Full copies of the license agreements used by the data sets are included under
+`inst/misc`.

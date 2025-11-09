@@ -67,17 +67,20 @@ library(blvim)
 ### Input data
 
 To compute a spatial interaction model with `blvim`, you need at least a cost 
-matrix. In this example, we use the distance between some random locations.
+matrix. The package comes with distance data for a selection of large French
+cities. We use the 30 largest ones as origin locations and the 20 smallest ones
+as destination locations. The cost matrix is the distance between the cities 
+(in meters).
 
 ```{r}
-set.seed(42)
-## random origin locations
-origins <- matrix(runif(2 * 30), ncol = 2)
-## random destination locations
-destinations <- matrix(runif(2 * 10), ncol = 2)
+## 30 largest cities
+origins <- french_cities[1:30, c("th_longitude", "th_latitude")]
+## 20 smallest cities
+destinations <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), c("th_longitude", "th_latitude")]
 ## cost matrix
-full_costs <- as.matrix(dist(rbind(origins, destinations)))
-cost_matrix <- full_costs[1:nrow(origins), (nrow(origins) + 1):(nrow(origins) + nrow(destinations))]
+cost_matrix <- french_cities_distance[1:30, (nrow(french_cities) - 19):nrow(french_cities)]
+rownames(cost_matrix) <- french_cities[1:30, "name"]
+colnames(cost_matrix) <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), "name"]
 ```
 
 Additionally, since we focus on **production-constrained models**, we must 
@@ -95,6 +98,8 @@ again assume a common unitary attractiveness.
 ```{r}
 Z <- rep(1, nrow(destinations))
 ```
+
+We could use the population of the cities as production constraints for instance. 
 
 ### Static models
 In Wilson's production-constrained maximum entropy model, the flows are given
@@ -115,7 +120,7 @@ $$
 
 The model is obtained using the `static_blvim()` function:
 ```{r}
-a_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 2, Z)
+a_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 500000, Z)
 a_model
 ```
 
@@ -126,12 +131,12 @@ a_model_flows <- flows(a_model)
 ```
 which can be displayed using, for instance, the `image()` function.
 ```{r a_flow}
-#| fig.height: 9
-#| fig.width: 3
-#| out.width: 25%
+#| fig.height: 11
+#| fig.width: 6.5
+#| out.width: 50%
 #| fig.align: center
 par(mar = rep(0.1, 4))
-image(t(a_model_flows),
+image(t(a_model_flows)[, 30:1],
   col = gray.colors(20, start = 1, end = 0),
   axes = FALSE,
   frame = TRUE
@@ -143,9 +148,9 @@ destination locations. The package also provides a `ggplot2::autoplot()`
 function, which can be used as follows:
 
 ```{r a_flow_ggplot2}
-#| fig.height: 9
-#| fig.width: 4
-#| out.width: 40%
+#| fig.height: 10
+#| fig.width: 8
+#| out.width: 80%
 #| fig.align: center
 library(ggplot2)
 autoplot(a_model, "full") +
@@ -156,14 +161,14 @@ autoplot(a_model, "full") +
 
 
 ```{r}
-b_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 15, Z)
+b_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 100000, Z)
 b_model
 ```
 
 ```{r b_flow}
-#| fig.height: 9
-#| fig.width: 4
-#| out.width: 40%
+#| fig.height: 10
+#| fig.width: 8
+#| out.width: 80%
 #| fig.align: center
 autoplot(b_model) +
   scale_fill_gradient(low = "white", high = "black") +
@@ -190,7 +195,7 @@ where the flows are given by the equations above. The model is estimated using
 the `blvim()` function as follows.
 
 ```{r}
-a_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 2, Z)
+a_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 500000, Z)
 a_blv_model
 ```
 
@@ -212,9 +217,9 @@ In this particular example, one destination location acts as a global attractor
 of all the flows. This pattern is also visible in the final flow matrix.
 
 ```{r a_blv_flow}
-#| fig.height: 9
-#| fig.width: 4
-#| out.width: 40%
+#| fig.height: 10
+#| fig.width: 8
+#| out.width: 80%
 #| fig.align: center
 autoplot(a_blv_model) +
   scale_fill_gradient(low = "white", high = "black")
@@ -225,28 +230,58 @@ attractivenesses values:
 ```{r a_blv_Z_ggplot2}
 #| fig.height: 4
 #| fig.width: 8
-autoplot(a_blv_model, "attractiveness")
+autoplot(a_blv_model, "attractiveness", with_names = TRUE) +
+  coord_flip()
 ```
 
 Naturally, the results are strongly influenced by the parameters, as shown in 
 this second example.
 
 ```{r}
-b_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 15, Z)
+b_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 50000, Z)
 b_blv_model
 ```
 
 ```{r b_blv_Z}
 #| fig.height: 4
 #| fig.width: 8
-autoplot(b_blv_model, "attractiveness")
+autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
+  coord_flip()
 ```
 
 ```{r b_blv_flow}
-#| fig.height: 9
-#| fig.width: 4
-#| out.width: 40%
+#| fig.height: 10
+#| fig.width: 8
+#| out.width: 80%
 #| fig.align: center
-autoplot(b_blv_model) +
-  scale_fill_gradient(low = "white", high = "black")
+autoplot(b_blv_model, with_names = TRUE) +
+  scale_fill_gradient(low = "white", high = "black") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+`bvlim` offers a collection of graphical representations that can leverage
+the data associated to the origin and destination locations. For instance, 
+we can display the full flows using geographical coordinates of the cities.
+
+```{r b_blv_france}
+#| fig.height: 8
+#| fig.width: 10
+origin_positions(b_blv_model) <- as.matrix(origins)
+destination_positions(b_blv_model) <- as.matrix(destinations)
+autoplot(b_blv_model,
+  with_positions = TRUE,
+  arrow = arrow(length = unit(0.01, "npc"))
+) +
+  scale_linewidth(range = c(0, 1.5)) +
+  coord_sf(crs = "epsg:4326") +
+  geom_point(
+    data = origins,
+    mapping = aes(x = th_longitude, y = th_latitude), inherit.aes = FALSE,
+    color = "blueviolet", alpha = 0.5, size = 3
+  ) +
+  geom_point(
+    data = destinations,
+    mapping = aes(x = th_longitude, y = th_latitude), inherit.aes = FALSE,
+    color = "darkorange", alpha = 0.5, size = 3
+  )
 ```

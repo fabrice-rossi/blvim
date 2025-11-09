@@ -48,3 +48,7 @@ reference:
   - starts_with("fortify")
   - grid_autoplot
   - grid_var_autoplot
+- title: "Data sets"
+  contents:
+  - has_keyword("datasets")
+

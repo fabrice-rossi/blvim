@@ -11,3 +11,4 @@ devtools
 ^doc$
 ^Meta$
 vignettes/grid_cache
+^data-raw$

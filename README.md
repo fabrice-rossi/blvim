@@ -60,18 +60,20 @@ library(blvim)
 ### Input data
 
 To compute a spatial interaction model with `blvim`, you need at least a
-cost matrix. In this example, we use the distance between some random
-locations.
+cost matrix. The package comes with distance data for a selection of
+large French cities. We use the 30 largest ones as origin locations and
+the 20 smallest ones as destination locations. The cost matrix is the
+distance between the cities (in meters).
 
 ``` r
-set.seed(42)
-## random origin locations
-origins <- matrix(runif(2 * 30), ncol = 2)
-## random destination locations
-destinations <- matrix(runif(2 * 10), ncol = 2)
+## 30 largest cities
+origins <- french_cities[1:30, c("th_longitude", "th_latitude")]
+## 20 smallest cities
+destinations <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), c("th_longitude", "th_latitude")]
 ## cost matrix
-full_costs <- as.matrix(dist(rbind(origins, destinations)))
-cost_matrix <- full_costs[1:nrow(origins), (nrow(origins) + 1):(nrow(origins) + nrow(destinations))]
+cost_matrix <- french_cities_distance[1:30, (nrow(french_cities) - 19):nrow(french_cities)]
+rownames(cost_matrix) <- french_cities[1:30, "name"]
+colnames(cost_matrix) <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), "name"]
 ```
 
 Additionally, since we focus on **production-constrained models**, we
@@ -91,6 +93,9 @@ attractiveness.
 ``` r
 Z <- rep(1, nrow(destinations))
 ```
+
+We could use the population of the cities as production constraints for
+instance.
 
 ### Static models
 
@@ -115,11 +120,12 @@ any origin location is equals the production of that location:
 The model is obtained using the `static_blvim()` function:
 
 ``` r
-a_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 2, Z)
+a_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 500000, Z)
 a_model
-#> Spatial interaction model with 30 origin locations and 10 destination locations
+#> Spatial interaction model with 30 origin locations and 20 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) = 2
+#> • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) =
+#> 2e-06
 ```
 
 Several functions are provided to extract parts of the result. In
@@ -133,14 +139,14 @@ which can be displayed using, for instance, the `image()` function.
 
 ``` r
 par(mar = rep(0.1, 4))
-image(t(a_model_flows),
+image(t(a_model_flows)[, 30:1],
   col = gray.colors(20, start = 1, end = 0),
   axes = FALSE,
   frame = TRUE
 )
 ```
 
-<img src="man/figures/README-a_flow-1.png" width="25%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_flow-1.png" width="50%" style="display: block; margin: auto;" />
 
 In this representation, each row shows the flows from one origin
 location to all destination locations. The package also provides a
@@ -153,14 +159,15 @@ autoplot(a_model, "full") +
   coord_fixed()
 ```
 
-<img src="man/figures/README-a_flow_ggplot2-1.png" width="40%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_flow_ggplot2-1.png" width="80%" style="display: block; margin: auto;" />
 
 ``` r
-b_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 15, Z)
+b_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 100000, Z)
 b_model
-#> Spatial interaction model with 30 origin locations and 10 destination locations
+#> Spatial interaction model with 30 origin locations and 20 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) = 15
+#> • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) =
+#> 1e-05
 ```
 
 ``` r
@@ -169,7 +176,7 @@ autoplot(b_model) +
   coord_fixed()
 ```
 
-<img src="man/figures/README-b_flow-1.png" width="40%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_flow-1.png" width="80%" style="display: block; margin: auto;" />
 
 As the two figures above exemplify, different values of the parameters
 $`\alpha`$ and $`\beta`$ result in more or less concentrated flows.
@@ -192,12 +199,13 @@ where the flows are given by the equations above. The model is estimated
 using the `blvim()` function as follows.
 
 ``` r
-a_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 2, Z)
+a_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 500000, Z)
 a_blv_model
-#> Spatial interaction model with 30 origin locations and 10 destination locations
+#> Spatial interaction model with 30 origin locations and 20 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) = 2
-#> ℹ The BLV model converged after 5800 iterations.
+#> • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) =
+#> 2e-06
+#> ℹ The BLV model converged after 4800 iterations.
 ```
 
 Notice that we start with some initial values of the attractiveness, but
@@ -220,13 +228,14 @@ autoplot(a_blv_model) +
   scale_fill_gradient(low = "white", high = "black")
 ```
 
-<img src="man/figures/README-a_blv_flow-1.png" width="40%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_blv_flow-1.png" width="80%" style="display: block; margin: auto;" />
 
 The `autoplot()` function can also be used to show the destination flows
 or the attractivenesses values:
 
 ``` r
-autoplot(a_blv_model, "attractiveness")
+autoplot(a_blv_model, "attractiveness", with_names = TRUE) +
+  coord_flip()
 ```
 
 <img src="man/figures/README-a_blv_Z_ggplot2-1.png" width="100%" />
@@ -235,23 +244,54 @@ Naturally, the results are strongly influenced by the parameters, as
 shown in this second example.
 
 ``` r
-b_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 15, Z)
+b_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 50000, Z)
 b_blv_model
-#> Spatial interaction model with 30 origin locations and 10 destination locations
+#> Spatial interaction model with 30 origin locations and 20 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) = 15
-#> ℹ The BLV model converged after 13300 iterations.
+#> • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) =
+#> 2e-05
+#> ℹ The BLV model converged after 5700 iterations.
 ```
 
 ``` r
-autoplot(b_blv_model, "attractiveness")
+autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
+  coord_flip()
 ```
 
 <img src="man/figures/README-b_blv_Z-1.png" width="100%" />
 
 ``` r
-autoplot(b_blv_model) +
-  scale_fill_gradient(low = "white", high = "black")
+autoplot(b_blv_model, with_names = TRUE) +
+  scale_fill_gradient(low = "white", high = "black") +
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
-<img src="man/figures/README-b_blv_flow-1.png" width="40%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_blv_flow-1.png" width="80%" style="display: block; margin: auto;" />
+
+`bvlim` offers a collection of graphical representations that can
+leverage the data associated to the origin and destination locations.
+For instance, we can display the full flows using geographical
+coordinates of the cities.
+
+``` r
+origin_positions(b_blv_model) <- as.matrix(origins)
+destination_positions(b_blv_model) <- as.matrix(destinations)
+autoplot(b_blv_model,
+  with_positions = TRUE,
+  arrow = arrow(length = unit(0.01, "npc"))
+) +
+  scale_linewidth(range = c(0, 1.5)) +
+  coord_sf(crs = "epsg:4326") +
+  geom_point(
+    data = origins,
+    mapping = aes(x = th_longitude, y = th_latitude), inherit.aes = FALSE,
+    color = "blueviolet", alpha = 0.5, size = 3
+  ) +
+  geom_point(
+    data = destinations,
+    mapping = aes(x = th_longitude, y = th_latitude), inherit.aes = FALSE,
+    color = "darkorange", alpha = 0.5, size = 3
+  )
+```
+
+<img src="man/figures/README-b_blv_france-1.png" width="100%" />
