@@ -1,0 +1,279 @@
+# Theoretical Background
+
+``` r
+library(blvim)
+```
+
+## Static Models
+
+### Spatial Interaction Models
+
+Spatial interaction models aim to estimate flows between locations, for
+instance, workers commuting from residential zones to employment zones.
+Models are built from:
+
+- A collection of \\n\\ origin locations described by some
+  characteristics \\(X_i)\_{1\leq i\leq n}\\
+- A collection of \\p\\ destination locations described by some
+  characteristics \\(Z_j)\_{1\leq j\leq p}\\
+- A collection of \\n\times p\\ characteristics of the difficulty of
+  travelling (in a broad sense) from origin \\i\\ to destination \\j\\,
+  \\c\_{ij}\\
+
+The goal is to estimate flows \\(Y\_{ij})\_{1\leq i\leq n, 1\leq j\leq
+p}\\ from origin locations to destination locations. A typical
+hypothesis is for the flows to depend on characteristics as follows:
+
+\\ Y\_{ij}=f(X_i, Z_j, c\_{ij}), \\
+
+for a well-chosen function \\f\\. The most well-known spatial
+interaction model is the so-called *gravity model*, which takes the
+form:
+
+\\ Y\_{ij}\propto \frac{X_iZ_j}{c\_{ij}^2}, \\
+
+where \\\propto\\ means proportional to, \\c\_{ij}\\ is supposed to be
+the distance between origin \\i\\ and destination \\j\\, and the
+characteristics \\X_i\\ and \\Z_j\\ are assumed to be numerical.
+
+### Constraints
+
+Spatial interaction models can be instantiated with different
+constraints:
+
+- On production: the \\(X_i)\\ are interpreted as production values.
+  Then the model is *production-constrained* if
+  \\\sum\_{j=1}^pY\_{ij}=X_i\\ for all \\i\\;
+- On capacity: the \\(Z_j)\\ are interpreted as destination capacities.
+  Then the model is *capacity-constrained* if
+  \\\sum\_{i=1}^pY\_{ij}=Z_j\\ for all \\j\\;
+- On both: the *doubly-constrained* models are both production- and
+  capacity-constrained. One of the most common models used in practice
+  is the doubly-constrained gravity model.
+
+### Maximum Entropy Models
+
+In the late 1960s, Alan Wilson developed a collection of spatial
+interaction models based on a maximum entropy principle. In those
+models, the flow is given by:
+
+\\ Y\_{ij} \propto X_iZ_j^{\alpha}\exp(-\beta c\_{ij}), \\
+
+where \\\alpha\\ and \\\beta\\ are two parameters interpreted as
+follows:
+
+- \\\alpha\\ is a *return to scale* parameter: if \\Z_j\\ grows above
+  \\1\\, its actual attractiveness can increase in a super-linear way
+  (\\\alpha\>1\\) or in a sub-linear way (\\\alpha\<1\\);
+- \\\beta\\ acts as the *inverse of the scale of the costs* \\c\_{ij}\\.
+  If those osts are distances, for instance, \\\frac{1}{\beta}\\ can be
+  seen as a cut-off distance.
+
+As with other spatial interaction models, maximum entropy models are
+constrained. In `blvim`, we focus on production-constrained models and
+thus we have:
+
+\\ Y\_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta
+c\_{ij})}{\sum\_{k=1}^pZ_k^{\alpha}\exp(-\beta c\_{ik})}, \\
+
+which ensures:
+
+\\ \forall i,\\ \sum\_{j=1}^pY\_{ij}=X_i. \\
+
+This model is implemented in `blvim` by the
+[`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
+function.
+
+## Dynamic Models
+
+The models described above are *static*: they correspond to a frozen
+view of the exchanges with no retroaction of the flow received at one
+destination location on its attractiveness, for instance.
+
+In the 1970s, Harris and Wilson developed dynamic models that assume a
+form of etroaction, initially in terms of an equilibrium state.
+
+### Harris and Wilson Equilibrium Values
+
+The main idea from Harris (1964) is that if we interpret incoming flows
+as revenues, then the capacity/attractiveness of a destination location
+should be adapted to those revenues (for production-constrained models).
+Essentially, this could be written as:
+
+\\ \forall j,\\ Z_j=\kappa D_j, \\
+
+where \\\kappa\\ is a conversion factor between capacity and revenues,
+and where \\D_j\\ is the total flow incoming in \\Z_j\\, i.e.:
+
+\\ \forall j,\\ D_j=\sum\_{i=1}^nY\_{ij}. \\
+
+Applied to the maximum entropy production-constrained model, this leads
+to a spatial interaction model defined implicitly as follows. We assume
+given the production constraints \\(X_i)\_{1\leq i\leq n}\\ and the cost
+matrix \\(c\_{ij})\_{1\leq i\leq n, 1\leq j\leq p}\\, then the
+attractiveness \\(Z_j)\_{1\leq j\leq p}\\ is a solution of the following
+collection of fixed-point equations:
+
+\\ \forall j,\\
+Z_j=\kappa\sum\_{i=1}^n\left(\frac{X_iZ_j^{\alpha}\exp(-\beta
+c\_{ij})}{\sum\_{k=1}^pZ_k^{\alpha}\exp(-\beta c\_{ik})}\right), \\
+
+where \\\alpha\\, \\\beta\\, and \\\kappa\\ are fixed parameters.
+
+From the \\(Z_j)\_{1\leq j\leq p}\\, the flows are computed using the
+standard production-constrained maximum entropy model.
+
+### A Dynamic Model: The Boltzmann–Lotka–Volterra Model
+
+The collection of fixed-point equations can be solved using different
+techniques, for instance, Newton’s method. The simplest solution is
+probably to perform fixed-point iterations, as discussed in Harris &
+Wilson (1978). We start with some initial values of the \\Z\\s, denoted
+\\(Z^{0}\_j)\_{1\leq j\leq p}\\, and then iterate:
+
+\\ \forall j,\\ Z_j^{t+1} :=
+\kappa\sum\_{i=1}^n\left(\frac{X_i{(Z^{t}\_j)}^{\alpha}\exp(-\beta
+c\_{ij})}{\sum\_{k=1}^p{(Z^{t}\_k)}^{\alpha}\exp(-\beta
+c\_{ik})}\right), \\
+
+until convergence.
+
+This iterative scheme can also be interpreted as a dynamic model in
+which the attractiveness of a location is updated to match its incoming
+flow. The update is not instantaneous, and thus an update parameter is
+introduced, \\\epsilon\\. Then we start again with some initial values
+of the \\Z\\s and then iterate:
+
+\\ \begin{align\*} \forall j,\\ D_j^{t} &:=
+\sum\_{i=1}^n\left(\frac{X_i{(Z^{t}\_j)}^{\alpha}\exp(-\beta
+c\_{ij})}{\sum\_{k=1}^p{(Z^{t}\_k)}^{\alpha}\exp(-\beta
+c\_{ik})}\right),\\ \forall j,\\ Z_j^{t+1} &:= Z_j^t +\epsilon(\kappa
+D^{t}\_j-Z^{t}\_j). \end{align\*} \\
+
+Using \\\epsilon\<1\\, typically a small value of \\0.01\\, gives a full
+trajectory for the \\Z\\s with the added value of preventing oscillation
+behaviour.
+
+A variant of the dynamic model has been proposed by Wilson in 2008,
+replacing the second update by a quadratic version:
+
+\\ \forall j,\\ Z_j^{t+1} := Z_j^t +\epsilon(\kappa
+D^{t}\_j-Z^{t}\_j)Z^{t}\_j. \\
+
+Both solutions are implemented in
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md).
+
+### Diversity
+
+A typical behaviour of the equilibrium solutions is a concentration of
+the attractiveness on a subset of the destination locations. This can be
+measured by the
+[`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
+function. It uses the notion of diversity outlined in, for example, Jost
+(2006). The main idea of this notion, rephrased in the context of
+locations, is to find from the \\Z\\s an equivalent number of locations,
+say \\m\\, for which the attractiveness would be evenly spread (that is,
+proportional to \\\frac{1}{m}\\).
+
+If we normalise the \\(Z_j)\_{1\leq j\leq p}\\ such that they sum to 1,
+we get the probability distribution \\\mathcal{P}=(p_j)\_{1\leq j\leq
+p}\\ over \\\\1, \ldots, p\\\\. One way to interpret the notion of
+diversity is to measure how “random” \\\mathcal{P}\\ is. Indeed, if it
+is concentrated on 1, for instance, with \\p_1\simeq 1\\, then samples
+generated in an i.i.d. manner from \\\mathcal{P}\\ will not be diverse,
+as they will mostly consist of the value 1. Then an *entropy* is a
+rather natural diversity index. For instance, the Shannon entropy
+\\H(\mathcal{P})=-\sum\_{j}p_j\log p_j\\ provides a good diversity
+index. Based on the principle outlined above, the diversity of
+\\\mathcal{P}\\ is the number \\m\\ such that the diversity index of
+\\\mathcal{P}\\ is equal to the diversity index of the uniform
+distribution on \\\\1, \ldots, m\\\\. It can be shown that for the
+Shannon entropy, the diversity of \\\mathcal{P}\\ is
+\\\exp(H(\mathcal{P}))\\. This holds also for all the Rényi entropies.
+
+Notice that in
+[`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
+the diversities are computed according to the incoming flows, i.e., not
+using the \\(Z_j)\_{1\leq j\leq p}\\ but rather the \\D_j\\ defined
+above by \\ \forall j,\\ D_j=\sum\_{i=1}^nY\_{ij}. \\
+
+## Self-Exchange Configurations
+
+In the general case, exchanges in spatial interaction models follow a
+bipartite scheme: production locations send their productions to
+destination locations. These locations are two distinct sets. The
+non-bipartite case is when production and destination locations are
+identical. This does not change anything in the definition of the models
+(static and dynamic), but new tools can be defined specifically for this
+particular case.
+
+### Location Domination and Terminals
+
+These tools are based on notions proposed by J. D. Nystuen and M. F.
+Dacey (1961). As any location is both a production and a destination
+location, one can compare the outgoing flows to the incoming ones. In
+particular, Nystuen and Dacey focus on the maximum output flow and on
+the total incoming flow (the \\(D_j)\_{1\leq j\leq p}\\). More
+precisely, they define the importance of location \\j\\ as \\D_j\\ and
+introduce the notion of *domination*: a location \\k\\ is *dominated* if
+its importance is smaller than the importance of the location to which
+it is sending its largest flow. In equation:
+
+\\ D_k \< D\_{\arg\max\_{j} Y\_{kj}}. \\
+
+A *terminal* is a location that is not dominated. Rihll and Wilson
+(1991) propose a relaxed version in which a terminal is a location that
+receives a total incoming flow larger than all its individual outgoing
+flows. Thus, location \\k\\ is dominated according to this definition
+if:
+
+\\ D_k \< \max\_{j}Y\_{kj}. \\
+
+It is easy to see that a terminal in the Nystuen and Dacey definition is
+also a terminal for Rihll and Wilson, but the reverse is false. The
+functions
+[`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
+and
+[`is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/is_terminal.md)
+compute the terminals according to either definition. In addition, the
+number of terminals can be seen as a diversity measure and is thus
+included in the definitions supported by
+[`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md).
+
+### Domination Graphs
+
+In addition to extracting terminals from a non-bipartite model, Nystuen
+and Dacey propose to analyse the so-called *nodal structure* of the
+flows. It consists of the *nodal flows*, i.e. the links between each
+non-terminal location and the location to which it is sending its
+largest flow. This defines a graph on the locations which is very sparse
+(it has \\p-t\\ edges, where \\p\\ is the number of locations and \\t\\
+the number of terminals). The function
+[`nd_graph()`](https://fabrice-rossi.github.io/blvim/reference/nd_graph.md)
+computes this graph according to both terminal definitions.
+
+## References
+
+Harris, B. (1964). “A model of locational equilibrium for retail trade”,
+Penn-Jersey Transportation Study, Philadelphia, Pennsylvania (mimeo).
+
+Harris, B., & Wilson, A. G. (1978). “Equilibrium Values and Dynamics of
+Attractiveness Terms in Production-Constrained Spatial-Interaction
+Models”, Environment and Planning A: Economy and Space, 10(4), 371-388.
+<https://dx.doi.org/10.1068/a100371>
+
+Jost, L. (2006), “Entropy and diversity”, Oikos, 113: 363-375.
+<https://dx.doi.org/10.1111/j.2006.0030-1299.14714.x>
+
+Nystuen, J.D. and Dacey, M.F. (1961), “A graph theory interpretation of
+nodal regions”, Papers and Proceedings of the Regional Science
+Association 7: 29–42. <https://dx.doi.org/10.1007/bf01969070>
+
+Rihll, T., and Wilson, A. (1991), “Modelling settlement structures in
+ancient Greece: new approaches to the polis”, In City and Country in the
+Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
+London: Routledge.
+
+Wilson, A. (2008), “Boltzmann, Lotka and Volterra and spatial structural
+evolution: an integrated methodology for some dynamical systems”, J. R.
+Soc. Interface.5865–871 <https://dx.doi.org/10.1098/rsif.2007.1288>

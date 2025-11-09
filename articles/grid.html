@@ -90,7 +90,7 @@ collection of <code>grid_*</code> functions.</p>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">locations</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, label <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="700"></p>
 <p>We use the Euclidean distance between the points as the interaction
 costs.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -156,7 +156,7 @@ standard matrix display and the position-based one.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  flows <span class="op">=</span> <span class="st">"full"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -164,7 +164,7 @@ standard matrix display and the position-based one.</p>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="variability-plot">Variability plot<a class="anchor" aria-label="anchor" href="#variability-plot"></a>
@@ -177,7 +177,7 @@ focuses on individual flows as shown below.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_light</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="700"></p>
 <p>For instance, the M column shows the flows received from all
 locations by location M (the centre point of the locations). The thick
 squares correspond to the median of the flow received by M over all the
@@ -189,7 +189,7 @@ circles to display statistics of those flows.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models</span>, flows <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">7</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="700"></p>
 <p>he figure confirms that the external locations do not receive any
 flow. The median flow received by M, the central location, is
 significantly larger than other flows. The internal tiny circle for this
@@ -280,14 +280,14 @@ diversities of the models.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="576" style="display: block; margin: auto;"></p>
 <p>he figure shows, for each combination of parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, a coloured rectangle that
 represents the chosen numerical value for the corresponding model. One
 can display any column of the <code>sim_df</code> object, for instance
 the convergence status.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models_df</span>, <span class="va">converged</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="576" style="display: block; margin: auto;"></p>
 <p>The <code><a href="../reference/autoplot.sim_df.html">autoplot.sim_df()</a></code> function uses tidy evaluation,
 which enables the user to compute interesting values on the fly, as in
 the following figure that displays the number of terminals per model,
@@ -295,7 +295,7 @@ according to the Nystuen and Dacey definition.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models_df</span>, <span class="fu"><a href="../reference/diversity.html">diversity</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"ND"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -325,7 +325,7 @@ on the dendrogram of the clustering, with the large cluster on the
 left.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">models_hc</span>, hang <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="700"></p>
 <p>As we use clustering only to explore the result set, we can set the
 number of clusters to an arbitrary value: we are not looking for a
 clustering structure but rather we want to summarise the model set. A
@@ -341,7 +341,7 @@ membership, as follows for instance:</p>
 visualisation.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">models_df</span>, <span class="va">cluster</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-20-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="showing-cluster-variability">Showing cluster variability<a class="anchor" aria-label="anchor" href="#showing-cluster-variability"></a>
@@ -356,7 +356,7 @@ each of the groups identified by a partitioning variable in a
 <p>Using the clustering obtained above, we simply write:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_var_autoplot.html">grid_var_autoplot</a></span><span class="op">(</span><span class="va">models_df</span>, <span class="va">cluster</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-21-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 <p>This gives a flow variation panel for each of the 16 clusters. Based
 on the redundancy of the display, we can guess that we asked for too
 many clusters, but apart from that, the representation outlines a
@@ -375,7 +375,7 @@ different behaviours, provided we focus on the destination flows.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_var_autoplot.html">grid_var_autoplot</a></span><span class="op">(</span><span class="va">models_df</span>, <span class="va">cluster</span>, flows <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-22-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 <p>The fact that we see only one circle at most per position illustrates
 the quality of the clusters (this was also the case in the previous
 visualisation, but less clearly). Indeed, this means that the
@@ -417,7 +417,7 @@ as follows.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">models_center_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-24-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 <p>The function supports all the individual representations, for
 instance flows with positions.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -427,13 +427,13 @@ instance flows with positions.</p>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-25-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 <p>Destination flows with positions are also supported.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">models_center_df</span>, flows <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-26-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 <p>In this example, the structure of the result collection is quite
 simple and was already captured to a large extent by the variability
 plots. In more complex situations, the series of graphics are
@@ -484,7 +484,7 @@ coordinates of those cities obtained from <a href="https://www.openstreetmap.org
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html" class="external-link">geom_label_repel</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="models">Models<a class="anchor" aria-label="anchor" href="#models"></a>
@@ -510,7 +510,7 @@ except for a few values.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models_df</span>, <span class="va">iterations</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-31-1.png" width="576" style="display: block; margin: auto;">
+<p><img src="grid_files/figure-html/unnamed-chunk-31-1.png" class="r-plt" width="576" style="display: block; margin: auto;">
 The full range of diversity possible with 21 cities is covered in the
 parameter space, which indicates that an extension of the parameter
 range will probably not uncover SIMs that differ significantly from
@@ -518,7 +518,7 @@ those obtained with the chosen range.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models_df</span>, <span class="va">diversity</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-32-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="variability-plot-1">Variability plot<a class="anchor" aria-label="anchor" href="#variability-plot-1"></a>
@@ -533,7 +533,7 @@ of their own flow, probably owing to their isolated positions.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-33-1.png" width="700">
+<p><img src="grid_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" width="700">
 Destination flows tell the same story. Notably, most of the cities have
 a null median incoming flow, apart from Athens, Gibraltar, Lyon and
 Stockholm. In addition, most of the cities have a 0.95 quantile of 1,
@@ -543,7 +543,7 @@ to the four cities mentioned above).</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models</span>, flows <span class="op">=</span> <span class="st">"destination"</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-34-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models</span>,</span>
 <span>  flows <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -551,7 +551,7 @@ to the four cities mentioned above).</p>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-35-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="clustering">Clustering<a class="anchor" aria-label="anchor" href="#clustering"></a>
@@ -567,14 +567,14 @@ above, the role of clustering is to allow exploration of the result
 spaces rather than to find actual clusters.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">euro_models_hc</span>, hang <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-37-1.png" class="r-plt" width="700"></p>
 <p>The clusters are well organised on the parameter set.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">euro_models_df</span><span class="op">$</span><span class="va">cluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cutree.html" class="external-link">cutree</a></span><span class="op">(</span><span class="va">euro_models_hc</span>, k <span class="op">=</span> <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models_df</span>, <span class="va">cluster</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-38-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-38-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 <p>The variability plot shows mostly isolated circles with no inner or
 outer ring. This means that the clusters are relatively homogeneous in
 terms of destination flows, and thus median flows will give a good idea
@@ -586,7 +586,7 @@ of typical behaviours.</p>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-39-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-39-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 <p>Those behaviours are visible both at the destination flow level
 (above) and at the flow level (below):</p>
 <ul>
@@ -610,7 +610,7 @@ and Madrid.</li>
 </ul>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_var_autoplot.html">grid_var_autoplot</a></span><span class="op">(</span><span class="va">euro_models_df</span>, <span class="va">cluster</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-40-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-40-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="medoids">Medoids<a class="anchor" aria-label="anchor" href="#medoids"></a>
@@ -627,7 +627,7 @@ and Madrid.</li>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">euro_models_center_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-42-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-42-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">euro_models_center_df</span>,</span>
 <span>  flows <span class="op">=</span> <span class="st">"destination"</span>,</span>
@@ -635,14 +635,14 @@ and Madrid.</li>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-43-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-43-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">euro_models_center_df</span>,</span>
 <span>  with_positions <span class="op">=</span> <span class="cn">TRUE</span>, arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.015</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-44-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-44-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 <p>To further the analysis, one can focus on a particular medoid, for
 instance cluster 1:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
@@ -652,7 +652,7 @@ instance cluster 1:</p>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-45-1.png" class="r-plt" width="700"></p>
 <p>Or cluster 5:</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">euro_models_center</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>,</span>
@@ -661,7 +661,7 @@ instance cluster 1:</p>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-46-1.png" class="r-plt" width="700"></p>
 <p>Finally, one can randomly select a subset of the models in a cluster
 and use <code><a href="../reference/grid_autoplot.html">grid_autoplot()</a></code> to display these models all at
 once. This offers a way to visually assess the variability within that
@@ -677,7 +677,7 @@ to Hamburg and Copenhagen, whose level varies across the configurations
 <span><span class="fu"><a href="../reference/grid_autoplot.html">grid_autoplot</a></span><span class="op">(</span><span class="va">euro_models_cl4_sample_df</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>default_crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="grid_files/figure-html/unnamed-chunk-47-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="grid_files/figure-html/unnamed-chunk-47-1.png" class="r-plt" width="816" style="display: block; margin: auto;"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -691,7 +691,7 @@ to Hamburg and Copenhagen, whose level varies across the configurations
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
