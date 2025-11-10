@@ -1,8 +1,8 @@
 library(data.table)
 library(httr2)
 
-# In this script, we get the distances from
-# \href{https://geoservices.ign.fr/documentation/services/services-geoplateforme/itineraire-gpf}{geoservice}.
+# In this script, we get the distances from the IGN geoservice:
+# https://geoservices.ign.fr/documentation/services/services-geoplateforme/itineraire-gpf
 # Unfortunately, the licence of the API is not clear enough to be sure that
 # redistribution is allowed and if so, under which licence.
 
@@ -14,7 +14,7 @@ if (!file.exists(big_cities_geo_file)) {
 big_cities_geo <- fread(big_cities_geo_file, colClasses = list(character = "id"))
 setorder(big_cities_geo, "id")
 ## Distances
-## https://geoservices.ign.fr/documentation/services/services-geoplateforme/
+## https://geoservices.ign.fr/documentation/services/services-geoplateforme/itineraire-gpf
 big_cities_distances_file <- file.path(cache_dir, "big_cities_distances.csv.gz")
 if (!file.exists(big_cities_distances_file)) {
   big_cities_distances <- expand.grid(from = big_cities_geo$id, to = big_cities_geo$id)
