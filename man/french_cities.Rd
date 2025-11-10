@@ -42,17 +42,17 @@ inhabitants in 2022, excluding Corsican cities. It contains 121 cities
 described by 8 variables. The data frame is sorted in decreasing population
 order, making it straightforward to select the most populated cities. The
 same order is used for rows and columns in distance matrices
-\link{french_cities_distance} and \link{french_cities_time}.
+\link{french_cities_distances} and \link{french_cities_times}.
 
 The population and administrative information was collected from the INSEE
 open data in November 2025. These data are distributed under the
-\href{https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Open_Licence.pdf}{French
-"Open Licence"}. Geographical coordinates and areas have been obtained from the
+\href{https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Open_Licence.pdf}{French "Open Licence"}.
+Geographical coordinates and areas have been obtained from the
 \href{https://geo.api.gouv.fr/}{Geo API} in November 2025 and are also
 available under the French "Open Licence".
 }
 \seealso{
-\link{french_departments}, \link{french_regions}, \link{french_cities_distance} and
-\link{french_cities_time}
+\link{french_departments}, \link{french_regions}, \link{french_cities_distances} and
+\link{french_cities_times}
 }
 \keyword{datasets}

@@ -31,6 +31,8 @@ if (!file.exists(big_cities_geo_file)) {
 big_cities_geo <- fread(big_cities_geo_file, colClasses = list(character = "id"))
 
 ## Distances
+## Replace "big_cities_distances_osm.csv.gz" by "big_cities_distances.csv.gz"
+## to use the IGN distance if ign_geoservices.R was used.
 big_cities_distances_file <- file.path(cache_dir, "big_cities_distances_osm.csv.gz")
 if (!file.exists(big_cities_distances_file)) {
   cli::cli_abort("I need the city distances (see README.md)")
@@ -42,15 +44,15 @@ full_distances <- fread(big_cities_distances_file,
 
 setorder(full_distances, to, from)
 setorder(big_cities, id)
-french_cities_distance <- matrix(full_distances$distance, nrow = nrow(big_cities))
-rownames(french_cities_distance) <- big_cities$id
-colnames(french_cities_distance) <- big_cities$id
-french_cities_time <- matrix(full_distances$duration, nrow = nrow(big_cities))
-rownames(french_cities_time) <- big_cities$id
-colnames(french_cities_time) <- big_cities$id
+french_cities_distances <- matrix(full_distances$distance, nrow = nrow(big_cities))
+rownames(french_cities_distances) <- big_cities$id
+colnames(french_cities_distances) <- big_cities$id
+french_cities_times <- matrix(full_distances$duration, nrow = nrow(big_cities))
+rownames(french_cities_times) <- big_cities$id
+colnames(french_cities_times) <- big_cities$id
 pop_order <- order(big_cities$population, decreasing = TRUE)
-french_cities_distance <- french_cities_distance[pop_order, pop_order]
-french_cities_time <- french_cities_time[pop_order, pop_order]
+french_cities_distances <- french_cities_distances[pop_order, pop_order]
+french_cities_times <- french_cities_times[pop_order, pop_order]
 
 ## export
 french_cities <- big_cities[big_cities_geo[, .(id, area = surface / 100, th_longitude, th_latitude, centre_longitude = ctr_longitude, centre_latitude = ctr_latitude)],
@@ -68,6 +70,6 @@ setDF(french_regions)
 
 usethis::use_data(
   french_cities, french_departments, french_regions,
-  french_cities_distance, french_cities_time,
+  french_cities_distances, french_cities_times,
   overwrite = TRUE
 )

@@ -24,9 +24,7 @@ french_regions
 This data set contains the list of all French regions It can be joined with
 the \link{french_departments} or the \link{french_cities} data set. The data set was
 extracted from the INSEE open data in November 2025. These data are
-distributed under the
-\href{https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Open_Licence.pdf}{French
-"Open Licence"}.
+distributed under the \href{https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Open_Licence.pdf}{French "Open Licence"}.
 }
 \seealso{
 \link{french_departments} and \link{french_cities}

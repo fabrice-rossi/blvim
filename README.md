@@ -71,7 +71,7 @@ origins <- french_cities[1:30, c("th_longitude", "th_latitude")]
 ## 20 smallest cities
 destinations <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), c("th_longitude", "th_latitude")]
 ## cost matrix
-cost_matrix <- french_cities_distance[1:30, (nrow(french_cities) - 19):nrow(french_cities)]
+cost_matrix <- french_cities_distances[1:30, (nrow(french_cities) - 19):nrow(french_cities)]
 rownames(cost_matrix) <- french_cities[1:30, "name"]
 colnames(cost_matrix) <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), "name"]
 ```
