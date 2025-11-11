@@ -8,7 +8,10 @@
 [![R-CMD-check](https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/fabrice-rossi/blvim/graph/badge.svg)](https://app.codecov.io/gh/fabrice-rossi/blvim)
-
+[![blvim
+version](https://fabrice-rossi.r-universe.dev/blvim/badges/version)](https://fabrice-rossi.r-universe.dev/blvim)
+[![blvim
+status](https://fabrice-rossi.r-universe.dev/blvim/badges/checks)](https://fabrice-rossi.r-universe.dev/blvim)
 <!-- badges: end -->
 
 `blvim` implements A. Wilson’s **Boltzmann–Lotka–Volterra (BLV)
@@ -26,12 +29,10 @@ representations (see `vignette("grid")` for details on this aspect).
 
 ## Installation
 
-You can install the development version of `blvim` from
-[GitHub](https://github.com/) with:
+You can install `blvim` from [R-universe](https://r-universe.dev/) with:
 
 ``` r
-# install.packages("pak")
-pak::pak("fabrice-rossi/blvim")
+install.packages('blvim', repos = c('https://fabrice-rossi.r-universe.dev'))
 ```
 
 ## Spatial interaction models
