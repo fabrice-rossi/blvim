@@ -1,7 +1,7 @@
-#' Compute an equilibrium solution of the Boltzmann–Lotka–Volterra model
+#' Compute an equilibrium solution of the Boltzmann-Lotka-Volterra model
 #'
 #' This function computes flows between origin locations and destination
-#' locations at an equilibrium solution of A. Wilson's Boltzmann–Lotka–Volterra
+#' locations at an equilibrium solution of A. Wilson's Boltzmann-Lotka-Volterra
 #' (BLV) interaction model. The BLV dynamic model is initialised with the
 #' production constraints at the origin locations and the initial values of the
 #' the attractiveness of destination locations. Iterations update the
@@ -64,7 +64,7 @@
 #'
 #'   Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 #'   evolution: an integrated methodology for some dynamical systems", J. R.
-#'   Soc. Interface.5865–871 \doi{10.1098/rsif.2007.1288}
+#'   Soc. Interface.5865-871 \doi{10.1098/rsif.2007.1288}
 #'
 blvim <- function(costs, X, alpha, beta, Z,
                   bipartite = TRUE, origin_data = NULL, destination_data = NULL,

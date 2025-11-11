@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid-dynamic.R
 \name{grid_blvim}
 \alias{grid_blvim}
-\title{Compute a collection of Boltzmann–Lotka–Volterra model solutions}
+\title{Compute a collection of Boltzmann-Lotka-Volterra model solutions}
 \usage{
 grid_blvim(
   costs,

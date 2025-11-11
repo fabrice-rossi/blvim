@@ -30,11 +30,11 @@
 #'   structure of a spatial interaction model
 #' @references Nystuen, J.D. and Dacey, M.F. (1961), "A graph theory
 #'   interpretation of nodal regions", Papers and Proceedings of the Regional
-#'   Science Association 7: 29–42. \doi{10.1007/bf01969070}
+#'   Science Association 7: 29-42. \doi{10.1007/bf01969070}
 #'
 #'   Rihll, T., and Wilson, A. (1991), "Modelling settlement structures in
 #'   ancient Greece: new approaches to the polis", In City and Country in the
-#'   Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
+#'   Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58-95.
 #'   London: Routledge.
 #' @export
 #'

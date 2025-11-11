@@ -1,4 +1,4 @@
-#' Compute a collection of Boltzmann–Lotka–Volterra model solutions
+#' Compute a collection of Boltzmann-Lotka-Volterra model solutions
 #'
 #' This function computes a collection of flows between origin locations and
 #' destination locations using [blvim()] on a grid of parameters. The flows use

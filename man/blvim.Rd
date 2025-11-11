@@ -2,7 +2,7 @@
 % Please edit documentation in R/dynamic.R
 \name{blvim}
 \alias{blvim}
-\title{Compute an equilibrium solution of the Boltzmann–Lotka–Volterra model}
+\title{Compute an equilibrium solution of the Boltzmann-Lotka-Volterra model}
 \usage{
 blvim(
   costs,
@@ -60,7 +60,7 @@ model.
 }
 \description{
 This function computes flows between origin locations and destination
-locations at an equilibrium solution of A. Wilson's Boltzmann–Lotka–Volterra
+locations at an equilibrium solution of A. Wilson's Boltzmann-Lotka-Volterra
 (BLV) interaction model. The BLV dynamic model is initialised with the
 production constraints at the origin locations and the initial values of the
 the attractiveness of destination locations. Iterations update the
@@ -148,5 +148,5 @@ Spatial-Interaction Models", Environment and Planning A: Economy and Space,
 
 Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
-Soc. Interface.5865–871 \doi{10.1098/rsif.2007.1288}
+Soc. Interface.5865-871 \doi{10.1098/rsif.2007.1288}
 }

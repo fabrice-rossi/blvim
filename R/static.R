@@ -84,13 +84,13 @@
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness,
-#'   origin_data = list(names = letters[1:10], positions = positions),
-#'   destination_data = list(names = letters[1:10], positions = positions)
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness,
+#'   origin_data = list(names = french_cities$name[1:10], positions = positions),
+#'   destination_data = list(names = french_cities$name[1:10], positions = positions)
 #' )
 #' model
 #' location_names(model)
