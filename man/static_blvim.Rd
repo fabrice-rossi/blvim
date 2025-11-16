@@ -51,14 +51,14 @@ proposed by A. Wilson.
 \details{
 The model computes flows using the following parameters:
 \itemize{
-\item \code{costs} (\eqn{c}) is a \eqn{n\times p} matrix whose \eqn{(i,j )} entry is the
-cost of having a "unitary" flow from origin location \eqn{i} to destination
-location \eqn{j}
-\item \code{X} (\eqn{X}) is a vector of size \eqn{n} containing non negative production
-constraints for the \eqn{n} origin locations
-\item \code{alpha} (\eqn{\alpha}) is a return to scale parameter that enhance (or reduce
-if smaller that 1) the attractivenesses of destination locations when they
-are larger than 1
+\item \code{costs} (\eqn{c}) is a \eqn{n\times p} matrix whose \eqn{(i,j )} entry is
+the cost of having a "unitary" flow from origin location \eqn{i} to
+destination location \eqn{j}
+\item \code{X} (\eqn{X}) is a vector of size \eqn{n} containing non negative
+production constraints for the \eqn{n} origin locations
+\item \code{alpha} (\eqn{\alpha}) is a return to scale parameter that enhance (or
+reduce if smaller that 1) the attractivenesses of destination locations when
+they are larger than 1
 \item \code{beta} (\eqn{\beta}) is the inverse of a cost scale parameter, i.e., costs
 are multiplied by \code{beta} in the model
 \item \code{Z} (\eqn{Z}) is a vector of size \eqn{p} containing the positive
@@ -105,7 +105,8 @@ given by a list whose components are not interpreted excepted the following
 ones:
 \itemize{
 \item \code{names} is used to specify location names and its content has to follow
-the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}
+the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and
+\code{\link[=destination_names<-]{destination_names<-()}}
 \item \code{positions} is used to specify location positions and its content has
 to follow the restrictions documented in \code{\link[=origin_positions<-]{origin_positions<-()}} and
 \code{\link[=destination_positions<-]{destination_positions<-()}}
@@ -119,8 +120,14 @@ distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness,
-  origin_data = list(names = french_cities$name[1:10], positions = positions),
-  destination_data = list(names = french_cities$name[1:10], positions = positions)
+  origin_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  ),
+  destination_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  )
 )
 model
 location_names(model)
@@ -132,5 +139,6 @@ associated developments", Environment and Planning A: Economy and Space,
 3(1), 1-32 \doi{10.1068/a030001}
 }
 \seealso{
-\code{\link[=origin_names]{origin_names()}}, \code{\link[=destination_names]{destination_names()}}
+\code{\link[=origin_names]{origin_names()}}, \code{\link[=destination_names]{destination_names()}}, \code{\link[=origin_positions]{origin_positions()}},
+\code{\link[=destination_positions]{destination_positions()}}
 }

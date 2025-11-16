@@ -74,7 +74,7 @@ test_that("sim_list handles positions correctly, non bipartite case", {
   )
   ## set positions
   ## random reorder for testing purposes
-  config$pd <- config$pd[sample(1:nrow(config$pd)), ]
+  config$pd <- config$pd[sample(nrow(config$pd)), ]
   origin_positions(models) <- config$pp
   expect_equal(origin_positions(models), config$pp)
   expect_equal(destination_positions(models), config$pp)

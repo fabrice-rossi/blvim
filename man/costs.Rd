@@ -24,4 +24,5 @@ production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
 model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 costs(model) ## should be equal to distances above
+all.equal(costs(model), distances)
 }

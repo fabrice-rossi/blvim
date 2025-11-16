@@ -16,16 +16,19 @@
 #' @return an object of class `sim_list`
 #' @export
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness)
+#' attractiveness <- log(french_cities$area[1:10])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness
+#' )
 #' all_flows
 #' length(all_flows)
 #' all_flows[[2]]
 grid_blvim <- function(costs, X, alphas, betas, Z,
-                       bipartite = TRUE, origin_data = NULL, destination_data = NULL,
+                       bipartite = TRUE, origin_data = NULL,
+                       destination_data = NULL,
                        epsilon = 0.01,
                        iter_max = 50000,
                        conv_check = 100,

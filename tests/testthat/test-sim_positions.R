@@ -126,7 +126,7 @@ test_that("positions are handled consistantly in the non bipartite case", {
   config <- create_locations(40, 40, symmetric = TRUE, seed = 420)
   model <- static_blvim(config$costs, config$X, 1.5, 1, config$Z, bipartite = FALSE)
   ## arbitrary reorder for testing purposes
-  config$pd <- config$pd[sample(1:nrow(config$pd)), ]
+  config$pd <- config$pd[sample(nrow(config$pd)), ]
   ## set positions
   origin_positions(model) <- config$pp
   expect_equal(origin_positions(model), config$pp)

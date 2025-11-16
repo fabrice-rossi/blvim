@@ -124,7 +124,8 @@ given by a list whose components are not interpreted excepted the following
 ones:
 \itemize{
 \item \code{names} is used to specify location names and its content has to follow
-the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}
+the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and
+\code{\link[=destination_names<-]{destination_names<-()}}
 \item \code{positions} is used to specify location positions and its content has
 to follow the restrictions documented in \code{\link[=origin_positions<-]{origin_positions<-()}} and
 \code{\link[=destination_positions<-]{destination_positions<-()}}
@@ -133,11 +134,12 @@ to follow the restrictions documented in \code{\link[=origin_positions<-]{origin
 }
 
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-flows <- blvim(distances, production, 1.5, 1, attractiveness)
+attractiveness <- log(french_cities$area[1:10])
+## rescale to production
+attractiveness <- attractiveness / sum(attractiveness) * sum(production)
+flows <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
 flows
 }
 \references{
@@ -149,4 +151,8 @@ Spatial-Interaction Models", Environment and Planning A: Economy and Space,
 Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
 Soc. Interface.5865-871 \doi{10.1098/rsif.2007.1288}
+}
+\seealso{
+\code{\link[=grid_blvim]{grid_blvim()}} for systematic exploration of parameter influence,
+\code{\link[=static_blvim]{static_blvim()}} for the static model.
 }

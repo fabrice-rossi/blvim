@@ -61,12 +61,21 @@ is a Rihll & Wilson terminal, but the reverse is false in general. The
 function use the Rihll & Wilson definition when \code{definition} is \code{"RW"}
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-model <- blvim(distances, production, 1.3, 2, attractiveness, bipartite = FALSE)
+model <- blvim(distances, production, 1.3, 1 / 250, attractiveness,
+  bipartite = FALSE
+)
+destination_names(model) <- french_cities$name[1:10]
 terminals(model)
+dist_times <- french_cities_times[1:10, 1:10]
+tmodel <- blvim(dist_times, production, 1.3, 1 / 5000, attractiveness,
+  bipartite = FALSE
+)
+destination_names(tmodel) <- french_cities$name[1:10]
+terminals(tmodel)
+terminals(tmodel, definition = "RW")
 }
 \references{
 Nystuen, J.D. and Dacey, M.F. (1961), "A graph theory

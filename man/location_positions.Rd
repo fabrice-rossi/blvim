@@ -29,20 +29,23 @@ positions. It is recommended to use \code{\link[=origin_positions]{origin_positi
 \section{Positions}{
 Location positions are given by numeric matrices with 2 or 3 columns. The
 first two columns are assumed to be geographical coordinates while the 3rd
-column can be used for instance to store altitude. Coordinates are interpreted
-as is in graphical representations (see \code{\link[=autoplot.sim]{autoplot.sim()}}). They are not matched
-to the costs as those can be derived from complex movement models and other
-non purely geographic considerations.
+column can be used for instance to store altitude. Coordinates are
+interpreted as is in graphical representations (see \code{\link[=autoplot.sim]{autoplot.sim()}}). They
+are not matched to the costs as those can be derived from complex movement
+models and other non purely geographic considerations.
 }
 
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 ## No positions
-location_positions(model) <- list(origin = positions, destination = positions)
+location_positions(model) <- list(
+  origin = positions,
+  destination = positions
+)
 destination_positions(model)
 origin_positions(model)
 }

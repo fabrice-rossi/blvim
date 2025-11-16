@@ -25,13 +25,13 @@ is not the result of an iterative calculation. The function applies also to a
 collection of spatial interaction models as represented by a \code{sim_list}.
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- log(french_cities$population[1:10])
+attractiveness <- log(french_cities$area[1:10])
+model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+destination_flow(model)
 sim_converged(model) ## must be NA
 }
 \seealso{
-\code{\link[=sim_iterations]{sim_iterations()}}
+\code{\link[=sim_iterations]{sim_iterations()}}, \code{\link[=blvim]{blvim()}}, \code{\link[=grid_blvim]{grid_blvim()}}
 }

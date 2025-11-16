@@ -21,8 +21,8 @@
 #' the context of the data frame and used for wrapping. Notice that if the
 #' expression evaluates to identical values for different SIMs, they will be
 #' drawn on the same panel of the final figure, which may end up with
-#' meaningless representations. Parameters of [ggplot2::facet_wrap()] can
-#' be set using the `fw_params` parameter (in a list).
+#' meaningless representations. Parameters of [ggplot2::facet_wrap()] can be set
+#' using the `fw_params` parameter (in a list).
 #'
 #' @param sim_df a data frame of spatial interaction models, an object of class
 #'   `sim_df`
@@ -31,22 +31,29 @@
 #' @inheritParams autoplot.sim
 #' @param max_sims the maximum number of spatial interaction models allowed in
 #'   the `sim_df` data frame
-#' @param fw_params parameters for the [ggplot2::facet_wrap] call (if non `NULL`)
+#' @param fw_params parameters for the [ggplot2::facet_wrap] call (if non
+#'   `NULL`)
 #' @param ... additional (named) parameters passed to [autoplot.sim()]
 #' @export
 #' @returns a ggplot object
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
+#' attractiveness <- log(french_cities$area[1:10])
 #' all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
-#'   seq(1, 3, by = 0.5),
+#'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
 #'   epsilon = 0.1, iter_max = 1000,
-#'   destination_data = list(names = LETTERS[1:10], positions = positions),
-#'   origin_data = list(names = LETTERS[1:10], positions = positions)
+#'   destination_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   ),
+#'   origin_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   )
 #' )
 #' all_flows_df <- sim_df(all_flows)
 #' ## default display: flows as matrices
@@ -58,9 +65,11 @@
 #' grid_autoplot(all_flows_df, flows = "attractiveness")
 #' ## with positions
 #' grid_autoplot(all_flows_df, flows = "destination", with_positions = TRUE) +
-#'   ggplot2::scale_size_continuous(range = c(0, 2))
+#'   ggplot2::scale_size_continuous(range = c(0, 2)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 #' grid_autoplot(all_flows_df, with_positions = TRUE) +
-#'   ggplot2::scale_linewidth_continuous(range = c(0, 1))
+#'   ggplot2::scale_linewidth_continuous(range = c(0, 1)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 grid_autoplot <- function(sim_df, key,
                           flows = c("full", "destination", "attractiveness"),
                           with_names = FALSE,
@@ -72,7 +81,10 @@ grid_autoplot <- function(sim_df, key,
                           fw_params = NULL,
                           ...) {
   rlang::check_installed("ggplot2", reason = "to use `grid_autoplot()`")
-  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits, with_labels)
+  check_autoplot_params(
+    with_names, with_positions, cut_off, adjust_limits,
+    with_labels
+  )
   if (!is.numeric(max_sims) || max_sims <= 0) {
     cli::cli_abort(
       c("{.arg max_sims} must be non negative number",
@@ -84,7 +96,8 @@ grid_autoplot <- function(sim_df, key,
     cli::cli_abort("{.arg sim_df} must be a {.cls sim_df} object")
   }
   if (nrow(sim_df) > max_sims) {
-    cli::cli_abort("Too many spatial interaction models ({.val {nrow(sim_df)}} > {.arf max_sims} = {.val {max_sims}})")
+    cli::cli_abort("Too many spatial interaction models
+({.val {nrow(sim_df)}} > {.arf max_sims} = {.val {max_sims}})")
   }
   check_dots_named(list(...))
   flows <- rlang::arg_match(flows)

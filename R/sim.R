@@ -87,12 +87,15 @@ print.sim <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' ## rescale to production
+#' attractiveness <- attractiveness / sum(attractiveness) * sum(production)
+#' model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness)
 #' flows(model)
+#' @seealso [flows_df()] for a data frame version of the flows,
+#' [destination_flow()] for destination flows.
 flows <- function(sim, ...) {
   UseMethod("flows")
 }
@@ -135,22 +138,28 @@ flows.sim <- function(sim, ...) {
 #'
 #' @returns a data frame of flows between origin locations and destination
 #'   locations with additional content if available (see Details).
-#' @seealso [location_positions()],  [location_names()]
+#' @seealso [location_positions()],  [location_names()], [flows()]
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' ## rescale to production
+#' attractiveness <- attractiveness / sum(attractiveness) * sum(production)
 #' ## simple case (no positions and default names)
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness)
 #' head(flows_df(model))
 #' ## with location data
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness,
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness,
 #'   origin_data = list(positions = positions),
 #'   destination_data = list(positions = positions)
 #' )
+#' head(flows_df(model))
+#' ## with names
+#' origin_names(model) <- french_cities$name[1:10]
+#' destination_names(model) <- french_cities$name[1:10]
 #' head(flows_df(model))
 flows_df <- function(sim, ...) {
   UseMethod("flows_df")
@@ -199,12 +208,15 @@ flows_df.sim <- function(sim, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
-#' all.equal(production(model), production)
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+#' production(model)
+#' ## the names of the production vector are set from the distance matrix
+#' ## we remove them for testing equality
+#' all.equal(as.numeric(production(model)), production)
+#' @seealso [attractiveness()], [destination_flow()]
 production <- function(sim, ...) {
   UseMethod("production")
 }
@@ -223,12 +235,15 @@ production.sim <- function(sim, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 #' attractiveness(model)
+#' ## the names of the attractiveness vector are set from the distance matrix
+#' ## we remove them for testing equality
+#' all.equal(as.numeric(attractiveness(model)), attractiveness)
+#' @seealso [production()], [destination_flow()]
 attractiveness <- function(sim, ...) {
   UseMethod("attractiveness")
 }
@@ -249,12 +264,14 @@ attractiveness.sim <- function(sim, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 #' destination_flow(model)
+#' ## should be different from the attractiveness as the model is static
+#' attractiveness(model)
+#' @seealso [production()], [attractiveness()]
 destination_flow <- function(sim, ...) {
   UseMethod("destination_flow")
 }
@@ -277,11 +294,11 @@ destination_flow.sim <- function(sim, ...) {
 #' @export
 #' @seealso [sim_converged()]
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+#' destination_flow(model)
 #' sim_iterations(model) ## must be one
 sim_iterations <- function(sim, ...) {
   UseMethod("sim_iterations")
@@ -308,13 +325,13 @@ sim_iterations.sim <- function(sim, ...) {
 #' @returns `TRUE`, `FALSE` or `NA`, as described above. In the case of a `sim_list`
 #' the function returns a logical vector with one value per model.
 #' @export
-#' @seealso [sim_iterations()]
+#' @seealso [sim_iterations()], [blvim()], [grid_blvim()]
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+#' destination_flow(model)
 #' sim_converged(model) ## must be NA
 sim_converged <- function(sim, ...) {
   UseMethod("sim_converged")
@@ -327,14 +344,15 @@ sim_converged.sim <- function(sim, ...) {
 
 #' Reports whether the spatial interaction model is bipartite
 #'
-#' The function returns `TRUE` is the spatial interaction model (SIM) is bipartite, that
-#' is if the origin locations are distinct from the destination locations (at least
-#' from the analysis point of view). The function return `FALSE` when the SIM
-#' uses the same locations for origin and destination.
+#' The function returns `TRUE` is the spatial interaction model (SIM) is
+#' bipartite, that is if the origin locations are distinct from the destination
+#' locations (at least from the analysis point of view). The function return
+#' `FALSE` when the SIM uses the same locations for origin and destination.
 #'
 #' @param sim a spatial interaction model object
 #'
-#' @returns `TRUE` if the spatial interaction model is bipartite, `FALSE` if not.
+#' @returns `TRUE` if the spatial interaction model is bipartite, `FALSE` if
+#'   not.
 #' @export
 #'
 #' @examples
@@ -346,7 +364,9 @@ sim_converged.sim <- function(sim, ...) {
 #' ## returns TRUE despite the use of a single set of positions
 #' sim_is_bipartite(model)
 #' ## now we are clear about the non bipartite nature of the model
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness, bipartite = FALSE)
+#' model <- static_blvim(distances, production, 1.5, 1, attractiveness,
+#'   bipartite = FALSE
+#' )
 #' sim_is_bipartite(model)
 sim_is_bipartite <- function(sim) {
   UseMethod("sim_is_bipartite")

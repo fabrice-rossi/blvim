@@ -21,11 +21,11 @@ the function returns a vector with iteration number per model.
 Returns the number of iterations used to produce this spatial interaction model
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- log(french_cities$population[1:10])
+attractiveness <- log(french_cities$area[1:10])
+model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+destination_flow(model)
 sim_iterations(model) ## must be one
 }
 \seealso{

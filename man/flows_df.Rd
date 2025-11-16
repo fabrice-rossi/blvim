@@ -48,20 +48,26 @@ and \code{"latitude"}, the resulting columns will be \code{destination_longitude
 }
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- log(french_cities$population[1:10])
+attractiveness <- log(french_cities$area[1:10])
+## rescale to production
+attractiveness <- attractiveness / sum(attractiveness) * sum(production)
 ## simple case (no positions and default names)
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness)
 head(flows_df(model))
 ## with location data
-model <- static_blvim(distances, production, 1.5, 1, attractiveness,
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness,
   origin_data = list(positions = positions),
   destination_data = list(positions = positions)
 )
 head(flows_df(model))
+## with names
+origin_names(model) <- french_cities$name[1:10]
+destination_names(model) <- french_cities$name[1:10]
+head(flows_df(model))
 }
 \seealso{
-\code{\link[=location_positions]{location_positions()}},  \code{\link[=location_names]{location_names()}}
+\code{\link[=location_positions]{location_positions()}},  \code{\link[=location_names]{location_names()}}, \code{\link[=flows]{flows()}}
 }

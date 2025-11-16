@@ -51,11 +51,12 @@
 #'
 #' @inheritSection static_blvim Location data
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' flows <- blvim(distances, production, 1.5, 1, attractiveness)
+#' attractiveness <- log(french_cities$area[1:10])
+#' ## rescale to production
+#' attractiveness <- attractiveness / sum(attractiveness) * sum(production)
+#' flows <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
 #' flows
 #' @references Harris, B., & Wilson, A. G. (1978). "Equilibrium Values and
 #'   Dynamics of Attractiveness Terms in Production-Constrained
@@ -65,7 +66,8 @@
 #'   Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 #'   evolution: an integrated methodology for some dynamical systems", J. R.
 #'   Soc. Interface.5865-871 \doi{10.1098/rsif.2007.1288}
-#'
+#' @seealso [grid_blvim()] for systematic exploration of parameter influence,
+#' [static_blvim()] for the static model.
 blvim <- function(costs, X, alpha, beta, Z,
                   bipartite = TRUE, origin_data = NULL, destination_data = NULL,
                   epsilon = 0.01,
@@ -74,7 +76,10 @@ blvim <- function(costs, X, alpha, beta, Z,
                   precision = 1e-6,
                   quadratic = FALSE) {
   check_configuration(costs, X, alpha, beta, Z, bipartite)
-  pre <- blv(costs, X, alpha, beta, Z, epsilon, iter_max, conv_check, precision, quadratic)
+  pre <- blv(
+    costs, X, alpha, beta, Z, epsilon, iter_max, conv_check, precision,
+    quadratic
+  )
   new_sim_blvim(pre$Y, pre$Z[, 1], costs, alpha, beta,
     bipartite, origin_data, destination_data,
     iteration = pre$iter + 1L,

@@ -27,16 +27,18 @@ names. It is recommended to use \code{\link[=origin_names]{origin_names()}} and 
 instead of \code{location_names} and \verb{location_names<-}.
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-rownames(positions) <- LETTERS[1:10]
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10]
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
 ## the row/column names of the cost matrix are used for the location
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 location_names(model)
 location_names(model) <- NULL
-location_names(model) <- list(origin = letters[1:10], destination = LETTERS[1:10])
+location_names(model)
+location_names(model) <- list(
+  origin = french_cities$name[1:10],
+  destination = LETTERS[1:10]
+)
 destination_names(model)
 origin_names(model)
 }

@@ -18,10 +18,15 @@ a vector of attractivenesses at the destination locations
 Extract the attractivenesses from a spatial interaction model object
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- log(french_cities$population[1:10])
+attractiveness <- log(french_cities$area[1:10])
+model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 attractiveness(model)
+## the names of the attractiveness vector are set from the distance matrix
+## we remove them for testing equality
+all.equal(as.numeric(attractiveness(model)), attractiveness)
+}
+\seealso{
+\code{\link[=production]{production()}}, \code{\link[=destination_flow]{destination_flow()}}
 }

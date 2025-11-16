@@ -1,10 +1,13 @@
-check_positions <- function(value, location_number, call = rlang::caller_env()) {
+check_positions <- function(value, location_number,
+                            call = rlang::caller_env()) {
   if (!is.null(value)) {
     if (!is.matrix(value)) {
       cli::cli_abort("{.arg value} must be a matrix", call = call)
     }
     if (nrow(value) != location_number) {
-      cli::cli_abort("{.arg value} must have {.val {location_number}} rows", call = call)
+      cli::cli_abort("{.arg value} must have {.val {location_number}} rows",
+        call = call
+      )
     }
     if (ncol(value) < 2 || ncol(value) > 3) {
       cli::cli_abort("{.arg value} must have 2 or 3 columns", call = call)
@@ -20,7 +23,8 @@ check_location_positions <- function(sim, value, call = rlang::caller_env()) {
       )
     }
     if (!identical(names(value), c("origin", "destination"))) {
-      cli::cli_abort("{.arg value} must have exactly two elements: {.field origin} and {.field destination}",
+      cli::cli_abort("{.arg value} must have exactly two elements:
+{.field origin} and {.field destination}",
         call = call
       )
     }
@@ -29,7 +33,8 @@ check_location_positions <- function(sim, value, call = rlang::caller_env()) {
   }
   if (!sim_is_bipartite(sim)) {
     if (!identical(value$origin, value$destination)) {
-      cli::cli_abort("{.arg sim} is not bipartite but origin and destination location positions differ.",
+      cli::cli_abort("{.arg sim} is not bipartite but origin and destination
+location positions differ.",
         call = call
       )
     }
@@ -47,10 +52,10 @@ check_location_positions <- function(sim, value, call = rlang::caller_env()) {
 #'
 #' Location positions are given by numeric matrices with 2 or 3 columns. The
 #' first two columns are assumed to be geographical coordinates while the 3rd
-#' column can be used for instance to store altitude. Coordinates are interpreted
-#' as is in graphical representations (see [autoplot.sim()]). They are not matched
-#' to the costs as those can be derived from complex movement models and other
-#' non purely geographic considerations.
+#' column can be used for instance to store altitude. Coordinates are
+#' interpreted as is in graphical representations (see [autoplot.sim()]). They
+#' are not matched to the costs as those can be derived from complex movement
+#' models and other non purely geographic considerations.
 #'
 #' @param sim a spatial interaction model object
 #' @returns for `location_positions` `NULL` or a list with two components:
@@ -61,13 +66,16 @@ check_location_positions <- function(sim, value, call = rlang::caller_env()) {
 #' @export
 #' @seealso [origin_positions()], [destination_positions()]
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 #' ## No positions
-#' location_positions(model) <- list(origin = positions, destination = positions)
+#' location_positions(model) <- list(
+#'   origin = positions,
+#'   destination = positions
+#' )
 #' destination_positions(model)
 #' origin_positions(model)
 location_positions <- function(sim) {
@@ -106,16 +114,16 @@ location_positions.sim <- function(sim) {
 #'
 #' @param sim a spatial interaction model object
 #'
-#' @returns for `origin_positions` `NULL` or the coordinate matrix for the origin
-#'   locations. for `origin_positions<-` the modified `sim` object
+#' @returns for `origin_positions` `NULL` or the coordinate matrix for the
+#'   origin locations. for `origin_positions<-` the modified `sim` object
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 #' origin_positions(model) <- positions
 #' origin_positions(model)
 #' @seealso [location_positions()], [destination_positions()]
@@ -162,8 +170,8 @@ origin_positions.sim <- function(sim) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
 #' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
@@ -181,8 +189,8 @@ destination_positions.sim <- function(sim) {
 
 #' @export
 #' @rdname destination_positions
-#' @param value a matrix with as many rows as  the number of destination locations
-#'   and 2 or 3 columns, or `NULL`
+#' @param value a matrix with as many rows as  the number of destination
+#'   locations and 2 or 3 columns, or `NULL`
 `destination_positions<-` <- function(sim, value) {
   UseMethod("destination_positions<-")
 }

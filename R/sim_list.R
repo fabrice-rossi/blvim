@@ -1,13 +1,11 @@
 #' Validate a collection of sims
 #'
-#' This function validates its inputs and abort in case of problems. To be valid,
-#' sims has to verify the following properties:
+#' This function validates its inputs and abort in case of problems. To be
+#' valid, sims has to verify the following properties:
 #'
-#' 1) it must be a list of sim objects
-#' 2) if it contains more than one object, they need to share
-#'   a) the same cost matrix
-#'   b) the same origin data (if any)
-#'   c) the same destination data (if any)
+#' 1) it must be a list of sim objects 2) if it contains more than one object,
+#' they need to share a) the same cost matrix b) the same origin data (if any)
+#' c) the same destination data (if any)
 #'
 #' @param sims a list of sim objects
 #' @param call caller environment for proper error reporting
@@ -29,7 +27,8 @@ validate_sim_list <- function(sims, call = rlang::caller_env()) {
     if (!all(costs_test)) {
       cli::cli_abort(
         c("all sim objects in {.arg sims} must share the same costs",
-          x = "{.arg sims[[1]]} and {.arg sims[[{which(!costs_test)[1]}]]} have different costs"
+          x = "{.arg sims[[1]]} and {.arg sims[[{which(!costs_test)[1]}]]}
+have different costs"
         ),
         call = call
       )
@@ -38,16 +37,26 @@ validate_sim_list <- function(sims, call = rlang::caller_env()) {
     if (!all(origin_test)) {
       cli::cli_abort(
         c("all sim objects in {.arg sims} must share the same origin data",
-          x = "{.arg sims[[1]]} and {.arg sims[[{which(!origin_test)[1]}]]} have different origin data"
+          x = "{.arg sims[[1]]} and {.arg sims[[{which(!origin_test)[1]}]]}
+have different origin data"
         ),
         call = call
       )
     }
-    destination_test <- sapply(sims, function(x) isTRUE(all.equal(x$destination, destination)))
+    destination_test <- sapply(
+      sims,
+      function(x) {
+        isTRUE(all.equal(
+          x$destination,
+          destination
+        ))
+      }
+    )
     if (!all(destination_test)) {
       cli::cli_abort(
         c("all sim objects in {.arg sims} must share the same destination data",
-          x = "{.arg sims[[1]]} and {.arg sims[[{which(!destination_test)[1]}]]} have different destination data"
+          x = "{.arg sims[[1]]} and {.arg sims[[{which(!destination_test)[1]}]]}
+have different destination data"
         ),
         call = call
       )
@@ -67,7 +76,10 @@ sims_compress <- function(sims) {
     x$destination <- NULL
     x
   })
-  list(sims = sims, common = list(costs = costs, origin = origin, destination = destination))
+  list(sims = sims, common = list(
+    costs = costs, origin = origin,
+    destination = destination
+  ))
 }
 
 ## reverse of compression for one sim
@@ -90,7 +102,8 @@ new_sim_list <- function(sims, common = NULL, ..., class = character()) {
     common <- cp_sims$common
     sims <- cp_sims$sims
   }
-  ## when common is specified, we assume the common elements were removed from the sim objects
+  ## when common is specified, we assume the common elements were removed
+  ## from the sim objects
   structure(
     sims,
     common = common,
@@ -133,7 +146,8 @@ sim_list <- function(sims, validate = TRUE) {
   ## validate the indexes
   out_of_range <- i > length(x)
   if (any(out_of_range)) {
-    cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x} with length {.val {length(x)}}",
+    cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x}
+with length {.val {length(x)}}",
       x = "out of range value(s): {.val {i[out_of_range]}}"
     ))
   }
@@ -144,7 +158,8 @@ sim_list <- function(sims, validate = TRUE) {
 `[[.sim_list` <- function(x, i, ...) {
   out_of_range <- i > length(x)
   if (any(out_of_range)) {
-    cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x} with length {.val {length(x)}}",
+    cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x} with
+length {.val {length(x)}}",
       x = "out of range value(s): {.val {i[out_of_range]}}"
     ))
   }
@@ -164,7 +179,7 @@ sim_list <- function(sims, validate = TRUE) {
 
 #' @export
 format.sim_list <- function(x, ...) {
-  one_model <- x[[1]]
+  one_model <- x[[1]] # nolint
   cli::cli_format_method({
     cli::cli_text(
       "Collection of {.val {length(x)}} spatial interaction models with ",
@@ -190,14 +205,15 @@ as.list.sim_list <- function(x, ...) {
   lapply(unclass(x), sim_restore, attr(x, "common"))
 }
 
-#' Extract all the attractivenesses from a collection of spatial interaction models
+#' Extract all the attractivenesses from a collection of spatial interaction
+#' models
 #'
 #' The function extract attractivenesses from all the spatial interaction models
 #' of the collection and returns them in a matrix in which each row corresponds
 #' to a model and each column to a destination location.
 #'
-#' @param sim_list a collection of spatial interaction models, an object of class
-#'   `sim_list`
+#' @param sim_list a collection of spatial interaction models, an object of
+#'   class `sim_list`
 #' @param ... additional parameters for the [attractiveness()] function
 #'
 #' @returns a matrix of attractivenesses at the destination locations
@@ -205,20 +221,17 @@ as.list.sim_list <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(15 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 15)
-#' attractiveness <- rep(1, 15)
-#' all_flows <- grid_blvim(distances,
-#'   production,
-#'   c(1.1, 1.25, 1.5),
-#'   c(1, 2, 3),
-#'   attractiveness,
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
 #'   epsilon = 0.1
 #' )
 #' g_Z <- grid_attractiveness(all_flows)
-#' ## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
-#' ## locations)
+#' ## should be 12 rows (3 times 4 parameter pairs) and 15 columns (15
+#' ## destination locations)
 #' dim(g_Z)
 grid_attractiveness <- function(sim_list, ...) {
   if (!inherits(sim_list, "sim_list")) {
@@ -227,14 +240,15 @@ grid_attractiveness <- function(sim_list, ...) {
   t(sapply(sim_list, attractiveness, ...))
 }
 
-#' Extract all the destination flows from a collection of spatial interaction models
+#' Extract all the destination flows from a collection of spatial interaction
+#' models
 #'
-#' The function extract destination flows from all the spatial interaction models
-#' of the collection and returns them in a matrix in which each row corresponds
-#' to a model and each column to a destination location.
+#' The function extract destination flows from all the spatial interaction
+#' models of the collection and returns them in a matrix in which each row
+#' corresponds to a model and each column to a destination location.
 #'
-#' @param sim_list a collection of spatial interaction models, an object of class
-#'   `sim_list`
+#' @param sim_list a collection of spatial interaction models, an object of
+#'   class `sim_list`
 #' @param ... additional parameters for the [destination_flow()] function
 #'
 #' @returns a matrix of destination flows at the destination locations
@@ -242,20 +256,17 @@ grid_attractiveness <- function(sim_list, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(15 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 15)
-#' attractiveness <- rep(1, 15)
-#' all_flows <- grid_blvim(distances,
-#'   production,
-#'   c(1.1, 1.25, 1.5),
-#'   c(1, 2, 3),
-#'   attractiveness,
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- rep(1, 10)
+#' attractiveness <- log(french_cities$area[1:10])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
 #'   epsilon = 0.1
 #' )
 #' g_df <- grid_destination_flow(all_flows)
-#' ## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
-#' ## locations)
+#' ## should be 12 rows (3 times 4 parameter pairs) and 10 columns (10
+#' ## destination locations)
 #' dim(g_df)
 grid_destination_flow <- function(sim_list, ...) {
   if (!inherits(sim_list, "sim_list")) {
@@ -269,13 +280,13 @@ grid_destination_flow <- function(sim_list, ...) {
 #' The function extract terminal status from all the spatial interaction models
 #' of the collection and returns them in a matrix in which each row corresponds
 #' to a model and each column to a destination location. The value at row `i`
-#' and column `j` is `TRUE` if destination `j` is a terminal in model `i`.
-#' This function applies only to non bipartite models.
+#' and column `j` is `TRUE` if destination `j` is a terminal in model `i`. This
+#' function applies only to non bipartite models.
 #'
 #' See [terminals()] for the definition of terminal locations.
 #'
-#' @param sim_list a collection of non bipartite spatial interaction models, an object of class
-#'   `sim_list`
+#' @param sim_list a collection of non bipartite spatial interaction models, an
+#'   object of class `sim_list`
 #' @inheritParams is_terminal
 #' @param ... additional parameters for the [is_terminal()] function
 #'
@@ -284,21 +295,18 @@ grid_destination_flow <- function(sim_list, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(15 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 15)
-#' attractiveness <- rep(1, 15)
-#' all_flows <- grid_blvim(distances,
-#'   production,
-#'   c(1.1, 1.25, 1.5),
-#'   c(1, 2, 3),
-#'   attractiveness,
-#'   bipartite = FALSE,
-#'   epsilon = 0.1
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
+#'   epsilon = 0.1,
+#'   bipartite = FALSE
 #' )
 #' g_df <- grid_is_terminal(all_flows)
-#' ## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
-#' ## locations)
+#' ## should be 12 rows (3 times 4 parameter pairs) and 15 columns (15
+#' ## destination locations)
 #' dim(g_df)
 grid_is_terminal <- function(sim_list, definition = c("ND", "RW"), ...) {
   if (!inherits(sim_list, "sim_list")) {
@@ -329,22 +337,20 @@ grid_is_terminal <- function(sim_list, definition = c("ND", "RW"), ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(15 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 15)
-#' attractiveness <- rep(1, 15)
-#' all_flows <- grid_blvim(distances,
-#'   production,
-#'   c(1.1, 1.25, 1.5),
-#'   c(1, 2, 3),
-#'   attractiveness,
-#'   bipartite = FALSE,
-#'   epsilon = 0.1
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
+#'   epsilon = 0.1,
+#'   bipartite = FALSE
 #' )
 #' diversities <- grid_diversity(all_flows)
-#' diversities ## should be a length 9 vector
+#' diversities ## should be a length 12 vector
 #' grid_diversity(all_flows, "renyi", 3)
-grid_diversity <- function(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...) {
+grid_diversity <- function(sim, definition = c("shannon", "renyi", "ND", "RW"),
+                           order = 1L, ...) {
   diversity(sim, definition, order, ...)
 }
 
@@ -372,18 +378,15 @@ sim_converged.sim_list <- function(sim, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(15 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 15)
-#' attractiveness <- rep(1, 15)
-#' all_flows <- grid_blvim(distances,
-#'   production,
-#'   c(1.1, 1.25, 1.5),
-#'   c(1, 2, 3),
-#'   attractiveness,
-#'   bipartite = FALSE,
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
 #'   epsilon = 0.1,
-#'   iter_max = 750,
+#'   bipartite = FALSE,
+#'   iter_max = 750
 #' )
 #' grid_sim_converged(all_flows)
 grid_sim_converged <- function(sim, ...) {
@@ -399,7 +402,8 @@ sim_iterations.sim_list <- function(sim, ...) {
 #' interaction models
 #'
 #' The function reports for each spatial interaction model of its `sim_list`
-#' parameter the number of iterations used to produce it (see [sim_iterations()])
+#' parameter the number of iterations used to produce it (see
+#' [sim_iterations()])
 #'
 #' Notice that [sim_iterations()] is generic and can be applied directly to
 #' `sim_list` objects. The current function is provided to be explicit in R code
@@ -414,18 +418,15 @@ sim_iterations.sim_list <- function(sim, ...) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(15 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 15)
-#' attractiveness <- rep(1, 15)
-#' all_flows <- grid_blvim(distances,
-#'   production,
-#'   c(1.1, 1.25, 1.5),
-#'   c(1, 2, 3),
-#'   attractiveness,
-#'   bipartite = FALSE,
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
 #'   epsilon = 0.1,
-#'   iter_max = 750,
+#'   bipartite = FALSE,
+#'   iter_max = 750
 #' )
 #' grid_sim_iterations(all_flows)
 grid_sim_iterations <- function(sim, ...) {

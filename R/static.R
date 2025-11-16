@@ -5,14 +5,14 @@
 #' proposed by A. Wilson.
 #'
 #' The model computes flows using the following parameters:
-#' * `costs` (\eqn{c}) is a \eqn{n\times p} matrix whose \eqn{(i,j )} entry is the
-#' cost of having a "unitary" flow from origin location \eqn{i} to destination
-#' location \eqn{j}
-#' * `X` (\eqn{X}) is a vector of size \eqn{n} containing non negative production
-#' constraints for the \eqn{n} origin locations
-#' * `alpha` (\eqn{\alpha}) is a return to scale parameter that enhance (or reduce
-#' if smaller that 1) the attractivenesses of destination locations when they
-#' are larger than 1
+#' * `costs` (\eqn{c}) is a \eqn{n\times p} matrix whose \eqn{(i,j )} entry is
+#' the cost of having a "unitary" flow from origin location \eqn{i} to
+#' destination location \eqn{j}
+#' * `X` (\eqn{X}) is a vector of size \eqn{n} containing non negative
+#' production constraints for the \eqn{n} origin locations
+#' * `alpha` (\eqn{\alpha}) is a return to scale parameter that enhance (or
+#' reduce if smaller that 1) the attractivenesses of destination locations when
+#' they are larger than 1
 #' * `beta` (\eqn{\beta}) is the inverse of a cost scale parameter, i.e., costs
 #' are multiplied by `beta` in the model
 #' * `Z` (\eqn{Z}) is a vector of size \eqn{p} containing the positive
@@ -57,10 +57,11 @@
 #' given by a list whose components are not interpreted excepted the following
 #' ones:
 #'   - `names` is used to specify location names and its content has to follow
-#'   the restrictions documented in [`origin_names<-()`] and [`destination_names<-()`]
+#' the restrictions documented in [`origin_names<-()`] and
+#' [`destination_names<-()`]
 #'   - `positions` is used to specify location positions and its content has
-#'   to follow the restrictions documented in [`origin_positions<-()`] and
-#'   [`destination_positions<-()`]
+#' to follow the restrictions documented in [`origin_positions<-()`] and
+#' [`destination_positions<-()`]
 #'
 #' @param costs a cost matrix
 #' @param X a vector of production constraints
@@ -89,8 +90,14 @@
 #' production <- rep(1, 10)
 #' attractiveness <- log(french_cities$area[1:10])
 #' model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness,
-#'   origin_data = list(names = french_cities$name[1:10], positions = positions),
-#'   destination_data = list(names = french_cities$name[1:10], positions = positions)
+#'   origin_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   ),
+#'   destination_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   )
 #' )
 #' model
 #' location_names(model)
@@ -98,9 +105,14 @@
 #' @references Wilson, A. (1971), "A family of spatial interaction models, and
 #'   associated developments", Environment and Planning A: Economy and Space,
 #'   3(1), 1-32 \doi{10.1068/a030001}
-#' @seealso [origin_names()], [destination_names()]
-static_blvim <- function(costs, X, alpha, beta, Z, bipartite = TRUE, origin_data = NULL, destination_data = NULL) {
+#' @seealso [origin_names()], [destination_names()], [origin_positions()],
+#'   [destination_positions()]
+static_blvim <- function(costs, X, alpha, beta, Z, bipartite = TRUE,
+                         origin_data = NULL, destination_data = NULL) {
   check_configuration(costs, X, alpha, beta, Z, bipartite)
   Y <- we_oc(costs, X, alpha, beta, Z)
-  new_sim_wpc(Y, Z, costs, alpha, beta, bipartite, origin_data, destination_data)
+  new_sim_wpc(
+    Y, Z, costs, alpha, beta, bipartite, origin_data,
+    destination_data
+  )
 }

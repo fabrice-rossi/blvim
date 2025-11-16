@@ -18,7 +18,8 @@ check_location_names <- function(sim, value, call = rlang::caller_env()) {
       )
     }
     if (!identical(names(value), c("origin", "destination"))) {
-      cli::cli_abort("{.arg value} must have exactly two elements: {.field origin} and {.field destination}",
+      cli::cli_abort("{.arg value} must have exactly two elements:
+{.field origin} and {.field destination}",
         call = call
       )
     }
@@ -29,7 +30,8 @@ check_location_names <- function(sim, value, call = rlang::caller_env()) {
         )
       }
       if (length(value$origin) != nrow(sim$Y)) {
-        cli::cli_abort("{.arg value$origin} must be of length {.val {nrow(sim$Y)}}",
+        cli::cli_abort("{.arg value$origin} must be of length
+{.val {nrow(sim$Y)}}",
           call = call
         )
       }
@@ -41,7 +43,8 @@ check_location_names <- function(sim, value, call = rlang::caller_env()) {
         )
       }
       if (length(value$destination) != ncol(sim$Y)) {
-        cli::cli_abort("{.arg value$destination} must be of length {.val {ncol(sim$Y)}}",
+        cli::cli_abort("{.arg value$destination} must be of length
+{.val {ncol(sim$Y)}}",
           call = call
         )
       }
@@ -49,7 +52,8 @@ check_location_names <- function(sim, value, call = rlang::caller_env()) {
   }
   if (!sim_is_bipartite(sim)) {
     if (!identical(value$origin, value$destination)) {
-      cli::cli_abort("{.arg sim} is not bipartite but origin and destination location names differ.",
+      cli::cli_abort("{.arg sim} is not bipartite but origin and destination
+location names differ.",
         call = call
       )
     }
@@ -72,16 +76,18 @@ check_location_names <- function(sim, value, call = rlang::caller_env()) {
 #' @export
 #' @seealso [origin_names()], [destination_names()]
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' rownames(positions) <- LETTERS[1:10]
-#' distances <- as.matrix(dist(positions))
+#' distances <- french_cities_distances[1:10, 1:10]
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
 #' ## the row/column names of the cost matrix are used for the location
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 #' location_names(model)
 #' location_names(model) <- NULL
-#' location_names(model) <- list(origin = letters[1:10], destination = LETTERS[1:10])
+#' location_names(model)
+#' location_names(model) <- list(
+#'   origin = french_cities$name[1:10],
+#'   destination = LETTERS[1:10]
+#' )
 #' destination_names(model)
 #' origin_names(model)
 location_names <- function(sim) {
@@ -122,15 +128,13 @@ location_names.sim <- function(sim) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' rownames(positions) <- LETTERS[1:10]
-#' distances <- as.matrix(dist(positions))
+#' distances <- french_cities_distances[1:10, 1:10]
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
 #' ## the row/column names of the cost matrix are used for the location
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 #' origin_names(model)
-#' origin_names(model) <- letters[11:20]
+#' origin_names(model) <- french_cities$name[1:10]
 #' origin_names(model)
 #' @seealso [location_names()], [destination_names()]
 origin_names <- function(sim) {
@@ -146,7 +150,8 @@ origin_names.sim <- function(sim) {
 #' @export
 #' @rdname origin_names
 #' @param value a character vector of length equal to the number of origin
-#'  locations, or `NULL` (vectors of adapted length are converted to character vectors)
+#'  locations, or `NULL` (vectors of adapted length are converted to character
+#'  vectors)
 `origin_names<-` <- function(sim, value) {
   UseMethod("origin_names<-")
 }
@@ -174,15 +179,13 @@ origin_names.sim <- function(sim) {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' rownames(positions) <- LETTERS[11:20]
-#' distances <- as.matrix(dist(positions))
+#' distances <- french_cities_distances[1:10, 1:10]
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
 #' ## the row/column names of the cost matrix are used for the location
-#' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+#' model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 #' destination_names(model)
-#' destination_names(model) <- letters[1:10]
+#' destination_names(model) <- french_cities$name[1:10]
 #' destination_names(model)
 #' @seealso [location_names()], [origin_names()]
 destination_names <- function(sim) {
@@ -197,7 +200,8 @@ destination_names.sim <- function(sim) {
 #' @export
 #' @rdname destination_names
 #' @param value a character vector of length equal to the number of destination
-#'  locations, or `NULL` (vectors of adapted length are converted to character vectors)
+#'  locations, or `NULL` (vectors of adapted length are converted to character
+#'  vectors)
 `destination_names<-` <- function(sim, value) {
   UseMethod("destination_names<-")
 }

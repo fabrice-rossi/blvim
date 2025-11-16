@@ -40,13 +40,21 @@
 #'
 #' @seealso [sim_is_bipartite()], [is_terminal()], [terminals()]
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
-#' model <- blvim(distances, production, 1.3, 2, attractiveness, bipartite = FALSE)
+#' model <- blvim(distances, production, 1.3, 1 / 250, attractiveness,
+#'   bipartite = FALSE
+#' )
+#' destination_names(model) <- french_cities$name[1:10]
 #' nd_graph(model)
-#' nd_graph(model, "RW")
+#' dist_times <- french_cities_times[1:15, 1:15]
+#' tmodel <- blvim(dist_times, rep(1, 15), 1.3, 1 / 5000, rep(1, 15),
+#'   bipartite = FALSE
+#' )
+#' destination_names(tmodel) <- french_cities$name[1:15]
+#' terminals(tmodel, definition = "RW")
+#' nd_graph(tmodel, "RW")
 nd_graph <- function(sim, definition = c("ND", "RW"), ...) {
   UseMethod("nd_graph")
 }

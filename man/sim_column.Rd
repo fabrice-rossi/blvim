@@ -18,11 +18,16 @@ as a \code{sim_list} object
 Get the collection of spatial interaction models from a sim data frame
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness)
-all_flows_df <- sim_df(all_flows)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
+  seq(1, 3, by = 0.5) / 400,
+  attractiveness,
+  bipartite = FALSE,
+  epsilon = 0.1, iter_max = 1000,
+)
+all_flows_df <- sim_df(all_flows, sim_colum = "my_col")
+names(all_flows_df)
 sim_column(all_flows_df)
 }

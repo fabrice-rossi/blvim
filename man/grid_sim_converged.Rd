@@ -27,18 +27,15 @@ about what is a unique model and what is a collection of models (using
 function names that start with \code{"grid_"})
 }
 \examples{
-positions <- matrix(rnorm(15 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 15)
-attractiveness <- rep(1, 15)
-all_flows <- grid_blvim(distances,
-  production,
-  c(1.1, 1.25, 1.5),
-  c(1, 2, 3),
-  attractiveness,
-  bipartite = FALSE,
+distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+production <- log(french_cities$population[1:15])
+attractiveness <- log(french_cities$area[1:15])
+all_flows <- grid_blvim(
+  distances, production, c(1.1, 1.25, 1.5),
+  c(1, 2, 3, 4) / 500, attractiveness,
   epsilon = 0.1,
-  iter_max = 750,
+  bipartite = FALSE,
+  iter_max = 750
 )
 grid_sim_converged(all_flows)
 }

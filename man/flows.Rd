@@ -18,10 +18,15 @@ a matrix of flows between origin locations and destination locations
 Extract the flow matrix from a spatial interaction model object
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- log(french_cities$population[1:10])
+attractiveness <- log(french_cities$area[1:10])
+## rescale to production
+attractiveness <- attractiveness / sum(attractiveness) * sum(production)
+model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness)
 flows(model)
+}
+\seealso{
+\code{\link[=flows_df]{flows_df()}} for a data frame version of the flows,
+\code{\link[=destination_flow]{destination_flow()}} for destination flows.
 }

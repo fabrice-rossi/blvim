@@ -95,7 +95,8 @@ given by a list whose components are not interpreted excepted the following
 ones:
 \itemize{
 \item \code{names} is used to specify location names and its content has to follow
-the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}
+the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and
+\code{\link[=destination_names<-]{destination_names<-()}}
 \item \code{positions} is used to specify location positions and its content has
 to follow the restrictions documented in \code{\link[=origin_positions<-]{origin_positions<-()}} and
 \code{\link[=destination_positions<-]{destination_positions<-()}}
@@ -104,11 +105,13 @@ to follow the restrictions documented in \code{\link[=origin_positions<-]{origin
 }
 
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(
+  distances, production, c(1.25, 1.5),
+  c(1, 2, 3, 4) / 500, attractiveness
+)
 all_flows
 length(all_flows)
 all_flows[[2]]

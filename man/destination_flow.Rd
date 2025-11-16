@@ -18,10 +18,14 @@ a vector of flows incoming at destination locations
 Compute the flows incoming at each destination location
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- log(french_cities$population[1:10])
+attractiveness <- log(french_cities$area[1:10])
+model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 destination_flow(model)
+## should be different from the attractiveness as the model is static
+attractiveness(model)
+}
+\seealso{
+\code{\link[=production]{production()}}, \code{\link[=attractiveness]{attractiveness()}}
 }

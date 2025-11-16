@@ -87,11 +87,13 @@ sim_autoplot <- function(sim, sim_data,
     } else {
       if (!sim_is_bipartite(sim)) {
         ## we remove zero length segments
-        sim_data <- sim_data[sim_data$x != sim_data$xend | sim_data$y != sim_data$yend, ]
+        sim_data <- sim_data[sim_data$x != sim_data$xend |
+          sim_data$y != sim_data$yend, ]
       }
       segment_parameters <- list(...)
       if (!rlang::has_name(segment_parameters, "arrow")) {
-        segment_parameters$arrow <- ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
+        segment_parameters$arrow <-
+          ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
       }
       if (!rlang::has_name(segment_parameters, "lineend")) {
         segment_parameters$lineend <- "round"
@@ -200,13 +202,13 @@ sim_autoplot <- function(sim, sim_data,
 #' If `with_position` is `FALSE` (default value), the graphical representations
 #' are "abstract". Depending on `flows` we have the following representations:
 #'
-#' -  `"full"`: this is the default case for which the full flow matrix is represented.
-#' It is extracted from the spatial interaction model with [flows()] and
-#' displayed using a matrix representation with origin locations in rows and
-#' destination locations in columns. The colour of a cell corresponds to the
-#' intensity of a flow between the corresponding locations. To mimic the
-#' standard top to bottom reading order of a flow matrix, the top row of the
-#' graphical representation corresponds to the first origin location.
+#' -  `"full"`: this is the default case for which the full flow matrix is
+#' represented. It is extracted from the spatial interaction model with
+#' [flows()] and displayed using a matrix representation with origin locations
+#' in rows and destination locations in columns. The colour of a cell
+#' corresponds to the intensity of a flow between the corresponding locations.
+#' To mimic the standard top to bottom reading order of a flow matrix, the top
+#' row of the graphical representation corresponds to the first origin location.
 #' -  `"destination"`: the function computes the
 #' incoming flows for destination locations (using [destination_flow()]) and
 #' represents them with a bar plot (each bar is proportional to the incoming
@@ -228,14 +230,14 @@ sim_autoplot <- function(sim, sim_data,
 #' use of `with_positions = TRUE` is an error. Depending on `flows` we have the
 #' following representations:
 #'
-#' -  `"full"`: this is the default case for which the full flow matrix is represented.
-#' Positions for both origin and destination locations are needed. The
-#' representation uses arrows from origin location positions to destination
+#' -  `"full"`: this is the default case for which the full flow matrix is
+#' represented. Positions for both origin and destination locations are needed.
+#' The representation uses arrows from origin location positions to destination
 #' location positions. The thickness of the lines (`linewidth` aesthetics) is
 #' proportional to the flows. Only segments that carry a flow above the
-#' `cut_off` value are included. When the spatial interaction model is not bipartite
-#' (see [sim_is_bipartite()]), zero length segments corresponding to self exchange are
-#' removed. Additional parameters in `...` are submitted to
+#' `cut_off` value are included. When the spatial interaction model is not
+#' bipartite (see [sim_is_bipartite()]), zero length segments corresponding to
+#' self exchange are removed. Additional parameters in `...` are submitted to
 #' [ggplot2::geom_segment()]. This can be used to override defaults parameters
 #' used for the arrow shapes, for instance. Those parameters must be named.
 #' -  `"destination"`: the function draws a disk at each destination location
@@ -249,10 +251,10 @@ sim_autoplot <- function(sim, sim_data,
 #' with an attractiveness above  the `cut_off` value are included.
 #'
 #' For the last two representations and when `with_names` is `TRUE`, the names
-#' of the destinations are added to the graphical representation. If `with_labels`
-#' is `TRUE` the names are represented as labels instead of plain texts
-#' (see [ggplot2::geom_label()]). If the `ggrepel` package is installed, its
-#' functions are used instead of `ggplot2` native functions.
+#' of the destinations are added to the graphical representation. If
+#' `with_labels` is `TRUE` the names are represented as labels instead of plain
+#' texts (see [ggplot2::geom_label()]). If the `ggrepel` package is installed,
+#' its functions are used instead of `ggplot2` native functions.
 #'
 #' @param object a spatial interaction model object
 #' @param flows  `"full"` (default),  `"destination"` or `"attractiveness"`, see
@@ -272,19 +274,25 @@ sim_autoplot <- function(sim, sim_data,
 #'   value. If `TRUE`, limits are adjusted to the data using the standard
 #'   ggplot2 behaviour.
 #' @param with_labels if `FALSE` (default value) names are displayed using plain
-#'  texts. If `TRUE`, names are shown using labels.
+#'   texts. If `TRUE`, names are shown using labels.
 #' @param ... additional parameters, see details
 #' @seealso [fortify.sim()]
 #' @exportS3Method ggplot2::autoplot
 #' @returns a ggplot object
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' flows <- blvim(distances, production, 1.5, 4, attractiveness,
-#'   origin_data = list(names = LETTERS[1:10], positions = positions),
-#'   destination_data = list(names = LETTERS[1:10], positions = positions)
+#' attractiveness <- log(french_cities$area[1:10])
+#' flows <- blvim(distances, production, 1.5, 1 / 150, attractiveness,
+#'   origin_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   ),
+#'   destination_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   )
 #' )
 #' ggplot2::autoplot(flows)
 #' ## bar plots should be almost identical if convergence occurred
@@ -292,28 +300,35 @@ sim_autoplot <- function(sim, sim_data,
 #' ggplot2::autoplot(flows, "destination")
 #' ggplot2::autoplot(flows, "attractiveness")
 #' ## names inclusion
-#' ggplot2::autoplot(flows, "destination", with_names = TRUE)
-#' ggplot2::autoplot(flows, with_names = TRUE)
+#' ggplot2::autoplot(flows, "destination", with_names = TRUE) +
+#'   ggplot2::coord_flip()
+#' ggplot2::autoplot(flows, with_names = TRUE) +
+#'   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 #' ## positions
 #' ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
-#'   ggplot2::scale_size_continuous(range = c(0, 6))
+#'   ggplot2::scale_size_continuous(range = c(0, 6)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 #' ggplot2::autoplot(flows, "destination",
 #'   with_positions = TRUE,
 #'   with_names = TRUE
 #' ) +
-#'   ggplot2::scale_size_continuous(range = c(0, 6))
+#'   ggplot2::scale_size_continuous(range = c(0, 6)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 #' ggplot2::autoplot(flows, "destination",
 #'   with_positions = TRUE,
 #'   with_names = TRUE, with_labels = TRUE
 #' ) +
-#'   ggplot2::scale_size_continuous(range = c(0, 6))
+#'   ggplot2::scale_size_continuous(range = c(0, 6)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 #' ggplot2::autoplot(flows, with_positions = TRUE) +
-#'   ggplot2::scale_linewidth_continuous(range = c(0, 2))
+#'   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 #' ggplot2::autoplot(flows,
 #'   with_positions = TRUE,
 #'   arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
 #' ) +
-#'   ggplot2::scale_linewidth_continuous(range = c(0, 2))
+#'   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 autoplot.sim <- function(object,
                          flows = c("full", "destination", "attractiveness"),
                          with_names = FALSE,
@@ -322,7 +337,10 @@ autoplot.sim <- function(object,
                          adjust_limits = FALSE,
                          with_labels = FALSE,
                          ...) {
-  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits, with_labels)
+  check_autoplot_params(
+    with_names, with_positions, cut_off, adjust_limits,
+    with_labels
+  )
   check_dots_named(list(...))
   flows <- rlang::arg_match(flows)
   sim_data <- fortify.sim(object,
@@ -331,5 +349,8 @@ autoplot.sim <- function(object,
     with_positions = with_positions,
     cut_off = cut_off
   )
-  sim_autoplot(object, sim_data, flows, with_names, with_positions, adjust_limits, with_labels, ...)
+  sim_autoplot(
+    object, sim_data, flows, with_names, with_positions,
+    adjust_limits, with_labels, ...
+  )
 }

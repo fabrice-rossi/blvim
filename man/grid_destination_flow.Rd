@@ -2,13 +2,14 @@
 % Please edit documentation in R/sim_list.R
 \name{grid_destination_flow}
 \alias{grid_destination_flow}
-\title{Extract all the destination flows from a collection of spatial interaction models}
+\title{Extract all the destination flows from a collection of spatial interaction
+models}
 \usage{
 grid_destination_flow(sim_list, ...)
 }
 \arguments{
-\item{sim_list}{a collection of spatial interaction models, an object of class
-\code{sim_list}}
+\item{sim_list}{a collection of spatial interaction models, an object of
+class \code{sim_list}}
 
 \item{...}{additional parameters for the \code{\link[=destination_flow]{destination_flow()}} function}
 }
@@ -16,25 +17,22 @@ grid_destination_flow(sim_list, ...)
 a matrix of destination flows at the destination locations
 }
 \description{
-The function extract destination flows from all the spatial interaction models
-of the collection and returns them in a matrix in which each row corresponds
-to a model and each column to a destination location.
+The function extract destination flows from all the spatial interaction
+models of the collection and returns them in a matrix in which each row
+corresponds to a model and each column to a destination location.
 }
 \examples{
-positions <- matrix(rnorm(15 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 15)
-attractiveness <- rep(1, 15)
-all_flows <- grid_blvim(distances,
-  production,
-  c(1.1, 1.25, 1.5),
-  c(1, 2, 3),
-  attractiveness,
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- rep(1, 10)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(
+  distances, production, c(1.1, 1.25, 1.5),
+  c(1, 2, 3, 4) / 500, attractiveness,
   epsilon = 0.1
 )
 g_df <- grid_destination_flow(all_flows)
-## should be 9 rows (3 times 3 parameter pairs) and 15 columns (15 destination
-## locations)
+## should be 12 rows (3 times 4 parameter pairs) and 10 columns (10
+## destination locations)
 dim(g_df)
 }
 \seealso{

@@ -257,24 +257,25 @@ sim_list_autoplot <- function(sim_list,
 #' If `with_position` is `FALSE` (default value), the graphical representations
 #' are "abstract". Depending on `flows` we have the following representations:
 #'
-#' -  `"full"`: the function displays the quantiles over the collection of models
-#' of the flows using nested squares ([flows()]). The graph is organised as matrix with
-#' origin locations on rows and destination locations on columns. At each row and
-#' column intersection, three nested squares represent respectively the lower quantile,
-#' the median and the upper quantile of the distribution of the flows between the
-#' corresponding origin and destination locations over the collection of models. The
-#' median square borders are thicker than the other two squares. The area of
-#' each square is proportional to the represented value.
+#' -  `"full"`: the function displays the quantiles over the collection of
+#' models of the flows using nested squares ([flows()]). The graph is organised
+#' as matrix with origin locations on rows and destination locations on columns.
+#' At each row and column intersection, three nested squares represent
+#' respectively the lower quantile, the median and the upper quantile of the
+#' distribution of the flows between the corresponding origin and destination
+#' locations over the collection of models. The median square borders are
+#' thicker than the other two squares. The area of each square is proportional
+#' to the represented value.
 #'
-#' -  `"destination"`: the function displays the quantiles over the collection of
-#' models of the incoming flows for each destination location (using
+#' -  `"destination"`: the function displays the quantiles over the collection
+#' of models of the incoming flows for each destination location (using
 #' [destination_flow()]). Quantiles are represented using
 #' [ggplot2::geom_crossbar()]: each location is represented by a rectangle that
 #' spans from its lower quantile to its upper quantile. An intermediate thicker
 #' bar represents the median quantile.
-#' -  `"attractiveness"`: the function displays the quantiles over the collection of
-#' models of the attractiveness of each destination location (as given by
-#' [attractiveness()]). The graphical representation is the same as for
+#' -  `"attractiveness"`: the function displays the quantiles over the
+#' collection of models of the attractiveness of each destination location (as
+#' given by [attractiveness()]). The graphical representation is the same as for
 #' `"destination"`. This is interesting for dynamic models where those values
 #' are updated during the iterations (see [blvim()] for details). When the
 #' calculation has converged (see [sim_converged()]), both `"destination"` and
@@ -291,18 +292,19 @@ sim_list_autoplot <- function(sim_list,
 #' supported: the function will issue a warning and revert to the position free
 #' representation if this value is used.
 #'
-#' The representations for `flows="destination"` and `flows="attractiveness"` are
-#' based on the same principle. Each destination location is represented by a
-#' collection of three nested circles centred on the corresponding location
-#' position, representing respectively the lower quantile, the median and the upper
-#' quantile of the incoming flows or of the attractivenesses. The diameters of
-#' the circles are proportional to the quantities they represent. The border ot
-#' the median circle is thicker than the ones of the other circles.
+#' The representations for `flows="destination"` and `flows="attractiveness"`
+#' are based on the same principle. Each destination location is represented by
+#' a collection of three nested circles centred on the corresponding location
+#' position, representing respectively the lower quantile, the median and the
+#' upper quantile of the incoming flows or of the attractivenesses. The
+#' diameters of the circles are proportional to the quantities they represent.
+#' The border ot the median circle is thicker than the ones of the other
+#' circles.
 #'
-#' When both `with_positions` and `with_names` are `TRUE`, the names
-#' of the destinations are added to the graphical representation. If `with_labels`
-#' is `TRUE` the names are represented as labels instead of plain texts
-#' (see [ggplot2::geom_label()]). If the `ggrepel` package is installed, its
+#' When both `with_positions` and `with_names` are `TRUE`, the names of the
+#' destinations are added to the graphical representation. If `with_labels` is
+#' `TRUE` the names are represented as labels instead of plain texts (see
+#' [ggplot2::geom_label()]). If the `ggrepel` package is installed, its
 #' functions are used instead of `ggplot2` native functions.
 #'
 #' @param object a collection of spatial interaction models, a `sim_list`
@@ -322,13 +324,13 @@ sim_list_autoplot <- function(sim_list,
 #'   value. If `TRUE`, limits are adjusted to the data using the standard
 #'   ggplot2 behaviour.
 #' @param with_labels if `FALSE` (default value) names are displayed using plain
-#'  texts. If `TRUE`, names are shown using labels.
+#'   texts. If `TRUE`, names are shown using labels.
 #' @param qmin lower quantile, see details (default: 0.05)
 #' @param qmax upper quantile, see details (default: 0.95)
 #' @param normalisation when `flows="full"`, the flows can be reported without
-#'    normalisation (`normalisation="none"`) or they can be normalised, either
-#'    to sum to one for each origin location (`normalisation="origin"`, the default
-#'    value) or to sum to one globally (`normalisation="full"`).
+#'   normalisation (`normalisation="none"`) or they can be normalised, either to
+#'   sum to one for each origin location (`normalisation="origin"`, the default
+#'   value) or to sum to one globally (`normalisation="full"`).
 #' @param ... additional parameters, not used currently
 #'
 #' @returns a ggplot object
@@ -336,42 +338,57 @@ sim_list_autoplot <- function(sim_list,
 #' @exportS3Method ggplot2::autoplot
 #'
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- c(2, rep(1, 9))
-#' attractiveness <- c(2, rep(1, 9))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- rep(1, 10)
+#' attractiveness <- log(french_cities$area[1:10])
 #' all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
-#'   seq(1, 3, by = 0.5),
+#'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
 #'   epsilon = 0.1, iter_max = 1000,
-#'   destination_data = list(names = LETTERS[1:10], positions = positions),
-#'   origin_data = list(names = LETTERS[1:10], positions = positions),
+#'   destination_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   ),
+#'   origin_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   )
 #' )
-#' ggplot2::autoplot(all_flows, with_names = TRUE)
-#' ggplot2::autoplot(all_flows, with_names = TRUE, normalisation = "none")
+#' ggplot2::autoplot(all_flows, with_names = TRUE) +
+#'   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
+#' ggplot2::autoplot(all_flows, with_names = TRUE, normalisation = "none") +
+#'   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 #' ggplot2::autoplot(all_flows,
 #'   flow = "destination", with_names = TRUE,
 #'   qmin = 0, qmax = 1
-#' )
+#' ) +
+#'   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 #' ggplot2::autoplot(all_flows,
 #'   flow = "destination", with_positions = TRUE,
 #'   qmin = 0, qmax = 1
-#' ) + ggplot2::scale_size_continuous(range = c(0, 6))
+#' ) + ggplot2::scale_size_continuous(range = c(0, 6)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 #' ggplot2::autoplot(all_flows,
 #'   flow = "destination", with_positions = TRUE,
 #'   qmin = 0, qmax = 1,
 #'   cut_off = 1.1
-#' )
+#' ) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 #' ggplot2::autoplot(all_flows,
 #'   flow = "destination", with_positions = TRUE,
 #'   with_names = TRUE,
 #'   with_labels = TRUE,
 #'   qmin = 0, qmax = 1,
 #'   cut_off = 1.1
-#' )
+#' ) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 autoplot.sim_list <- function(object,
-                              flows = c("full", "destination", "attractiveness"),
+                              flows = c(
+                                "full", "destination",
+                                "attractiveness"
+                              ),
                               with_names = FALSE,
                               with_positions = FALSE,
                               cut_off = 100 * .Machine$double.eps^0.5,
@@ -381,7 +398,10 @@ autoplot.sim_list <- function(object,
                               qmax = 0.95,
                               normalisation = c("origin", "full", "none"),
                               ...) {
-  check_autoplot_params(with_names, with_positions, cut_off, adjust_limits, with_labels)
+  check_autoplot_params(
+    with_names, with_positions, cut_off, adjust_limits,
+    with_labels
+  )
   check_quantiles(qmin, qmax)
   flows <- rlang::arg_match(flows)
   normalisation <- rlang::arg_match(normalisation)
@@ -393,7 +413,8 @@ autoplot.sim_list <- function(object,
       }
     }
     if (flows == "full") {
-      cli::cli_warn(c("{.arg flows} = {.str full} cannot be combined with {.arg with_positions} = {.val TRUE}",
+      cli::cli_warn(c("{.arg flows} = {.str full} cannot be combined with
+{.arg with_positions} = {.val TRUE}",
         "!" = "proceeding with {.arg with_positions} set to {.val FALSE}"
       ))
     }

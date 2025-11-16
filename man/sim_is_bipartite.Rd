@@ -10,13 +10,14 @@ sim_is_bipartite(sim)
 \item{sim}{a spatial interaction model object}
 }
 \value{
-\code{TRUE} if the spatial interaction model is bipartite, \code{FALSE} if not.
+\code{TRUE} if the spatial interaction model is bipartite, \code{FALSE} if
+not.
 }
 \description{
-The function returns \code{TRUE} is the spatial interaction model (SIM) is bipartite, that
-is if the origin locations are distinct from the destination locations (at least
-from the analysis point of view). The function return \code{FALSE} when the SIM
-uses the same locations for origin and destination.
+The function returns \code{TRUE} is the spatial interaction model (SIM) is
+bipartite, that is if the origin locations are distinct from the destination
+locations (at least from the analysis point of view). The function return
+\code{FALSE} when the SIM uses the same locations for origin and destination.
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
@@ -27,6 +28,8 @@ model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 ## returns TRUE despite the use of a single set of positions
 sim_is_bipartite(model)
 ## now we are clear about the non bipartite nature of the model
-model <- static_blvim(distances, production, 1.5, 1, attractiveness, bipartite = FALSE)
+model <- static_blvim(distances, production, 1.5, 1, attractiveness,
+  bipartite = FALSE
+)
 sim_is_bipartite(model)
 }

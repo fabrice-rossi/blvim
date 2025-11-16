@@ -52,7 +52,8 @@ texts. If \code{TRUE}, names are shown using labels.}
 \item{max_sims}{the maximum number of spatial interaction models allowed in
 the \code{sim_df} data frame}
 
-\item{fw_params}{parameters for the \link[ggplot2:facet_wrap]{ggplot2::facet_wrap} call (if non \code{NULL})}
+\item{fw_params}{parameters for the \link[ggplot2:facet_wrap]{ggplot2::facet_wrap} call (if non
+\code{NULL})}
 
 \item{...}{additional (named) parameters passed to \code{\link[=autoplot.sim]{autoplot.sim()}}}
 }
@@ -82,22 +83,28 @@ number of SIMs in the \code{sim_df} data frame. If specified, it is evaluated in
 the context of the data frame and used for wrapping. Notice that if the
 expression evaluates to identical values for different SIMs, they will be
 drawn on the same panel of the final figure, which may end up with
-meaningless representations. Parameters of \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} can
-be set using the \code{fw_params} parameter (in a list).
+meaningless representations. Parameters of \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} can be set
+using the \code{fw_params} parameter (in a list).
 }
 \examples{
 \dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
+attractiveness <- log(french_cities$area[1:10])
 all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
-  seq(1, 3, by = 0.5),
+  seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
   epsilon = 0.1, iter_max = 1000,
-  destination_data = list(names = LETTERS[1:10], positions = positions),
-  origin_data = list(names = LETTERS[1:10], positions = positions)
+  destination_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  ),
+  origin_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  )
 )
 all_flows_df <- sim_df(all_flows)
 ## default display: flows as matrices
@@ -109,8 +116,10 @@ grid_autoplot(all_flows_df, flows = "destination")
 grid_autoplot(all_flows_df, flows = "attractiveness")
 ## with positions
 grid_autoplot(all_flows_df, flows = "destination", with_positions = TRUE) +
-  ggplot2::scale_size_continuous(range = c(0, 2))
+  ggplot2::scale_size_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 grid_autoplot(all_flows_df, with_positions = TRUE) +
-  ggplot2::scale_linewidth_continuous(range = c(0, 1))
+  ggplot2::scale_linewidth_continuous(range = c(0, 1)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 \dontshow{\}) # examplesIf}
 }

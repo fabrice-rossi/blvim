@@ -2,7 +2,8 @@
 % Please edit documentation in R/sim_list_distances.R
 \name{sim_distance}
 \alias{sim_distance}
-\title{Compute all pairwise distances between the spatial interaction models in a collection}
+\title{Compute all pairwise distances between the spatial interaction models in a
+collection}
 \usage{
 sim_distance(
   sim_list,
@@ -12,13 +13,14 @@ sim_distance(
 )
 }
 \arguments{
-\item{sim_list}{a collection of spatial interaction models, an object of class
-\code{sim_list}}
+\item{sim_list}{a collection of spatial interaction models, an object of
+class \code{sim_list}}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see details.}
+\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+details.}
 
-\item{method}{the distance measure to be used. Currently only \code{"euclidean"} is
-supported}
+\item{method}{the distance measure to be used. Currently only \code{"euclidean"}
+is supported}
 
 \item{...}{additional parameters (not used currently)}
 }
@@ -26,16 +28,17 @@ supported}
 an object of class \code{"dist"}
 }
 \description{
-This function extracts from each spatial interaction model of the collection a
-vector representation derived from its flow matrix (see details). This vector
-is then used to compute distances between the models.
+This function extracts from each spatial interaction model of the collection
+a vector representation derived from its flow matrix (see details). This
+vector is then used to compute distances between the models.
 }
 \details{
 The vector representation is selected using the \code{flows} parameters. Possible
 values are
 \itemize{
-\item \code{"full"} (default value): the representation is obtained by considering the
-matrix of \code{\link[=flows]{flows()}} as a vector (with the standard \code{\link[=as.vector]{as.vector()}} function);
+\item \code{"full"} (default value): the representation is obtained by considering
+the matrix of \code{\link[=flows]{flows()}} as a vector (with the standard \code{\link[=as.vector]{as.vector()}}
+function);
 \item \code{"destination"}: the representation is the \code{\link[=destination_flow]{destination_flow()}} vector
 associated to each spatial interaction model;
 \item \code{"attractiveness"}: the representation is the \code{\link[=attractiveness]{attractiveness()}} vector
@@ -43,15 +46,12 @@ associated to each spatial interaction model.
 }
 }
 \examples{
-positions <- matrix(rnorm(15 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 15)
-attractiveness <- rep(1, 15)
-all_flows <- grid_blvim(distances,
-  production,
-  c(1.1, 1.25, 1.5),
-  c(1, 2, 3),
-  attractiveness,
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- rep(1, 10)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(
+  distances, production, c(1.25, 1.5),
+  c(1, 2, 3, 4) / 500, attractiveness,
   epsilon = 0.1
 )
 flows_distances <- sim_distance(all_flows)

@@ -22,15 +22,15 @@
 #' @returns a ggplot object
 #' @exportS3Method ggplot2::autoplot
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' all_flows <- grid_blvim(distances, production, seq(1.05, 1.55, by = 0.05),
-#'   seq(1, 3, by = 0.5),
+#' attractiveness <- log(french_cities$area[1:10])
+#' all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
+#'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
-#'   epsilon = 0.1, iter_max = 1000
+#'   epsilon = 0.1, iter_max = 1000,
 #' )
 #' all_flows_df <- sim_df(all_flows)
 #'
@@ -60,7 +60,10 @@ autoplot.sim_df <- function(object,
   }
   xc <- to_rect(object$beta, inverse)
   yc <- to_rect(object$alpha)
-  sim_data <- data.frame(xmin = xc$min, xmax = xc$max, ymin = yc$min, ymax = yc$max)
+  sim_data <- data.frame(
+    xmin = xc$min, xmax = xc$max, ymin = yc$min,
+    ymax = yc$max
+  )
   sim_data[[val_name]] <- val
   pre <- ggplot2::ggplot(sim_data, ggplot2::aes(
     xmin = .data[["xmin"]],

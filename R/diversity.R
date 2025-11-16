@@ -36,8 +36,8 @@
 #' extensions to the limit case are straightforward:
 #'
 #'  - \eqn{\gamma=1} is Shannon's entropy/diversity
-#'  - \eqn{\gamma=0} is the max-entropy, here \eqn{\ln(n)} and thus the corresponding
-#' diversity is the number of locations
+#'  - \eqn{\gamma=0} is the max-entropy, here \eqn{\ln(n)} and thus the
+#' corresponding diversity is the number of locations
 #'  - \eqn{\gamma=\infty} is the min-entropy, here \eqn{-\log \max_{k}p_k} and
 #' thhe corresponding diversity is \eqn{\frac{1}{\max_{k}p_k}}
 #'
@@ -49,10 +49,11 @@
 #' min-entropy instead of the exact Rényi entropy.
 #'
 #' In addition to those entropy based definition, terminal based calculations
-#' are also provided. Using any definition supported by the [terminals()] function,
-#' the diversity is the number of terminals identified. Notice this applies only
-#' to interaction models in which origin and destination locations are identical,
-#' i.e. when the model is not bipartite. Current values of definitions are:
+#' are also provided. Using any definition supported by the [terminals()]
+#' function, the diversity is the number of terminals identified. Notice this
+#' applies only to interaction models in which origin and destination locations
+#' are identical, i.e. when the model is not bipartite. Current values of
+#' definitions are:
 #'
 #'   - `"ND"` for the original Nystuen and Dacey definition
 #'   - `"RW"` for the variant by Rihll and Wilson
@@ -66,8 +67,8 @@
 #'
 #' @param sim a spatial interaction model object (an object of class `sim`) or a
 #'   collection of spatial interaction  models (an object of class `sim_list`)
-#' @param definition diversity definition `"shannon"` (default),
-#'   `"renyi"` (see details) or a definition supported by  [terminals()]
+#' @param definition diversity definition `"shannon"` (default), `"renyi"` (see
+#'   details) or a definition supported by  [terminals()]
 #' @param order order of the Rényi entropy, used only when `definition="renyi"`
 #' @param ... additional parameters
 #'
@@ -79,21 +80,24 @@
 #' @references Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 #'   \doi{10.1111/j.2006.0030-1299.14714.x}
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
-#' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' flows <- blvim(distances, production, 1.5, 3, attractiveness, bipartite = FALSE)
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- rep(1, 15)
+#' flows <- blvim(distances, production, 1.5, 1 / 100, attractiveness,
+#'   bipartite = FALSE
+#' )
 #' diversity(flows)
 #' diversity(flows, "renyi", 2)
 #' diversity(flows, "RW")
-diversity <- function(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...) {
+diversity <- function(sim, definition = c("shannon", "renyi", "ND", "RW"),
+                      order = 1L, ...) {
   UseMethod("diversity")
 }
 
 #' @export
 #' @rdname diversity
-diversity.sim <- function(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...) {
+diversity.sim <- function(sim, definition = c("shannon", "renyi", "ND", "RW"),
+                          order = 1L, ...) {
   definition <- rlang::arg_match(definition)
   if (definition == "renyi" && order < 0) {
     cli::cli_abort(c("{.arg order} must be non negative",
@@ -121,6 +125,8 @@ diversity.sim <- function(sim, definition = c("shannon", "renyi", "ND", "RW"), o
 
 #' @export
 #' @rdname diversity
-diversity.sim_list <- function(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...) {
+diversity.sim_list <- function(sim,
+                               definition = c("shannon", "renyi", "ND", "RW"),
+                               order = 1L, ...) {
   sapply(sim, diversity, definition, order, ...)
 }

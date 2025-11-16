@@ -2,8 +2,12 @@ new_sim_df <- function(sim_list, sim_column, ..., class = character()) {
   if (!inherits(sim_list, "sim_list")) {
     cli::cli_abort("{.arg sim_list} must be a {.cls sim_list}")
   }
-  if (sim_column %in% c("alpha", "beta", "diversity", "iterations", "converged")) {
-    cli::cli_abort("{.arg sim_column} cannot be the reserved column name {.str {sim_column}}")
+  if (sim_column %in% c(
+    "alpha", "beta", "diversity", "iterations",
+    "converged"
+  )) {
+    cli::cli_abort("{.arg sim_column} cannot be the reserved column
+name {.str {sim_column}}")
   }
   iterations <- sapply(sim_list, sim_iterations)
   converged <- sapply(sim_list, sim_converged)
@@ -39,8 +43,8 @@ new_sim_df <- function(sim_list, sim_column, ..., class = character()) {
 #' - `diversity`: model default [diversity()] (Shannon's diversity)
 #' - `iterations`: the number of iterations used to produce the model (1 for a
 #' static model)
-#' - `converged`: `TRUE` is the iterative calculation of the model converged (for
-#' models produced by [blvim()] and related approaches), `FALSE` for no
+#' - `converged`: `TRUE` is the iterative calculation of the model converged
+#' (for models produced by [blvim()] and related approaches), `FALSE` for no
 #' convergence and `NA` for static models
 #'
 #'
@@ -51,14 +55,17 @@ new_sim_df <- function(sim_list, sim_column, ..., class = character()) {
 #'   collection with classes `sim_df` and `data.frame`
 #' @export
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness)
+#' attractiveness <- log(french_cities$area[1:10])
+#' all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
+#'   seq(1, 3, by = 0.5) / 400,
+#'   attractiveness,
+#'   bipartite = FALSE,
+#'   epsilon = 0.1, iter_max = 1000,
+#' )
 #' all_flows_df <- sim_df(all_flows)
 #' all_flows_df$converged
-#'
 sim_df <- function(x, sim_column = "sim") {
   new_sim_df(x, sim_column)
 }
@@ -73,12 +80,17 @@ sim_df <- function(x, sim_column = "sim") {
 #' @export
 #'
 #' @examples
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
-#' all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness)
-#' all_flows_df <- sim_df(all_flows)
+#' attractiveness <- log(french_cities$area[1:10])
+#' all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
+#'   seq(1, 3, by = 0.5) / 400,
+#'   attractiveness,
+#'   bipartite = FALSE,
+#'   epsilon = 0.1, iter_max = 1000,
+#' )
+#' all_flows_df <- sim_df(all_flows, sim_colum = "my_col")
+#' names(all_flows_df)
 #' sim_column(all_flows_df)
 sim_column <- function(sim_df) {
   if (!inherits(sim_df, "sim_df")) {
@@ -161,15 +173,15 @@ sim_column <- function(sim_df) {
       } else {
         x[[sim_column]] <- I(value)
       }
-      return(x)
     }
+    x
   } else {
     pre <- NextMethod()
     if (!inherits(pre, "sim_df")) {
       class(pre) <- c("sim_df", class(pre))
       attr(pre, "sim_column") <- sim_column
     }
-    return(pre)
+    pre
   }
 }
 

@@ -14,7 +14,8 @@ destination_names(sim) <- value
 collection of spatial interaction  models (an object of class \code{sim_list})}
 
 \item{value}{a character vector of length equal to the number of destination
-locations, or \code{NULL} (vectors of adapted length are converted to character vectors)}
+locations, or \code{NULL} (vectors of adapted length are converted to character
+vectors)}
 }
 \value{
 for \code{destination_names} \code{NULL} or a character vector with one name
@@ -26,15 +27,13 @@ Functions to get or set the names of the destination locations in a spatial
 interaction model (or in a collection of spatial interaction models).
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-rownames(positions) <- LETTERS[11:20]
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10]
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
 ## the row/column names of the cost matrix are used for the location
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 destination_names(model)
-destination_names(model) <- letters[1:10]
+destination_names(model) <- french_cities$name[1:10]
 destination_names(model)
 }
 \seealso{

@@ -49,8 +49,8 @@ texts. If \code{TRUE}, names are shown using labels.}
 \item{qmax}{upper quantile, see details (default: 0.95)}
 
 \item{normalisation}{when \code{flows="full"}, the flows can be reported without
-normalisation (\code{normalisation="none"}) or they can be normalised, either
-to sum to one for each origin location (\code{normalisation="origin"}, the default
+normalisation (\code{normalisation="none"}) or they can be normalised, either to
+sum to one for each origin location (\code{normalisation="origin"}, the default
 value) or to sum to one globally (\code{normalisation="full"}).}
 
 \item{...}{additional parameters, not used currently}
@@ -80,23 +80,24 @@ destination. We consider three quantiles:
 If \code{with_position} is \code{FALSE} (default value), the graphical representations
 are "abstract". Depending on \code{flows} we have the following representations:
 \itemize{
-\item \code{"full"}: the function displays the quantiles over the collection of models
-of the flows using nested squares (\code{\link[=flows]{flows()}}). The graph is organised as matrix with
-origin locations on rows and destination locations on columns. At each row and
-column intersection, three nested squares represent respectively the lower quantile,
-the median and the upper quantile of the distribution of the flows between the
-corresponding origin and destination locations over the collection of models. The
-median square borders are thicker than the other two squares. The area of
-each square is proportional to the represented value.
-\item \code{"destination"}: the function displays the quantiles over the collection of
-models of the incoming flows for each destination location (using
+\item \code{"full"}: the function displays the quantiles over the collection of
+models of the flows using nested squares (\code{\link[=flows]{flows()}}). The graph is organised
+as matrix with origin locations on rows and destination locations on columns.
+At each row and column intersection, three nested squares represent
+respectively the lower quantile, the median and the upper quantile of the
+distribution of the flows between the corresponding origin and destination
+locations over the collection of models. The median square borders are
+thicker than the other two squares. The area of each square is proportional
+to the represented value.
+\item \code{"destination"}: the function displays the quantiles over the collection
+of models of the incoming flows for each destination location (using
 \code{\link[=destination_flow]{destination_flow()}}). Quantiles are represented using
 \code{\link[ggplot2:geom_linerange]{ggplot2::geom_crossbar()}}: each location is represented by a rectangle that
 spans from its lower quantile to its upper quantile. An intermediate thicker
 bar represents the median quantile.
-\item \code{"attractiveness"}: the function displays the quantiles over the collection of
-models of the attractiveness of each destination location (as given by
-\code{\link[=attractiveness]{attractiveness()}}). The graphical representation is the same as for
+\item \code{"attractiveness"}: the function displays the quantiles over the
+collection of models of the attractiveness of each destination location (as
+given by \code{\link[=attractiveness]{attractiveness()}}). The graphical representation is the same as for
 \code{"destination"}. This is interesting for dynamic models where those values
 are updated during the iterations (see \code{\link[=blvim]{blvim()}} for details). When the
 calculation has converged (see \code{\link[=sim_converged]{sim_converged()}}), both \code{"destination"} and
@@ -114,56 +115,69 @@ use of \code{with_positions = TRUE} is an error. Moreover, \code{flows = "full"}
 supported: the function will issue a warning and revert to the position free
 representation if this value is used.
 
-The representations for \code{flows="destination"} and \code{flows="attractiveness"} are
-based on the same principle. Each destination location is represented by a
-collection of three nested circles centred on the corresponding location
-position, representing respectively the lower quantile, the median and the upper
-quantile of the incoming flows or of the attractivenesses. The diameters of
-the circles are proportional to the quantities they represent. The border ot
-the median circle is thicker than the ones of the other circles.
+The representations for \code{flows="destination"} and \code{flows="attractiveness"}
+are based on the same principle. Each destination location is represented by
+a collection of three nested circles centred on the corresponding location
+position, representing respectively the lower quantile, the median and the
+upper quantile of the incoming flows or of the attractivenesses. The
+diameters of the circles are proportional to the quantities they represent.
+The border ot the median circle is thicker than the ones of the other
+circles.
 
-When both \code{with_positions} and \code{with_names} are \code{TRUE}, the names
-of the destinations are added to the graphical representation. If \code{with_labels}
-is \code{TRUE} the names are represented as labels instead of plain texts
-(see \code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed, its
+When both \code{with_positions} and \code{with_names} are \code{TRUE}, the names of the
+destinations are added to the graphical representation. If \code{with_labels} is
+\code{TRUE} the names are represented as labels instead of plain texts (see
+\code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed, its
 functions are used instead of \code{ggplot2} native functions.
 }
 \examples{
 \dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- c(2, rep(1, 9))
-attractiveness <- c(2, rep(1, 9))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- rep(1, 10)
+attractiveness <- log(french_cities$area[1:10])
 all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
-  seq(1, 3, by = 0.5),
+  seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
   epsilon = 0.1, iter_max = 1000,
-  destination_data = list(names = LETTERS[1:10], positions = positions),
-  origin_data = list(names = LETTERS[1:10], positions = positions),
+  destination_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  ),
+  origin_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  )
 )
-ggplot2::autoplot(all_flows, with_names = TRUE)
-ggplot2::autoplot(all_flows, with_names = TRUE, normalisation = "none")
+ggplot2::autoplot(all_flows, with_names = TRUE) +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
+ggplot2::autoplot(all_flows, with_names = TRUE, normalisation = "none") +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 ggplot2::autoplot(all_flows,
   flow = "destination", with_names = TRUE,
   qmin = 0, qmax = 1
-)
+) +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 ggplot2::autoplot(all_flows,
   flow = "destination", with_positions = TRUE,
   qmin = 0, qmax = 1
-) + ggplot2::scale_size_continuous(range = c(0, 6))
+) + ggplot2::scale_size_continuous(range = c(0, 6)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(all_flows,
   flow = "destination", with_positions = TRUE,
   qmin = 0, qmax = 1,
   cut_off = 1.1
-)
+) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(all_flows,
   flow = "destination", with_positions = TRUE,
   with_names = TRUE,
   with_labels = TRUE,
   qmin = 0, qmax = 1,
   cut_off = 1.1
-)
+) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 \dontshow{\}) # examplesIf}
 }
 \seealso{

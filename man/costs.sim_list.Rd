@@ -19,16 +19,12 @@ the cost matrix
 Extract the common cost matrix from a collection of spatial interaction models
 }
 \examples{
-positions <- matrix(rnorm(15 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 15)
-attractiveness <- rep(1, 15)
-all_flows <- grid_blvim(distances,
-  production,
-  c(1.1, 1.25, 1.5),
-  c(1, 2, 3),
-  attractiveness,
-  epsilon = 0.1
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- rep(1, 10)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(
+  distances, production, c(1.25, 1.5),
+  c(1, 2, 3, 4) / 500, attractiveness
 )
 ## should be TRUE
 identical(distances, costs(all_flows))

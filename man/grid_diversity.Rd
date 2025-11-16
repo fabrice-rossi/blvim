@@ -15,8 +15,8 @@ grid_diversity(
 \item{sim}{a collection of spatial interaction models, an object of class
 \code{sim_list}}
 
-\item{definition}{diversity definition \code{"shannon"} (default),
-\code{"renyi"} (see details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
+\item{definition}{diversity definition \code{"shannon"} (default), \code{"renyi"} (see
+details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
 
 \item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
 
@@ -39,20 +39,17 @@ unique model and what is a collection of models (using function names that
 start with \code{"grid_"})
 }
 \examples{
-positions <- matrix(rnorm(15 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 15)
-attractiveness <- rep(1, 15)
-all_flows <- grid_blvim(distances,
-  production,
-  c(1.1, 1.25, 1.5),
-  c(1, 2, 3),
-  attractiveness,
-  bipartite = FALSE,
-  epsilon = 0.1
+distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+production <- log(french_cities$population[1:15])
+attractiveness <- log(french_cities$area[1:15])
+all_flows <- grid_blvim(
+  distances, production, c(1.1, 1.25, 1.5),
+  c(1, 2, 3, 4) / 500, attractiveness,
+  epsilon = 0.1,
+  bipartite = FALSE
 )
 diversities <- grid_diversity(all_flows)
-diversities ## should be a length 9 vector
+diversities ## should be a length 12 vector
 grid_diversity(all_flows, "renyi", 3)
 }
 \seealso{

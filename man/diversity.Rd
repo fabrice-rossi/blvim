@@ -16,8 +16,8 @@ diversity(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...)
 \item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
 collection of spatial interaction  models (an object of class \code{sim_list})}
 
-\item{definition}{diversity definition \code{"shannon"} (default),
-\code{"renyi"} (see details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
+\item{definition}{diversity definition \code{"shannon"} (default), \code{"renyi"} (see
+details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
 
 \item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
 
@@ -65,8 +65,8 @@ This is defined directly only for \eqn{\gamma\in]0,1[\cup ]1,\infty[}, but
 extensions to the limit case are straightforward:
 \itemize{
 \item \eqn{\gamma=1} is Shannon's entropy/diversity
-\item \eqn{\gamma=0} is the max-entropy, here \eqn{\ln(n)} and thus the corresponding
-diversity is the number of locations
+\item \eqn{\gamma=0} is the max-entropy, here \eqn{\ln(n)} and thus the
+corresponding diversity is the number of locations
 \item \eqn{\gamma=\infty} is the min-entropy, here \eqn{-\log \max_{k}p_k} and
 thhe corresponding diversity is \eqn{\frac{1}{\max_{k}p_k}}
 }
@@ -79,10 +79,11 @@ generate underflows in the calculation that will trigger the use of the
 min-entropy instead of the exact Rényi entropy.
 
 In addition to those entropy based definition, terminal based calculations
-are also provided. Using any definition supported by the \code{\link[=terminals]{terminals()}} function,
-the diversity is the number of terminals identified. Notice this applies only
-to interaction models in which origin and destination locations are identical,
-i.e. when the model is not bipartite. Current values of definitions are:
+are also provided. Using any definition supported by the \code{\link[=terminals]{terminals()}}
+function, the diversity is the number of terminals identified. Notice this
+applies only to interaction models in which origin and destination locations
+are identical, i.e. when the model is not bipartite. Current values of
+definitions are:
 \itemize{
 \item \code{"ND"} for the original Nystuen and Dacey definition
 \item \code{"RW"} for the variant by Rihll and Wilson
@@ -96,11 +97,12 @@ class \code{sim_list}) the function uses the same parameters (\code{definition} 
 completely equivalent to \code{\link[=grid_diversity]{grid_diversity()}}.
 }
 \examples{
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-flows <- blvim(distances, production, 1.5, 3, attractiveness, bipartite = FALSE)
+distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+production <- log(french_cities$population[1:15])
+attractiveness <- rep(1, 15)
+flows <- blvim(distances, production, 1.5, 1 / 100, attractiveness,
+  bipartite = FALSE
+)
 diversity(flows)
 diversity(flows, "renyi", 2)
 diversity(flows, "RW")

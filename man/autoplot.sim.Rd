@@ -59,13 +59,13 @@ The graphical representation depends on the values of \code{flows} and
 If \code{with_position} is \code{FALSE} (default value), the graphical representations
 are "abstract". Depending on \code{flows} we have the following representations:
 \itemize{
-\item \code{"full"}: this is the default case for which the full flow matrix is represented.
-It is extracted from the spatial interaction model with \code{\link[=flows]{flows()}} and
-displayed using a matrix representation with origin locations in rows and
-destination locations in columns. The colour of a cell corresponds to the
-intensity of a flow between the corresponding locations. To mimic the
-standard top to bottom reading order of a flow matrix, the top row of the
-graphical representation corresponds to the first origin location.
+\item \code{"full"}: this is the default case for which the full flow matrix is
+represented. It is extracted from the spatial interaction model with
+\code{\link[=flows]{flows()}} and displayed using a matrix representation with origin locations
+in rows and destination locations in columns. The colour of a cell
+corresponds to the intensity of a flow between the corresponding locations.
+To mimic the standard top to bottom reading order of a flow matrix, the top
+row of the graphical representation corresponds to the first origin location.
 \item \code{"destination"}: the function computes the
 incoming flows for destination locations (using \code{\link[=destination_flow]{destination_flow()}}) and
 represents them with a bar plot (each bar is proportional to the incoming
@@ -88,14 +88,14 @@ representations. Notice that if no positions are known for the locations, the
 use of \code{with_positions = TRUE} is an error. Depending on \code{flows} we have the
 following representations:
 \itemize{
-\item \code{"full"}: this is the default case for which the full flow matrix is represented.
-Positions for both origin and destination locations are needed. The
-representation uses arrows from origin location positions to destination
+\item \code{"full"}: this is the default case for which the full flow matrix is
+represented. Positions for both origin and destination locations are needed.
+The representation uses arrows from origin location positions to destination
 location positions. The thickness of the lines (\code{linewidth} aesthetics) is
 proportional to the flows. Only segments that carry a flow above the
-\code{cut_off} value are included. When the spatial interaction model is not bipartite
-(see \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}), zero length segments corresponding to self exchange are
-removed. Additional parameters in \code{...} are submitted to
+\code{cut_off} value are included. When the spatial interaction model is not
+bipartite (see \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}), zero length segments corresponding to
+self exchange are removed. Additional parameters in \code{...} are submitted to
 \code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}. This can be used to override defaults parameters
 used for the arrow shapes, for instance. Those parameters must be named.
 \item \code{"destination"}: the function draws a disk at each destination location
@@ -110,20 +110,26 @@ with an attractiveness above  the \code{cut_off} value are included.
 }
 
 For the last two representations and when \code{with_names} is \code{TRUE}, the names
-of the destinations are added to the graphical representation. If \code{with_labels}
-is \code{TRUE} the names are represented as labels instead of plain texts
-(see \code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed, its
-functions are used instead of \code{ggplot2} native functions.
+of the destinations are added to the graphical representation. If
+\code{with_labels} is \code{TRUE} the names are represented as labels instead of plain
+texts (see \code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed,
+its functions are used instead of \code{ggplot2} native functions.
 }
 \examples{
 \dontshow{if (requireNamespace("ggplot2", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-flows <- blvim(distances, production, 1.5, 4, attractiveness,
-  origin_data = list(names = LETTERS[1:10], positions = positions),
-  destination_data = list(names = LETTERS[1:10], positions = positions)
+attractiveness <- log(french_cities$area[1:10])
+flows <- blvim(distances, production, 1.5, 1 / 150, attractiveness,
+  origin_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  ),
+  destination_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  )
 )
 ggplot2::autoplot(flows)
 ## bar plots should be almost identical if convergence occurred
@@ -131,28 +137,35 @@ sim_converged(flows)
 ggplot2::autoplot(flows, "destination")
 ggplot2::autoplot(flows, "attractiveness")
 ## names inclusion
-ggplot2::autoplot(flows, "destination", with_names = TRUE)
-ggplot2::autoplot(flows, with_names = TRUE)
+ggplot2::autoplot(flows, "destination", with_names = TRUE) +
+  ggplot2::coord_flip()
+ggplot2::autoplot(flows, with_names = TRUE) +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 ## positions
 ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
-  ggplot2::scale_size_continuous(range = c(0, 6))
+  ggplot2::scale_size_continuous(range = c(0, 6)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(flows, "destination",
   with_positions = TRUE,
   with_names = TRUE
 ) +
-  ggplot2::scale_size_continuous(range = c(0, 6))
+  ggplot2::scale_size_continuous(range = c(0, 6)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(flows, "destination",
   with_positions = TRUE,
   with_names = TRUE, with_labels = TRUE
 ) +
-  ggplot2::scale_size_continuous(range = c(0, 6))
+  ggplot2::scale_size_continuous(range = c(0, 6)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(flows, with_positions = TRUE) +
-  ggplot2::scale_linewidth_continuous(range = c(0, 2))
+  ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(flows,
   with_positions = TRUE,
   arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
 ) +
-  ggplot2::scale_linewidth_continuous(range = c(0, 2))
+  ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 \dontshow{\}) # examplesIf}
 }
 \seealso{

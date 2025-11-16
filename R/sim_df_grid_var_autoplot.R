@@ -37,31 +37,45 @@
 #' @export
 #'
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
-#' positions <- matrix(rnorm(10 * 2), ncol = 2)
-#' distances <- as.matrix(dist(positions))
+#' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)
-#' attractiveness <- c(2, rep(1, 9))
+#' attractiveness <- log(french_cities$area[1:10])
 #' all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
-#'   seq(1, 3, by = 0.5),
+#'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
 #'   epsilon = 0.1, iter_max = 1000,
-#'   destination_data = list(names = LETTERS[1:10], positions = positions),
-#'   origin_data = list(names = LETTERS[1:10], positions = positions)
+#'   destination_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   ),
+#'   origin_data = list(
+#'     names = french_cities$name[1:10],
+#'     positions = positions
+#'   )
 #' )
 #' all_flows_df <- sim_df(all_flows)
 #' ## group models by iteration number
 #' grid_var_autoplot(all_flows_df, iterations)
 #' ## or by convergence status (showing destination)
-#' grid_var_autoplot(all_flows_df, converged, flow = "destination")
+#' grid_var_autoplot(all_flows_df, converged,
+#'   flow = "destination",
+#'   with_names = TRUE
+#' ) + ggplot2::coord_flip()
 #' ## using positions
 #' grid_var_autoplot(all_flows_df, iterations,
 #'   flow = "destination",
 #'   with_positions = TRUE
-#' )
+#' ) +
+#'   ggplot2::scale_size_continuous(range = c(0, 3)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
 grid_var_autoplot <- function(sim_df,
                               key,
-                              flows = c("full", "destination", "attractiveness"),
+                              flows = c(
+                                "full", "destination",
+                                "attractiveness"
+                              ),
                               with_names = FALSE,
                               with_positions = FALSE,
                               cut_off = 100 * .Machine$double.eps^0.5,
@@ -86,7 +100,8 @@ grid_var_autoplot <- function(sim_df,
       }
     }
     if (flows == "full") {
-      cli::cli_warn(c("{.arg flows} = {.str full} cannot be combined with {.arg with_positions} = {.val TRUE}",
+      cli::cli_warn(c("{.arg flows} = {.str full} cannot be combined with
+{.arg with_positions} = {.val TRUE}",
         "!" = "proceeding with {.arg with_positions} set to {.val FALSE}"
       ))
     }
@@ -102,12 +117,17 @@ grid_var_autoplot <- function(sim_df,
         data = NULL, flows = flows,
         with_names = with_names, normalisation = normalisation
       )
-      sim_data_stat <- stat_sim_list(sim_data, flows, quantiles = c(qmin, qmax))
+      sim_data_stat <- stat_sim_list(sim_data, flows,
+        quantiles = c(qmin, qmax)
+      )
       sim_data_stat
     }
   )
   if (is.factor(val)) {
-    final_data <- combine_df(pre_data, factor(levels(val), levels(val)), val_name)
+    final_data <- combine_df(
+      pre_data, factor(levels(val), levels(val)),
+      val_name
+    )
   } else {
     final_data <- combine_df(pre_data, sort(unique(val)), val_name)
   }

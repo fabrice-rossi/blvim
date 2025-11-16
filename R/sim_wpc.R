@@ -9,7 +9,8 @@ insert_names <- function(data, names) {
   data
 }
 
-new_sim_wpc <- function(Y, Z, costs, alpha, beta, bipartite, origin_data, destination_data, ..., class = character()) {
+new_sim_wpc <- function(Y, Z, costs, alpha, beta, bipartite, origin_data,
+                        destination_data, ..., class = character()) {
   new_sim(Y,
     Z,
     bipartite,
@@ -30,7 +31,8 @@ format.sim_wpc <- function(x, ...) {
     cli::cli_format_method({
       cli::cli_ul(c(
         "Model: Wilson's production constrained",
-        "Parameters: return to scale (alpha) = {.val {x$alpha}} and inverse cost scale (beta) = {.val {x$beta}}"
+        "Parameters: return to scale (alpha) = {.val {x$alpha}} and
+inverse cost scale (beta) = {.val {x$beta}}"
       ))
     })
   )
@@ -99,6 +101,7 @@ inverse_cost.sim_wpc <- function(sim, ...) {
 #' attractiveness <- c(2, rep(1, 9))
 #' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 #' costs(model) ## should be equal to distances above
+#' all.equal(costs(model), distances)
 costs <- function(sim, ...) {
   UseMethod("costs")
 }
