@@ -12,3 +12,4 @@ devtools
 ^Meta$
 vignettes/grid_cache
 ^data-raw$
+.lintr
