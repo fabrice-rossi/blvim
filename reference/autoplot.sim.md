@@ -163,13 +163,19 @@ If the `ggrepel` package is installed, its functions are used instead of
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-flows <- blvim(distances, production, 1.5, 4, attractiveness,
-  origin_data = list(names = LETTERS[1:10], positions = positions),
-  destination_data = list(names = LETTERS[1:10], positions = positions)
+attractiveness <- log(french_cities$area[1:10])
+flows <- blvim(distances, production, 1.5, 1 / 150, attractiveness,
+  origin_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  ),
+  destination_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  )
 )
 ggplot2::autoplot(flows)
 
@@ -181,32 +187,39 @@ ggplot2::autoplot(flows, "destination")
 ggplot2::autoplot(flows, "attractiveness")
 
 ## names inclusion
-ggplot2::autoplot(flows, "destination", with_names = TRUE)
+ggplot2::autoplot(flows, "destination", with_names = TRUE) +
+  ggplot2::coord_flip()
 
-ggplot2::autoplot(flows, with_names = TRUE)
+ggplot2::autoplot(flows, with_names = TRUE) +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 
 ## positions
 ggplot2::autoplot(flows, "attractiveness", with_positions = TRUE) +
-  ggplot2::scale_size_continuous(range = c(0, 6))
+  ggplot2::scale_size_continuous(range = c(0, 6)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 
 ggplot2::autoplot(flows, "destination",
   with_positions = TRUE,
   with_names = TRUE
 ) +
-  ggplot2::scale_size_continuous(range = c(0, 6))
+  ggplot2::scale_size_continuous(range = c(0, 6)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 
 ggplot2::autoplot(flows, "destination",
   with_positions = TRUE,
   with_names = TRUE, with_labels = TRUE
 ) +
-  ggplot2::scale_size_continuous(range = c(0, 6))
+  ggplot2::scale_size_continuous(range = c(0, 6)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 
 ggplot2::autoplot(flows, with_positions = TRUE) +
-  ggplot2::scale_linewidth_continuous(range = c(0, 2))
+  ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 
 ggplot2::autoplot(flows,
   with_positions = TRUE,
   arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
 ) +
-  ggplot2::scale_linewidth_continuous(range = c(0, 2))
+  ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 ```

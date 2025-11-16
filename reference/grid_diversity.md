@@ -63,23 +63,20 @@ and
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(15 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 15)
-attractiveness <- rep(1, 15)
-all_flows <- grid_blvim(distances,
-  production,
-  c(1.1, 1.25, 1.5),
-  c(1, 2, 3),
-  attractiveness,
-  bipartite = FALSE,
-  epsilon = 0.1
+distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+production <- log(french_cities$population[1:15])
+attractiveness <- log(french_cities$area[1:15])
+all_flows <- grid_blvim(
+  distances, production, c(1.1, 1.25, 1.5),
+  c(1, 2, 3, 4) / 500, attractiveness,
+  epsilon = 0.1,
+  bipartite = FALSE
 )
 diversities <- grid_diversity(all_flows)
-diversities ## should be a length 9 vector
-#> [1]  1.983502  1.901702  1.000000  6.961644  4.174735  2.661917 10.363274
-#> [8]  8.139205  6.331496
+diversities ## should be a length 12 vector
+#>  [1] 1.891319 1.000000 1.000000 1.976166 1.968974 1.945845 5.027994 2.410876
+#>  [9] 1.981744 6.907061 5.460118 2.458216
 grid_diversity(all_flows, "renyi", 3)
-#> [1] 1.952206 1.755958 1.000000 4.878591 3.586610 2.396639 7.398064 5.726087
-#> [9] 4.659825
+#>  [1] 1.734908 1.000000 1.000000 1.931990 1.912744 1.854403 3.636500 2.165508
+#>  [9] 1.947308 4.905153 4.077701 2.212184
 ```

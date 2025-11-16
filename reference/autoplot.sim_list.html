@@ -124,8 +124,8 @@ texts. If <code>TRUE</code>, names are shown using labels.</p></dd>
 
 <dt id="arg-normalisation">normalisation<a class="anchor" aria-label="anchor" href="#arg-normalisation"></a></dt>
 <dd><p>when <code>flows="full"</code>, the flows can be reported without
-normalisation (<code>normalisation="none"</code>) or they can be normalised, either
-to sum to one for each origin location (<code>normalisation="origin"</code>, the default
+normalisation (<code>normalisation="none"</code>) or they can be normalised, either to
+sum to one for each origin location (<code>normalisation="origin"</code>, the default
 value) or to sum to one globally (<code>normalisation="full"</code>).</p></dd>
 
 
@@ -149,23 +149,24 @@ destination. We consider three quantiles:</p><ul><li><p>a lower quantile <code>q
 <li><p>the median;</p></li>
 <li><p>a upper quantile <code>qmax</code> defaulting to 0.95.</p></li>
 </ul><p>If <code>with_position</code> is <code>FALSE</code> (default value), the graphical representations
-are "abstract". Depending on <code>flows</code> we have the following representations:</p><ul><li><p><code>"full"</code>: the function displays the quantiles over the collection of models
-of the flows using nested squares (<code><a href="flows.html">flows()</a></code>). The graph is organised as matrix with
-origin locations on rows and destination locations on columns. At each row and
-column intersection, three nested squares represent respectively the lower quantile,
-the median and the upper quantile of the distribution of the flows between the
-corresponding origin and destination locations over the collection of models. The
-median square borders are thicker than the other two squares. The area of
-each square is proportional to the represented value.</p></li>
-<li><p><code>"destination"</code>: the function displays the quantiles over the collection of
-models of the incoming flows for each destination location (using
+are "abstract". Depending on <code>flows</code> we have the following representations:</p><ul><li><p><code>"full"</code>: the function displays the quantiles over the collection of
+models of the flows using nested squares (<code><a href="flows.html">flows()</a></code>). The graph is organised
+as matrix with origin locations on rows and destination locations on columns.
+At each row and column intersection, three nested squares represent
+respectively the lower quantile, the median and the upper quantile of the
+distribution of the flows between the corresponding origin and destination
+locations over the collection of models. The median square borders are
+thicker than the other two squares. The area of each square is proportional
+to the represented value.</p></li>
+<li><p><code>"destination"</code>: the function displays the quantiles over the collection
+of models of the incoming flows for each destination location (using
 <code><a href="destination_flow.html">destination_flow()</a></code>). Quantiles are represented using
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">ggplot2::geom_crossbar()</a></code>: each location is represented by a rectangle that
 spans from its lower quantile to its upper quantile. An intermediate thicker
 bar represents the median quantile.</p></li>
-<li><p><code>"attractiveness"</code>: the function displays the quantiles over the collection of
-models of the attractiveness of each destination location (as given by
-<code><a href="attractiveness.html">attractiveness()</a></code>). The graphical representation is the same as for
+<li><p><code>"attractiveness"</code>: the function displays the quantiles over the
+collection of models of the attractiveness of each destination location (as
+given by <code><a href="attractiveness.html">attractiveness()</a></code>). The graphical representation is the same as for
 <code>"destination"</code>. This is interesting for dynamic models where those values
 are updated during the iterations (see <code><a href="blvim.html">blvim()</a></code> for details). When the
 calculation has converged (see <code><a href="sim_converged.html">sim_converged()</a></code>), both <code>"destination"</code> and
@@ -179,17 +180,18 @@ representations. Notice that if no positions are known for the locations, the
 use of <code>with_positions = TRUE</code> is an error. Moreover, <code>flows = "full"</code> is not
 supported: the function will issue a warning and revert to the position free
 representation if this value is used.</p>
-<p>The representations for <code>flows="destination"</code> and <code>flows="attractiveness"</code> are
-based on the same principle. Each destination location is represented by a
-collection of three nested circles centred on the corresponding location
-position, representing respectively the lower quantile, the median and the upper
-quantile of the incoming flows or of the attractivenesses. The diameters of
-the circles are proportional to the quantities they represent. The border ot
-the median circle is thicker than the ones of the other circles.</p>
-<p>When both <code>with_positions</code> and <code>with_names</code> are <code>TRUE</code>, the names
-of the destinations are added to the graphical representation. If <code>with_labels</code>
-is <code>TRUE</code> the names are represented as labels instead of plain texts
-(see <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_label()</a></code>). If the <code>ggrepel</code> package is installed, its
+<p>The representations for <code>flows="destination"</code> and <code>flows="attractiveness"</code>
+are based on the same principle. Each destination location is represented by
+a collection of three nested circles centred on the corresponding location
+position, representing respectively the lower quantile, the median and the
+upper quantile of the incoming flows or of the attractivenesses. The
+diameters of the circles are proportional to the quantities they represent.
+The border ot the median circle is thicker than the ones of the other
+circles.</p>
+<p>When both <code>with_positions</code> and <code>with_names</code> are <code>TRUE</code>, the names of the
+destinations are added to the graphical representation. If <code>with_labels</code> is
+<code>TRUE</code> the names are represented as labels instead of plain texts (see
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_label()</a></code>). If the <code>ggrepel</code> package is installed, its
 functions are used instead of <code>ggplot2</code> native functions.</p>
     </div>
     <div class="section level2">
@@ -199,37 +201,48 @@ functions are used instead of <code>ggplot2</code> native functions.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"th_longitude"</span>, <span class="st">"th_latitude"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="va">french_cities_distances</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co">## convert to km</span></span></span>
+<span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">$</span><span class="va">area</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">all_flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="grid_blvim.html">grid_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1.05</span>, <span class="fl">1.45</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, by <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, by <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">400</span>,</span></span>
 <span class="r-in"><span>  <span class="va">attractiveness</span>,</span></span>
 <span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  epsilon <span class="op">=</span> <span class="fl">0.1</span>, iter_max <span class="op">=</span> <span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  destination_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  origin_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  destination_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    names <span class="op">=</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    positions <span class="op">=</span> <span class="va">positions</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  origin_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    names <span class="op">=</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    positions <span class="op">=</span> <span class="va">positions</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim_list-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span>, normalisation <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span>, normalisation <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim_list-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>,</span></span>
 <span class="r-in"><span>  flow <span class="op">=</span> <span class="st">"destination"</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  qmin <span class="op">=</span> <span class="fl">0</span>, qmax <span class="op">=</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim_list-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>,</span></span>
 <span class="r-in"><span>  flow <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  qmin <span class="op">=</span> <span class="fl">0</span>, qmax <span class="op">=</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="st">"epsg:4326"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim_list-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>,</span></span>
 <span class="r-in"><span>  flow <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  qmin <span class="op">=</span> <span class="fl">0</span>, qmax <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>  cut_off <span class="op">=</span> <span class="fl">1.1</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="st">"epsg:4326"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim_list-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">all_flows</span>,</span></span>
 <span class="r-in"><span>  flow <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
@@ -237,7 +250,8 @@ functions are used instead of <code>ggplot2</code> native functions.</p>
 <span class="r-in"><span>  with_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  qmin <span class="op">=</span> <span class="fl">0</span>, qmax <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>  cut_off <span class="op">=</span> <span class="fl">1.1</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="st">"epsg:4326"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim_list-6.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

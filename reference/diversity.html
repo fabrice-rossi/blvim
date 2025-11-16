@@ -80,8 +80,8 @@ collection of spatial interaction  models (an object of class <code>sim_list</co
 
 
 <dt id="arg-definition">definition<a class="anchor" aria-label="anchor" href="#arg-definition"></a></dt>
-<dd><p>diversity definition <code>"shannon"</code> (default),
-<code>"renyi"</code> (see details) or a definition supported by  <code><a href="terminals.html">terminals()</a></code></p></dd>
+<dd><p>diversity definition <code>"shannon"</code> (default), <code>"renyi"</code> (see
+details) or a definition supported by  <code><a href="terminals.html">terminals()</a></code></p></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
@@ -119,8 +119,8 @@ distribution, that is</p>
 \left(\sum_{k=1}^np_k^\gamma\right)\right).$$</p>
 <p>This is defined directly only for \(\gamma\in]0,1[\cup ]1,\infty[\), but
 extensions to the limit case are straightforward:</p><ul><li><p>\(\gamma=1\) is Shannon's entropy/diversity</p></li>
-<li><p>\(\gamma=0\) is the max-entropy, here \(\ln(n)\) and thus the corresponding
-diversity is the number of locations</p></li>
+<li><p>\(\gamma=0\) is the max-entropy, here \(\ln(n)\) and thus the
+corresponding diversity is the number of locations</p></li>
 <li><p>\(\gamma=\infty\) is the min-entropy, here \(-\log \max_{k}p_k\) and
 thhe corresponding diversity is \(\frac{1}{\max_{k}p_k}\)</p></li>
 </ul><p>The <code>definition</code> parameter specifies the diversity used for calculation. The
@@ -130,10 +130,11 @@ as specified by the <code>order</code> parameter. Large values of <code>order</c
 generate underflows in the calculation that will trigger the use of the
 min-entropy instead of the exact Rényi entropy.</p>
 <p>In addition to those entropy based definition, terminal based calculations
-are also provided. Using any definition supported by the <code><a href="terminals.html">terminals()</a></code> function,
-the diversity is the number of terminals identified. Notice this applies only
-to interaction models in which origin and destination locations are identical,
-i.e. when the model is not bipartite. Current values of definitions are:</p><ul><li><p><code>"ND"</code> for the original Nystuen and Dacey definition</p></li>
+are also provided. Using any definition supported by the <code><a href="terminals.html">terminals()</a></code>
+function, the diversity is the number of terminals identified. Notice this
+applies only to interaction models in which origin and destination locations
+are identical, i.e. when the model is not bipartite. Current values of
+definitions are:</p><ul><li><p><code>"ND"</code> for the original Nystuen and Dacey definition</p></li>
 <li><p><code>"RW"</code> for the variant by Rihll and Wilson</p></li>
 </ul><p>See <code><a href="terminals.html">terminals()</a></code> for details.</p>
 <p>When applied to a collection of spatial interaction  models (an object of
@@ -153,15 +154,16 @@ completely equivalent to <code><a href="grid_diversity.html">grid_diversity()</a
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">3</span>, <span class="va">attractiveness</span>, bipartite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="va">french_cities_distances</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co">## convert to km</span></span></span>
+<span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">$</span><span class="va">population</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">15</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">100</span>, <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">diversity</span><span class="op">(</span><span class="va">flows</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.196688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.612398</span>
 <span class="r-in"><span><span class="fu">diversity</span><span class="op">(</span><span class="va">flows</span>, <span class="st">"renyi"</span>, <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.45878</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.734579</span>
 <span class="r-in"><span><span class="fu">diversity</span><span class="op">(</span><span class="va">flows</span>, <span class="st">"RW"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 7</span>
 </code></pre></div>

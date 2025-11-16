@@ -40,16 +40,16 @@ modified `sim` object or `sim_list` object.
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-rownames(positions) <- LETTERS[11:20]
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10]
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
 ## the row/column names of the cost matrix are used for the location
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 destination_names(model)
-#>  [1] "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T"
-destination_names(model) <- letters[1:10]
+#>  [1] "75056" "13055" "69123" "31555" "06088" "44109" "34172" "67482" "33063"
+#> [10] "59350"
+destination_names(model) <- french_cities$name[1:10]
 destination_names(model)
-#>  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"
+#>  [1] "Paris"       "Marseille"   "Lyon"        "Toulouse"    "Nice"       
+#>  [6] "Nantes"      "Montpellier" "Strasbourg"  "Bordeaux"    "Lille"      
 ```

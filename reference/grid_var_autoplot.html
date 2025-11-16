@@ -137,8 +137,8 @@ texts. If <code>TRUE</code>, names are shown using labels.</p></dd>
 
 <dt id="arg-normalisation">normalisation<a class="anchor" aria-label="anchor" href="#arg-normalisation"></a></dt>
 <dd><p>when <code>flows="full"</code>, the flows can be reported without
-normalisation (<code>normalisation="none"</code>) or they can be normalised, either
-to sum to one for each origin location (<code>normalisation="origin"</code>, the default
+normalisation (<code>normalisation="none"</code>) or they can be normalised, either to
+sum to one for each origin location (<code>normalisation="origin"</code>, the default
 value) or to sum to one globally (<code>normalisation="full"</code>).</p></dd>
 
 
@@ -175,30 +175,41 @@ parameter (in a list).</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"th_longitude"</span>, <span class="st">"th_latitude"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="va">french_cities_distances</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co">## convert to km</span></span></span>
 <span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">$</span><span class="va">area</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">all_flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="grid_blvim.html">grid_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1.05</span>, <span class="fl">1.45</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, by <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, by <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">400</span>,</span></span>
 <span class="r-in"><span>  <span class="va">attractiveness</span>,</span></span>
 <span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  epsilon <span class="op">=</span> <span class="fl">0.1</span>, iter_max <span class="op">=</span> <span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  destination_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  origin_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  destination_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    names <span class="op">=</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    positions <span class="op">=</span> <span class="va">positions</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  origin_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    names <span class="op">=</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    positions <span class="op">=</span> <span class="va">positions</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">all_flows_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_df.html">sim_df</a></span><span class="op">(</span><span class="va">all_flows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## group models by iteration number</span></span></span>
 <span class="r-in"><span><span class="fu">grid_var_autoplot</span><span class="op">(</span><span class="va">all_flows_df</span>, <span class="va">iterations</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="grid_var_autoplot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co">## or by convergence status (showing destination)</span></span></span>
-<span class="r-in"><span><span class="fu">grid_var_autoplot</span><span class="op">(</span><span class="va">all_flows_df</span>, <span class="va">converged</span>, flow <span class="op">=</span> <span class="st">"destination"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">grid_var_autoplot</span><span class="op">(</span><span class="va">all_flows_df</span>, <span class="va">converged</span>,</span></span>
+<span class="r-in"><span>  flow <span class="op">=</span> <span class="st">"destination"</span>,</span></span>
+<span class="r-in"><span>  with_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="grid_var_autoplot-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co">## using positions</span></span></span>
 <span class="r-in"><span><span class="fu">grid_var_autoplot</span><span class="op">(</span><span class="va">all_flows_df</span>, <span class="va">iterations</span>,</span></span>
 <span class="r-in"><span>  flow <span class="op">=</span> <span class="st">"destination"</span>,</span></span>
 <span class="r-in"><span>  with_positions <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="st">"epsg:4326"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="grid_var_autoplot-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

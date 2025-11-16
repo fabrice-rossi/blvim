@@ -72,30 +72,30 @@ the returned SIM has always two attributes:
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(15 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 15)
-attractiveness <- rep(1, 15)
-all_flows <- grid_blvim(distances,
-  production,
-  c(1.1, 1.25, 1.5),
-  c(1, 2, 3),
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- rep(1, 10)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
+  seq(1, 3, by = 0.5) / 400,
   attractiveness,
-  epsilon = 0.1
+  bipartite = FALSE,
+  epsilon = 0.1, iter_max = 1000,
 )
 all_flows_median <- median(all_flows)
 attr(all_flows_median, "index")
-#> [1] 5
+#> [1] 13
 attr(all_flows_median, "distortion")
-#> [1] 1.417701
+#> [1] 1.581661
 median(all_flows, flows = "destination")
-#> Spatial interaction model with 15 origin locations and 15 destination locations
+#> Spatial interaction model with 10 origin locations and 10 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.25 and inverse cost scale (beta) = 2
-#> ℹ The BLV model converged after 900 iterations.
+#> • Parameters: return to scale (alpha) = 1.25 and inverse cost scale (beta) =
+#> 0.005
+#> ℹ The BLV model converged after 1000 iterations.
 median(all_flows, flows = "attractiveness")
-#> Spatial interaction model with 15 origin locations and 15 destination locations
+#> Spatial interaction model with 10 origin locations and 10 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.25 and inverse cost scale (beta) = 2
-#> ℹ The BLV model converged after 900 iterations.
+#> • Parameters: return to scale (alpha) = 1.25 and inverse cost scale (beta) =
+#> 0.005
+#> ℹ The BLV model converged after 1000 iterations.
 ```

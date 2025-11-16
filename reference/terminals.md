@@ -75,17 +75,17 @@ general. The function use the Rihll & Wilson definition when
 
 Nystuen, J.D. and Dacey, M.F. (1961), "A graph theory interpretation of
 nodal regions", Papers and Proceedings of the Regional Science
-Association 7: 29–42.
+Association 7: 29-42.
 [doi:10.1007/bf01969070](https://doi.org/10.1007/bf01969070)
 
 Rihll, T.E., and Wilson, A.G. (1987). "Spatial interaction and
 structural models in historical analysis: some possibilities and an
-example", Histoire & Mesure 2: 5–32.
+example", Histoire & Mesure 2: 5-32.
 [doi:10.3406/hism.1987.1300](https://doi.org/10.3406/hism.1987.1300)
 
 Rihll, T., and Wilson, A. (1991), "Modelling settlement structures in
 ancient Greece: new approaches to the polis", In City and Country in the
-Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
+Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58-95.
 London: Routledge.
 
 ## See also
@@ -97,12 +97,29 @@ London: Routledge.
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-model <- blvim(distances, production, 1.3, 2, attractiveness, bipartite = FALSE)
+model <- blvim(distances, production, 1.3, 1 / 250, attractiveness,
+  bipartite = FALSE
+)
+destination_names(model) <- french_cities$name[1:10]
 terminals(model)
-#> 5 6 9 
-#> 5 6 9 
+#>       Paris Montpellier 
+#>           1           7 
+dist_times <- french_cities_times[1:10, 1:10]
+tmodel <- blvim(dist_times, production, 1.3, 1 / 5000, attractiveness,
+  bipartite = FALSE
+)
+destination_names(tmodel) <- french_cities$name[1:10]
+terminals(tmodel)
+#>       Paris        Nice      Nantes Montpellier  Strasbourg    Bordeaux 
+#>           1           5           6           7           8           9 
+#>       Lille 
+#>          10 
+terminals(tmodel, definition = "RW")
+#>       Paris        Nice      Nantes Montpellier  Strasbourg    Bordeaux 
+#>           1           5           6           7           8           9 
+#>       Lille 
+#>          10 
 ```

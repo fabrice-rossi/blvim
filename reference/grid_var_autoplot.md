@@ -136,28 +136,39 @@ can be set using the `fw_params` parameter (in a list).
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
+attractiveness <- log(french_cities$area[1:10])
 all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
-  seq(1, 3, by = 0.5),
+  seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
   epsilon = 0.1, iter_max = 1000,
-  destination_data = list(names = LETTERS[1:10], positions = positions),
-  origin_data = list(names = LETTERS[1:10], positions = positions)
+  destination_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  ),
+  origin_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  )
 )
 all_flows_df <- sim_df(all_flows)
 ## group models by iteration number
 grid_var_autoplot(all_flows_df, iterations)
 
 ## or by convergence status (showing destination)
-grid_var_autoplot(all_flows_df, converged, flow = "destination")
+grid_var_autoplot(all_flows_df, converged,
+  flow = "destination",
+  with_names = TRUE
+) + ggplot2::coord_flip()
 
 ## using positions
 grid_var_autoplot(all_flows_df, iterations,
   flow = "destination",
   with_positions = TRUE
-)
+) +
+  ggplot2::scale_size_continuous(range = c(0, 3)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
 ```

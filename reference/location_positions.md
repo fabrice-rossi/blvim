@@ -50,35 +50,38 @@ movement models and other non purely geographic considerations.
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 ## No positions
-location_positions(model) <- list(origin = positions, destination = positions)
+location_positions(model) <- list(
+  origin = positions,
+  destination = positions
+)
 destination_positions(model)
-#>              [,1]       [,2]
-#>  [1,]  0.88862899  0.1046622
-#>  [2,]  0.01321448  0.7201865
-#>  [3,]  0.22533951 -0.6110461
-#>  [4,] -0.72991521 -1.1069141
-#>  [5,] -1.22248707  0.5348033
-#>  [6,]  0.40680517  0.7360680
-#>  [7,] -0.75101222 -1.2225016
-#>  [8,] -0.16211654  1.0214153
-#>  [9,]  0.35201013  0.4651652
-#> [10,] -0.28905830  0.7904727
+#>    th_longitude th_latitude
+#> 1        2.3525     48.8564
+#> 2        5.3699     43.2966
+#> 3        4.8350     45.7676
+#> 4        1.4442     43.6046
+#> 5        7.2715     43.6960
+#> 6       -1.5543     47.2184
+#> 7        3.8968     43.5985
+#> 8        7.7520     48.5733
+#> 9       -0.5794     44.8379
+#> 10       3.0713     50.6305
 origin_positions(model)
-#>              [,1]       [,2]
-#>  [1,]  0.88862899  0.1046622
-#>  [2,]  0.01321448  0.7201865
-#>  [3,]  0.22533951 -0.6110461
-#>  [4,] -0.72991521 -1.1069141
-#>  [5,] -1.22248707  0.5348033
-#>  [6,]  0.40680517  0.7360680
-#>  [7,] -0.75101222 -1.2225016
-#>  [8,] -0.16211654  1.0214153
-#>  [9,]  0.35201013  0.4651652
-#> [10,] -0.28905830  0.7904727
+#>    th_longitude th_latitude
+#> 1        2.3525     48.8564
+#> 2        5.3699     43.2966
+#> 3        4.8350     45.7676
+#> 4        1.4442     43.6046
+#> 5        7.2715     43.6960
+#> 6       -1.5543     47.2184
+#> 7        3.8968     43.5985
+#> 8        7.7520     48.5733
+#> 9       -0.5794     44.8379
+#> 10       3.0713     50.6305
 ```

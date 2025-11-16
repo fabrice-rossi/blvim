@@ -45,22 +45,22 @@ movement models and other non purely geographic considerations.
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 origin_positions(model) <- positions
 origin_positions(model)
-#>              [,1]        [,2]
-#>  [1,] -1.07806726  0.41626080
-#>  [2,] -1.14356572  0.11402961
-#>  [3,] -0.52964368  0.06391875
-#>  [4,] -0.68127316 -0.91933224
-#>  [5,] -0.20244756  0.90133529
-#>  [6,]  1.68449572 -0.79772830
-#>  [7,] -1.03377324  0.66822120
-#>  [8,] -0.15597667  0.15521430
-#>  [9,] -0.04640064  0.12868809
-#> [10,] -0.95362873 -1.53306545
+#>    th_longitude th_latitude
+#> 1        2.3525     48.8564
+#> 2        5.3699     43.2966
+#> 3        4.8350     45.7676
+#> 4        1.4442     43.6046
+#> 5        7.2715     43.6960
+#> 6       -1.5543     47.2184
+#> 7        3.8968     43.5985
+#> 8        7.7520     48.5733
+#> 9       -0.5794     44.8379
+#> 10       3.0713     50.6305
 ```

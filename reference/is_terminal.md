@@ -39,12 +39,26 @@ terminals and `FALSE` for other locations.
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-model <- blvim(distances, production, 1.3, 2, attractiveness, bipartite = FALSE)
+model <- blvim(distances, production, 1.3, 1 / 500, attractiveness,
+  bipartite = FALSE
+)
+destination_names(model) <- french_cities$name[1:10]
 is_terminal(model)
-#>     1     2     3     4     5     6     7     8     9    10 
-#> FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE 
+#>       Paris   Marseille        Lyon    Toulouse        Nice      Nantes 
+#>       FALSE       FALSE        TRUE       FALSE       FALSE       FALSE 
+#> Montpellier  Strasbourg    Bordeaux       Lille 
+#>       FALSE       FALSE       FALSE       FALSE 
+dist_times <- french_cities_times[1:10, 1:10]
+tmodel <- blvim(dist_times, production, 1.3, 1 / 10000, attractiveness,
+  bipartite = FALSE
+)
+destination_names(tmodel) <- french_cities$name[1:10]
+is_terminal(tmodel)
+#>       Paris   Marseille        Lyon    Toulouse        Nice      Nantes 
+#>        TRUE       FALSE       FALSE       FALSE       FALSE       FALSE 
+#> Montpellier  Strasbourg    Bordeaux       Lille 
+#>        TRUE       FALSE       FALSE       FALSE 
 ```

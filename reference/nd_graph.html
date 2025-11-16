@@ -118,10 +118,10 @@ constitutes a a trivial connected component in itself.</p>
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Nystuen, J.D. and Dacey, M.F. (1961), "A graph theory
 interpretation of nodal regions", Papers and Proceedings of the Regional
-Science Association 7: 29–42. <a href="https://doi.org/10.1007/bf01969070" class="external-link">doi:10.1007/bf01969070</a></p>
+Science Association 7: 29-42. <a href="https://doi.org/10.1007/bf01969070" class="external-link">doi:10.1007/bf01969070</a></p>
 <p>Rihll, T., and Wilson, A. (1991), "Modelling settlement structures in
 ancient Greece: new approaches to the polis", In City and Country in the
-Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
+Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58-95.
 London: Routledge.</p>
     </div>
     <div class="section level2">
@@ -131,27 +131,41 @@ London: Routledge.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="va">french_cities_distances</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co">## convert to km</span></span></span>
 <span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.3</span>, <span class="fl">2</span>, <span class="va">attractiveness</span>, bipartite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.3</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>, <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="destination_names.html">destination_names</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">nd_graph</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    from to      flow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     2  4 0.9942171</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     3  4 0.9648898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     6  4 0.9922923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     8  4 0.9793537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9     9  4 0.9672267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   10  4 0.9838683</span>
-<span class="r-in"><span><span class="fu">nd_graph</span><span class="op">(</span><span class="va">model</span>, <span class="st">"RW"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    from to      flow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     2  4 0.9942171</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     3  4 0.9648898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     6  4 0.9922923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     8  4 0.9793537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9     9  4 0.9672267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   10  4 0.9838683</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            from to      flow</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Marseille     2  7 0.9488844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lyon          3  7 0.7594037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toulouse      4  7 0.9046308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Nice          5  7 0.9488844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Nantes        6  1 0.7793698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Strasbourg    8  1 0.6655188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bordeaux      9  7 0.7106013</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lille        10  1 0.9291846</span>
+<span class="r-in"><span><span class="va">dist_times</span> <span class="op">&lt;-</span> <span class="va">french_cities_times</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">tmodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">dist_times</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">15</span><span class="op">)</span>, <span class="fl">1.3</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">5000</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">15</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="destination_names.html">destination_names</a></span><span class="op">(</span><span class="va">tmodel</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="terminals.html">terminals</a></span><span class="op">(</span><span class="va">tmodel</span>, definition <span class="op">=</span> <span class="st">"RW"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Paris  Marseille       Lyon   Toulouse Strasbourg   Bordeaux     Rennes </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          1          2          3          4          8          9         11 </span>
+<span class="r-in"><span><span class="fu">nd_graph</span><span class="op">(</span><span class="va">tmodel</span>, <span class="st">"RW"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               from to      flow</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Nice             5  2 0.9620972</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Nantes           6 11 0.5920218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Montpellier      7  2 0.8707174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lille           10  1 0.9551241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toulon          12  2 0.9727568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reims           13  1 0.9308482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Saint-Étienne   14  3 0.5062502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Le Havre        15  1 0.8529081</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

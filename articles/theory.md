@@ -66,7 +66,7 @@ follows:
   \\1\\, its actual attractiveness can increase in a super-linear way
   (\\\alpha\>1\\) or in a sub-linear way (\\\alpha\<1\\);
 - \\\beta\\ acts as the *inverse of the scale of the costs* \\c\_{ij}\\.
-  If those osts are distances, for instance, \\\frac{1}{\beta}\\ can be
+  If those costs are distances, for instance, \\\frac{1}{\beta}\\ can be
   seen as a cut-off distance.
 
 As with other spatial interaction models, maximum entropy models are
@@ -90,8 +90,8 @@ The models described above are *static*: they correspond to a frozen
 view of the exchanges with no retroaction of the flow received at one
 destination location on its attractiveness, for instance.
 
-In the 1970s, Harris and Wilson developed dynamic models that assume a
-form of etroaction, initially in terms of an equilibrium state.
+In the 1960s and 1970s, Harris and Wilson developed dynamic models that
+assume a form of etroaction, initially in terms of an equilibrium state.
 
 ### Harris and Wilson Equilibrium Values
 

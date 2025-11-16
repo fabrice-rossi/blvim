@@ -152,55 +152,66 @@ associated developments", Environment and Planning A: Economy and Space,
 ## See also
 
 [`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md),
-[`destination_names()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
+[`destination_names()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md),
+[`origin_positions()`](https://fabrice-rossi.github.io/blvim/reference/origin_positions.md),
+[`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
 
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-model <- static_blvim(distances, production, 1.5, 1, attractiveness,
-  origin_data = list(names = letters[1:10], positions = positions),
-  destination_data = list(names = letters[1:10], positions = positions)
+attractiveness <- log(french_cities$area[1:10])
+model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness,
+  origin_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  ),
+  destination_data = list(
+    names = french_cities$name[1:10],
+    positions = positions
+  )
 )
 model
 #> Spatial interaction model with 10 origin locations and 10 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.5 and inverse cost scale (beta) = 1
+#> • Parameters: return to scale (alpha) = 1.5 and inverse cost scale (beta) =
+#> 0.002
 location_names(model)
 #> $origin
-#>  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"
+#>  [1] "Paris"       "Marseille"   "Lyon"        "Toulouse"    "Nice"       
+#>  [6] "Nantes"      "Montpellier" "Strasbourg"  "Bordeaux"    "Lille"      
 #> 
 #> $destination
-#>  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"
+#>  [1] "Paris"       "Marseille"   "Lyon"        "Toulouse"    "Nice"       
+#>  [6] "Nantes"      "Montpellier" "Strasbourg"  "Bordeaux"    "Lille"      
 #> 
 location_positions(model)
 #> $origin
-#>              [,1]       [,2]
-#>  [1,]  0.24594946  1.1645199
-#>  [2,]  0.27205914  0.3376279
-#>  [3,] -0.99245858 -1.0545187
-#>  [4,] -0.02757795  0.6607691
-#>  [5,]  2.22284516 -0.8234090
-#>  [6,]  0.15550390  0.4370337
-#>  [7,] -0.86911632  0.3723881
-#>  [8,] -1.17448945 -1.6467491
-#>  [9,] -1.75967731 -1.9235523
-#> [10,]  0.05836159  0.3808330
+#>    th_longitude th_latitude
+#> 1        2.3525     48.8564
+#> 2        5.3699     43.2966
+#> 3        4.8350     45.7676
+#> 4        1.4442     43.6046
+#> 5        7.2715     43.6960
+#> 6       -1.5543     47.2184
+#> 7        3.8968     43.5985
+#> 8        7.7520     48.5733
+#> 9       -0.5794     44.8379
+#> 10       3.0713     50.6305
 #> 
 #> $destination
-#>              [,1]       [,2]
-#>  [1,]  0.24594946  1.1645199
-#>  [2,]  0.27205914  0.3376279
-#>  [3,] -0.99245858 -1.0545187
-#>  [4,] -0.02757795  0.6607691
-#>  [5,]  2.22284516 -0.8234090
-#>  [6,]  0.15550390  0.4370337
-#>  [7,] -0.86911632  0.3723881
-#>  [8,] -1.17448945 -1.6467491
-#>  [9,] -1.75967731 -1.9235523
-#> [10,]  0.05836159  0.3808330
+#>    th_longitude th_latitude
+#> 1        2.3525     48.8564
+#> 2        5.3699     43.2966
+#> 3        4.8350     45.7676
+#> 4        1.4442     43.6046
+#> 5        7.2715     43.6960
+#> 6       -1.5543     47.2184
+#> 7        3.8968     43.5985
+#> 8        7.7520     48.5733
+#> 9       -0.5794     44.8379
+#> 10       3.0713     50.6305
 #> 
 ```

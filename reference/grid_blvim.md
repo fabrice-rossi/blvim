@@ -1,4 +1,4 @@
-# Compute a collection of Boltzmann–Lotka–Volterra model solutions
+# Compute a collection of Boltzmann-Lotka-Volterra model solutions
 
 This function computes a collection of flows between origin locations
 and destination locations using
@@ -146,21 +146,24 @@ interpreted excepted the following ones:
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(
+  distances, production, c(1.25, 1.5),
+  c(1, 2, 3, 4) / 500, attractiveness
+)
 all_flows
-#> Collection of 6 spatial interaction models with 10 origin locations and 10
+#> Collection of 8 spatial interaction models with 10 origin locations and 10
 #> destination locations computed on the following grid:
 #> • alpha: 1.25 and 1.5
-#> • beta: 1, 2, and 3
+#> • beta: 0.002, 0.004, 0.006, and 0.008
 length(all_flows)
-#> [1] 6
+#> [1] 8
 all_flows[[2]]
 #> Spatial interaction model with 10 origin locations and 10 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.5 and inverse cost scale (beta) = 1
-#> ℹ The BLV model converged after 1700 iterations.
+#> • Parameters: return to scale (alpha) = 1.5 and inverse cost scale (beta) =
+#> 0.002
+#> ℹ The BLV model converged after 3200 iterations.
 ```

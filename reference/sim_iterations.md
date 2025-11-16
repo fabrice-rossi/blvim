@@ -36,11 +36,15 @@ number per model.
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- log(french_cities$population[1:10])
+attractiveness <- log(french_cities$area[1:10])
+model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+destination_flow(model)
+#>     75056     13055     69123     31555     06088     44109     34172     67482 
+#> 16.732020 19.146917 11.465220 14.885136 11.003105 11.776545 12.625408 11.752380 
+#>     33063     59350 
+#> 10.985307  9.743067 
 sim_iterations(model) ## must be one
 #> [1] 1
 ```

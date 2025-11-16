@@ -119,13 +119,13 @@ function use the Rihll &amp; Wilson definition when <code>definition</code> is <
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Nystuen, J.D. and Dacey, M.F. (1961), "A graph theory
 interpretation of nodal regions", Papers and Proceedings of the Regional
-Science Association 7: 29–42. <a href="https://doi.org/10.1007/bf01969070" class="external-link">doi:10.1007/bf01969070</a></p>
+Science Association 7: 29-42. <a href="https://doi.org/10.1007/bf01969070" class="external-link">doi:10.1007/bf01969070</a></p>
 <p>Rihll, T.E., and Wilson, A.G. (1987). "Spatial interaction and structural
 models in historical analysis: some possibilities and an example", Histoire
-&amp; Mesure 2: 5–32. <a href="https://doi.org/10.3406/hism.1987.1300" class="external-link">doi:10.3406/hism.1987.1300</a></p>
+&amp; Mesure 2: 5-32. <a href="https://doi.org/10.3406/hism.1987.1300" class="external-link">doi:10.3406/hism.1987.1300</a></p>
 <p>Rihll, T., and Wilson, A. (1991), "Modelling settlement structures in
 ancient Greece: new approaches to the polis", In City and Country in the
-Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
+Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58-95.
 London: Routledge.</p>
     </div>
     <div class="section level2">
@@ -135,14 +135,31 @@ London: Routledge.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="va">french_cities_distances</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co">## convert to km</span></span></span>
 <span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.3</span>, <span class="fl">2</span>, <span class="va">attractiveness</span>, bipartite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.3</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>, <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="destination_names.html">destination_names</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">terminals</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 6 9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 6 9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Paris Montpellier </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           7 </span>
+<span class="r-in"><span><span class="va">dist_times</span> <span class="op">&lt;-</span> <span class="va">french_cities_times</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">tmodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">dist_times</span>, <span class="va">production</span>, <span class="fl">1.3</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">5000</span>, <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="destination_names.html">destination_names</a></span><span class="op">(</span><span class="va">tmodel</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">terminals</span><span class="op">(</span><span class="va">tmodel</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Paris        Nice      Nantes Montpellier  Strasbourg    Bordeaux </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           5           6           7           8           9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Lille </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          10 </span>
+<span class="r-in"><span><span class="fu">terminals</span><span class="op">(</span><span class="va">tmodel</span>, definition <span class="op">=</span> <span class="st">"RW"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Paris        Nice      Nantes Montpellier  Strasbourg    Bordeaux </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1           5           6           7           8           9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Lille </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          10 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

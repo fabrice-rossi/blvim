@@ -73,9 +73,9 @@ more inhabitants in 2022, excluding Corsican cities. It contains 121
 cities described by 8 variables. The data frame is sorted in decreasing
 population order, making it straightforward to select the most populated
 cities. The same order is used for rows and columns in distance matrices
-[french_cities_distance](https://fabrice-rossi.github.io/blvim/reference/french_cities_distance.md)
+[french_cities_distances](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
 and
-[french_cities_time](https://fabrice-rossi.github.io/blvim/reference/french_cities_distance.md).
+[french_cities_times](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md).
 
 The population and administrative information was collected from the
 INSEE open data in November 2025. These data are distributed under the
@@ -89,6 +89,6 @@ under the French "Open Licence".
 
 [french_departments](https://fabrice-rossi.github.io/blvim/reference/french_departments.md),
 [french_regions](https://fabrice-rossi.github.io/blvim/reference/french_regions.md),
-[french_cities_distance](https://fabrice-rossi.github.io/blvim/reference/french_cities_distance.md)
+[french_cities_distances](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
 and
-[french_cities_time](https://fabrice-rossi.github.io/blvim/reference/french_cities_distance.md)
+[french_cities_times](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)

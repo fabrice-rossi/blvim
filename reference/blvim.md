@@ -1,8 +1,8 @@
-# Compute an equilibrium solution of the Boltzmann–Lotka–Volterra model
+# Compute an equilibrium solution of the Boltzmann-Lotka-Volterra model
 
 This function computes flows between origin locations and destination
 locations at an equilibrium solution of A. Wilson's
-Boltzmann–Lotka–Volterra (BLV) interaction model. The BLV dynamic model
+Boltzmann-Lotka-Volterra (BLV) interaction model. The BLV dynamic model
 is initialised with the production constraints at the origin locations
 and the initial values of the the attractiveness of destination
 locations. Iterations update the attractivenesses according the received
@@ -181,20 +181,29 @@ Models", Environment and Planning A: Economy and Space, 10(4), 371-388.
 
 Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
-Soc. Interface.5865–871
+Soc. Interface.5865-871
 [doi:10.1098/rsif.2007.1288](https://doi.org/10.1098/rsif.2007.1288)
+
+## See also
+
+[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
+for systematic exploration of parameter influence,
+[`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
+for the static model.
 
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-flows <- blvim(distances, production, 1.5, 1, attractiveness)
+attractiveness <- log(french_cities$area[1:10])
+## rescale to production
+attractiveness <- attractiveness / sum(attractiveness) * sum(production)
+flows <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
 flows
 #> Spatial interaction model with 10 origin locations and 10 destination locations
 #> • Model: Wilson's production constrained
-#> • Parameters: return to scale (alpha) = 1.5 and inverse cost scale (beta) = 1
-#> ℹ The BLV model converged after 1700 iterations.
+#> • Parameters: return to scale (alpha) = 1.5 and inverse cost scale (beta) =
+#> 0.004
+#> ℹ The BLV model converged after 3500 iterations.
 ```

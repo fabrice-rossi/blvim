@@ -68,37 +68,43 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a matrix of flows between origin locations and destination locations</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="flows_df.html">flows_df()</a></code> for a data frame version of the flows,
+<code><a href="destination_flow.html">destination_flow()</a></code> for destination flows.</p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="va">attractiveness</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="va">french_cities_distances</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co">## convert to km</span></span></span>
+<span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">$</span><span class="va">population</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">$</span><span class="va">area</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## rescale to production</span></span></span>
+<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="va">attractiveness</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">attractiveness</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">production</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">500</span>, <span class="va">attractiveness</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">flows</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             1           2          3          4          5          6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.58128391 0.025458910 0.04684689 0.05848390 0.03607918 0.05852402</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.13016862 0.371505120 0.07323146 0.01921715 0.05141161 0.05612128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.16018674 0.048975287 0.24845291 0.04934854 0.16702976 0.17155850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.21093941 0.013556383 0.05205350 0.26207147 0.05389922 0.07538260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.13416326 0.037391400 0.18164568 0.05556970 0.27019375 0.16621311</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.18546418 0.034784600 0.15899826 0.06623318 0.14164922 0.23026303</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.36517338 0.024676357 0.02998645 0.04890420 0.02269232 0.03677474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.14870307 0.009364505 0.03940146 0.17804164 0.04479849 0.05649520</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.09976814 0.271448028 0.05424589 0.01409669 0.03857196 0.04113340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.24306093 0.018928499 0.07171756 0.14522908 0.07008341 0.10363505</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             7           8           9         10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.07132486 0.028850116 0.016822711 0.07632550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.02464276 0.009289214 0.234022328 0.03039045</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.02002685 0.026138803 0.031276398 0.07700622</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.03445160 0.124586408 0.008573194 0.16448622</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.01648154 0.032319753 0.024185371 0.08183643</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.02276236 0.034734824 0.021979843 0.10313049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.37201159 0.028231158 0.017923248 0.05362656</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.02842123 0.374516251 0.005909444 0.11434871</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.02076130 0.006799394 0.430917567 0.02225765</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.03335548 0.070648737 0.011951677 0.23138958</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           75056     13055     69123     31555     06088     44109     34172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75056 4.0969692 1.1088098 1.2217612 1.0921179 0.5632478 1.6240133 0.7378889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13055 0.7071741 4.2253002 1.3428003 1.5342674 1.9561224 0.3929341 1.9234560</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69123 1.3143837 2.2647413 2.5217377 1.1758690 1.1504320 0.7218590 1.4741448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31555 0.8712958 1.9235243 0.8733871 3.5073682 0.9771023 0.8927507 1.6940382</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 06088 0.5849998 3.2232558 1.1108126 1.2692013 3.3461291 0.3250493 1.5911523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44109 1.9685175 0.7507590 0.8127451 1.3602679 0.3813668 3.6122313 0.6611897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34172 0.6718017 2.7488355 1.2481243 1.9264583 1.3963398 0.4933762 2.4319934</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67482 1.7123966 1.1773743 1.3023122 0.6776466 0.5980768 0.6912986 0.7663658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33063 1.1146105 1.2519543 0.8983174 2.2683621 0.6359615 1.5194761 1.1025898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59350 2.8982762 0.7759918 0.8550398 0.7730969 0.3941844 1.1496191 0.5051015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           67482     33063     59350</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75056 1.3863096 0.9779127 1.7549224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13055 0.6027795 0.7007471 0.2989262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69123 1.1368049 0.8475020 0.5555970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31555 0.4418368 1.5921056 0.3720533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 06088 0.4986410 0.5796833 0.2472826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44109 0.6772168 1.6269221 0.8405797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34172 0.5602798 0.8798728 0.2778500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67482 4.1426973 0.5088312 1.0065126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33063 0.4724853 2.7490133 0.4759517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59350 1.3462538 0.6922524 2.9931259</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

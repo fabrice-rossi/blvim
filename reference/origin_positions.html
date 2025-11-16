@@ -72,17 +72,17 @@ and 2 or 3 columns, or <code>NULL</code></p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>for <code>origin_positions</code> <code>NULL</code> or the coordinate matrix for the origin
-locations. for <code>origin_positions&lt;-</code> the modified <code>sim</code> object</p>
+    <p>for <code>origin_positions</code> <code>NULL</code> or the coordinate matrix for the
+origin locations. for <code>origin_positions&lt;-</code> the modified <code>sim</code> object</p>
     </div>
     <div class="section level2">
     <h2 id="positions">Positions<a class="anchor" aria-label="anchor" href="#positions"></a></h2>
     <p>Location positions are given by numeric matrices with 2 or 3 columns. The
 first two columns are assumed to be geographical coordinates while the 3rd
-column can be used for instance to store altitude. Coordinates are interpreted
-as is in graphical representations (see <code><a href="autoplot.sim.html">autoplot.sim()</a></code>). They are not matched
-to the costs as those can be derived from complex movement models and other
-non purely geographic considerations.</p>
+column can be used for instance to store altitude. Coordinates are
+interpreted as is in graphical representations (see <code><a href="autoplot.sim.html">autoplot.sim()</a></code>). They
+are not matched to the costs as those can be derived from complex movement
+models and other non purely geographic considerations.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -91,24 +91,24 @@ non purely geographic considerations.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"th_longitude"</span>, <span class="st">"th_latitude"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="va">french_cities_distances</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co">## convert to km</span></span></span>
 <span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="va">attractiveness</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>, <span class="va">attractiveness</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">origin_positions</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">positions</span></span></span>
 <span class="r-in"><span><span class="fu">origin_positions</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]        [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -1.07806726  0.41626080</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -1.14356572  0.11402961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.52964368  0.06391875</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.68127316 -0.91933224</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.20244756  0.90133529</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  1.68449572 -0.79772830</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -1.03377324  0.66822120</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.15597667  0.15521430</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.04640064  0.12868809</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.95362873 -1.53306545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    th_longitude th_latitude</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        2.3525     48.8564</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        5.3699     43.2966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        4.8350     45.7676</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        1.4442     43.6046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        7.2715     43.6960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       -1.5543     47.2184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        3.8968     43.5985</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        7.7520     48.5733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       -0.5794     44.8379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       3.0713     50.6305</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

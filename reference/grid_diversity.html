@@ -76,8 +76,8 @@ parameters are identical for all models.</p>
 
 
 <dt id="arg-definition">definition<a class="anchor" aria-label="anchor" href="#arg-definition"></a></dt>
-<dd><p>diversity definition <code>"shannon"</code> (default),
-<code>"renyi"</code> (see details) or a definition supported by  <code><a href="terminals.html">terminals()</a></code></p></dd>
+<dd><p>diversity definition <code>"shannon"</code> (default), <code>"renyi"</code> (see
+details) or a definition supported by  <code><a href="terminals.html">terminals()</a></code></p></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
@@ -107,25 +107,22 @@ start with <code>"grid_"</code>)</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">15</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">15</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">15</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">all_flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="grid_blvim.html">grid_blvim</a></span><span class="op">(</span><span class="va">distances</span>,</span></span>
-<span class="r-in"><span>  <span class="va">production</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="va">attractiveness</span>,</span></span>
-<span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>  epsilon <span class="op">=</span> <span class="fl">0.1</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="va">french_cities_distances</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co">## convert to km</span></span></span>
+<span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">$</span><span class="va">population</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">$</span><span class="va">area</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">all_flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="grid_blvim.html">grid_blvim</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">distances</span>, <span class="va">production</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">/</span> <span class="fl">500</span>, <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  epsilon <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">diversities</span> <span class="op">&lt;-</span> <span class="fu">grid_diversity</span><span class="op">(</span><span class="va">all_flows</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">diversities</span> <span class="co">## should be a length 9 vector</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  1.983502  1.901702  1.000000  6.961644  4.174735  2.661917 10.363274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [8]  8.139205  6.331496</span>
+<span class="r-in"><span><span class="va">diversities</span> <span class="co">## should be a length 12 vector</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.891319 1.000000 1.000000 1.976166 1.968974 1.945845 5.027994 2.410876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 1.981744 6.907061 5.460118 2.458216</span>
 <span class="r-in"><span><span class="fu">grid_diversity</span><span class="op">(</span><span class="va">all_flows</span>, <span class="st">"renyi"</span>, <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.952206 1.755958 1.000000 4.878591 3.586610 2.396639 7.398064 5.726087</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [9] 4.659825</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.734908 1.000000 1.000000 1.931990 1.912744 1.854403 3.636500 2.165508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 1.947308 4.905153 4.077701 2.212184</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -8,7 +8,7 @@ parameters.
 - [`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
   : Compute flows between origin and destination locations
 - [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
-  : Compute an equilibrium solution of the Boltzmann–Lotka–Volterra
+  : Compute an equilibrium solution of the Boltzmann-Lotka-Volterra
   model
 - [`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md)
   : Extract the cost matrix used to compute this model
@@ -90,7 +90,7 @@ grid of parameters.
   : Create a complete ggplot for spatial interaction models in a data
   frame
 - [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
-  : Compute a collection of Boltzmann–Lotka–Volterra model solutions
+  : Compute a collection of Boltzmann-Lotka-Volterra model solutions
 - [`grid_destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/grid_destination_flow.md)
   : Extract all the destination flows from a collection of spatial
   interaction models
@@ -149,8 +149,8 @@ models.
 
 - [`french_cities`](https://fabrice-rossi.github.io/blvim/reference/french_cities.md)
   : French cities
-- [`french_cities_distance`](https://fabrice-rossi.github.io/blvim/reference/french_cities_distance.md)
-  [`french_cities_time`](https://fabrice-rossi.github.io/blvim/reference/french_cities_distance.md)
+- [`french_cities_distances`](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
+  [`french_cities_times`](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
   : French cities distances
 - [`french_departments`](https://fabrice-rossi.github.io/blvim/reference/french_departments.md)
   : French departments

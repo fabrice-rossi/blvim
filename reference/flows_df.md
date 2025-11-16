@@ -57,43 +57,78 @@ in the data frame as follows:
 ## See also
 
 [`location_positions()`](https://fabrice-rossi.github.io/blvim/reference/location_positions.md),
-[`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md)
+[`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md),
+[`flows()`](https://fabrice-rossi.github.io/blvim/reference/flows.md)
 
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- log(french_cities$population[1:10])
+attractiveness <- log(french_cities$area[1:10])
+## rescale to production
+attractiveness <- attractiveness / sum(attractiveness) * sum(production)
 ## simple case (no positions and default names)
-model <- static_blvim(distances, production, 1.5, 1, attractiveness)
+model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness)
 head(flows_df(model))
 #>   origin_idx destination_idx      flow origin_name destination_name
-#> 1          1               1 0.5157087           1                1
-#> 2          2               1 0.1673249           2                1
-#> 3          3               1 0.1451588           3                1
-#> 4          4               1 0.2120735           4                1
-#> 5          5               1 0.2594128           5                1
-#> 6          6               1 0.2453039           6                1
+#> 1          1               1 4.0969692       75056            75056
+#> 2          2               1 0.7071741       13055            75056
+#> 3          3               1 1.3143837       69123            75056
+#> 4          4               1 0.8712958       31555            75056
+#> 5          5               1 0.5849998       06088            75056
+#> 6          6               1 1.9685175       44109            75056
 ## with location data
-model <- static_blvim(distances, production, 1.5, 1, attractiveness,
+positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
+model <- static_blvim(distances, production, 1.5, 1 / 500, attractiveness,
   origin_data = list(positions = positions),
   destination_data = list(positions = positions)
 )
 head(flows_df(model))
-#>   origin_idx destination_idx      flow origin_name     origin_x   origin_y
-#> 1          1               1 0.5157087           1  0.239959572 -0.3082114
-#> 2          2               1 0.1673249           2  0.060898893  1.0120018
-#> 3          3               1 0.1451588           3 -2.177576028 -0.9190516
-#> 4          4               1 0.2120735           4 -0.117860143  0.5633801
-#> 5          5               1 0.2594128           5  0.112294787  0.3224827
-#> 6          6               1 0.2453039           6  0.007886198  0.3666744
-#>   destination_name destination_x destination_y
-#> 1                1     0.2399596    -0.3082114
-#> 2                1     0.2399596    -0.3082114
-#> 3                1     0.2399596    -0.3082114
-#> 4                1     0.2399596    -0.3082114
-#> 5                1     0.2399596    -0.3082114
-#> 6                1     0.2399596    -0.3082114
+#>   origin_idx destination_idx      flow origin_name origin_th_longitude
+#> 1          1               1 4.0969692       75056              2.3525
+#> 2          2               1 0.7071741       13055              5.3699
+#> 3          3               1 1.3143837       69123              4.8350
+#> 4          4               1 0.8712958       31555              1.4442
+#> 5          5               1 0.5849998       06088              7.2715
+#> 6          6               1 1.9685175       44109             -1.5543
+#>   origin_th_latitude destination_name destination_th_longitude
+#> 1            48.8564            75056                   2.3525
+#> 2            43.2966            75056                   2.3525
+#> 3            45.7676            75056                   2.3525
+#> 4            43.6046            75056                   2.3525
+#> 5            43.6960            75056                   2.3525
+#> 6            47.2184            75056                   2.3525
+#>   destination_th_latitude
+#> 1                 48.8564
+#> 2                 48.8564
+#> 3                 48.8564
+#> 4                 48.8564
+#> 5                 48.8564
+#> 6                 48.8564
+## with names
+origin_names(model) <- french_cities$name[1:10]
+destination_names(model) <- french_cities$name[1:10]
+head(flows_df(model))
+#>   origin_idx destination_idx      flow origin_name origin_th_longitude
+#> 1          1               1 4.0969692       Paris              2.3525
+#> 2          2               1 0.7071741   Marseille              5.3699
+#> 3          3               1 1.3143837        Lyon              4.8350
+#> 4          4               1 0.8712958    Toulouse              1.4442
+#> 5          5               1 0.5849998        Nice              7.2715
+#> 6          6               1 1.9685175      Nantes             -1.5543
+#>   origin_th_latitude destination_name destination_th_longitude
+#> 1            48.8564            Paris                   2.3525
+#> 2            43.2966            Paris                   2.3525
+#> 3            45.7676            Paris                   2.3525
+#> 4            43.6046            Paris                   2.3525
+#> 5            43.6960            Paris                   2.3525
+#> 6            47.2184            Paris                   2.3525
+#>   destination_th_latitude
+#> 1                 48.8564
+#> 2                 48.8564
+#> 3                 48.8564
+#> 4                 48.8564
+#> 5                 48.8564
+#> 6                 48.8564
 ```

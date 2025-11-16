@@ -128,15 +128,16 @@ Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
-production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-flows <- blvim(distances, production, 1.5, 3, attractiveness, bipartite = FALSE)
+distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+production <- log(french_cities$population[1:15])
+attractiveness <- rep(1, 15)
+flows <- blvim(distances, production, 1.5, 1 / 100, attractiveness,
+  bipartite = FALSE
+)
 diversity(flows)
-#> [1] 6.196688
+#> [1] 5.612398
 diversity(flows, "renyi", 2)
-#> [1] 5.45878
+#> [1] 4.734579
 diversity(flows, "RW")
 #> [1] 7
 ```

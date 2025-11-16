@@ -23,15 +23,22 @@ a `sim_list` object
 ## Examples
 
 ``` r
-positions <- matrix(rnorm(10 * 2), ncol = 2)
-distances <- as.matrix(dist(positions))
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
-attractiveness <- c(2, rep(1, 9))
-all_flows <- grid_blvim(distances, production, c(1.25, 1.5), c(1, 2, 3), attractiveness)
-all_flows_df <- sim_df(all_flows)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
+  seq(1, 3, by = 0.5) / 400,
+  attractiveness,
+  bipartite = FALSE,
+  epsilon = 0.1, iter_max = 1000,
+)
+all_flows_df <- sim_df(all_flows, sim_colum = "my_col")
+names(all_flows_df)
+#> [1] "alpha"      "beta"       "diversity"  "iterations" "converged" 
+#> [6] "my_col"    
 sim_column(all_flows_df)
-#> Collection of 6 spatial interaction models with 10 origin locations and 10
+#> Collection of 15 spatial interaction models with 10 origin locations and 10
 #> destination locations computed on the following grid:
-#> • alpha: 1.25 and 1.5
-#> • beta: 1, 2, and 3
+#> • alpha: 1.05, 1.25, and 1.45
+#> • beta: 0.0025, 0.00375, 0.005, 0.00625, and 0.0075
 ```
