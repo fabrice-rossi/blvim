@@ -14,7 +14,7 @@
   with_labels = FALSE,
   qmin = 0.05,
   qmax = 0.95,
-  normalisation = c("origin", "full", "none"),
+  normalisation = c("none", "origin", "full"),
   ...
 )
 }
@@ -49,9 +49,10 @@ texts. If \code{TRUE}, names are shown using labels.}
 \item{qmax}{upper quantile, see details (default: 0.95)}
 
 \item{normalisation}{when \code{flows="full"}, the flows can be reported without
-normalisation (\code{normalisation="none"}) or they can be normalised, either to
-sum to one for each origin location (\code{normalisation="origin"}, the default
-value) or to sum to one globally (\code{normalisation="full"}).}
+normalisation (\code{normalisation="none"}, the default value) or they can be
+normalised, either to sum to one for each origin location
+(\code{normalisation="origin"}) or to sum to one globally
+(\code{normalisation="full"}).}
 
 \item{...}{additional parameters, not used currently}
 }
