@@ -18,7 +18,7 @@ autoplot(
   with_labels = FALSE,
   qmin = 0.05,
   qmax = 0.95,
-  normalisation = c("origin", "full", "none"),
+  normalisation = c("none", "origin", "full"),
   ...
 )
 ```
@@ -75,9 +75,10 @@ autoplot(
 - normalisation:
 
   when `flows="full"`, the flows can be reported without normalisation
-  (`normalisation="none"`) or they can be normalised, either to sum to
-  one for each origin location (`normalisation="origin"`, the default
-  value) or to sum to one globally (`normalisation="full"`).
+  (`normalisation="none"`, the default value) or they can be normalised,
+  either to sum to one for each origin location
+  (`normalisation="origin"`) or to sum to one globally
+  (`normalisation="full"`).
 
 - ...:
 

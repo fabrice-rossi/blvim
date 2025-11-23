@@ -66,7 +66,7 @@ object).</p>
 <span>  with_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  qmin <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  qmax <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  normalisation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"origin"</span>, <span class="st">"full"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
+<span>  normalisation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"origin"</span>, <span class="st">"full"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -124,9 +124,10 @@ texts. If <code>TRUE</code>, names are shown using labels.</p></dd>
 
 <dt id="arg-normalisation">normalisation<a class="anchor" aria-label="anchor" href="#arg-normalisation"></a></dt>
 <dd><p>when <code>flows="full"</code>, the flows can be reported without
-normalisation (<code>normalisation="none"</code>) or they can be normalised, either to
-sum to one for each origin location (<code>normalisation="origin"</code>, the default
-value) or to sum to one globally (<code>normalisation="full"</code>).</p></dd>
+normalisation (<code>normalisation="none"</code>, the default value) or they can be
+normalised, either to sum to one for each origin location
+(<code>normalisation="origin"</code>) or to sum to one globally
+(<code>normalisation="full"</code>).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

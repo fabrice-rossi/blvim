@@ -88,9 +88,10 @@ grid_var_autoplot(
 - normalisation:
 
   when `flows="full"`, the flows can be reported without normalisation
-  (`normalisation="none"`) or they can be normalised, either to sum to
-  one for each origin location (`normalisation="origin"`, the default
-  value) or to sum to one globally (`normalisation="full"`).
+  (`normalisation="none"`, the default value) or they can be normalised,
+  either to sum to one for each origin location
+  (`normalisation="origin"`) or to sum to one globally
+  (`normalisation="full"`).
 
 - fw_params:
 
