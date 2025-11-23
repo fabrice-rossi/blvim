@@ -432,7 +432,10 @@ test_that("autoplot.sim_list works as expected (full flows with names)", {
   )
   vdiffr::expect_doppelganger(
     "Full names",
-    \() print(ggplot2::autoplot(models, with_names = TRUE))
+    \() print(ggplot2::autoplot(models,
+      with_names = TRUE,
+      normalisation = "origin"
+    ))
   )
   vdiffr::expect_doppelganger(
     "Full names set quantiles",
