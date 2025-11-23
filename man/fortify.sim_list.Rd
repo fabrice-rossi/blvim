@@ -31,6 +31,9 @@ value) or to sum to one globally (\code{normalisation="full"}).}
 
 \item{...}{additional parameters, not used currently}
 }
+\value{
+a data frame, see details
+}
 \description{
 This function extracts from a collection of spatial interaction models
 (represented by a \code{sim_list}) a data frame in a long format, with one flow

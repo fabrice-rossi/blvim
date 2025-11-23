@@ -54,6 +54,7 @@
 #'    value) or to sum to one globally (`normalisation="full"`).
 #' @param ... additional parameters, not used currently
 #' @exportS3Method ggplot2::fortify
+#' @returns a data frame, see details
 #' @seealso [autoplot.sim_list()]
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
