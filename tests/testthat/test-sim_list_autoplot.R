@@ -18,7 +18,10 @@ test_that("autoplot.sim_list works as expected (destination without names)", {
   )
   vdiffr::expect_doppelganger(
     "Destination no names",
-    \() print(ggplot2::autoplot(models, flow = "destination"))
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      normalisation = "origin"
+    ))
   )
   vdiffr::expect_doppelganger(
     "Destination no names set quantiles",
@@ -146,7 +149,10 @@ test_that("autoplot.sim_list works as expected (destination with positions)", {
   destination_positions(models) <- config$pd
   vdiffr::expect_doppelganger(
     "Destination pos",
-    \() print(ggplot2::autoplot(models, flow = "destination", with_positions = TRUE))
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE
+    ))
   )
   vdiffr::expect_doppelganger(
     "Destination pos cut off",
@@ -227,13 +233,19 @@ test_that("autoplot.sim_list works as expected (destination with named positions
   destination_positions(models) <- config$pd
   vdiffr::expect_doppelganger(
     "Destination pos named",
-    \() print(ggplot2::autoplot(models, flow = "destination", with_positions = TRUE))
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE
+    ))
   )
   colnames(config$pd) <- c("My first coordinate", "My second coordinate")
   destination_positions(models) <- config$pd
   vdiffr::expect_doppelganger(
     "Destination pos named 2",
-    \() print(ggplot2::autoplot(models, flow = "destination", with_positions = TRUE))
+    \() print(ggplot2::autoplot(models,
+      flow = "destination",
+      with_positions = TRUE
+    ))
   )
 })
 
@@ -370,13 +382,16 @@ test_that("autoplot.sim_list works as expected (full flows no names)", {
   )
   vdiffr::expect_doppelganger(
     "Full no names",
-    \() print(ggplot2::autoplot(models))
+    \() print(ggplot2::autoplot(models,
+      normalisation = "origin"
+    ))
   )
   vdiffr::expect_doppelganger(
     "Full no names set quantiles",
     \() print(ggplot2::autoplot(models,
       qmin = 0,
-      qmax = 0.7
+      qmax = 0.7,
+      normalisation = "origin"
     ))
   )
   vdiffr::expect_doppelganger(
@@ -424,7 +439,8 @@ test_that("autoplot.sim_list works as expected (full flows with names)", {
     \() print(ggplot2::autoplot(models,
       qmin = 0,
       qmax = 0.7,
-      with_names = TRUE
+      with_names = TRUE,
+      normalisation = "origin"
     ))
   )
   vdiffr::expect_doppelganger(
@@ -432,8 +448,8 @@ test_that("autoplot.sim_list works as expected (full flows with names)", {
     \() print(ggplot2::autoplot(models,
       qmin = 0,
       qmax = 0.7,
-      normalisation = "none",
-      with_names = TRUE
+      with_names = TRUE,
+      normalisation = "none"
     ))
   )
   vdiffr::expect_doppelganger(
@@ -461,7 +477,10 @@ test_that("autoplot.sim_list errors and warnings are triggered", {
     precision = .Machine$double.eps^0.5
   )
   expect_warning(ggplot2::autoplot(models, with_positions = TRUE))
-  expect_error(ggplot2::autoplot(models, flows = "destination", with_positions = TRUE))
+  expect_error(ggplot2::autoplot(models,
+    flows = "destination",
+    with_positions = TRUE
+  ))
 })
 
 test_that("autoplot.sim_list tolerates duplicate names", {
@@ -480,5 +499,8 @@ test_that("autoplot.sim_list tolerates duplicate names", {
   destination_names(models) <- sample(letters[1:10], 18, replace = TRUE)
   origin_names(models) <- sample(LETTERS[1:10], 20, replace = TRUE)
   expect_no_error(ggplot2::autoplot(models, with_names = TRUE))
-  expect_no_error(ggplot2::autoplot(models, flow = "destination", with_names = TRUE))
+  expect_no_error(ggplot2::autoplot(models,
+    flow = "destination",
+    with_names = TRUE
+  ))
 })

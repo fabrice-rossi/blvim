@@ -9,7 +9,7 @@
   data,
   flows = c("full", "destination", "attractiveness"),
   with_names = FALSE,
-  normalisation = c("origin", "full", "none"),
+  normalisation = c("none", "origin", "full"),
   ...
 )
 }
@@ -25,9 +25,10 @@ details.}
 location names (\code{FALSE} by default), see details.}
 
 \item{normalisation}{when \code{flows="full"}, the flows can be reported without
-normalisation (\code{normalisation="none"}) or they can be normalised, either
-to sum to one for each origin location (\code{normalisation="origin"}, the default
-value) or to sum to one globally (\code{normalisation="full"}).}
+normalisation (\code{normalisation="none"}, the default value) or they can be
+normalised, either to sum to one for each origin location
+(\code{normalisation="origin"}) or to sum to one globally
+(\code{normalisation="full"}).}
 
 \item{...}{additional parameters, not used currently}
 }

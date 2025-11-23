@@ -799,10 +799,11 @@ autoplot(fr_models_direct_df) +
 
 In this case the flow from Paris becomes dominant and more small cities around
 Paris receive flow, with a limited effect on other cities, as the flows are
-mostly local.
+mostly local. This is revealed in the graphical representation thanks to the
+origin based normalisation.
 
 ```{r}
-autoplot(fr_models_direct, with_names = TRUE) +
+autoplot(fr_models_direct, with_names = TRUE, normalisation = "origin") +
   theme_light() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   labs(title = "Population")
@@ -818,8 +819,8 @@ autoplot(fr_models_direct,
   coord_sf(crs = "epsg:4326") +
   labs(title = "Population")
 ```
-By default, the flows are normalised per destination in the variability plot,
-but a global normalisation emphasises Paris' dominance and its preferred
+By default, the flows are not normalised in the variability plot,
+and the global normalisation emphasises Paris' dominance and its preferred
 destination, Saint-Ouen-Sur-Seine, more strongly. This representation shows
 similar patterns for Marseille with Arles and to a lesser extent for Lyon with
 Vaulx-en-Velin, and Toulouse with Arles and Albi.

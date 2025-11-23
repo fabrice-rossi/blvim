@@ -109,16 +109,25 @@ grid_var_autoplot <- function(sim_df,
   expr <- rlang::enquo(key)
   val <- rlang::eval_tidy({{ expr }}, sim_df)
   val_name <- rlang::as_label(expr)
+  flow_name <- ifelse(flows == "attractiveness", "attractiveness", "flow")
+  col_names <- c("min", "Q_min", flow_name, "Q_max", "max")
+  probs <- c(0, qmin, 0.5, qmax, 1)
+  if (flows == "full") {
+    the_cols <- 1:2
+  } else {
+    the_cols <- 1
+  }
   pre_data <- tapply(
     sim_column(sim_df),
     val,
     function(a_sim) {
       sim_data <- fortify.sim_list(a_sim,
         data = NULL, flows = flows,
-        with_names = with_names, normalisation = normalisation
+        with_names = FALSE, normalisation = normalisation
       )
-      sim_data_stat <- stat_sim_list(sim_data, flows,
-        quantiles = c(qmin, qmax)
+      sim_data_stat <- quantile_sim_data(sim_data, flows, probs = probs)
+      names(sim_data_stat) <- c(
+        names(sim_data_stat)[the_cols], col_names
       )
       sim_data_stat
     }

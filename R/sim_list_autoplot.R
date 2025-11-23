@@ -246,10 +246,10 @@ sim_list_autoplot <- function(sim_list,
 #' The graphical representation depends on the values of `flows` and
 #' `with_positions`. It is based on the data frame representation produced by
 #' [fortify.sim_list()]. In all cases, the variations of the flows are
-#' represented via quantiles of their distribution over the collection of
-#' models. For instance, when `flows` is `"destination"`, the function computes
-#' the quantiles of the incoming flows observed in the collection at each
-#' destination. We consider three quantiles:
+#' represented via quantiles of their distribution over the collection of models
+#' (computed with [quantile.sim_list()]). For instance, when `flows` is
+#' `"destination"`, the function computes the quantiles of the incoming flows
+#' observed in the collection at each destination. We consider three quantiles:
 #' - a lower quantile `qmin` defaulting to 0.05;
 #' - the median;
 #' - a upper quantile `qmax` defaulting to 0.95.
@@ -328,13 +328,14 @@ sim_list_autoplot <- function(sim_list,
 #' @param qmin lower quantile, see details (default: 0.05)
 #' @param qmax upper quantile, see details (default: 0.95)
 #' @param normalisation when `flows="full"`, the flows can be reported without
-#'   normalisation (`normalisation="none"`) or they can be normalised, either to
-#'   sum to one for each origin location (`normalisation="origin"`, the default
-#'   value) or to sum to one globally (`normalisation="full"`).
+#'   normalisation (`normalisation="none"`, the default value) or they can be
+#'   normalised, either to sum to one for each origin location
+#'   (`normalisation="origin"`) or to sum to one globally
+#'   (`normalisation="full"`).
 #' @param ... additional parameters, not used currently
 #'
 #' @returns a ggplot object
-#' @seealso [fortify.sim_list()]
+#' @seealso [fortify.sim_list()], [quantile.sim_list()]
 #' @exportS3Method ggplot2::autoplot
 #'
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
@@ -396,7 +397,7 @@ autoplot.sim_list <- function(object,
                               with_labels = FALSE,
                               qmin = 0.05,
                               qmax = 0.95,
-                              normalisation = c("origin", "full", "none"),
+                              normalisation = c("none", "origin", "full"),
                               ...) {
   check_autoplot_params(
     with_names, with_positions, cut_off, adjust_limits,
@@ -422,11 +423,25 @@ autoplot.sim_list <- function(object,
   sim_data <- fortify.sim_list(object,
     data = NULL,
     flows = flows,
-    with_names = with_names,
+    with_names = FALSE, ## names are not obtained from the sim_data structure
     normalisation = normalisation,
     ...
   )
-  sim_data_stat <- stat_sim_list(sim_data, flows, quantiles = c(qmin, qmax))
+  sim_data_stat <- quantile_sim_data(sim_data, flows,
+    probs = c(0, qmin, 0.5, qmax, 1)
+  )
+  flow_name <- ifelse(flows == "attractiveness", "attractiveness", "flow")
+  if (flows == "full") {
+    names(sim_data_stat) <- c(
+      names(sim_data_stat)[1:2],
+      c("min", "Q_min", flow_name, "Q_max", "max")
+    )
+  } else {
+    names(sim_data_stat) <- c(
+      names(sim_data_stat)[1],
+      c("min", "Q_min", flow_name, "Q_max", "max")
+    )
+  }
   sim_list_autoplot(
     object, sim_data_stat, flows, with_names, with_positions,
     cut_off, adjust_limits, with_labels, normalisation

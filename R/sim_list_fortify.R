@@ -49,9 +49,10 @@
 #' @param with_names specifies whether the extracted data frame includes
 #'   location names (`FALSE` by default), see details.
 #' @param normalisation when `flows="full"`, the flows can be reported without
-#'    normalisation (`normalisation="none"`) or they can be normalised, either
-#'    to sum to one for each origin location (`normalisation="origin"`, the default
-#'    value) or to sum to one globally (`normalisation="full"`).
+#'   normalisation (`normalisation="none"`, the default value) or they can be
+#'   normalised, either to sum to one for each origin location
+#'   (`normalisation="origin"`) or to sum to one globally
+#'   (`normalisation="full"`).
 #' @param ... additional parameters, not used currently
 #' @exportS3Method ggplot2::fortify
 #' @returns a data frame, see details
@@ -71,7 +72,7 @@
 fortify.sim_list <- function(model, data,
                              flows = c("full", "destination", "attractiveness"),
                              with_names = FALSE,
-                             normalisation = c("origin", "full", "none"),
+                             normalisation = c("none", "origin", "full"),
                              ...) {
   flows <- rlang::arg_match(flows)
   normalisation <- rlang::arg_match(normalisation)
@@ -128,64 +129,4 @@ fortify.sim_list <- function(model, data,
     }
     sim_data_long
   }
-}
-
-stat_sim_list <- function(sim_data, flows, quantiles = c(0.05, 0.95)) {
-  check_quantiles(quantiles[1], quantiles[2])
-  if (flows == "full") {
-    stat_flow_sim_list(sim_data, quantiles)
-  } else {
-    stat_destination_sim_list(
-      sim_data,
-      ifelse(flows == "destination", "flow", "attractiveness"),
-      quantiles
-    )
-  }
-}
-
-stat_destination_sim_list <- function(sim_data, flow_name, quantiles = c(0.05, 0.95)) {
-  all_stats <- tapply(
-    sim_data[[flow_name]],
-    sim_data$destination,
-    function(x) {
-      stats::quantile(x,
-        probs = c(0, quantiles[1], 0.5, quantiles[2], 1),
-        names = FALSE
-      )
-    }
-  )
-  m_all_stats <- matrix(NA,
-    nrow = length(all_stats),
-    ncol = length(all_stats[[1]])
-  )
-  for (k in seq_len(ncol(m_all_stats))) {
-    m_all_stats[, k] <- sapply(all_stats, function(x) x[k])
-  }
-  colnames(m_all_stats) <- c("min", "Q_min", flow_name, "Q_max", "max")
-  m_all_stats <- as.data.frame(m_all_stats)
-  m_all_stats$destination <- as.integer(names(all_stats))
-  m_all_stats
-}
-
-stat_flow_sim_list <- function(sim_data, quantiles = c(0.05, 0.95)) {
-  all_stats <- tapply(
-    sim_data,
-    ~ origin_idx + destination_idx,
-    function(x) {
-      stats::quantile(x$flow,
-        probs = c(0, quantiles[1], 0.5, quantiles[2], 1),
-        names = FALSE
-      )
-    }
-  )
-  m_all_stats <- matrix(NA,
-    nrow = length(all_stats),
-    ncol = length(all_stats[[1]])
-  )
-  for (k in seq_len(ncol(m_all_stats))) {
-    m_all_stats[, k] <- sapply(all_stats, function(x) x[k])
-  }
-  colnames(m_all_stats) <- c("min", "Q_min", "flow", "Q_max", "max")
-  m_all_stats <- as.data.frame(m_all_stats)
-  cbind(sim_data[c("origin_idx", "destination_idx")], m_all_stats)
 }

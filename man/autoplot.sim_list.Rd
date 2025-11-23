@@ -67,10 +67,10 @@ object).
 The graphical representation depends on the values of \code{flows} and
 \code{with_positions}. It is based on the data frame representation produced by
 \code{\link[=fortify.sim_list]{fortify.sim_list()}}. In all cases, the variations of the flows are
-represented via quantiles of their distribution over the collection of
-models. For instance, when \code{flows} is \code{"destination"}, the function computes
-the quantiles of the incoming flows observed in the collection at each
-destination. We consider three quantiles:
+represented via quantiles of their distribution over the collection of models
+(computed with \code{\link[=quantile.sim_list]{quantile.sim_list()}}). For instance, when \code{flows} is
+\code{"destination"}, the function computes the quantiles of the incoming flows
+observed in the collection at each destination. We consider three quantiles:
 \itemize{
 \item a lower quantile \code{qmin} defaulting to 0.05;
 \item the median;
@@ -181,5 +181,5 @@ ggplot2::autoplot(all_flows,
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=fortify.sim_list]{fortify.sim_list()}}
+\code{\link[=fortify.sim_list]{fortify.sim_list()}}, \code{\link[=quantile.sim_list]{quantile.sim_list()}}
 }

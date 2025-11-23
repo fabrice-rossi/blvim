@@ -37,6 +37,7 @@ reference:
   - costs.sim_list
   - starts_with("grid_")
   - median.sim_list
+  - quantile.sim_list
   - sim_df
   - sim_column
   - sim_distance
