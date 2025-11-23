@@ -67,7 +67,7 @@ graphics.</p>
 <span>  <span class="va">data</span>,</span>
 <span>  flows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"full"</span>, <span class="st">"destination"</span>, <span class="st">"attractiveness"</span><span class="op">)</span>,</span>
 <span>  with_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  normalisation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"origin"</span>, <span class="st">"full"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
+<span>  normalisation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"origin"</span>, <span class="st">"full"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -96,15 +96,20 @@ location names (<code>FALSE</code> by default), see details.</p></dd>
 
 <dt id="arg-normalisation">normalisation<a class="anchor" aria-label="anchor" href="#arg-normalisation"></a></dt>
 <dd><p>when <code>flows="full"</code>, the flows can be reported without
-normalisation (<code>normalisation="none"</code>) or they can be normalised, either
-to sum to one for each origin location (<code>normalisation="origin"</code>, the default
-value) or to sum to one globally (<code>normalisation="full"</code>).</p></dd>
+normalisation (<code>normalisation="none"</code>, the default value) or they can be
+normalised, either to sum to one for each origin location
+(<code>normalisation="origin"</code>) or to sum to one globally
+(<code>normalisation="full"</code>).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>additional parameters, not used currently</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>a data frame, see details</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The data frame produced by the method depends on the values of <code>flows</code> and to

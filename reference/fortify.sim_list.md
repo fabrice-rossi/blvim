@@ -17,7 +17,7 @@ fortify(
   data,
   flows = c("full", "destination", "attractiveness"),
   with_names = FALSE,
-  normalisation = c("origin", "full", "none"),
+  normalisation = c("none", "origin", "full"),
   ...
 )
 ```
@@ -45,13 +45,18 @@ fortify(
 - normalisation:
 
   when `flows="full"`, the flows can be reported without normalisation
-  (`normalisation="none"`) or they can be normalised, either to sum to
-  one for each origin location (`normalisation="origin"`, the default
-  value) or to sum to one globally (`normalisation="full"`).
+  (`normalisation="none"`, the default value) or they can be normalised,
+  either to sum to one for each origin location
+  (`normalisation="origin"`) or to sum to one globally
+  (`normalisation="full"`).
 
 - ...:
 
   additional parameters, not used currently
+
+## Value
+
+a data frame, see details
 
 ## Details
 

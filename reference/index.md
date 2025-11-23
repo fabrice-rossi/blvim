@@ -110,6 +110,9 @@ grid of parameters.
   a data frame
 - [`median(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/median.sim_list.md)
   : Compute the "median" of a collection of spatial interaction models
+- [`quantile(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/quantile.sim_list.md)
+  : Compute quantiles of the flows in a collection of spatial
+  interaction models
 - [`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md)
   : Create a spatial interaction models data frame from a collection of
   interaction models

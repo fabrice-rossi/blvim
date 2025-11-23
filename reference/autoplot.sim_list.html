@@ -142,10 +142,10 @@ value) or to sum to one globally (<code>normalisation="full"</code>).</p></dd>
     <p>The graphical representation depends on the values of <code>flows</code> and
 <code>with_positions</code>. It is based on the data frame representation produced by
 <code><a href="fortify.sim_list.html">fortify.sim_list()</a></code>. In all cases, the variations of the flows are
-represented via quantiles of their distribution over the collection of
-models. For instance, when <code>flows</code> is <code>"destination"</code>, the function computes
-the quantiles of the incoming flows observed in the collection at each
-destination. We consider three quantiles:</p><ul><li><p>a lower quantile <code>qmin</code> defaulting to 0.05;</p></li>
+represented via quantiles of their distribution over the collection of models
+(computed with <code><a href="quantile.sim_list.html">quantile.sim_list()</a></code>). For instance, when <code>flows</code> is
+<code>"destination"</code>, the function computes the quantiles of the incoming flows
+observed in the collection at each destination. We consider three quantiles:</p><ul><li><p>a lower quantile <code>qmin</code> defaulting to 0.05;</p></li>
 <li><p>the median;</p></li>
 <li><p>a upper quantile <code>qmax</code> defaulting to 0.95.</p></li>
 </ul><p>If <code>with_position</code> is <code>FALSE</code> (default value), the graphical representations
@@ -196,7 +196,7 @@ functions are used instead of <code>ggplot2</code> native functions.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="fortify.sim_list.html">fortify.sim_list()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="fortify.sim_list.html">fortify.sim_list()</a></code>, <code><a href="quantile.sim_list.html">quantile.sim_list()</a></code></p></div>
     </div>
 
     <div class="section level2">

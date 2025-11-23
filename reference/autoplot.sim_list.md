@@ -94,10 +94,11 @@ The graphical representation depends on the values of `flows` and
 by
 [`fortify.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim_list.md).
 In all cases, the variations of the flows are represented via quantiles
-of their distribution over the collection of models. For instance, when
-`flows` is `"destination"`, the function computes the quantiles of the
-incoming flows observed in the collection at each destination. We
-consider three quantiles:
+of their distribution over the collection of models (computed with
+[`quantile.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/quantile.sim_list.md)).
+For instance, when `flows` is `"destination"`, the function computes the
+quantiles of the incoming flows observed in the collection at each
+destination. We consider three quantiles:
 
 - a lower quantile `qmin` defaulting to 0.05;
 
@@ -176,7 +177,8 @@ If the `ggrepel` package is installed, its functions are used instead of
 
 ## See also
 
-[`fortify.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim_list.md)
+[`fortify.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim_list.md),
+[`quantile.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/quantile.sim_list.md)
 
 ## Examples
 
