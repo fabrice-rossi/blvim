@@ -42,6 +42,7 @@ reference:
   - sim_column
   - sim_distance
   - sim_list
+  - c.sim_list
 - title: "Graphical representations"
   desc: "Functions that provide graphical representations of spatial interaction models."
   contents:

@@ -1,3 +1,50 @@
+compatible_sim_list <- function(sims, costs, origin, destination, first_index = 2,
+                                call = rlang::caller_env()) {
+  if (length(sims) >= first_index) {
+    ## we want consistency between the sims
+    sims <- sims[seq(from = first_index, to = length(sims))]
+    costs_test <- sapply(sims, function(x) isTRUE(all.equal(costs(x), costs)))
+    if (!all(costs_test)) {
+      cli::cli_abort(
+        c("all sim objects in {.arg sims} must share the same costs",
+          x = "{.arg sims[[{which(!costs_test)[1]}]]}
+has different costs"
+        ),
+        call = call
+      )
+    }
+    origin_test <- sapply(sims, function(x) isTRUE(all.equal(x$origin, origin)))
+    if (!all(origin_test)) {
+      cli::cli_abort(
+        c("all sim objects in {.arg sims} must share the same origin data",
+          x = "{.arg sims[[{which(!origin_test)[1]}]]}
+has different origin data"
+        ),
+        call = call
+      )
+    }
+    destination_test <- sapply(
+      sims,
+      function(x) {
+        isTRUE(all.equal(
+          x$destination,
+          destination
+        ))
+      }
+    )
+    if (!all(destination_test)) {
+      cli::cli_abort(
+        c("all sim objects in {.arg sims} must share the same destination data",
+          x = "{.arg sims[[{which(!destination_test)[1]}]]}
+has different destination data"
+        ),
+        call = call
+      )
+    }
+  }
+}
+
+
 #' Validate a collection of sims
 #'
 #' This function validates its inputs and abort in case of problems. To be
@@ -23,44 +70,10 @@ validate_sim_list <- function(sims, call = rlang::caller_env()) {
     costs <- costs(sims[[1]])
     origin <- sims[[1]]$origin
     destination <- sims[[1]]$destination
-    costs_test <- sapply(sims, function(x) isTRUE(all.equal(costs(x), costs)))
-    if (!all(costs_test)) {
-      cli::cli_abort(
-        c("all sim objects in {.arg sims} must share the same costs",
-          x = "{.arg sims[[1]]} and {.arg sims[[{which(!costs_test)[1]}]]}
-have different costs"
-        ),
-        call = call
-      )
-    }
-    origin_test <- sapply(sims, function(x) isTRUE(all.equal(x$origin, origin)))
-    if (!all(origin_test)) {
-      cli::cli_abort(
-        c("all sim objects in {.arg sims} must share the same origin data",
-          x = "{.arg sims[[1]]} and {.arg sims[[{which(!origin_test)[1]}]]}
-have different origin data"
-        ),
-        call = call
-      )
-    }
-    destination_test <- sapply(
-      sims,
-      function(x) {
-        isTRUE(all.equal(
-          x$destination,
-          destination
-        ))
-      }
+    compatible_sim_list(sims, costs, origin, destination,
+      first_index = 2,
+      call = call
     )
-    if (!all(destination_test)) {
-      cli::cli_abort(
-        c("all sim objects in {.arg sims} must share the same destination data",
-          x = "{.arg sims[[1]]} and {.arg sims[[{which(!destination_test)[1]}]]}
-have different destination data"
-        ),
-        call = call
-      )
-    }
   }
 }
 
@@ -431,4 +444,63 @@ sim_iterations.sim_list <- function(sim, ...) {
 #' grid_sim_iterations(all_flows)
 grid_sim_iterations <- function(sim, ...) {
   sim_iterations(sim, ...)
+}
+
+#' Combine multiple sim_list objects into a single one
+#'
+#' This function combines the `sim_list` and `sim` objects use as arguments
+#' in a single `sim_list`, provided they are compatible. Compatibility is
+#' defined as in `sim_list()`: all spatial interaction models must share
+#' the same cost as well as the same origin and destination data.
+#'
+#' @param ... `sim_list` and `sim` to be concatenated.
+#' @return A combined object of class `sim_list`.
+#' @export
+#' @examples
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows_log <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
+#'   epsilon = 0.1,
+#'   bipartite = FALSE,
+#'   iter_max = 750
+#' )
+#' production <- rep(1, 15)
+#' attractiveness <- rep(1, 15)
+#' all_flows_unit <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
+#'   epsilon = 0.1,
+#'   bipartite = FALSE,
+#'   iter_max = 750
+#' )
+#' all_flows <- c(all_flows_log, all_flows_unit)
+c.sim_list <- function(...) {
+  args <- list(...)
+  base_sl <- args[[1]]
+  costs <- costs(base_sl)
+  origin <- base_sl[[1]]$origin
+  destination <- base_sl[[1]]$destination
+  for (k in seq_len(length(args) - 1)) {
+    current_sl <- args[[k + 1]]
+    if (inherits(current_sl, "sim_list")) {
+      compatible_sim_list(current_sl, costs, origin, destination,
+        first_index = 1
+      )
+    } else if (inherits(current_sl, "sim")) {
+      current_sl <- sim_list(list(current_sl))
+      compatible_sim_list(current_sl, costs, origin, destination,
+        first_index = 1
+      )
+      args[[k + 1]] <- current_sl
+    } else {
+      cli::cli_abort("All arguments passed to {.fn c} must be of class
+{.cls sim_list} or {.cls sim}.")
+    }
+  }
+  c_args <- unlist(args, recursive = FALSE)
+  ## we need to restore the shared content
+  new_sim_list(c_args, common = attr(base_sl, "common"))
 }

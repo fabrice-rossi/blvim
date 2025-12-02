@@ -1,4 +1,4 @@
-test_that("sim_list construction", {
+test_that("sim_list construction works as expected", {
   config <- create_locations(20, 30, seed = 120)
   alphas <- seq(1.25, 2, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 4)
@@ -216,4 +216,76 @@ test_that("sim_list out of range access tentative are detected", {
   )
   expect_error(models[c(1, 5, 20)], regexp = "out of range value")
   expect_error(models[[14:18]], regexp = "out of range value")
+})
+
+test_that("sim_list c concatenates sim_lists correctly", {
+  config <- create_locations(20, 30, seed = 0)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  res <- c(models, models)
+  expect_length(res, 2L * length(models))
+  for (k in seq_len(length(models))) {
+    expect_identical(res[[k]], models[[k]])
+    expect_identical(res[[k + length(models)]], models[[k]])
+  }
+  expect_identical(res[seq_along(models)], models)
+  expect_identical(res[length(models) + seq_along(models)], models)
+  a_model <- blvim(config$costs,
+    config$X,
+    1.1,
+    5,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  res2 <- c(models, a_model)
+  expect_length(res2, 1L + length(models))
+  for (k in seq_len(length(models))) {
+    expect_identical(res2[[k]], models[[k]])
+  }
+  expect_mapequal(unclass(res2[[length(models) + 1]]), unclass(a_model))
+})
+
+test_that("sim_list c detects errors", {
+  config <- create_locations(20, 30, seed = 0)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  expect_error(c(models, 1L))
+  config2 <- create_locations(10, 20, seed = 0)
+  models2 <- grid_blvim(config2$costs,
+    config2$X,
+    alphas,
+    betas,
+    config2$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  expect_error(c(models, models2))
+  expect_error(c(models, models2[[1]]))
+  models3 <- models
+  origin_names(models3) <- sample(letters, 20)
+  expect_error(c(models, models3))
+  models3 <- models
+  destination_names(models3) <- sample(letters, 30, replace = TRUE)
+  expect_error(c(models, models3))
 })
