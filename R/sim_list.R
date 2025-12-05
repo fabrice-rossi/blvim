@@ -169,6 +169,11 @@ with length {.val {length(x)}}",
 
 #' @export
 `[[.sim_list` <- function(x, i, ...) {
+  if (length(i) > 1) {
+    cli::cli_abort(c("{.arg i} contains more than one index",
+      x = "{.val {i}}"
+    ))
+  }
   out_of_range <- i > length(x)
   if (any(out_of_range)) {
     cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x} with
@@ -181,12 +186,54 @@ length {.val {length(x)}}",
 
 #' @export
 `[<-.sim_list` <- function(x, i, ..., value) {
-  cli::cli_abort("{.cls sim_list} objects do not support modification")
+  out_of_range <- i > length(x)
+  if (any(out_of_range)) {
+    cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x}
+with length {.val {length(x)}}",
+      x = "out of range value(s): {.val {i[out_of_range]}}"
+    ))
+  }
+  if (!inherits(value, "sim_list")) {
+    cli::cli_abort("{.arg value} must be of class {.class sim_list}")
+  }
+  common <- attr(x, "common")
+  compatible_sim_list(value, costs(x), common$origin, common$destination,
+    first_index = 1
+  )
+  new_sim_list(NextMethod(), common)
 }
 
 #' @export
 `[[<-.sim_list` <- function(x, i, ..., value) {
-  cli::cli_abort("{.cls sim_list} objects do not support modification")
+  if (length(i) > 1) {
+    cli::cli_abort(c("{.arg i} contains more than one index",
+      x = "{.val {i}}"
+    ))
+  }
+  if (!inherits(value, "sim")) {
+    cli::cli_abort("{.arg value} must be of class {.class sim}")
+  }
+  if (!isTRUE(all.equal(costs(value), costs(x)))) {
+    cli::cli_abort("{.arg value} is not compatible with {.arg x}:
+different costs")
+  }
+  common <- attr(x, "common")
+  if (!isTRUE(all.equal(value$origin, common$origin))) {
+    cli::cli_abort("{.arg value} is not compatible with {.arg x}:
+different origin data")
+  }
+  if (!isTRUE(all.equal(value$destination, common$destination))) {
+    cli::cli_abort("{.arg value} is not compatible with {.arg x}:
+different destination data")
+  }
+  out_of_range <- i > length(x)
+  if (any(out_of_range)) {
+    cli::cli_abort(c("{.arg i} contains out of range indexes for {.arg x}
+with length {.val {length(x)}}",
+      x = "out of range value(s): {.val {i[out_of_range]}}"
+    ))
+  }
+  new_sim_list(NextMethod(), common = common)
 }
 
 
@@ -451,7 +498,7 @@ grid_sim_iterations <- function(sim, ...) {
 #' This function combines the `sim_list` and `sim` objects use as arguments
 #' in a single `sim_list`, provided they are compatible. Compatibility is
 #' defined as in `sim_list()`: all spatial interaction models must share
-#' the same cost as well as the same origin and destination data.
+#' the same costs as well as the same origin and destination data.
 #'
 #' @param ... `sim_list` and `sim` to be concatenated.
 #' @return A combined object of class `sim_list`.

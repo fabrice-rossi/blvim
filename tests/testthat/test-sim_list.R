@@ -15,6 +15,7 @@ test_that("sim_list construction works as expected", {
   models_2 <- sim_list(model_list)
   expect_equal(models, models_2)
   ## error detection
+  expect_error(models[[20]])
   expect_error(sim_list(12))
   expect_error(sim_list(list(model_list[[1]], "foo")))
   model_list_bug <- model_list
@@ -184,7 +185,7 @@ test_that("sim_list common information restoration works", {
   }
 })
 
-test_that("sim_list modifications are prohibited", {
+test_that("sim_list modifications", {
   config <- create_locations(20, 30, seed = 120)
   alphas <- seq(1.25, 2, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 4)
@@ -197,8 +198,37 @@ test_that("sim_list modifications are prohibited", {
     epsilon = 0.1,
     precision = .Machine$double.eps^0.5
   )
-  expect_error(models[[1]] <- models[[2]])
-  expect_error(models[1:3] <- models[5:7])
+  save_one <- models[[1]]
+  models[[1]] <- models[[2]]
+  expect_identical(models[[1]], models[[2]])
+  models[1:3] <- models[5:7]
+  for (k in 1:3) {
+    expect_identical(models[[k]], models[[k + 4]])
+  }
+  ## error cases
+  expect_error(models[[c(1, 2)]] <- list(save_one, save_one))
+  expect_error(models[[1]] <- models)
+  expect_error(models[[20]] <- save_one)
+  expect_error(models[1] <- models[[1]])
+  expect_error(models[c(1, 20)] <- sim_list(list(save_one, save_one)))
+  wrong_model <- save_one
+  destination_names(wrong_model) <- sample(letters, 30, replace = TRUE)
+  expect_error(models[[1]] <- wrong_model)
+  wrong_model <- save_one
+  origin_names(wrong_model) <- sample(letters, 20, replace = TRUE)
+  expect_error(models[[1]] <- wrong_model)
+  config2 <- create_locations(10, 20, seed = 0)
+  models2 <- grid_blvim(config2$costs,
+    config2$X,
+    alphas,
+    betas,
+    config2$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  expect_error(models[[1]] <- models2[[1]])
+  expect_error(models[1:3] <- models2[1:3])
 })
 
 test_that("sim_list out of range access tentative are detected", {
@@ -215,7 +245,7 @@ test_that("sim_list out of range access tentative are detected", {
     precision = .Machine$double.eps^0.5
   )
   expect_error(models[c(1, 5, 20)], regexp = "out of range value")
-  expect_error(models[[14:18]], regexp = "out of range value")
+  expect_error(models[[14:18]], regexp = "more than one index")
 })
 
 test_that("sim_list c concatenates sim_lists correctly", {
