@@ -319,3 +319,26 @@ test_that("sim_list c detects errors", {
   destination_names(models3) <- sample(letters, 30, replace = TRUE)
   expect_error(c(models, models3))
 })
+
+test_that("sim_list conversion to data frame", {
+  config <- create_locations(20, 30, seed = 120)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  models_df <- as.data.frame(models, sim_column = "aname")
+  expect_s3_class(models_df, "data.frame")
+  expect_equal(dim(models_df), c(length(models), 1L))
+  expect_named(models_df, "aname")
+  ## we need the I
+  expect_identical(models_df$aname, I(models))
+  ## error case
+  expect_error(as.data.frame(models, sim_column = 1:2))
+})

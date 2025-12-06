@@ -551,3 +551,43 @@ c.sim_list <- function(...) {
   ## we need to restore the shared content
   new_sim_list(c_args, common = attr(base_sl, "common"))
 }
+
+#' Coerce to a Data Frame
+#'
+#' This function creates a data frame with a single column storing its
+#' collection of spatial interaction models. The default name of the column
+#' is `"sim"` (can be modified using the `sim_column` parameter). An more
+#' flexible alternative is provided by the [sim_df()] function.
+#'
+#' @param x a collection of spatial interaction models, an object of class
+#'   `sim_list`
+#' @param ... additional parameters (not used currently)
+#' @param sim_column the name of the `sim_list` column (default `"sim"`)
+#' @seealso [sim_df()]
+#' @returns a data frame
+#' @export
+#' @examples
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows_log <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
+#'   epsilon = 0.1,
+#'   bipartite = FALSE,
+#'   iter_max = 750
+#' )
+#' as.data.frame(all_flows_log, sim_column = "log flows")
+as.data.frame.sim_list <- function(x, ..., sim_column = "sim") {
+  sc <- as.character(sim_column)
+  if (length(sc) > 1) {
+    cli::cli_abort(c("{.arg sim_column} must be a singe column name",
+      "x" = "{.arg sim_column} is {.val {sim_column}}"
+    ))
+  }
+  pre_res <- data.frame(sim = I(x))
+  if (sc != "sim") {
+    names(pre_res) <- sim_column
+  }
+  pre_res
+}
