@@ -2,22 +2,46 @@
 % Please edit documentation in R/sim_list_summary.R
 \name{summary.sim_list}
 \alias{summary.sim_list}
+\alias{print.summary_sim_list}
 \title{Summary of a collection of spatial interaction models}
 \usage{
 \method{summary}{sim_list}(object, ...)
+
+\method{print}{summary_sim_list}(x, ...)
 }
 \arguments{
 \item{object}{a collection of spatial interaction models, an object of class
-\code{sim_list}}
+\code{sim_list}
+\code{\link[=summary.sim_list]{summary.sim_list()}}}
 
 \item{...}{additional parameters (not used currently)}
+
+\item{x}{an object of class \code{summary_sim_list} produced by}
 }
 \value{
-a list with a set of summary statistics computed on the collection
-of spatial interaction models
+an object of class \code{summary_sim_list} and \code{list} with a set of
+summary statistics computed on the collection of spatial interaction models
 }
 \description{
-Summary of a collection of spatial interaction models
+This function computes summary statistics on a collection of spatial
+interaction models (in a \code{sim_list}).
+}
+\details{
+The list returned by the function contains the following elements:
+\itemize{
+\item \code{median}: the median of the collection, as return by the \code{median.sim_list()}
+function
+\item \code{distortion}: the average distance of all elements of the collection to
+the median model
+\item \code{withinss}: the sum of all pairwise distances between the elements of
+the collection
+\item \code{nb_sims}: the size of the collection
+}
+
+In addition, if the collection contains non bipartite models, the result
+has another element, \code{nb_configurations} which gives the number of distinct
+terminal sets in the collection, where the terminals are computed by
+\code{terminals()}, using the \code{"RW"} definition.
 }
 \examples{
 positions <- matrix(rnorm(15 * 2), ncol = 2)
@@ -33,4 +57,7 @@ all_flows <- grid_blvim(distances,
   bipartite = FALSE,
 )
 summary(all_flows)
+}
+\seealso{
+\code{\link[=median.sim_list]{median.sim_list()}}, \code{\link[=terminals]{terminals()}}
 }
