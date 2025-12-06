@@ -127,6 +127,7 @@ grid of parameters.
 - [`c(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/c.sim_list.md)
   : Combine multiple sim_list objects into a single one
 - [`summary(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md)
+  [`print(`*`<summary_sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md)
   : Summary of a collection of spatial interaction models
 
 ## Graphical representations
