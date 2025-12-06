@@ -15,19 +15,17 @@ new_sim_blvim <- function(Y, Z, costs, alpha, beta, bipartite, origin_data, dest
 }
 
 #' @export
-format.sim_blvim <- function(x, ...) {
-  if (x$converged) {
-    status <- "{cli::symbol$info} The BLV model converged after {.val {x$iteration}} iterations."
+sim_cli_rep.sim_blvim <- function(sim, ...) {
+  if (sim$converged) {
+    status <- "{cli::symbol$info} The BLV model converged after {.val {sim$iteration}} iterations."
   } else {
-    status <- "{cli::symbol$warning} The BLV model did not converged after {.val {x$iteration-1}} iterations."
+    status <- "{cli::symbol$warning} The BLV model did not converged after {.val {sim$iteration-1}} iterations."
   }
   c(
     NextMethod(),
-    cli::cli_format_method({
-      cli::cli_text(
-        status
-      )
-    })
+    cli::cli_text(
+      status
+    )
   )
 }
 

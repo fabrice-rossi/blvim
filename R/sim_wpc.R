@@ -25,16 +25,14 @@ new_sim_wpc <- function(Y, Z, costs, alpha, beta, bipartite, origin_data,
 }
 
 #' @export
-format.sim_wpc <- function(x, ...) {
+sim_cli_rep.sim_wpc <- function(sim, ...) {
   c(
     NextMethod(),
-    cli::cli_format_method({
-      cli::cli_ul(c(
-        "Model: Wilson's production constrained",
-        "Parameters: return to scale (alpha) = {.val {x$alpha}} and
-inverse cost scale (beta) = {.val {x$beta}}"
-      ))
-    })
+    cli::cli_ul(c(
+      "Model: Wilson's production constrained",
+      "Parameters: return to scale (alpha) = {.val {sim$alpha}} and
+inverse cost scale (beta) = {.val {sim$beta}}"
+    ))
   )
 }
 

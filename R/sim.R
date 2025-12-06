@@ -61,14 +61,23 @@ new_sim <- function(Y,
   )
 }
 
+sim_cli_rep <- function(sim, ...) {
+  UseMethod("sim_cli_rep")
+}
+
+#' @export
+sim_cli_rep.sim <- function(sim, ...) {
+  cli::cli_text(
+    "Spatial interaction model with ",
+    "{.val {nrow(sim$Y)}} origin locations and ",
+    "{.val {ncol(sim$Y)}} destination locations"
+  )
+}
+
 #' @export
 format.sim <- function(x, ...) {
   cli::cli_format_method({
-    cli::cli_text(
-      "Spatial interaction model with ",
-      "{.val {nrow(x$Y)}} origin locations and ",
-      "{.val {ncol(x$Y)}} destination locations"
-    )
+    sim_cli_rep(x, ...)
   })
 }
 
