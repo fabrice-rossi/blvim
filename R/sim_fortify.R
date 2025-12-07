@@ -102,7 +102,12 @@ fortify.sim <- function(model, data,
                         with_positions = FALSE,
                         cut_off = 100 * .Machine$double.eps^0.5,
                         ...) {
+  with_cut_off <- !missing(cut_off)
   flows <- rlang::arg_match(flows)
+  sim_autoplot_warning(
+    with_names, with_positions, with_cut_off, cut_off,
+    FALSE, NA, FALSE, NA
+  )
   if (with_positions) {
     positions <- location_positions(model)
     if (flows == "destination" || flows == "attractiveness") {

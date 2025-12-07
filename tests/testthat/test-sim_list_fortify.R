@@ -100,3 +100,28 @@ test_that("fortify.sim_list returns the expected data frame (full case)", {
     expect_equal(in_df[["flow"]], the_flows[as.matrix(in_df[1:2])])
   }
 })
+
+test_that("fortify.sim_list warns about unused parameters", {
+  nb_origins <- 15
+  nb_destinations <- 10
+  config <- create_locations(nb_origins, nb_destinations, seed = 1200)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.1, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 5000,
+    epsilon = 0.1,
+    precision = .Machine$double.eps^0.5
+  )
+  expect_warning(fortify.sim_list(models,
+    flows = "destination",
+    normalisation = "none"
+  ))
+  expect_warning(fortify.sim_list(models,
+    flows = "attractiveness",
+    normalisation = "none"
+  ))
+})

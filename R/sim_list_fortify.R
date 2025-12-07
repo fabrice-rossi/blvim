@@ -75,7 +75,13 @@ fortify.sim_list <- function(model, data,
                              normalisation = c("none", "origin", "full"),
                              ...) {
   flows <- rlang::arg_match(flows)
+  with_normalisation <- !missing(normalisation)
   normalisation <- rlang::arg_match(normalisation)
+  sim_list_autoplot_warning(
+    flows,
+    with_names, FALSE, FALSE, NA_real_, FALSE, NA, FALSE, NA,
+    with_normalisation, normalisation
+  )
   if (flows == "full") {
     fl_1 <- flows(model[[1]])
     indexes <- expand.grid(

@@ -22,7 +22,10 @@ test_that("fortify.sim remove values before the cut off", {
   }
   ## destination/attractiveness flows
   for (what in c("destination", "attractiveness")) {
-    d_flows <- ggplot2::fortify(model, flows = what, with_positions = TRUE, cut_off = 0)
+    d_flows <- ggplot2::fortify(model,
+      flows = what, with_positions = TRUE,
+      cut_off = 0
+    )
     expect_s3_class(m_flows, "data.frame")
     ### dimension 15 rows (as many as destinations) and 3 columns
     expect_equal(dim(d_flows), c(nrow(config$pd), 3))
@@ -36,9 +39,25 @@ test_that("fortify.sim remove values before the cut off", {
     }
     ### filtering
     for (co in 10^(-3:1)) {
-      sub_d_flows <- ggplot2::fortify(model, flows = what, with_positions = TRUE, cut_off = co)
+      sub_d_flows <- ggplot2::fortify(model,
+        flows = what,
+        with_positions = TRUE, cut_off = co
+      )
       expect_true(all(sub_d_flows[[what]] >= co))
       expect_equal(d_flows[d_flows[[what]] >= co, ], sub_d_flows)
     }
   }
+})
+
+
+test_that("fortify.sim warns about unused parameters", {
+  config <- create_locations(20, 15, seed = 412)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  origin_positions(model) <- config$pp
+  colnames(config$pd) <- c("bli", "foo")
+  destination_positions(model) <- config$pd
+  ## no position
+  expect_warning(ggplot2::fortify(model, cut_off = 1))
+  ## with names
+  expect_warning(ggplot2::fortify(model, with_names = TRUE, cut_off = 1))
 })
