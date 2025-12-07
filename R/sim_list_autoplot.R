@@ -1,3 +1,52 @@
+sim_list_autoplot_warning <- function(flows, with_names, with_positions,
+                                      with_cut_off, cut_off,
+                                      with_adjust_limits, adjust_limits,
+                                      with_with_labels, with_labels,
+                                      with_normalisation, normalisation,
+                                      call = rlang::caller_env()) {
+  if (!with_positions) {
+    if (with_adjust_limits) {
+      cli::cli_warn(
+        c("{.arg adjust_limits} is not used when {.arg with_positions}
+is {.val {FALSE}}",
+          "!" = "{.arg adjust_limits} is {.val {adjust_limits}}"
+        ),
+        call = call
+      )
+    }
+    if (with_with_labels) {
+      cli::cli_warn(
+        c("{.arg with_labels} is not used when {.arg with_positions}
+is {.val {FALSE}}",
+          "!" = "{.arg with_labels} is {.val {with_labels}}"
+        ),
+        call = call
+      )
+    }
+  }
+  if (!with_names && with_positions) {
+    if (with_with_labels) {
+      cli::cli_warn(
+        c("{.arg with_labels} is not used when {.arg with_names}
+is {.val {FALSE}}",
+          "!" = "{.arg with_labels} is {.val {with_labels}}"
+        ),
+        call = call
+      )
+    }
+  }
+  if (flows != "full" && with_normalisation) {
+    cli::cli_warn(
+      c("{.arg normalisation} is not used when {.arg flows}
+is not {.str full}",
+        "!" = "{.arg flows} is {.val {flows}} and
+{.arg normalisation} is {.val {normalisation}}"
+      ),
+      call = call
+    )
+  }
+}
+
 sim_list_autoplot <- function(sim_list,
                               sim_data_stat,
                               flows,
@@ -399,6 +448,10 @@ autoplot.sim_list <- function(object,
                               qmax = 0.95,
                               normalisation = c("none", "origin", "full"),
                               ...) {
+  with_cut_off <- !missing(cut_off)
+  with_adjust_limits <- !missing(adjust_limits)
+  with_with_labels <- !missing(with_labels)
+  with_normalisation <- !missing(normalisation)
   check_autoplot_params(
     with_names, with_positions, cut_off, adjust_limits,
     with_labels
@@ -415,18 +468,34 @@ autoplot.sim_list <- function(object,
     }
     if (flows == "full") {
       cli::cli_warn(c("{.arg flows} = {.str full} cannot be combined with
-{.arg with_positions} = {.val TRUE}",
-        "!" = "proceeding with {.arg with_positions} set to {.val FALSE}"
+{.arg with_positions} = {.val {TRUE}}",
+        "!" = "proceeding with {.arg with_positions} set to {.val {FALSE}}"
       ))
+      with_positions <- FALSE
     }
   }
-  sim_data <- fortify.sim_list(object,
-    data = NULL,
-    flows = flows,
-    with_names = FALSE, ## names are not obtained from the sim_data structure
-    normalisation = normalisation,
-    ...
+  sim_list_autoplot_warning(
+    flows,
+    with_names, with_positions, with_cut_off, cut_off,
+    with_adjust_limits, adjust_limits, with_with_labels,
+    with_labels, with_normalisation, normalisation
   )
+  if (with_normalisation && flows == "full") {
+    sim_data <- fortify.sim_list(object,
+      data = NULL,
+      flows = flows,
+      with_names = FALSE, ## names are not obtained from the sim_data structure
+      normalisation = normalisation,
+      ...
+    )
+  } else {
+    sim_data <- fortify.sim_list(object,
+      data = NULL,
+      flows = flows,
+      with_names = FALSE, ## names are not obtained from the sim_data structure
+      ...
+    )
+  }
   sim_data_stat <- quantile_sim_data(sim_data, flows,
     probs = c(0, qmin, 0.5, qmax, 1)
   )

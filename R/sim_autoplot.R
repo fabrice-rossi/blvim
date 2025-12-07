@@ -1,3 +1,50 @@
+sim_autoplot_warning <- function(with_names, with_positions,
+                                 with_cut_off, cut_off,
+                                 with_adjust_limits, adjust_limits,
+                                 with_with_labels, with_labels,
+                                 call = rlang::caller_env()) {
+  if (!with_positions) {
+    if (with_cut_off) {
+      cli::cli_warn(
+        c("{.arg cut_off} is not used when {.arg with_positions}
+is {.val {FALSE}}",
+          "!" = "{.arg cut_off} is {.val {cut_off}}"
+        ),
+        call = call
+      )
+    }
+    if (with_adjust_limits) {
+      cli::cli_warn(
+        c("{.arg adjust_limits} is not used when {.arg with_positions}
+is {.val {FALSE}}",
+          "!" = "{.arg adjust_limits} is {.val {adjust_limits}}"
+        ),
+        call = call
+      )
+    }
+    if (with_with_labels) {
+      cli::cli_warn(
+        c("{.arg with_labels} is not used when {.arg with_positions}
+is {.val {FALSE}}",
+          "!" = "{.arg with_labels} is {.val {with_labels}}"
+        ),
+        call = call
+      )
+    }
+  }
+  if (!with_names && with_positions) {
+    if (with_with_labels) {
+      cli::cli_warn(
+        c("{.arg with_labels} is not used when {.arg with_names}
+is {.val {FALSE}}",
+          "!" = "{.arg with_labels} is {.val {with_labels}}"
+        ),
+        call = call
+      )
+    }
+  }
+}
+
 sim_autoplot <- function(sim, sim_data,
                          flows,
                          with_names,
@@ -337,18 +384,34 @@ autoplot.sim <- function(object,
                          adjust_limits = FALSE,
                          with_labels = FALSE,
                          ...) {
+  with_cut_off <- !missing(cut_off)
+  with_adjust_limits <- !missing(adjust_limits)
+  with_with_labels <- !missing(with_labels)
   check_autoplot_params(
     with_names, with_positions, cut_off, adjust_limits,
     with_labels
   )
   check_dots_named(list(...))
   flows <- rlang::arg_match(flows)
-  sim_data <- fortify.sim(object,
-    data = NULL, flows = flows,
-    with_names = with_names,
-    with_positions = with_positions,
-    cut_off = cut_off
+  sim_autoplot_warning(
+    with_names, with_positions, with_cut_off, cut_off,
+    with_adjust_limits, adjust_limits, with_with_labels,
+    with_labels
   )
+  if (with_cut_off && with_positions) {
+    sim_data <- fortify.sim(object,
+      data = NULL, flows = flows,
+      with_names = with_names,
+      with_positions = with_positions,
+      cut_off = cut_off
+    )
+  } else {
+    sim_data <- fortify.sim(object,
+      data = NULL, flows = flows,
+      with_names = with_names,
+      with_positions = with_positions
+    )
+  }
   sim_autoplot(
     object, sim_data, flows, with_names, with_positions,
     adjust_limits, with_labels, ...

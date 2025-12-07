@@ -14,7 +14,8 @@ test_that("grid_var_autoplot works as expected", {
   )
   destination_positions(models) <- config$pd
   models_df <- sim_df(models)
-  models_df$group <- as.factor(sample(c(0, 1, 2), nrow(models_df), replace = TRUE))
+  models_df$group <- as.factor(sample(c(0, 1, 2), nrow(models_df),
+                                      replace = TRUE))
   vdiffr::expect_doppelganger(
     "Default flow matrices iter",
     \() print(grid_var_autoplot(models_df, iterations,
@@ -197,7 +198,7 @@ test_that("grid_var_autoplot works as expected with names (base ggplot)", {
 })
 
 
-test_that("grid_var_autoplot errors and warnings are triggered", {
+test_that("grid_var_autoplot errors are triggered", {
   config <- create_locations(15, 15, seed = 4242, symmetric = TRUE)
   alphas <- seq(1.25, 1.5, by = 0.125)
   betas <- 1 / seq(0.1, 0.5, length.out = 6)
@@ -215,12 +216,65 @@ test_that("grid_var_autoplot errors and warnings are triggered", {
   models_df <- sim_df(models)
   expect_error(grid_var_autoplot(models, iterations, with_positions = TRUE))
   expect_error(grid_var_autoplot(models_df))
-  expect_warning(grid_var_autoplot(models_df, iterations,
-    with_positions = TRUE
-  ))
   destination_positions(models_df$sim) <- NULL
   expect_error(grid_var_autoplot(models_df, iterations,
     flows = "destination",
     with_positions = TRUE
+  ))
+})
+
+test_that("grid_var_autoplot warnings are triggered", {
+  config <- create_locations(15, 15, seed = 4242, symmetric = TRUE)
+  alphas <- seq(1.25, 1.5, by = 0.125)
+  betas <- 1 / seq(0.1, 0.5, length.out = 6)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    bipartite = FALSE,
+    epsilon = 0.1,
+    iter_max = 750,
+    precision = .Machine$double.eps^0.5,
+  )
+  destination_positions(models) <- config$pd
+  destination_names(models) <- LETTERS[1:15]
+  models_df <- sim_df(models)
+  expect_warning(grid_var_autoplot(models_df, iterations,
+    with_positions = TRUE
+  ))
+  ## no position
+  expect_warning(grid_var_autoplot(models_df, iterations,
+    adjust_limits = FALSE
+  ))
+  expect_warning(grid_var_autoplot(models_df, iterations, with_labels = FALSE))
+  ## with names
+  expect_warning(grid_var_autoplot(models_df, iterations,
+    with_names = TRUE,
+    adjust_limits = FALSE
+  ))
+  expect_warning(grid_var_autoplot(models_df, iterations,
+    with_names = TRUE,
+    with_labels = FALSE
+  ))
+  ## with positions
+  expect_warning(grid_var_autoplot(models_df, iterations,
+    flows = "destination",
+    with_positions = TRUE,
+    with_labels = TRUE
+  ))
+  expect_warning(grid_var_autoplot(models_df, iterations,
+    flows = "attractiveness",
+    with_positions = TRUE,
+    with_labels = TRUE
+  ))
+  ## normalisation
+  expect_warning(grid_var_autoplot(models_df, iterations,
+    flows = "destination",
+    normalisation = "full"
+  ))
+  expect_warning(grid_var_autoplot(models_df, iterations,
+    flows = "attractiveness",
+    normalisation = "full"
   ))
 })

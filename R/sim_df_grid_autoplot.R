@@ -81,6 +81,9 @@ grid_autoplot <- function(sim_df, key,
                           fw_params = NULL,
                           ...) {
   rlang::check_installed("ggplot2", reason = "to use `grid_autoplot()`")
+  with_cut_off <- !missing(cut_off)
+  with_adjust_limits <- !missing(adjust_limits)
+  with_with_labels <- !missing(with_labels)
   check_autoplot_params(
     with_names, with_positions, cut_off, adjust_limits,
     with_labels
@@ -101,6 +104,11 @@ grid_autoplot <- function(sim_df, key,
   }
   check_dots_named(list(...))
   flows <- rlang::arg_match(flows)
+  sim_autoplot_warning(
+    with_names, with_positions, with_cut_off, cut_off,
+    with_adjust_limits, adjust_limits, with_with_labels,
+    with_labels
+  )
   expr <- rlang::enquo(key)
   if (rlang::quo_is_missing(expr)) {
     val <- seq_len(nrow(sim_df))
@@ -109,11 +117,19 @@ grid_autoplot <- function(sim_df, key,
     val <- rlang::eval_tidy({{ expr }}, sim_df)
     val_name <- rlang::as_label(expr)
   }
-  pre_data <- lapply(sim_column(sim_df), fortify.sim,
-    data = NULL, flows,
-    with_names,
-    with_positions, cut_off
-  )
+  if (with_cut_off && with_positions) {
+    pre_data <- lapply(sim_column(sim_df), fortify.sim,
+      data = NULL, flows,
+      with_names,
+      with_positions, cut_off
+    )
+  } else {
+    pre_data <- lapply(sim_column(sim_df), fortify.sim,
+      data = NULL, flows,
+      with_names,
+      with_positions
+    )
+  }
   final_df <- combine_df(pre_data, val, val_name)
   pre <- sim_autoplot(
     sim_column(sim_df)[[1]], final_df, flows, with_names,

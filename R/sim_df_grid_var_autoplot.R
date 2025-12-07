@@ -87,6 +87,10 @@ grid_var_autoplot <- function(sim_df,
                               fw_params = NULL,
                               ...) {
   rlang::check_installed("ggplot2", reason = "to use `grid_var_autoplot()`")
+  with_cut_off <- !missing(cut_off)
+  with_adjust_limits <- !missing(adjust_limits)
+  with_with_labels <- !missing(with_labels)
+  with_normalisation <- !missing(normalisation)
   if (!inherits(sim_df, "sim_df")) {
     cli::cli_abort("{.arg sim_df} must be a {.cls sim_df} object")
   }
@@ -101,11 +105,18 @@ grid_var_autoplot <- function(sim_df,
     }
     if (flows == "full") {
       cli::cli_warn(c("{.arg flows} = {.str full} cannot be combined with
-{.arg with_positions} = {.val TRUE}",
-        "!" = "proceeding with {.arg with_positions} set to {.val FALSE}"
+{.arg with_positions} = {.val {TRUE}}",
+        "!" = "proceeding with {.arg with_positions} set to {.val {FALSE}}"
       ))
+      with_positions <- FALSE
     }
   }
+  sim_list_autoplot_warning(
+    flows,
+    with_names, with_positions, with_cut_off, cut_off,
+    with_adjust_limits, adjust_limits, with_with_labels,
+    with_labels, with_normalisation, normalisation
+  )
   expr <- rlang::enquo(key)
   val <- rlang::eval_tidy({{ expr }}, sim_df)
   val_name <- rlang::as_label(expr)
@@ -117,21 +128,39 @@ grid_var_autoplot <- function(sim_df,
   } else {
     the_cols <- 1
   }
-  pre_data <- tapply(
-    sim_column(sim_df),
-    val,
-    function(a_sim) {
-      sim_data <- fortify.sim_list(a_sim,
-        data = NULL, flows = flows,
-        with_names = FALSE, normalisation = normalisation
-      )
-      sim_data_stat <- quantile_sim_data(sim_data, flows, probs = probs)
-      names(sim_data_stat) <- c(
-        names(sim_data_stat)[the_cols], col_names
-      )
-      sim_data_stat
-    }
-  )
+  if (with_normalisation && flows == "full") {
+    pre_data <- tapply(
+      sim_column(sim_df),
+      val,
+      function(a_sim) {
+        sim_data <- fortify.sim_list(a_sim,
+          data = NULL, flows = flows,
+          with_names = FALSE, normalisation = normalisation
+        )
+        sim_data_stat <- quantile_sim_data(sim_data, flows, probs = probs)
+        names(sim_data_stat) <- c(
+          names(sim_data_stat)[the_cols], col_names
+        )
+        sim_data_stat
+      }
+    )
+  } else {
+    pre_data <- tapply(
+      sim_column(sim_df),
+      val,
+      function(a_sim) {
+        sim_data <- fortify.sim_list(a_sim,
+          data = NULL, flows = flows,
+          with_names = FALSE
+        )
+        sim_data_stat <- quantile_sim_data(sim_data, flows, probs = probs)
+        names(sim_data_stat) <- c(
+          names(sim_data_stat)[the_cols], col_names
+        )
+        sim_data_stat
+      }
+    )
+  }
   if (is.factor(val)) {
     final_data <- combine_df(
       pre_data, factor(levels(val), levels(val)),

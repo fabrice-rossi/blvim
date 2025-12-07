@@ -122,3 +122,41 @@ test_that("grid_autoplot detects errors", {
   )
   expect_error(grid_autoplot(models, max_sims = TRUE))
 })
+
+test_that("grid_autoplot warns about unused parameters", {
+  config <- create_locations(25, 25, seed = 28, symmetric = TRUE)
+  alphas <- seq(1.25, 1.5, by = 0.125)
+  betas <- 1 / seq(0.1, 0.5, length.out = 6)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    bipartite = FALSE,
+    epsilon = 0.1,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5,
+  )
+  destination_positions(models) <- config$pd
+  destination_names(models) <- letters[1:25]
+  models_df <- sim_df(models)
+  ## no position
+  expect_warning(grid_autoplot(models_df, cut_off = 1))
+  expect_warning(grid_autoplot(models_df, adjust_limits = FALSE))
+  expect_warning(grid_autoplot(models_df, with_labels = FALSE))
+  ## with names
+  expect_warning(grid_autoplot(models_df, with_names = TRUE, cut_off = 1))
+  expect_warning(grid_autoplot(models_df,
+    with_names = TRUE,
+    adjust_limits = FALSE
+  ))
+  expect_warning(grid_autoplot(models_df,
+    with_names = TRUE,
+    with_labels = FALSE
+  ))
+  ## with positions
+  expect_warning(grid_autoplot(models_df,
+    with_positions = TRUE,
+    with_labels = TRUE
+  ))
+})

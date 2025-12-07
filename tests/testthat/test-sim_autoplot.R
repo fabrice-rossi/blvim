@@ -24,6 +24,31 @@ test_that("autoplot.sim detects wrong parameters", {
   ))
 })
 
+test_that("autoplot.sim warns about unused parameters", {
+  config <- create_locations(25, 25, seed = 25, symmetric = TRUE)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z, bipartite = FALSE)
+  destination_positions(model) <- config$pd
+  destination_names(model) <- letters[1:25]
+  ## no position
+  expect_warning(ggplot2::autoplot(model, cut_off = 1))
+  expect_warning(ggplot2::autoplot(model, adjust_limits = FALSE))
+  expect_warning(ggplot2::autoplot(model, with_labels = FALSE))
+  ## with names
+  expect_warning(ggplot2::autoplot(model, with_names = TRUE, cut_off = 1))
+  expect_warning(ggplot2::autoplot(model,
+    with_names = TRUE,
+    adjust_limits = FALSE
+  ))
+  expect_warning(ggplot2::autoplot(model,
+    with_names = TRUE,
+    with_labels = FALSE
+  ))
+  ## with positions
+  expect_warning(ggplot2::autoplot(model,
+    with_positions = TRUE,
+    with_labels = TRUE
+  ))
+})
 
 test_that("autoplot.sim works as expected (without names)", {
   config <- create_locations(25, 25, seed = 25, symmetric = TRUE)
