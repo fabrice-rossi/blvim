@@ -808,6 +808,7 @@ autoplot(fr_models_direct, with_names = TRUE, normalisation = "origin") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   labs(title = "Population")
 ```
+
 The geographical representation shows the emergence of these smaller cities.
 
 ```{r}
@@ -819,6 +820,7 @@ autoplot(fr_models_direct,
   coord_sf(crs = "epsg:4326") +
   labs(title = "Population")
 ```
+
 By default, the flows are not normalised in the variability plot,
 and the global normalisation emphasises Paris' dominance and its preferred
 destination, Saint-Ouen-Sur-Seine, more strongly. This representation shows
