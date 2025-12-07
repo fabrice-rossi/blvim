@@ -4,13 +4,32 @@
 \alias{diversity}
 \alias{diversity.sim}
 \alias{diversity.sim_list}
-\title{Compute the diversity of the destination flows in a spatial interaction model}
+\title{Compute the diversity of the destination locations in a spatial interaction
+model}
 \usage{
-diversity(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...)
+diversity(
+  sim,
+  definition = c("shannon", "renyi", "ND", "RW"),
+  order = 1L,
+  activity = c("destination", "attractiveness"),
+  ...
+)
 
-\method{diversity}{sim}(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...)
+\method{diversity}{sim}(
+  sim,
+  definition = c("shannon", "renyi", "ND", "RW"),
+  order = 1L,
+  activity = c("destination", "attractiveness"),
+  ...
+)
 
-\method{diversity}{sim_list}(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...)
+\method{diversity}{sim_list}(
+  sim,
+  definition = c("shannon", "renyi", "ND", "RW"),
+  order = 1L,
+  activity = c("destination", "attractiveness"),
+  ...
+)
 }
 \arguments{
 \item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
@@ -21,6 +40,10 @@ details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
 
 \item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
 
+\item{activity}{specifies whether the diversity is computed based on the
+destination flows (for \code{activity="destination"}, the default case) or on
+the attractivenesses (for \code{activity="attractiveness"}).}
+
 \item{...}{additional parameters}
 }
 \value{
@@ -28,21 +51,35 @@ the diversity of destination flows (one value per spatial
 interaction model)
 }
 \description{
-This function computes the diversity of the destination flows according to
-different definitions that all aim at estimating a number of active
+This function computes the diversity of the destination locations according
+to different definitions that all aim at estimating a number of active
 destinations, i.e., the number of destination locations that receive a
-"significant fraction" of the total flow. The function applies also to a
-collection of spatial interaction models as represented by a \code{sim_list}.
+"significant fraction" of the total flow or that are attractive enough. The
+function applies also to a collection of spatial interaction models as
+represented by a \code{sim_list}.
 }
 \details{
-If \eqn{Y} is a flow matrix, the destination flows are computed as follows
+In general, the activity of a destination location is measured by its
+incoming flow a.k.a. its destination flow. If \eqn{Y} is a flow matrix, the
+destination flows are computed as follows
 
 \deqn{\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},}
 
-for each destination \eqn{j} (see \code{\link[=destination_flow]{destination_flow()}}). To compute their
-diversity using entropy based definitions, the flows are first normalised to
+for each destination \eqn{j} (see \code{\link[=destination_flow]{destination_flow()}}). This is the default
+calculation mode in this function (when the parameter \code{activity} is set
+to \code{"destination"}).
+
+For dynamic models produced by \code{\link[=blvim]{blvim()}}, the destination attractivenesses
+can be also considered as activity measures. When convergence occurs,
+the values are identical, but prior convergence they can be quite different.
+When \code{activity} is set to \code{"attractiveness"}, the diversity measures are
+computed using the same formula as below but with \eqn{D_j} replaced by
+\eqn{Z_j} (as given by \code{\link[=attractiveness]{attractiveness()}}).
+
+To compute their
+diversity using entropy based definitions, the activities are first normalised to
 be interpreted as a probability distribution over the destination locations.
-We use
+For instance for destination flows, we use
 
 \deqn{\forall j,\quad p_j=\frac{D_j}{\sum_{k=1}^n D_k}.}
 
@@ -82,8 +119,9 @@ In addition to those entropy based definition, terminal based calculations
 are also provided. Using any definition supported by the \code{\link[=terminals]{terminals()}}
 function, the diversity is the number of terminals identified. Notice this
 applies only to interaction models in which origin and destination locations
-are identical, i.e. when the model is not bipartite. Current values of
-definitions are:
+are identical, i.e. when the model is not bipartite. In addition, the notion
+of terminals is based on destination flows and cannot be used with activities
+based on attractivenesses. \code{definition} can be:
 \itemize{
 \item \code{"ND"} for the original Nystuen and Dacey definition
 \item \code{"RW"} for the variant by Rihll and Wilson
@@ -104,6 +142,9 @@ flows <- blvim(distances, production, 1.5, 1 / 100, attractiveness,
   bipartite = FALSE
 )
 diversity(flows)
+sim_converged(flows)
+## should be identical because of convergence
+diversity(flows, activity = "attractiveness")
 diversity(flows, "renyi", 2)
 diversity(flows, "RW")
 }
@@ -112,5 +153,6 @@ Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 \doi{10.1111/j.2006.0030-1299.14714.x}
 }
 \seealso{
-\code{\link[=destination_flow]{destination_flow()}}, \code{\link[=terminals]{terminals()}}, \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}
+\code{\link[=destination_flow]{destination_flow()}}, \code{\link[=attractiveness]{attractiveness()}}, \code{\link[=terminals]{terminals()}},
+\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}
 }

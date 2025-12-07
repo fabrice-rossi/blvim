@@ -410,7 +410,8 @@ grid_is_terminal <- function(sim_list, definition = c("ND", "RW"), ...) {
 #' diversities ## should be a length 12 vector
 #' grid_diversity(all_flows, "renyi", 3)
 grid_diversity <- function(sim, definition = c("shannon", "renyi", "ND", "RW"),
-                           order = 1L, ...) {
+                           order = 1L,
+                           activity = c("destination", "attractiveness"), ...) {
   diversity(sim, definition, order, ...)
 }
 

@@ -9,7 +9,9 @@ test_that("diversity detects errors", {
 
 test_that("diversity computes what is expected", {
   config <- create_locations(40, 50, seed = 3)
-  model <- blvim(config$costs, config$X, 1.5, 6, config$Z, precision = .Machine$double.eps^0.5)
+  model <- blvim(config$costs, config$X, 1.5, 6, config$Z,
+    precision = .Machine$double.eps^0.5
+  )
   D <- destination_flow(model)
   D <- D / sum(D)
   ## Shannon
@@ -17,7 +19,9 @@ test_that("diversity computes what is expected", {
   ## Some Rényi
   orders <- c(0.5, 1.5, 3)
   for (gamma in orders) {
-    expect_equal(log(sum(D^gamma)) / (1 - gamma), log(diversity(model, "renyi", order = gamma)))
+    expect_equal(log(sum(D^gamma)) / (1 - gamma), log(diversity(model, "renyi",
+      order = gamma
+    )))
   }
   ## special Rényi
   ## Shannon
@@ -38,6 +42,49 @@ test_that("diversity computes what is expected", {
   expect_equal(diversity(model, "RW"), length(terminals(model, "RW")))
   expect_equal(diversity(model, "ND"), length(terminals(model, "ND")))
 })
+
+test_that("diversity computes what is expected for attractivenesses", {
+  config <- create_locations(40, 50, seed = 3)
+  model <- blvim(config$costs, config$X, 1.5, 6, config$Z,
+    precision = .Machine$double.eps^0.5
+  )
+  D <- attractiveness(model)
+  D <- D / sum(D)
+  ## Shannon
+  expect_equal(-sum(D * log(D)), log(diversity(model, activity = "attractiveness")))
+  ## Some Rényi
+  orders <- c(0.5, 1.5, 3)
+  for (gamma in orders) {
+    expect_equal(log(sum(D^gamma)) / (1 - gamma), log(diversity(model, "renyi",
+      order = gamma,
+      activity = "attractiveness"
+    )))
+  }
+  ## special Rényi
+  ## Shannon
+  expect_equal(-sum(D * log(D)), log(diversity(model, "renyi",
+    order = 1,
+    activity = "attractiveness"
+  )))
+  ## min
+  expect_equal(-log(max(D)), log(diversity(model, "renyi",
+    order = Inf,
+    activity = "attractiveness"
+  )))
+  ## max
+  expect_equal(length(D), diversity(model, "renyi",
+    order = 0,
+    activity = "attractiveness"
+  ))
+  config <- create_locations(40, 40, seed = 3, symmetric = TRUE)
+  model <- blvim(config$costs, config$X, 1.5, 6, config$Z,
+    bipartite = FALSE,
+    precision = .Machine$double.eps^0.5
+  )
+  expect_error(diversity(model, "RW", activity = "attractiveness"))
+  expect_error(diversity(model, "ND", activity = "attractiveness"))
+})
+
 
 test_that("diversity computes what is expected on sim lists", {
   config <- create_locations(25, 25, seed = 8, symmetric = TRUE)

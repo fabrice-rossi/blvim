@@ -8,6 +8,7 @@ grid_diversity(
   sim,
   definition = c("shannon", "renyi", "ND", "RW"),
   order = 1L,
+  activity = c("destination", "attractiveness"),
   ...
 )
 }
@@ -19,6 +20,10 @@ grid_diversity(
 details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
 
 \item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
+
+\item{activity}{specifies whether the diversity is computed based on the
+destination flows (for \code{activity="destination"}, the default case) or on
+the attractivenesses (for \code{activity="attractiveness"}).}
 
 \item{...}{additional parameters}
 }

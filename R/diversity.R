@@ -1,19 +1,35 @@
-#' Compute the diversity of the destination flows in a spatial interaction model
+#' Compute the diversity of the destination locations in a spatial interaction
+#' model
 #'
-#' This function computes the diversity of the destination flows according to
-#' different definitions that all aim at estimating a number of active
+#' This function computes the diversity of the destination locations according
+#' to different definitions that all aim at estimating a number of active
 #' destinations, i.e., the number of destination locations that receive a
-#' "significant fraction" of the total flow. The function applies also to a
-#' collection of spatial interaction models as represented by a `sim_list`.
+#' "significant fraction" of the total flow or that are attractive enough. The
+#' function applies also to a collection of spatial interaction models as
+#' represented by a `sim_list`.
 #'
-#' If \eqn{Y} is a flow matrix, the destination flows are computed as follows
+#'
+#' In general, the activity of a destination location is measured by its
+#' incoming flow a.k.a. its destination flow. If \eqn{Y} is a flow matrix, the
+#' destination flows are computed as follows
 #'
 #' \deqn{\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},}
 #'
-#' for each destination \eqn{j} (see [destination_flow()]). To compute their
-#' diversity using entropy based definitions, the flows are first normalised to
+#' for each destination \eqn{j} (see [destination_flow()]). This is the default
+#' calculation mode in this function (when the parameter `activity` is set
+#' to `"destination"`).
+#'
+#' For dynamic models produced by [blvim()], the destination attractivenesses
+#' can be also considered as activity measures. When convergence occurs,
+#' the values are identical, but prior convergence they can be quite different.
+#' When `activity` is set to `"attractiveness"`, the diversity measures are
+#' computed using the same formula as below but with \eqn{D_j} replaced by
+#' \eqn{Z_j} (as given by [attractiveness()]).
+#'
+#' To compute their
+#' diversity using entropy based definitions, the activities are first normalised to
 #' be interpreted as a probability distribution over the destination locations.
-#' We use
+#' For instance for destination flows, we use
 #'
 #' \deqn{\forall j,\quad p_j=\frac{D_j}{\sum_{k=1}^n D_k}.}
 #'
@@ -52,8 +68,9 @@
 #' are also provided. Using any definition supported by the [terminals()]
 #' function, the diversity is the number of terminals identified. Notice this
 #' applies only to interaction models in which origin and destination locations
-#' are identical, i.e. when the model is not bipartite. Current values of
-#' definitions are:
+#' are identical, i.e. when the model is not bipartite. In addition, the notion
+#' of terminals is based on destination flows and cannot be used with activities
+#' based on attractivenesses. `definition` can be:
 #'
 #'   - `"ND"` for the original Nystuen and Dacey definition
 #'   - `"RW"` for the variant by Rihll and Wilson
@@ -70,11 +87,15 @@
 #' @param definition diversity definition `"shannon"` (default), `"renyi"` (see
 #'   details) or a definition supported by  [terminals()]
 #' @param order order of the Rényi entropy, used only when `definition="renyi"`
+#' @param activity specifies whether the diversity is computed based on the
+#' destination flows (for `activity="destination"`, the default case) or on
+#' the attractivenesses (for `activity="attractiveness"`).
 #' @param ... additional parameters
 #'
 #' @returns the diversity of destination flows (one value per spatial
 #'   interaction model)
-#' @seealso [destination_flow()], [terminals()], [sim_is_bipartite()]
+#' @seealso [destination_flow()], [attractiveness()], [terminals()],
+#'   [sim_is_bipartite()]
 #' @export
 #'
 #' @references Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
@@ -87,25 +108,42 @@
 #'   bipartite = FALSE
 #' )
 #' diversity(flows)
+#' sim_converged(flows)
+#' ## should be identical because of convergence
+#' diversity(flows, activity = "attractiveness")
 #' diversity(flows, "renyi", 2)
 #' diversity(flows, "RW")
 diversity <- function(sim, definition = c("shannon", "renyi", "ND", "RW"),
-                      order = 1L, ...) {
+                      order = 1L, activity = c("destination", "attractiveness"),
+                      ...) {
   UseMethod("diversity")
 }
 
 #' @export
 #' @rdname diversity
 diversity.sim <- function(sim, definition = c("shannon", "renyi", "ND", "RW"),
-                          order = 1L, ...) {
+                          order = 1L,
+                          activity = c("destination", "attractiveness"),
+                          ...) {
   definition <- rlang::arg_match(definition)
+  activity <- rlang::arg_match(activity)
+  if (activity == "attractiveness" && (definition == "ND" || definition == "RW")) {
+    cli::cli_abort(c("{.arg activity}={.str attractiveness} is not compatible
+with terminal based diversity definition",
+      "x" = "{.arg definition} is {.val {definition}}"
+    ))
+  }
   if (definition == "renyi" && order < 0) {
     cli::cli_abort(c("{.arg order} must be non negative",
       "x" = "{.arg order} is {.val {order}}"
     ))
   }
   if (definition == "shannon" || definition == "renyi") {
-    D <- destination_flow(sim)
+    if (activity == "destination") {
+      D <- destination_flow(sim)
+    } else {
+      D <- attractiveness(sim)
+    }
     D <- D / sum(D)
     if (definition == "shannon" || (definition == "renyi" && order == 1L)) {
       exp(-sum(ifelse(D > 0, D * log(D), 0)))
@@ -127,6 +165,8 @@ diversity.sim <- function(sim, definition = c("shannon", "renyi", "ND", "RW"),
 #' @rdname diversity
 diversity.sim_list <- function(sim,
                                definition = c("shannon", "renyi", "ND", "RW"),
-                               order = 1L, ...) {
-  sapply(sim, diversity, definition, order, ...)
+                               order = 1L,
+                               activity = c("destination", "attractiveness"),
+                               ...) {
+  sapply(sim, diversity, definition, order, activity, ...)
 }
