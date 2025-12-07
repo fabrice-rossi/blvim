@@ -181,10 +181,26 @@ quantile.sim_list <- function(x,
                               normalisation = c("none", "origin", "full"),
                               ...) {
   flows <- rlang::arg_match(flows)
+  with_normalisation <- !missing(normalisation)
   normalisation <- rlang::arg_match(normalisation)
-  sim_data <- fortify.sim_list(x,
-    data = NULL, flows = flows,
-    normalisation = normalisation
-  )
+  if (flows != "full") {
+    if (with_normalisation) {
+      cli::cli_warn(
+        c("{.arg normalisation} is not used when {.arg flows}
+is not {.str full}",
+          "!" = "{.arg flows} is {.val {flows}} and
+{.arg normalisation} is {.val {normalisation}}"
+        )
+      )
+    }
+    sim_data <- fortify.sim_list(x,
+      data = NULL, flows = flows,
+    )
+  } else {
+    sim_data <- fortify.sim_list(x,
+      data = NULL, flows = flows,
+      normalisation = normalisation
+    )
+  }
   quantile_sim_data(sim_data, flows, probs)
 }

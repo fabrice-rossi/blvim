@@ -150,3 +150,25 @@ test_that("quantile calculation works as expected", {
   }
   expect_true(all_equal)
 })
+
+test_that("quantile warns about unused parameters", {
+  config <- create_locations(20, 15, seed = 2892)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.05, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 10000,
+    precision = .Machine$double.eps^0.5
+  )
+  expect_warning(quantile.sim_list(models,
+    flows = "attractiveness",
+    normalisation = "none"
+  ))
+  expect_warning(quantile.sim_list(models,
+    flows = "destination",
+    normalisation = "none"
+  ))
+})
