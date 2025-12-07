@@ -890,8 +890,10 @@ autoplot(fr_models_direct, with_names = TRUE, normalisation = "origin") +
   labs(title = "Population")
 ```
 
-![](grid_files/figure-html/unnamed-chunk-56-1.png) The geographical
-representation shows the emergence of these smaller cities.
+![](grid_files/figure-html/unnamed-chunk-56-1.png)
+
+The geographical representation shows the emergence of these smaller
+cities.
 
 ``` r
 options("ggrepel.max.overlaps" = 20)
@@ -903,12 +905,13 @@ autoplot(fr_models_direct,
   labs(title = "Population")
 ```
 
-![](grid_files/figure-html/unnamed-chunk-57-1.png) By default, the flows
-are not normalised in the variability plot, and the global normalisation
-emphasises Paris’ dominance and its preferred destination,
-Saint-Ouen-Sur-Seine, more strongly. This representation shows similar
-patterns for Marseille with Arles and to a lesser extent for Lyon with
-Vaulx-en-Velin, and Toulouse with Arles and Albi.
+![](grid_files/figure-html/unnamed-chunk-57-1.png)
+
+By default, the flows are not normalised in the variability plot, and
+the global normalisation emphasises Paris’ dominance and its preferred
+destination, Saint-Ouen-Sur-Seine, more strongly. This representation
+shows similar patterns for Marseille with Arles and to a lesser extent
+for Lyon with Vaulx-en-Velin, and Toulouse with Arles and Albi.
 
 ``` r
 autoplot(fr_models_direct, with_names = TRUE, normalisation = "full") +
