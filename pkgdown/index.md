@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Boltzmann–Lotka–Volterra Interaction Model
+# blvim: Boltzmann–Lotka–Volterra Interaction Model <a href="https://fabrice-rossi.github.io/blvim/"><img src="man/figures/logo.svg" align="right" height="139" alt="blvim website" /></a>
 
 <!-- badges: start -->
 
