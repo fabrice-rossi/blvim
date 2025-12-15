@@ -1,21 +1,40 @@
-# Compute the diversity of the destination flows in a spatial interaction model
+# Compute the diversity of the destination locations in a spatial interaction model
 
-This function computes the diversity of the destination flows according
-to different definitions that all aim at estimating a number of active
-destinations, i.e., the number of destination locations that receive a
-"significant fraction" of the total flow. The function applies also to a
-collection of spatial interaction models as represented by a `sim_list`.
+This function computes the diversity of the destination locations
+according to different definitions that all aim at estimating a number
+of active destinations, i.e., the number of destination locations that
+receive a "significant fraction" of the total flow or that are
+attractive enough. The function applies also to a collection of spatial
+interaction models as represented by a `sim_list`.
 
 ## Usage
 
 ``` r
-diversity(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...)
+diversity(
+  sim,
+  definition = c("shannon", "renyi", "ND", "RW"),
+  order = 1L,
+  activity = c("destination", "attractiveness"),
+  ...
+)
 
 # S3 method for class 'sim'
-diversity(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...)
+diversity(
+  sim,
+  definition = c("shannon", "renyi", "ND", "RW"),
+  order = 1L,
+  activity = c("destination", "attractiveness"),
+  ...
+)
 
 # S3 method for class 'sim_list'
-diversity(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...)
+diversity(
+  sim,
+  definition = c("shannon", "renyi", "ND", "RW"),
+  order = 1L,
+  activity = c("destination", "attractiveness"),
+  ...
+)
 ```
 
 ## Arguments
@@ -36,6 +55,12 @@ diversity(sim, definition = c("shannon", "renyi", "ND", "RW"), order = 1L, ...)
 
   order of the Rényi entropy, used only when `definition="renyi"`
 
+- activity:
+
+  specifies whether the diversity is computed based on the destination
+  flows (for `activity="destination"`, the default case) or on the
+  attractivenesses (for `activity="attractiveness"`).
+
 - ...:
 
   additional parameters
@@ -47,15 +72,30 @@ model)
 
 ## Details
 
-If \\Y\\ is a flow matrix, the destination flows are computed as follows
+In general, the activity of a destination location is measured by its
+incoming flow a.k.a. its destination flow. If \\Y\\ is a flow matrix,
+the destination flows are computed as follows
 
 \$\$\forall j,\quad D_j=\sum\_{i=1}^{n}Y\_{ij},\$\$
 
 for each destination \\j\\ (see
 [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)).
-To compute their diversity using entropy based definitions, the flows
-are first normalised to be interpreted as a probability distribution
-over the destination locations. We use
+This is the default calculation mode in this function (when the
+parameter `activity` is set to `"destination"`).
+
+For dynamic models produced by
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md),
+the destination attractivenesses can be also considered as activity
+measures. When convergence occurs, the values are identical, but prior
+convergence they can be quite different. When `activity` is set to
+`"attractiveness"`, the diversity measures are computed using the same
+formula as below but with \\D_j\\ replaced by \\Z_j\\ (as given by
+[`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)).
+
+To compute their diversity using entropy based definitions, the
+activities are first normalised to be interpreted as a probability
+distribution over the destination locations. For instance for
+destination flows, we use
 
 \$\$\forall j,\quad p_j=\frac{D_j}{\sum\_{k=1}^n D_k}.\$\$
 
@@ -97,8 +137,10 @@ calculations are also provided. Using any definition supported by the
 [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
 function, the diversity is the number of terminals identified. Notice
 this applies only to interaction models in which origin and destination
-locations are identical, i.e. when the model is not bipartite. Current
-values of definitions are:
+locations are identical, i.e. when the model is not bipartite. In
+addition, the notion of terminals is based on destination flows and
+cannot be used with activities based on attractivenesses. `definition`
+can be:
 
 - `"ND"` for the original Nystuen and Dacey definition
 
@@ -122,6 +164,7 @@ Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 ## See also
 
 [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md),
+[`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md),
 [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md),
 [`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)
 
@@ -136,6 +179,11 @@ flows <- blvim(distances, production, 1.5, 1 / 100, attractiveness,
 )
 diversity(flows)
 #> [1] 5.612398
+sim_converged(flows)
+#> [1] TRUE
+## should be identical because of convergence
+diversity(flows, activity = "attractiveness")
+#> [1] 5.612397
 diversity(flows, "renyi", 2)
 #> [1] 4.734579
 diversity(flows, "RW")

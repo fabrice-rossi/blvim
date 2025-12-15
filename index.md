@@ -1,4 +1,4 @@
-# Boltzmann–Lotka–Volterra Interaction Model
+# blvim: Boltzmann–Lotka–Volterra Interaction Model
 
 `blvim` implements A. Wilson’s **Boltzmann–Lotka–Volterra (BLV)
 interaction model**. The model is described in [Wilson, A. (2008),

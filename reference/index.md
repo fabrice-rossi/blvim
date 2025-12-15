@@ -48,7 +48,7 @@ Functions for getting properties of spatial interaction models.
 - [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
   : Compute the flows incoming at each destination location
 - [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
-  : Compute the diversity of the destination flows in a spatial
+  : Compute the diversity of the destination locations in a spatial
   interaction model
 - [`flows()`](https://fabrice-rossi.github.io/blvim/reference/flows.md)
   : Extract the flow matrix from a spatial interaction model object

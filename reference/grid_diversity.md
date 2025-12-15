@@ -14,6 +14,7 @@ grid_diversity(
   sim,
   definition = c("shannon", "renyi", "ND", "RW"),
   order = 1L,
+  activity = c("destination", "attractiveness"),
   ...
 )
 ```
@@ -34,6 +35,12 @@ grid_diversity(
 - order:
 
   order of the Rényi entropy, used only when `definition="renyi"`
+
+- activity:
+
+  specifies whether the diversity is computed based on the destination
+  flows (for `activity="destination"`, the default case) or on the
+  attractivenesses (for `activity="attractiveness"`).
 
 - ...:
 
