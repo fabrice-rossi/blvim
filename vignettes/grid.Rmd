@@ -29,7 +29,9 @@ vary. This is supported by a collection of `grid_*` functions.
 We shall work with a regular grid of locations, in a symmetric (non-bipartite) 
 case.
 
-```{r}
+```{r regular_grid_example}
+#| fig.alt: >
+#|   A five by five grid showing the regularity of the location positions.
 locations <- expand.grid(x = 1:5, y = 1:5)
 locations$name <- LETTERS[1:25]
 ggplot(locations, aes(x, y, label = name)) +
@@ -102,13 +104,23 @@ any of the models, for instance to display the corresponding flows, as
 demonstrated below for the first model, using both the standard matrix display
 and the position-based one.
 
-```{r}
+```{r regular_grid_model_1_matrix}
+#| fig.alt: >
+#|   A matrix representation of the flows. The flows are highly structured with
+#|   a dominant diagonal (showing strong self interactions) and some diagonal
+#|   bands. These bands show that most of the flows are local.
 autoplot(models[[1]]) +
   scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
 ```
 
-```{r}
+```{r regular_grid_model_10_position_flows}
+#| fig.alt: >
+#|   A dot and arrow representation of the flows on the five by five regular
+#|   grid of the locations. This representation show a different type of flow
+#|   organisation. Locations on the border of the grid (top and bottom rows,
+#|   leftmost and rightmost columns) concentrate their flows on the internal
+#|   three by three subgrid.
 autoplot(models[[10]],
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.01, "npc"))
@@ -124,7 +136,21 @@ a variability plot. The aim is to display statistics of the flows over the
 collection of spatial interaction models in the list. The default
 representation focuses on individual flows as shown below.
 
-```{r}
+```{r regular_grid_variability_flows}
+#| fig.alt: >
+#|   A variability plot  displaying flow statistics between geographic locations
+#|   labeled A through Y on both the x-axis (destination) and y-axis (origin).
+#|   The plot is a grid where the size and thickness of squares represent the
+#|   median of flows across various spatial interaction models, as well as
+#|   other quantiles. The most striking feature is column M, which contains a
+#|   continuous vertical line of large, thick-bordered squares for every origin,
+#|   representing the median flow received by the center point (M) from all
+#|   other locations. Other destination columns, specifically G, I, Q, and S,
+#|   contain squares of varying sizes and thicknesses, indicating diverse flow
+#|   levels from specific origins. The majority of the grid is empty,
+#|   particularly columns A–F, H, J–L, N–P, R, and T–Y, illustrating that many
+#|   locations receive no incoming flow across any of the models in the
+#|   collection.
 autoplot(models, with_names = TRUE) +
   theme_light()
 ```
@@ -138,7 +164,20 @@ incoming flow in any model.
 The position-based figure shows only the destination flows, using circles
 to display statistics of those flows.
 
-```{r}
+```{r regular_grid_variability_position}
+#| fig.alt: >
+#|   A position-based variability plot showing destination flows across a 5x5
+#|   coordinate grid. The x and y axes represent spatial coordinates. Five
+#|   locations are plotted: a central point at (3, 3) representing location M,
+#|   and four surrounding points at (2, 2), (2, 4), (4, 2), and (4, 4). The
+#|   central location (M) features a significantly larger, thick-bordered
+#|   circle, indicating a high median flow compared to other locations. A tiny
+#|   dot is visible at the very center of this circle, representing the 0.05
+#|   quartile and indicating that in a small fraction of the models, this
+#|   location receives almost no flow. The four surrounding locations are
+#|   represented by smaller circles with central dots. The edges of the grid
+#|   (coordinates 1 and 5) are empty, confirming that the external locations
+#|   receive no incoming flow in any of the models.
 autoplot(models, flows = "destination", with_positions = TRUE) +
   scale_size_continuous(range = c(0, 7)) +
   coord_fixed()
@@ -173,9 +212,22 @@ knitr::kable(head(models_df))
 
 The `sim_df()` object has a `ggplot2::autoplot()` function which shows by default
 the diversities of the models. 
-```{r}
+```{r regular_grid_df_default}
 #| fig.width: 6
 #| fig.align: center
+#| fig.alt: >
+#|   A heatmap plot showing the diversity of incoming flows relative to two
+#|   model parameters: alpha (return to scale) on the y-axis (ranging from 1.05
+#|   to 2.00) and one over beta (cost scale) on the x-axis (ranging from
+#|   0.5 to 4.0). Diversity values are represented by a color gradient, where
+#|   dark purple indicates low diversity (around 5) and bright yellow indicates
+#|   high diversity (up to almost 25). The plot reveals that high diversity is
+#|   concentrated in a very specific region: the bottom-left corner, where both
+#|   alpha is low (near 1.0) and 1 over beta is low (below 1.0). As either α or
+#|   1/β increases, the diversity drops sharply. The vast majority of the
+#|   parameter space - specifically when 1/β is greater than 1.2 or α is greater
+#|   than 1.3 - is a uniform dark purple, indicating that flow diversity remains
+#|   consistently low for most parameter combinations.
 autoplot(models_df) +
   scale_fill_viridis_c()
 ```
@@ -185,9 +237,16 @@ a coloured rectangle that represents the chosen numerical value for the
 corresponding model. One can display any column of the `sim_df` object,
 for instance the convergence status.
 
-```{r}
+```{r regular_grid_df_converged}
 #| fig.width: 6
 #| fig.align: center
+#| fig.alt: >
+#|   This heatmap, organized identically to the previous figure showing
+#|   diversity, displays the convergence status of the models across the α and
+#|   1/β parameter space. The vast majority of the plot is cyan, indicating that
+#|   the models converged (TRUE). Only two small squares in the bottom-left
+#|   corner are salmon-colored, indicating non-convergence (FALSE) at very low
+#|   values of both parameters.
 autoplot(models_df, converged)
 ```
 
@@ -196,9 +255,18 @@ user to compute interesting values on the fly, as in the following figure
 that displays the number of terminals per model, according to the Nystuen
 and Dacey definition.
 
-```{r}
+```{r regular_grid_df_ND}
 #| fig.width: 6
 #| fig.align: center
+#| fig.alt: >
+#|   A heatmap nearly identical in structure to the previous diversity figure,
+#|   but calculated using the Nystuen and Dacey definition. It maps diversity
+#|   values across the same parameter space (α on the y-axis and 1/β on the
+#|   x-axis). The visual pattern remains consistent: high diversity (yellow) is
+#|   restricted to the bottom-left corner where both parameters are low, while
+#|   the rest of the parameter space shows uniform low diversity (dark purple).
+#|   The main difference is that the ND diversities are integers, but that does
+#|   not appear on the graphical representation.
 autoplot(models_df, diversity(sim, "ND")) +
   scale_fill_viridis_c()
 ```
@@ -230,7 +298,15 @@ specific, as a very large subset of them is the same model, with all
 the flow sent to the central location. This is partly visible in the
 dendrogram of the clustering, with the large cluster on the left.
 
-```{r}
+```{r regular_grid_hc_dendrogram}
+#| fig.alt: >
+#|   A Cluster Dendrogram showing hierarchical clustering of the models using
+#|   the ward.D2 method. The y-axis, labeled Height, indicates the distance
+#|   between clusters. The plot reveals two primary, distinct branches that join
+#|   at a high level (above 300). The branch on the left consists of a very
+#|   large group of models with near-zero distance between them, while the
+#|   smaller branch on the right shows more internal variation with
+#|   sub-clusters joining at heights between 0 and 50.
 plot(models_hc, hang = -1, labels = FALSE)
 ```
 
@@ -249,9 +325,21 @@ models_df$cluster <- as.factor(cutree(models_hc, k = 16))
 ```
 
 This can be immediately used in the standard `sim_df()` visualisation.
-```{r}
+```{r regular_grid_df_clusters}
 #| fig.width: 6
 #| fig.align: center
+#| fig.alt: >
+#|   A heatmap visualizing the distribution of 16 clusters resulting from
+#|   hierarchical clustering across the parameter space defined by α on the
+#|   y-axis (ranging from 1.00 to 2.00) and 1/β on the x-axis (ranging from
+#|   0.5 to 4.0). Each distinct color corresponds to one of the 16 numerical
+#|   clusters shown in the legend. The majority of the parameter space,
+#|   specifically regions with higher α or 1/β values, is dominated by a single
+#|   large purple region (cluster 13). A distinct teal vertical band (cluster 7)
+#|   occupies the left side where 1/β is low. The bottom-left corner and the
+#|   bottom edge, representing low values for both parameters, are highly
+#|   fragmented into many small, distinct colored blocks representing the
+#|   remaining diverse clusters.
 autoplot(models_df, cluster)
 ```
 
@@ -266,10 +354,21 @@ partitioning variable in a `sim_df()` object.
 
 Using the clustering obtained above, we simply execute: 
 
-```{r}
+```{r regular_grid_cluster_flow_var}
 #| fig.height: 8
 #| fig.width: 8
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 grid of 16 variability plots, each labeled 1 through 16, representing
+#|   clusters of spatial interaction models. Each subplot is a matrix grid
+#|   showing statistics on the flow  from origin (y-axis) to destination
+#|   (x-axis). There are four model classes: Central Dominance (clusters 13-16)
+#|   showing heavy flow to the center; Dominant Diagonal (clusters 1-3) indicating
+#|   self-interaction; No Central Flow (clusters 4 and 9) where the center
+#|   location receives nothing; and Complex Patterns (clusters 5-8 and 10-12)
+#|   showing flows to multiple regional hubs. The visual redundancy between many
+#|   subplots (especially 13-16) suggests that the models within these groups
+#|   are nearly identical despite being assigned to separate clusters.
 grid_var_autoplot(models_df, cluster)
 ```
 
@@ -287,10 +386,18 @@ the representation outlines a collection of very distinct model classes:
 We can gain further insight into the different behaviours using the location
 positions, provided we focus on the destination flows.
 
-```{r}
+```{r regular_grid_cluster_flow_var_position}
 #| fig.height: 8
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 grid of 16 spatial variability plots showing destination flow
+#|   patterns across a 5x5 coordinate grid for each model cluster. Each
+#|   plot is a position based standard variability plot. Subplots 13-16 exhibit
+#|   high central dominance with a large circle at (3,3); subplots 1-3 show
+#|   uniform flows across all internal locations; subplots 4 and 9 show an empty
+#|   center; and subplots 5-12 display varying regional hub patterns at
+#|   coordinates (2,2), (2,4), (4,2), and (4,4)
 grid_var_autoplot(models_df, cluster,
   flows = "destination",
   with_positions = TRUE
@@ -336,10 +443,19 @@ standard spatial interaction model graphical representation (the ones
 provided by `autoplot.sim()`) for each of the models in a `sim_df`. For
 instance, one can get the flows of all medoids as follows.
 
-```{r}
+```{r regular_grid_model_centres_flows}
 #| fig.height: 8
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 grid of 16 flow matrices showing the flows of medoid of each
+#|   cluster using a grayscale gradient to represent flow intensity. Subplots
+#|   1-3 show a strong black diagonal indicating high self-interaction; Subplots
+#|   4 and 9 show also a diagonal structure but without any flow going to the
+#|   central position M; subplots 5-8 and 10-12 feature vertical dark bands
+#|   at regional hub locations G, I, Q, and S; and subplots 13-16 display a
+#|   singular, solid black vertical line at the center (location M),
+#|   illustrating absolute central dominance.
 grid_autoplot(models_centre_df) +
   scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
@@ -348,10 +464,14 @@ grid_autoplot(models_centre_df) +
 The function supports all the individual representations, for instance flows
 with positions. 
 
-```{r}
+```{r regular_grid_model_centres_flows_positions}
 #| fig.height: 8
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 grid of 16 dot and arrow representations showing the flows of the
+#|   medoid of each cluster. The figure displays patterns consistent with the
+#|   analysis conducted on the previous figure.
 grid_autoplot(models_centre_df,
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.015, "npc"))
@@ -362,10 +482,15 @@ grid_autoplot(models_centre_df,
 
 Destination flows with positions are also supported. 
 
-```{r}
+```{r regular_grid_model_centres_dest_positions}
 #| fig.height: 8
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 grid of 16 dot representations showing the destination flows of the
+#|   medoid of each cluster. The figure displays patterns consistent with the
+#|   analysis conducted on the previous figure, for instance a dot at each
+#|   position for clusters 1 to 4, emphasizing self interaction only.
 grid_autoplot(models_centre_df, flows = "destination", with_positions = TRUE) +
   scale_size_continuous(range = c(0, 6)) +
   coord_fixed()
@@ -414,7 +539,12 @@ eurodist_coord <- data.frame(
 
 This yields the following map. 
 
-```{r}
+```{r european_city_map}
+#| fig.alt: >
+#|   A geographical map of the 21 cities under study. Central cities include
+#|   Lyon and Geneva. On the extreme east, we have Stockholm in the north and
+#|   Athens in the south. On the extreme west, we have Gibraltar and Lisbon, both
+#|   in the south of the region.
 ggplot(eurodist_coord, aes(longitude, latitude, label = name)) +
   geom_point() +
   ggrepel::geom_label_repel() +
@@ -425,7 +555,7 @@ ggplot(eurodist_coord, aes(longitude, latitude, label = name)) +
 
 We fit a collection of SIMs with a wide range of values for both parameters. 
 
-```{r cache=TRUE}
+```{r euro_models, cache=TRUE}
 euro_models <- grid_blvim(eurodist_mat,
   rep(1, 21),
   alphas = seq(1.05, 1.75, length.out = 30),
@@ -446,9 +576,19 @@ euro_models_df <- sim_df(euro_models)
 Most parameter pairs lead to relatively fast convergence, with the exception of
 a few values.
 
-```{r}
+```{r euro_cities_iterations}
 #| fig.width: 6
 #| fig.align: center
+#| fig.alt: >
+#|   A heatmap plot showing the iteration numbers relative to two
+#|   model parameters: alpha (return to scale) on the y-axis (ranging from 1.05
+#|   to 1.75) and one over beta (cost scale) on the x-axis (ranging from
+#|   50 to 750). Iteration numbers are represented by a color gradient, where
+#|   dark purple indicates fast convergence (200 iterations) and bright yellow
+#|   indicates slow convergence high (up to almost 24000). The plot reveals that
+#|   most models are obtained quickly, with a few exceptions associated to low
+#|   values of the return to scale parameter and medium to low values of the cost
+#|   scale.
 autoplot(euro_models_df, iterations) +
   scale_fill_viridis_c()
 ```
@@ -458,9 +598,22 @@ space, which indicates that extending the parameter range will unlikely uncover
 SIMs that differ significantly from those obtained with the chosen range.
 
 
-```{r}
+```{r euro_cities_diversity}
 #| fig.width: 6
 #| fig.align: center
+#| fig.alt: >
+#|   A heatmap plot showing the diversity of incoming flows relative to two
+#|   model parameters: alpha (return to scale) on the y-axis (ranging from 1.05
+#|   to 1.75) and one over beta (cost scale) on the x-axis (ranging from
+#|   50 to 750). Diversity values are represented by a color gradient, where
+#|   dark purple indicates a low diversity (starting at 1) and bright yellow
+#|   indicates maximal diversity (21). The plot shows that a large part of the
+#|   parameter space corresponds to concentrated flows into a single destination
+#|   with a very low diversity (for high values of the cost scale). A reduction
+#|   of the cost scale induces an increase of the diversity, with an additional
+#|   less pronounced increase associated to reducing the return to scale
+#|   parameter. When the cost scale parameter is below approximately 100,
+#|   the diversity is maximal for all values of the return to scale parameter.
 autoplot(euro_models_df, diversity) +
   scale_fill_viridis_c()
 ```
@@ -476,10 +629,18 @@ configurations. Athens and Stockholm are frequently the sole recipients
 of their own flow, probably owing to their isolated positions.
 
 
-```{r}
+```{r euro_cities_variability}
+#| fig.alt: >
+#|   A variability plot matrix for flows between European cities. The central
+#|   destination, Lyon, is represented by a solid vertical column of
+#|   thick-bordered squares, indicating high median flow from all origins.
+#|   Secondary hubs like Brussels and Hook of Holland show smaller clusters of
+#|   flow activity, while most other cities receive little to no incoming flow
+#|   across the models.
 autoplot(euro_models, with_names = TRUE) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
+
 
 Destination flows tell the same story. Notably, most of the cities have a null
 median incoming flow, apart from Athens, Gibraltar, Lyon and Stockholm. In 
@@ -488,12 +649,30 @@ local configurations, that is situations when $\beta$ is large enough to prevent
 any external flows. Only Brussels and Hook of Holland stand out (in addition to 
 the four cities mentioned above). 
 
-```{r}
+```{r euro_cities_dest_var}
+#| fig.alt: >
+#|   A horizontal bar chart displaying flow statistics for 21 European
+#|   destinations. Lyon dominates the chart with a significantly longer bar than
+#|   any other city, reaching a flow value over 20 (and a median over 17).
+#|   Brussels and Hook of Holland show moderate maximum flow levels (approx 7),
+#|   while cities like Athens, Gibraltar and Stockholm show non zero median
+#|   incoming flow. minimal activity. All other cities have a zero median flow
+#|   and a maximal incoming flow of one.
 autoplot(euro_models, flows = "destination", with_names = TRUE) +
   coord_flip()
 ```
 
-```{r}
+```{r euro_cities_dest_var_geo}
+#| fig.alt: >
+#|   A geographic plot of Europe where flow statistics for 21 cities are
+#|   represented by circles of varying sizes and thicknesses. Lyon features the
+#|   largest, thickest circle at approximately 5°E, 45°N, indicating it is the
+#|   primary destination hub. Secondary hubs like Brussels and Hook of Holland
+#|   are marked with medium-sized circles, while most other cities, such as
+#|   Rome and Madrid, appear as small dots. The figure tells essentially the
+#|   same story as the previous one by in a geographic settings. This emphasizes
+#|   the central position of Lyon, as well as the extreme positions of cities
+#|   with non zero median incoming flow (Athens, Gibraltar and Stockholm).
 autoplot(euro_models,
   flows = "destination", with_positions = TRUE,
   with_names = TRUE
@@ -517,15 +696,29 @@ The dendrogram clearly shows three main clusters, but as explained above, the
 role of clustering is to facilitate exploration of the result spaces rather than
 to identify distinct clusters.
 
-```{r}
+```{r euro_cities_dendrogram}
+#| fig.alt: >
+#|   A Cluster Dendrogram for European city models using the ward.D2 method.
+#|   The tree splits into two primary branches at a height of approximately 350.
+#|   The left branch is a dense, large cluster representing highly similar
+#|   models, while the right branch is further subdivided into several smaller,
+#|   more distinct groups at heights between 50 and 150, indicating higher
+#|   variability among those model classes.
 plot(euro_models_hc, hang = -1, labels = FALSE)
 ```
 
 The clusters are well organised on the parameter set. 
 
-```{r}
+```{r euro_cities_df_cluster}
 #| fig.width: 8
 #| fig.align: center
+#| fig.alt: >
+#|   A heatmap showing the distribution of 16 clusters across a parameter space
+#|   defined by alpha (y-axis) and 1/beta (x-axis) for European city models.
+#|   The clusters are organized in distinct vertical and diagonal bands.
+#|   Cluster 15 (pink) dominates the right side of the space where 1/beta is
+#|   high (above 600), while clusters 1 through 7 occupy the left side of the
+#|   plot where 1/beta is low (below 300).
 euro_models_df$cluster <- as.factor(cutree(euro_models_hc, k = 16))
 autoplot(euro_models_df, cluster) +
   theme(legend.position = "bottom") +
@@ -537,10 +730,17 @@ ring. This means that the clusters are relatively homogeneous in terms
 of destination flows, and thus median flows will give a good idea of
 typical behaviours.
 
-```{r}
+```{r euro_cities_cluster_var_geo}
 #| fig.height: 6
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 panel showing spatial flow circles for each of the 16 clusters on a
+#|   map of Europe. In clusters 13-15, a single large circle at Lyon dominates
+#|   the map. Clusters 1-4 show many small, uniform circles across all 21 city
+#|   locations. Clusters 5-12 show a mix of hubs, with larger circles appearing
+#|   at different locations like Brussels and Hook of Holland (clusters 4 and
+#|   6).
 grid_var_autoplot(euro_models_df, cluster,
   flows = "destination",
   with_positions = TRUE
@@ -570,10 +770,17 @@ and at the flow level (below):
   - Clusters 13 to 15 show Lyon as the dominating city, while in cluster
     16, Lyon shares its incoming flow with Hook of Holland.
 
-```{r}
+```{r euro_cities_cluster_var_flow}
 #| fig.height: 8
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 panel of 16 matrix plots showing flow variability for each cluster of
+#|   European city models. Clusters 13-15 exhibit high central dominance with a
+#|   single thick vertical line at the Lyon destination. Clusters 1-4 show
+#|   stronger activity along the diagonal, representing internal city flows,
+#|   while clusters 5-12 and 16 show diverse patterns with multiple vertical hub lines
+#|   at cities like Brussels and Hook of Holland.
 grid_var_autoplot(euro_models_df, cluster)
 ```
 
@@ -591,19 +798,30 @@ euro_models_centre_df <- sim_df(euro_models_centre)
 
 The medoids confirm the analysis given above. 
 
-```{r}
+```{r euro_cities_cluster_medoid_flow}
 #| fig.height: 8
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   4-by-4 faceted grid of flow matrices, one per cluster medoid. Each heatmap
+#|   shows origin nodes on the y-axis and destination nodes on the x-axis. From
+#|   the top-left facet to the bottom-right, the flows transition from a
+#|   diagonal distribution (local/internal flows) to sharp vertical lines,
+#|   indicating that all origins are sending their flows to a few dominant
+#|   destination 'hubs'. This is consistent with previous analyses.
 grid_autoplot(euro_models_centre_df) +
   scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
 ```
 
-```{r}
+```{r euro_cities_cluster_medoid_inflow_pos}
 #| fig.height: 6
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   4-by-4 faceted grid of destination flows geographical representation, one
+#|   per cluster medoid. The representation is very similar to the variability
+#|   plots of the clusters confirming previous analyses.
 grid_autoplot(euro_models_centre_df,
   flows = "destination",
   with_positions = TRUE
@@ -612,10 +830,19 @@ grid_autoplot(euro_models_centre_df,
   coord_sf(crs = "epsg:4326")
 ```
 
-```{r}
+```{r euro_cities_cluster_medoid_flow_geo}
 #| fig.height: 6
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 grid of 16 dot and arrow representations showing the flows of the
+#|   medoid of each cluster. The plots complement the previous analyses by
+#|   emphasizing the exchange patterns. There are two main regimes. Clusters 1
+#|   to 12, and 16, corresponds approximately to a dual regime with exchanges
+#|   in the north of Europe and exchanges in the south of Europe, both parts
+#|   being dominated by a central city (that changes from cluster to cluster).
+#|   Clusters 13 to 15 display the other regime in which Lyon dominates and
+#|   receive all the circulating flow.
 grid_autoplot(euro_models_centre_df,
   with_positions = TRUE, arrow = arrow(length = unit(0.015, "npc"))
 ) +
@@ -625,7 +852,14 @@ grid_autoplot(euro_models_centre_df,
 
 To further the analysis, one can focus on a particular medoid, for instance
 cluster 1:
-```{r}
+```{r euro_cities_cluster_one_medoid}
+#| fig.alt: >
+#|   A detailed spatial network plot showing directed flows. Thick black arrows
+#|   indicate high-volume flows between central nodes, while thin, light-grey
+#|   lines represent minor flows. The network is organized into two distinct
+#|   clusters of activity in the upper and lower central regions. Flow values
+#|   are small, as most of the global flow is self-directed and not shown on
+#|   the figure.
 autoplot(euro_models_centre[[1]],
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.015, "npc"))
@@ -635,7 +869,13 @@ autoplot(euro_models_centre[[1]],
 ```
 
 Or cluster 5:
-```{r}
+```{r euro_cities_cluster_five_medoid}
+#| fig.alt: >
+#|   A high-intensity spatial network plot. Thick black lines dominate the
+#|   center of the map, forming a dense web of high-volume flows between a
+#|   small number of attractive destinations, while peripheral nodes are
+#|   connected by only very thin, faint lines. This illustrate a typical case
+#|   of north and south exchanges.
 autoplot(euro_models_centre[[5]],
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.015, "npc"))
@@ -649,12 +889,17 @@ Finally, one can randomly select a subset of the models in a cluster and use
 visually assess the variability within that cluster. For instance, in the figure
 below for cluster 4, most of the models are very similar, but some differences
 exist, such as the flows to Hamburg and Copenhagen, whose level varies across
-the configurations (compare 6 to 7, for instance).
+the configurations (compare 6 to 7, for instance). 
 
-```{r}
+```{r euro_cities_cluster_four_content}
 #| fig.height: 6
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A faceted grid of network flow maps. Unlike the previous exploration, this
+#|   grid shows high stability across all 16 facets. In every panel, the flow
+#|   arrows are nearly identical, converging on two main central hubs,
+#|   illustrating that the cluster is largely homogeneous.
 set.seed(0)
 euro_models_idx <- sample(which(euro_models_df$cluster == 4), 16)
 euro_models_cl4_sample <- euro_models[euro_models_idx]
@@ -672,7 +917,14 @@ cities (in terms of population) to the smallest ones. As shown below, the
 distribution of the smallest cities is not all uniform as they cluster around
 large ones, especially around Paris.
 
-```{r}
+```{r french_cities}
+#| fig.alt: >
+#|   A geographic map of the 40 cities selected. The 20 largests cities are
+#|   origin locations and spreaded somewhat evenly in France, excepted for
+#|   a large empty region in the middle of France. The 20 smallests cities
+#|   are destination locations. Half of them are clustered around Paris. Nine
+#|   of the remaining ones are located south of Paris, generally in the vicinity
+#|   of a large city.
 big_cities <- french_cities[1:20, ]
 small_cities <- french_cities[102:121, ]
 fr_cities <- rbind(big_cities, small_cities)
@@ -744,24 +996,56 @@ will send all of its production to its nearest neighbours. Here this leads to a
 maximum diversity of `r round(max(fr_models_df$diversity), 2)` while in a
 non-bipartite case, we would expect a maximum around 20 (for 20 cities).
 
-```{r}
+```{r french_cities_log_pop_diversity}
+#| fig.alt: >
+#|   A heatmap plot showing the diversity of incoming flows relative to two
+#|   model parameters: alpha (return to scale) on the y-axis (ranging from 1.05
+#|   to 1.75) and one over beta (cost scale) on the x-axis (ranging from
+#|   5 to 200). Diversity values are represented by a color gradient, where
+#|   dark purple indicates a low diversity (starting at 1) and bright yellow
+#|   indicates maximal diversity (around 8.5). The plot shows a similar pattern
+#|   as previous similar figures: decreasing the cost scale or the return to
+#|   scale both increase the diversity, with more cities receiving some flow.
+#|   However, the diversities themselves are significantly smaller than in the
+#|   non bipartite case.
 autoplot(fr_models_df) +
-  labs(title = "Log population")
+  labs(title = "Log population") +
+  scale_fill_viridis_c()
 ```
 
 
 With the `log` transform, small cities around Paris do not receive much flow,
 apart for Saint-Ouen-Sur-Seine, Fontenay-sous-Bois and Sartrouville. Notice the
-absence of diagonal patterns. 
+absence of diagonal patterns. Vaulx-en-Velin receives flows from all origin 
+locations owing to its relatively central position in France. However, its 
+incoming flow is much more variable than in non bipartite settings with a 
+central location. 
 
-```{r}
+```{r french_cities_log_pop_flow_vars}
+#| fig.alt: >
+#|   A variability plot matrix for flows from large cities (y-axis) to small
+#|   cities (y-axis). One of the main differences with the non-bipartite case
+#|   is the absence of a dominant diagonal. Only Vaulx-en-Velin has an active
+#|   column of squares showing that it receives a significant median incoming
+#|   flows from all original locations. The matrix shows also large empty zones
+#|   corresponding to cities that never receive any significant flows, for
+#|   instance Vannes, Bondy and Gennevilliers.
 autoplot(fr_models, with_names = TRUE) +
   theme_light() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   labs(title = "Log population")
 ```
 
-```{r}
+The geographic representation emphasizes the fact that the bipartite case 
+induces a form of local selection rather than a global one. Indeed all the
+destination "regions" are represented, but in each local zone, only some cities
+receive a significant incoming flow. 
+
+```{r french_cities_log_pop_dest_vars_geo}
+#| fig.alt: >
+#|   A geographic plot of France where flow statistics for the 20 destination
+#|   cities are represented by circles of varying sizes and thicknesses. The
+#|   cities receiving flows are spreaded over the set of destination cities.
 autoplot(fr_models,
   flows = "destination", with_names = TRUE,
   with_positions = TRUE
@@ -792,26 +1076,78 @@ We observe a trend of smaller diversities with a maximum of
 producer tends to limit the emergence of multiple receivers and to concentrate
 the flows on a smaller number of cities. 
 
-```{r}
+```{r french_cities_direct_pop_diversity}
+#| fig.alt: >
+#|   A heatmap plot showing the diversity of incoming flows relative to the
+#|   model parameters. The shape of the regions of equal diversity are quite
+#|   similar to the ones displayed in the previous representation, but with
+#|   smaller values. There is also a larger region with a fixed diversity around
+#|   2.
 autoplot(fr_models_direct_df) +
-  labs(title = "Population")
+  labs(title = "Population") +
+  scale_fill_viridis_c()
 ```
 
 In this case the flow from Paris becomes dominant and more small cities around
-Paris receive flow, with a limited effect on other cities, as the flows are
-mostly local. This is revealed in the graphical representation thanks to the
-origin based normalisation.
+Paris receive flow. This makes Vaulx-en-Vellin less attractive to the benefit
+of Saint-Ouen-sur-Seine and Arles. Globally, less cities are receiving flows. 
+This is revealed in the graphical  representation thanks to the origin based 
+normalisation.
 
-```{r}
+```{r french_cities_pop_flow_vars_norm}
+#| fig.alt: >
+#|   A variability plot matrix for flows from large cities (y-axis) to small
+#|   cities (y-axis). Compared to the log population representation, it shows
+#|   more empty columns as well as more spreaded flows. On particular, the
+#|   full column of squares associated to Vaulx-en-Velin has been replaced by
+#|   a more empty one, with large cities sending next to no flow to
+#|   Vaulx-en-Velin (for instance Paris, Nantes, Lille, etc.). On the contrary
+#|   Saint-Ouen-sur-Seine and Arles, show more full squares has they receive
+#|   flow from more large cities.
 autoplot(fr_models_direct, with_names = TRUE, normalisation = "origin") +
   theme_light() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   labs(title = "Population")
 ```
 
-The geographical representation shows the emergence of these smaller cities.
+This can also be seen on the destination flow variability plots, especially by
+comparing both graphical representations. 
 
-```{r}
+```{r french_cities_log_pop_bar_dest}
+#| fig.alt: >
+#|   A horizontal bar chart displaying flow statistics for the 20 small French
+#|   cities. Vaulx-en-Velin dominates with a very long bar showing a median
+#|   incoming flow larger than the maximum flow of all cites excepted Arles.
+#|   Only 4 cities out of 20 have a non zero median incoming flow (Saint-Herblain,
+#|   Arles, Vaulx-en-Velin and Saint-Quentin). 9 cities have a zero maximum
+#|   incoming flow.
+autoplot(fr_models, with_names = TRUE, flow = "destination") +
+  labs(title = "Log population") +
+  coord_flip()
+```
+```{r french_cities_pop_bar_dest}
+#| fig.alt: >
+#|   A horizontal bar chart displaying flow statistics for the 20 small French
+#|   cities. Saint-Ouen-sur-Seine dominates with a very long bar showing a median
+#|   incoming flow larger than the maximal incoming flow of all other cities.
+#|   Only 4 cities have a non zero median incoming flow: Saint-Herblain, Arles
+#|   Vaulx-en-Velin and Saint-Ouen-sur-Seine. 12 cities have a zero maximal
+#|   incoming flow.
+autoplot(fr_models_direct, with_names = TRUE, flow = "destination") +
+  labs(title = "Population") +
+  coord_flip()
+```
+
+Finally, the geographical representation shows the emergence of these smaller cities.
+
+```{r french_cities_pop_geo_var}
+#| fig.alt: >
+#|   A geographic plot of France where flow statistics for the 20 destination
+#|   cities are represented by circles of varying sizes and thicknesses. The
+#|   cities receiving flows are spreaded over the set of destination cities.
+#|   Compared to the log population case, the figure displays more active cities
+#|   around Paris, a reduced influence of Vaulx-en-Velin and an increased
+#|   influence of Arles.
 options("ggrepel.max.overlaps" = 20)
 autoplot(fr_models_direct,
   flows = "destination", with_names = TRUE,
@@ -823,11 +1159,19 @@ autoplot(fr_models_direct,
 
 By default, the flows are not normalised in the variability plot,
 and the global normalisation emphasises Paris' dominance and its preferred
-destination, Saint-Ouen-Sur-Seine, more strongly. This representation shows
+destination, Saint-Ouen-sur-Seine, more strongly. This representation shows
 similar patterns for Marseille with Arles and to a lesser extent for Lyon with
 Vaulx-en-Velin, and Toulouse with Arles and Albi.
 
-```{r}
+```{r french_cities_pop_flow_vars}
+#| fig.alt: >
+#|   A variability plot matrix for flows from large cities (y-axis) to small
+#|   cities (y-axis). Compared to the normalised representation, it shows far
+#|   less big squares as the global flow is dominated by Paris, followed by
+#|   Marseille, Lyon and Toulouse. This manifests by the presence of a lot of
+#|   small squares together with largee on between Paris and Saint-Ouen-sur-Seine.
+#|   There is also a relatively large square between Marseille and Arles, as
+#|   well as medium ones between Lyon and Vaulx-en-Velin, and Toulouse and Arles.
 autoplot(fr_models_direct, with_names = TRUE, normalisation = "full") +
   theme_light() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
@@ -838,19 +1182,31 @@ autoplot(fr_models_direct, with_names = TRUE, normalisation = "full") +
 
 To investigate the differences between production constraints in more detail, we
 can cluster the results. As shown by the dendrograms and the cluster maps, the
-results are significantly influenced by the production constraints.
+results are significantly influenced by the production constraints. As in the
+previous analyses, we use 16 clusters in a quite arbitrary way. 
 
 ```{r}
 fr_models_dist <- sim_distance(fr_models, "destination")
 fr_models_hc <- hclust(fr_models_dist, method = "ward.D2")
 ```
 
-```{r}
+```{r french_cities_log_pop_dendro}
+#| fig.alt: >
+#|   A Cluster Dendrogram for French city models using the ward.D2 method. The
+#|   tree shows clear gaps in quality between 2, 3, 4 and 5 cluster solutions.
+#|   The fifth cluster in this last case has a more complex structure than the
+#|   other clusters, with a potential for being split into at least 3
+#|   sub-clusters.
 plot(fr_models_hc, hang = -1, labels = FALSE)
 ```
-```{r}
+```{r french_cities_log_pop_cluster}
 #| fig.width: 8
 #| fig.align: center
+#| fig.alt: >
+#|   A heatmap showing the distribution of 16 clusters across a parameter space
+#|   defined by alpha (y-axis) and 1/beta (x-axis) for European city models.
+#|   The distribution is relatively complex (but spatially organised), showing
+#|   that the chosen number of clusters is probably too high.
 fr_models_df$cluster <- as.factor(cutree(fr_models_hc, k = 16))
 autoplot(fr_models_df, cluster) +
   theme(legend.position = "bottom") +
@@ -863,33 +1219,59 @@ fr_models_direct_dist <- sim_distance(fr_models_direct, "destination")
 fr_models_direct_hc <- hclust(fr_models_direct_dist, method = "ward.D2")
 ```
 
-```{r}
+```{r french_cities_pop_dendro}
+#| fig.alt: >
+#|   A Cluster Dendrogram for French city models using the ward.D2 method. The
+#|   tree is very different from the one obtained for the log population model.
+#|   It shows two well balanced clusters. The left cluster can be split in a
+#|   clear into 3 sub-clusters, while the right cluster has a clear sub-structure
+#|   made of 2 sub-clusters that appear quite homogeneous.
 plot(fr_models_direct_hc, hang = -1, labels = FALSE)
 ```
 
-```{r}
+```{r french_cities_pop_cluster}
 #| fig.width: 8
 #| fig.align: center
+#| fig.alt: >
+#|   A heatmap showing the distribution of 16 clusters across a parameter space
+#|   defined by alpha (y-axis) and 1/beta (x-axis) for European city models.
+#|   The distribution is relatively complex (but spatially organised), showing
+#|   that the chosen number of clusters is probably too high. Compared to the
+#|   log population case, the clusters tend to be here more vertical, i.e. to
+#|   correspond to bands of cost scale values spreaded over the full range of
+#|   return to scale parameter. This may indicate that distances play here a
+#|   stronger role than return to scale effects in shaping the flows.
 fr_models_direct_df$cluster <- as.factor(cutree(fr_models_direct_hc, k = 16))
 autoplot(fr_models_direct_df, cluster) +
   theme(legend.position = "bottom") +
   guides(fill = guide_legend(nrow = 2)) +
   labs(title = "Population")
 ```
-The per-cluster variability plots are very informative. They show very limited
-variability within each cluster and display different configurations. Contrast
-for instance cluster 13 for the log population model with cluster 16 for the
-direct population model. With the log population model, there are configurations
-with a single dominating site, cluster 13 (this aligns with the minimal value of
-the diversity which is `r min(fr_models_df$diversity)`). On the contrary, the
-direct population model does not lead to such as situation, we always have at
-least two important sites, as in cluster 16 (again, this aligns with the minimal
-value of the diversity, `r round(min(fr_models_direct_df$diversity), 2)`).
 
-```{r}
+The per-cluster variability plots are very informative. They show very limited
+variability within each cluster (as expected) and display different
+configurations. Contrast for instance cluster 13 for the log population model
+with cluster 16 for the direct population model. With the log population model,
+there are configurations with a single dominating site, cluster 13 (this aligns
+with the minimal value of the diversity which is `r
+min(fr_models_df$diversity)`). On the contrary, the direct population model does
+not lead to such as situation, we always have at least two important sites, as
+in cluster 16 (again, this aligns with the minimal value of the diversity, `r
+round(min(fr_models_direct_df$diversity), 2)`).
+
+```{r french_cities_log_pop_cluster_var_geo}
 #| fig.height: 6
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 panel showing spatial flow circles for each of the 16 clusters of
+#|   small french cities. Most of the circles have not inner or outer circles,
+#|   showing a very strong homogeneity of the clusters. The flow distributions
+#|   are varied from a single dominating destination in cluster 13 to 10 active
+#|   cites in cluster 1. The reduction in the number of active cities consist
+#|   first in removing reducing local redundancy (two close cities are replaced
+#|   by a single one) and then reducing the flow to cities on the border of the
+#|   map.
 grid_var_autoplot(fr_models_df, cluster,
   flows = "destination",
   with_positions = TRUE
@@ -900,10 +1282,19 @@ grid_var_autoplot(fr_models_df, cluster,
 ```
 
 
-```{r}
+```{r french_cities_pop_cluster_var_geo}
 #| fig.height: 6
 #| fig.width: 8.5
 #| fig.align: center
+#| fig.alt: >
+#|   A 4x4 panel showing spatial flow circles for each of the 16 clusters of
+#|   small french cities. Most of the circles have not inner or outer circles,
+#|   showing a very strong homogeneity of the clusters. The flow distributions
+#|   vary from a concentration on two cities (cluster 16) to situations with up
+#|   to 12 active cities. A striking difference with the log population model
+#|   is the presence of a collection of active cities near Paris despite the
+#|   constant local (and global) domination of Saint-Ouen-sur-Seine whose
+#|   circle is always the largest.
 grid_var_autoplot(fr_models_direct_df, cluster,
   flows = "destination",
   with_positions = TRUE
