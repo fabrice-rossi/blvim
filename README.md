@@ -70,11 +70,19 @@ distance between the cities (in meters).
 ## 30 largest cities
 origins <- french_cities[1:30, c("th_longitude", "th_latitude")]
 ## 20 smallest cities
-destinations <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), c("th_longitude", "th_latitude")]
+destinations <- french_cities[
+  (nrow(french_cities) - 19):nrow(french_cities),
+  c("th_longitude", "th_latitude")
+]
 ## cost matrix
-cost_matrix <- french_cities_distances[1:30, (nrow(french_cities) - 19):nrow(french_cities)]
+cost_matrix <-
+  french_cities_distances[
+    1:30,
+    (nrow(french_cities) - 19):nrow(french_cities)
+  ]
 rownames(cost_matrix) <- french_cities[1:30, "name"]
-colnames(cost_matrix) <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), "name"]
+colnames(cost_matrix) <-
+  french_cities[(nrow(french_cities) - 19):nrow(french_cities), "name"]
 ```
 
 Additionally, since we focus on **production-constrained models**, we
@@ -147,7 +155,7 @@ image(t(a_model_flows)[, 30:1],
 )
 ```
 
-<img src="man/figures/README-a_flow-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_flow-1.png" alt="A matrix representation of the flows. It shows no particular structure in the flow apart from a dominating flow from Nice to Cagnes-sur-Mer." width="50%" style="display: block; margin: auto;" />
 
 In this representation, each row shows the flows from one origin
 location to all destination locations. The package also provides a
@@ -160,7 +168,7 @@ autoplot(a_model, "full") +
   coord_fixed()
 ```
 
-<img src="man/figures/README-a_flow_ggplot2-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_flow_ggplot2-1.png" alt="A matrix representation of the flows. The color scheme is more contrasted than in the previous figure, but does not show much more strucutre. The dominating flow is Nice to Cagnes-sur-Mer, but the figure shows that there are additional important flows." width="80%" style="display: block; margin: auto;" />
 
 ``` r
 b_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 100000, Z)
@@ -177,7 +185,7 @@ autoplot(b_model) +
   coord_fixed()
 ```
 
-<img src="man/figures/README-b_flow-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_flow-1.png" alt="A matrix representation of the flows. The flows are much more concentrated than with the previous choice of parameters. Many destination locations do not receive any flow. Most of the flow goes to Vaulx-en-Vellin, Arles, Albi and Cagnes-sur-mer." width="80%" style="display: block; margin: auto;" />
 
 As the two figures above exemplify, different values of the parameters
 $`\alpha`$ and $`\beta`$ result in more or less concentrated flows.
@@ -219,7 +227,7 @@ a_final_Z <- attractiveness(a_blv_model)
 barplot(a_final_Z)
 ```
 
-<img src="man/figures/README-a_blv_Z-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_blv_Z-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Only one bar is visible: Vaulx-en-Vellin dominates the destination locations." width="80%" style="display: block; margin: auto;" />
 In this particular example, one destination location acts as a global
 attractor of all the flows. This pattern is also visible in the final
 flow matrix.
@@ -229,7 +237,7 @@ autoplot(a_blv_model) +
   scale_fill_gradient(low = "white", high = "black")
 ```
 
-<img src="man/figures/README-a_blv_flow-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_blv_flow-1.png" alt="A matrix representation of the flows. The matrix has only one black column, showing that all the flow goes to Vaulx-en-Vellin." width="80%" style="display: block; margin: auto;" />
 
 The `autoplot()` function can also be used to show the destination flows
 or the attractivenesses values:
@@ -239,7 +247,7 @@ autoplot(a_blv_model, "attractiveness", with_names = TRUE) +
   coord_flip()
 ```
 
-<img src="man/figures/README-a_blv_Z_ggplot2-1.png" width="100%" />
+<img src="man/figures/README-a_blv_Z_ggplot2-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Only one bar is visible: Vaulx-en-Vellin dominates the destination locations." width="100%" />
 
 Naturally, the results are strongly influenced by the parameters, as
 shown in this second example.
@@ -259,7 +267,7 @@ autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
   coord_flip()
 ```
 
-<img src="man/figures/README-b_blv_Z-1.png" width="100%" />
+<img src="man/figures/README-b_blv_Z-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Nine out of the twenty destination locations remain attractive. Vaulx-en-Vellin is still the most attractive location, but Cholet and Arles are quite attractive also. They are closely followed by Saint-Ouen-sur-Seine and Saint-Quentin. Then the graph shows a set of four remaining attractive destinations but with small values (between 0.5 and 1.5, compared to 4 or more for the other locations). The cities are Albi, Cagnes-sur-Mer, Vannes and Bayonne." width="100%" />
 
 ``` r
 autoplot(b_blv_model, with_names = TRUE) +
@@ -267,7 +275,7 @@ autoplot(b_blv_model, with_names = TRUE) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
-<img src="man/figures/README-b_blv_flow-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_blv_flow-1.png" alt="A matrix representation of the flows. The figure shows essentially the same things as the previous bar plot. In most of the cases, the flow outgoing from a origin location goes to a unique destination location. The main exception is the pair Saint-Ouen-sur-Seine and Saint-Quentin who share incoming flows." width="80%" style="display: block; margin: auto;" />
 
 `bvlim` offers a collection of graphical representations that can
 leverage the data associated to the origin and destination locations.
@@ -295,4 +303,4 @@ autoplot(b_blv_model,
   )
 ```
 
-<img src="man/figures/README-b_blv_france-1.png" width="100%" />
+<img src="man/figures/README-b_blv_france-1.png" alt="A geographical representation of the flows with dots showing the locations and arrows between them representation the flows. The figure tells the same story of the previous ones. It shows in particular star patterns with a central destination location that receives flows for all the surrounding origin locations. The figure confirms that flows are organised in a geographical way as most of the flow goes from one origin to its closests destination. However, the figure shows also destination locations that do not receive any flow, emphasizing the concentration effects associated to the return to scale parameter." width="100%" />

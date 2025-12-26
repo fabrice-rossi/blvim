@@ -76,11 +76,19 @@ as destination locations. The cost matrix is the distance between the cities
 ## 30 largest cities
 origins <- french_cities[1:30, c("th_longitude", "th_latitude")]
 ## 20 smallest cities
-destinations <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), c("th_longitude", "th_latitude")]
+destinations <- french_cities[
+  (nrow(french_cities) - 19):nrow(french_cities),
+  c("th_longitude", "th_latitude")
+]
 ## cost matrix
-cost_matrix <- french_cities_distances[1:30, (nrow(french_cities) - 19):nrow(french_cities)]
+cost_matrix <-
+  french_cities_distances[
+    1:30,
+    (nrow(french_cities) - 19):nrow(french_cities)
+  ]
 rownames(cost_matrix) <- french_cities[1:30, "name"]
-colnames(cost_matrix) <- french_cities[(nrow(french_cities) - 19):nrow(french_cities), "name"]
+colnames(cost_matrix) <-
+  french_cities[(nrow(french_cities) - 19):nrow(french_cities), "name"]
 ```
 
 Additionally, since we focus on **production-constrained models**, we must 
@@ -135,6 +143,9 @@ which can be displayed using, for instance, the `image()` function.
 #| fig.width: 6.5
 #| out.width: 50%
 #| fig.align: center
+#| fig.alt: >
+#|   A matrix representation of the flows. It shows no particular structure
+#|   in the flow apart from a dominating flow from Nice to Cagnes-sur-Mer.
 par(mar = rep(0.1, 4))
 image(t(a_model_flows)[, 30:1],
   col = gray.colors(20, start = 1, end = 0),
@@ -152,6 +163,11 @@ function, which can be used as follows:
 #| fig.width: 8
 #| out.width: 80%
 #| fig.align: center
+#| fig.alt: >
+#|   A matrix representation of the flows. The color scheme is more contrasted
+#|   than in the previous figure, but does not show much more strucutre. The
+#|   dominating flow is Nice to Cagnes-sur-Mer, but the figure shows that there
+#|   are additional important flows.
 library(ggplot2)
 autoplot(a_model, "full") +
   scale_fill_gradient(low = "white", high = "black") +
@@ -170,6 +186,11 @@ b_model
 #| fig.width: 8
 #| out.width: 80%
 #| fig.align: center
+#| fig.alt: >
+#|   A matrix representation of the flows. The flows are much more concentrated
+#|   than with the previous choice of parameters. Many destination locations
+#|   do not receive any flow. Most of the flow goes to Vaulx-en-Vellin, Arles,
+#|   Albi and Cagnes-sur-mer.
 autoplot(b_model) +
   scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
@@ -209,6 +230,10 @@ final values are different. These final values can be obtained using the
 #| fig.width: 8
 #| out.width: 80%
 #| fig.align: center
+#| fig.alt: >
+#|   A bar plot representation of the attractivenesses of the destination
+#|   locations. Only one bar is visible: Vaulx-en-Vellin dominates the
+#|   destination locations.
 par(mar = c(0.1, 4, 1, 0))
 a_final_Z <- attractiveness(a_blv_model)
 barplot(a_final_Z)
@@ -221,6 +246,9 @@ of all the flows. This pattern is also visible in the final flow matrix.
 #| fig.width: 8
 #| out.width: 80%
 #| fig.align: center
+#| fig.alt: >
+#|   A matrix representation of the flows. The matrix has only one black column,
+#|   showing that all the flow goes to Vaulx-en-Vellin.
 autoplot(a_blv_model) +
   scale_fill_gradient(low = "white", high = "black")
 ```
@@ -230,6 +258,10 @@ attractivenesses values:
 ```{r a_blv_Z_ggplot2}
 #| fig.height: 4
 #| fig.width: 8
+#| fig.alt: >
+#|   A bar plot representation of the attractivenesses of the destination
+#|   locations. Only one bar is visible: Vaulx-en-Vellin dominates the
+#|   destination locations.
 autoplot(a_blv_model, "attractiveness", with_names = TRUE) +
   coord_flip()
 ```
@@ -245,6 +277,15 @@ b_blv_model
 ```{r b_blv_Z}
 #| fig.height: 4
 #| fig.width: 8
+#| fig.alt: >
+#|   A bar plot representation of the attractivenesses of the destination
+#|   locations. Nine out of the twenty destination locations remain
+#|   attractive. Vaulx-en-Vellin is still the most attractive location, but
+#|   Cholet and Arles are quite attractive also. They are closely followed
+#|   by Saint-Ouen-sur-Seine and Saint-Quentin. Then the graph shows a set
+#|   of four remaining attractive destinations but with small values (between
+#|   0.5 and 1.5, compared to 4 or more for the other locations). The cities
+#|   are Albi, Cagnes-sur-Mer, Vannes and Bayonne.
 autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
   coord_flip()
 ```
@@ -254,6 +295,12 @@ autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
 #| fig.width: 8
 #| out.width: 80%
 #| fig.align: center
+#| fig.alt: >
+#|   A matrix representation of the flows. The figure shows essentially the
+#|   same things as the previous bar plot. In most of the cases, the flow
+#|   outgoing from a origin location goes to a unique destination location. The
+#|   main exception is the pair Saint-Ouen-sur-Seine and Saint-Quentin who
+#|   share incoming flows.
 autoplot(b_blv_model, with_names = TRUE) +
   scale_fill_gradient(low = "white", high = "black") +
   theme(axis.text.x = element_text(angle = 90))
@@ -266,6 +313,16 @@ we can display the full flows using geographical coordinates of the cities.
 ```{r b_blv_france}
 #| fig.height: 8
 #| fig.width: 10
+#| fig.alt: >
+#|   A geographical representation of the flows with dots showing the locations
+#|   and arrows between them representation the flows. The figure tells the
+#|   same story of the previous ones. It shows in particular star patterns with
+#|   a central destination location that receives flows for all the surrounding
+#|   origin locations. The figure confirms that flows are organised in a
+#|   geographical way as most of the flow goes from one origin to its closests
+#|   destination. However, the figure shows also destination locations that
+#|   do not receive any flow, emphasizing the concentration effects associated
+#|   to the return to scale parameter.
 origin_positions(b_blv_model) <- as.matrix(origins)
 destination_positions(b_blv_model) <- as.matrix(destinations)
 autoplot(b_blv_model,
