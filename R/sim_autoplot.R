@@ -45,6 +45,131 @@ is {.val {FALSE}}",
   }
 }
 
+sim_autoplot_flow_pos <- function(sim, sim_data, segment_parameters, adjust_limits) {
+  if (!sim_is_bipartite(sim)) {
+    ## we remove zero length segments
+    sim_data <- sim_data[sim_data$x != sim_data$xend |
+      sim_data$y != sim_data$yend, ]
+  }
+  if (!rlang::has_name(segment_parameters, "arrow")) {
+    segment_parameters$arrow <-
+      ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
+  }
+  if (!rlang::has_name(segment_parameters, "lineend")) {
+    segment_parameters$lineend <- "round"
+  }
+  if (!rlang::has_name(segment_parameters, "linejoin")) {
+    segment_parameters$linejoin <- "round"
+  }
+  pre <- ggplot2::ggplot(
+    sim_data,
+    ggplot2::aes(
+      x = .data[["x"]],
+      xend = .data[["xend"]],
+      y = .data[["y"]],
+      yend = .data[["yend"]],
+      linewidth = .data[["flow"]]
+    )
+  ) +
+    do.call(ggplot2::geom_segment, segment_parameters)
+  if (!adjust_limits) {
+    positions <- location_positions(sim)
+    pre <- pre + ggplot2::lims(
+      x = range(
+        positions[["destination"]][, 1],
+        positions[["origin"]][, 1]
+      ),
+      y = range(
+        positions[["destination"]][, 2],
+        positions[["origin"]][, 2]
+      )
+    )
+  }
+  pre
+}
+
+sim_autoplot_destination_pos <- function(sim, sim_data, flows,
+                                         with_names, adjust_limits,
+                                         with_labels) {
+  sim_data_pos_names <- names(sim_data)
+  pre <- ggplot2::ggplot(
+    sim_data,
+    ggplot2::aes(
+      x = .data[[sim_data_pos_names[1]]],
+      y = .data[[sim_data_pos_names[2]]],
+      size = .data[[flows]]
+    )
+  ) +
+    ggplot2::geom_point()
+  positions <- location_positions(sim)
+  xrange <- range(positions[["destination"]][, 1])
+  yrange <- range(positions[["destination"]][, 2])
+  if (with_names) {
+    if (has_ggrepel()) {
+      if (with_labels) {
+        pre <- pre +
+          ggrepel::geom_label_repel(
+            mapping = ggplot2::aes(
+              x = .data[[sim_data_pos_names[1]]],
+              y = .data[[sim_data_pos_names[2]]],
+              label = .data[["name"]]
+            ),
+            inherit.aes = FALSE,
+            show.legend = FALSE
+          )
+      } else {
+        pre <- pre +
+          ggrepel::geom_text_repel(
+            mapping = ggplot2::aes(
+              x = .data[[sim_data_pos_names[1]]],
+              y = .data[[sim_data_pos_names[2]]],
+              label = .data[["name"]]
+            ),
+            inherit.aes = FALSE,
+            show.legend = FALSE
+          )
+      }
+    } else {
+      xnudge <- diff(xrange) / 25
+      ynudge <- diff(yrange) / 25
+      if (with_labels) {
+        pre <- pre +
+          ggplot2::geom_label(
+            mapping = ggplot2::aes(
+              x = .data[[sim_data_pos_names[1]]],
+              y = .data[[sim_data_pos_names[2]]],
+              label = .data[["name"]]
+            ),
+            inherit.aes = FALSE,
+            show.legend = FALSE,
+            position = ggplot2::position_nudge(x = xnudge, y = ynudge)
+          )
+      } else {
+        pre <- pre +
+          ggplot2::geom_text(
+            mapping = ggplot2::aes(
+              x = .data[[sim_data_pos_names[1]]],
+              y = .data[[sim_data_pos_names[2]]],
+              label = .data[["name"]]
+            ),
+            inherit.aes = FALSE,
+            show.legend = FALSE,
+            position = ggplot2::position_nudge(x = xnudge, y = ynudge)
+          )
+      }
+      xrange[2] <- xrange[2] + xnudge
+      yrange[2] <- yrange[2] + ynudge
+    }
+  }
+  if (!adjust_limits) {
+    pre <- pre + ggplot2::lims(
+      x = xrange,
+      y = yrange
+    )
+  }
+  pre
+}
+
 sim_autoplot <- function(sim, sim_data,
                          flows,
                          with_names,
@@ -54,125 +179,12 @@ sim_autoplot <- function(sim, sim_data,
                          ...) {
   if (with_positions) {
     if (flows == "destination" || flows == "attractiveness") {
-      sim_data_pos_names <- names(sim_data)
-      pre <- ggplot2::ggplot(
-        sim_data,
-        ggplot2::aes(
-          x = .data[[sim_data_pos_names[1]]],
-          y = .data[[sim_data_pos_names[2]]],
-          size = .data[[flows]]
-        )
-      ) +
-        ggplot2::geom_point()
-      positions <- location_positions(sim)
-      xrange <- range(positions[["destination"]][, 1])
-      yrange <- range(positions[["destination"]][, 2])
-      if (with_names) {
-        if (has_ggrepel()) {
-          if (with_labels) {
-            pre <- pre +
-              ggrepel::geom_label_repel(
-                mapping = ggplot2::aes(
-                  x = .data[[sim_data_pos_names[1]]],
-                  y = .data[[sim_data_pos_names[2]]],
-                  label = .data[["name"]]
-                ),
-                inherit.aes = FALSE,
-                show.legend = FALSE
-              )
-          } else {
-            pre <- pre +
-              ggrepel::geom_text_repel(
-                mapping = ggplot2::aes(
-                  x = .data[[sim_data_pos_names[1]]],
-                  y = .data[[sim_data_pos_names[2]]],
-                  label = .data[["name"]]
-                ),
-                inherit.aes = FALSE,
-                show.legend = FALSE
-              )
-          }
-        } else {
-          xnudge <- diff(xrange) / 25
-          ynudge <- diff(yrange) / 25
-          if (with_labels) {
-            pre <- pre +
-              ggplot2::geom_label(
-                mapping = ggplot2::aes(
-                  x = .data[[sim_data_pos_names[1]]],
-                  y = .data[[sim_data_pos_names[2]]],
-                  label = .data[["name"]]
-                ),
-                inherit.aes = FALSE,
-                show.legend = FALSE,
-                position = ggplot2::position_nudge(x = xnudge, y = ynudge)
-              )
-          } else {
-            pre <- pre +
-              ggplot2::geom_text(
-                mapping = ggplot2::aes(
-                  x = .data[[sim_data_pos_names[1]]],
-                  y = .data[[sim_data_pos_names[2]]],
-                  label = .data[["name"]]
-                ),
-                inherit.aes = FALSE,
-                show.legend = FALSE,
-                position = ggplot2::position_nudge(x = xnudge, y = ynudge)
-              )
-          }
-          xrange[2] <- xrange[2] + xnudge
-          yrange[2] <- yrange[2] + ynudge
-        }
-      }
-      if (!adjust_limits) {
-        pre <- pre + ggplot2::lims(
-          x = xrange,
-          y = yrange
-        )
-      }
-      pre
+      sim_autoplot_destination_pos(
+        sim, sim_data, flows, with_names,
+        adjust_limits, with_labels
+      )
     } else {
-      if (!sim_is_bipartite(sim)) {
-        ## we remove zero length segments
-        sim_data <- sim_data[sim_data$x != sim_data$xend |
-          sim_data$y != sim_data$yend, ]
-      }
-      segment_parameters <- list(...)
-      if (!rlang::has_name(segment_parameters, "arrow")) {
-        segment_parameters$arrow <-
-          ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
-      }
-      if (!rlang::has_name(segment_parameters, "lineend")) {
-        segment_parameters$lineend <- "round"
-      }
-      if (!rlang::has_name(segment_parameters, "linejoin")) {
-        segment_parameters$linejoin <- "round"
-      }
-      pre <- ggplot2::ggplot(
-        sim_data,
-        ggplot2::aes(
-          x = .data[["x"]],
-          xend = .data[["xend"]],
-          y = .data[["y"]],
-          yend = .data[["yend"]],
-          linewidth = .data[["flow"]]
-        )
-      ) +
-        do.call(ggplot2::geom_segment, segment_parameters)
-      if (!adjust_limits) {
-        positions <- location_positions(sim)
-        pre <- pre + ggplot2::lims(
-          x = range(
-            positions[["destination"]][, 1],
-            positions[["origin"]][, 1]
-          ),
-          y = range(
-            positions[["destination"]][, 2],
-            positions[["origin"]][, 2]
-          )
-        )
-      }
-      pre
+      sim_autoplot_flow_pos(sim, sim_data, list(...), adjust_limits)
     }
   } else {
     if (flows == "destination" || flows == "attractiveness") {
