@@ -129,7 +129,8 @@ flows <- blvim(distances, production, 1.5, 1 / 150, attractiveness,
   destination_data = list(
     names = french_cities$name[1:10],
     positions = positions
-  )
+  ),
+  bipartite = FALSE
 )
 ggplot2::autoplot(flows)
 ## bar plots should be almost identical if convergence occurred

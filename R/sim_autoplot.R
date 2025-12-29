@@ -351,7 +351,8 @@ sim_autoplot <- function(sim, sim_data,
 #'   destination_data = list(
 #'     names = french_cities$name[1:10],
 #'     positions = positions
-#'   )
+#'   ),
+#'   bipartite = FALSE
 #' )
 #' ggplot2::autoplot(flows)
 #' ## bar plots should be almost identical if convergence occurred
