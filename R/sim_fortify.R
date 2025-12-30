@@ -1,3 +1,84 @@
+fortify_sim_internal <- function(model,
+                                 flows = c("full", "destination", "attractiveness"),
+                                 with_names = FALSE,
+                                 with_positions = FALSE,
+                                 cut_off = 100 * .Machine$double.eps^0.5,
+                                 call = rlang::caller_env()) {
+  if (with_positions) {
+    positions <- location_positions(model)
+    if (flows == "destination" || flows == "attractiveness") {
+      if (is.null(positions[["destination"]])) {
+        cli::cli_abort("Missing destination location positions",
+          call = call
+        )
+      }
+      if (flows == "destination") {
+        value <- destination_flow(model)
+      } else {
+        value <- attractiveness(model)
+      }
+      sim_data <- positions_as_df(positions[["destination"]], NULL)
+      sim_data[[flows]] <- value
+      if (with_names) {
+        dnames <- destination_names(model)
+        if (is.null(dnames)) {
+          dnames <- seq_len(nrow(sim_data))
+        }
+        sim_data$name <- dnames
+      }
+      sim_data <- sim_data[value >= cut_off, ]
+      sim_data
+    } else {
+      if (is.null(positions) ||
+        is.null(positions[["origin"]]) ||
+        is.null(positions[["destination"]])) {
+        cli::cli_abort("Missing location positions",
+          call = call
+        )
+      }
+      sim_data <- flow_to_lines(
+        positions$origin,
+        positions$destination,
+        flows(model),
+        cut_off
+      )
+      sim_data
+    }
+  } else {
+    if (flows == "destination" || flows == "attractiveness") {
+      if (flows == "destination") {
+        dest_f <- destination_flow(model)
+        sim_data <- data.frame(
+          destination = factor(seq_along(dest_f)),
+          flow = dest_f
+        )
+      } else {
+        attra <- attractiveness(model)
+        sim_data <- data.frame(
+          destination = factor(seq_along(attra)),
+          attractiveness = attra
+        )
+      }
+      if (with_names) {
+        sim_data$name <- rownames(sim_data)
+      }
+      sim_data
+    } else {
+      full_f <- flows(model)
+      sim_data <- expand.grid(
+        origin = factor(seq_len(nrow(full_f)),
+          levels = seq_len(nrow(full_f))
+        ),
+        destination = factor(seq_len(ncol(full_f)),
+          levels = seq_len(ncol(full_f))
+        )
+      )
+      sim_data$flow <- as.vector(full_f)
+      sim_data
+    }
+  }
+}
+
 #' Turn a spatial interaction model into a data frame
 #'
 #' This function extracts from a spatial interaction model different types of
@@ -108,73 +189,5 @@ fortify.sim <- function(model, data,
     with_names, with_positions, with_cut_off, cut_off,
     FALSE, NA, FALSE, NA
   )
-  if (with_positions) {
-    positions <- location_positions(model)
-    if (flows == "destination" || flows == "attractiveness") {
-      if (is.null(positions[["destination"]])) {
-        cli::cli_abort("Missing destination location positions")
-      }
-      if (flows == "destination") {
-        value <- destination_flow(model)
-      } else {
-        value <- attractiveness(model)
-      }
-      sim_data <- positions_as_df(positions[["destination"]], NULL)
-      sim_data[[flows]] <- value
-      if (with_names) {
-        dnames <- destination_names(model)
-        if (is.null(dnames)) {
-          dnames <- seq_len(nrow(sim_data))
-        }
-        sim_data$name <- dnames
-      }
-      sim_data <- sim_data[value >= cut_off, ]
-      sim_data
-    } else {
-      if (is.null(positions) ||
-        is.null(positions[["origin"]]) ||
-        is.null(positions[["destination"]])) {
-        cli::cli_abort("Missing location positions")
-      }
-      sim_data <- flow_to_lines(
-        positions$origin,
-        positions$destination,
-        flows(model),
-        cut_off
-      )
-      sim_data
-    }
-  } else {
-    if (flows == "destination" || flows == "attractiveness") {
-      if (flows == "destination") {
-        dest_f <- destination_flow(model)
-        sim_data <- data.frame(
-          destination = factor(seq_along(dest_f)),
-          flow = dest_f
-        )
-      } else {
-        attra <- attractiveness(model)
-        sim_data <- data.frame(
-          destination = factor(seq_along(attra)),
-          attractiveness = attra
-        )
-      }
-      if (with_names) {
-        sim_data$name <- rownames(sim_data)
-      }
-      sim_data
-    } else {
-      full_f <- flows(model)
-      sim_data <- expand.grid(
-        origin = factor(seq_len(nrow(full_f)),
-          levels = seq_len(nrow(full_f))
-        ),
-        destination = factor(seq_len(ncol(full_f)),
-          levels = seq_len(ncol(full_f))
-        )
-      )
-      sim_data$flow <- as.vector(full_f)
-      sim_data
-    }
-  }
+  fortify_sim_internal(model, flows, with_names, with_positions, cut_off)
 }
