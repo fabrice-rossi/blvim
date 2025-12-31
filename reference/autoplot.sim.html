@@ -197,11 +197,15 @@ using for the <code>size</code> aesthetics the attractiveness of the destination
 the calculation has converged (see <code><a href="sim_converged.html">sim_converged()</a></code>), both <code>"destination"</code>
 and <code>"attractiveness"</code> graphics should be almost identical. Only destinations
 with an attractiveness above  the <code>cut_off</code> value are included.</p></li>
-</ul><p>For the last two representations and when <code>with_names</code> is <code>TRUE</code>, the names
-of the destinations are added to the graphical representation. If
+</ul><p>For the position based representations and when <code>with_names</code> is <code>TRUE</code>, the
+names of the destinations are added to the graphical representation . If
 <code>with_labels</code> is <code>TRUE</code> the names are represented as labels instead of plain
 texts (see <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_label()</a></code>). If the <code>ggrepel</code> package is installed,
-its functions are used instead of <code>ggplot2</code> native functions.</p>
+its functions are used instead of <code>ggplot2</code> native functions. When disks are
+used to show aggregated flows, the names match the chosen locations: for
+destination flow and attractiveness, destination locations are named, while
+for production, origin locations are named (they can be both named when the
+model is bipartite).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

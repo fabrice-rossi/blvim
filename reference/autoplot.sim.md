@@ -185,13 +185,17 @@ following representations:
   identical. Only destinations with an attractiveness above the
   `cut_off` value are included.
 
-For the last two representations and when `with_names` is `TRUE`, the
-names of the destinations are added to the graphical representation. If
-`with_labels` is `TRUE` the names are represented as labels instead of
-plain texts (see
+For the position based representations and when `with_names` is `TRUE`,
+the names of the destinations are added to the graphical representation
+. If `with_labels` is `TRUE` the names are represented as labels instead
+of plain texts (see
 [`ggplot2::geom_label()`](https://ggplot2.tidyverse.org/reference/geom_text.html)).
 If the `ggrepel` package is installed, its functions are used instead of
-`ggplot2` native functions.
+`ggplot2` native functions. When disks are used to show aggregated
+flows, the names match the chosen locations: for destination flow and
+attractiveness, destination locations are named, while for production,
+origin locations are named (they can be both named when the model is
+bipartite).
 
 ## See also
 
