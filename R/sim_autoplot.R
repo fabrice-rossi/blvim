@@ -157,6 +157,71 @@ sim_autoplot_flow_pos <- function(sim, sim_data,
   pre
 }
 
+sim_autoplot_add_names <- function(sim_data, with_labels, current_plot,
+                                   ranges) {
+  sim_data_pos_names <- names(sim_data)
+  if (has_ggrepel()) {
+    if (with_labels) {
+      current_plot <- current_plot +
+        ggrepel::geom_label_repel(
+          data = sim_data,
+          mapping = ggplot2::aes(
+            x = .data[[sim_data_pos_names[1]]],
+            y = .data[[sim_data_pos_names[2]]],
+            label = .data[["name"]]
+          ),
+          inherit.aes = FALSE,
+          show.legend = FALSE
+        )
+    } else {
+      current_plot <- current_plot +
+        ggrepel::geom_text_repel(
+          data = sim_data,
+          mapping = ggplot2::aes(
+            x = .data[[sim_data_pos_names[1]]],
+            y = .data[[sim_data_pos_names[2]]],
+            label = .data[["name"]]
+          ),
+          inherit.aes = FALSE,
+          show.legend = FALSE
+        )
+    }
+  } else {
+    xnudge <- diff(ranges$x) / 25
+    ynudge <- diff(ranges$y) / 25
+    if (with_labels) {
+      current_plot <- current_plot +
+        ggplot2::geom_label(
+          data = sim_data,
+          mapping = ggplot2::aes(
+            x = .data[[sim_data_pos_names[1]]],
+            y = .data[[sim_data_pos_names[2]]],
+            label = .data[["name"]]
+          ),
+          inherit.aes = FALSE,
+          show.legend = FALSE,
+          position = ggplot2::position_nudge(x = xnudge, y = ynudge)
+        )
+    } else {
+      current_plot <- current_plot +
+        ggplot2::geom_text(
+          data = sim_data,
+          mapping = ggplot2::aes(
+            x = .data[[sim_data_pos_names[1]]],
+            y = .data[[sim_data_pos_names[2]]],
+            label = .data[["name"]]
+          ),
+          inherit.aes = FALSE,
+          show.legend = FALSE,
+          position = ggplot2::position_nudge(x = xnudge, y = ynudge)
+        )
+    }
+    ranges$x[2] <- ranges$x[2] + xnudge
+    ranges$y[2] <- ranges$y[2] + ynudge
+  }
+  list(plot = current_plot, ranges = ranges)
+}
+
 sim_autoplot_destination_pos <- function(sim, sim_data, flows,
                                          with_names, adjust_limits,
                                          with_labels) {
@@ -171,69 +236,19 @@ sim_autoplot_destination_pos <- function(sim, sim_data, flows,
   ) +
     ggplot2::geom_point()
   positions <- location_positions(sim)
-  xrange <- range(positions[["destination"]][, 1])
-  yrange <- range(positions[["destination"]][, 2])
+  ranges <- list(
+    x = range(positions[["destination"]][, 1]),
+    y = range(positions[["destination"]][, 2])
+  )
   if (with_names) {
-    if (has_ggrepel()) {
-      if (with_labels) {
-        pre <- pre +
-          ggrepel::geom_label_repel(
-            mapping = ggplot2::aes(
-              x = .data[[sim_data_pos_names[1]]],
-              y = .data[[sim_data_pos_names[2]]],
-              label = .data[["name"]]
-            ),
-            inherit.aes = FALSE,
-            show.legend = FALSE
-          )
-      } else {
-        pre <- pre +
-          ggrepel::geom_text_repel(
-            mapping = ggplot2::aes(
-              x = .data[[sim_data_pos_names[1]]],
-              y = .data[[sim_data_pos_names[2]]],
-              label = .data[["name"]]
-            ),
-            inherit.aes = FALSE,
-            show.legend = FALSE
-          )
-      }
-    } else {
-      xnudge <- diff(xrange) / 25
-      ynudge <- diff(yrange) / 25
-      if (with_labels) {
-        pre <- pre +
-          ggplot2::geom_label(
-            mapping = ggplot2::aes(
-              x = .data[[sim_data_pos_names[1]]],
-              y = .data[[sim_data_pos_names[2]]],
-              label = .data[["name"]]
-            ),
-            inherit.aes = FALSE,
-            show.legend = FALSE,
-            position = ggplot2::position_nudge(x = xnudge, y = ynudge)
-          )
-      } else {
-        pre <- pre +
-          ggplot2::geom_text(
-            mapping = ggplot2::aes(
-              x = .data[[sim_data_pos_names[1]]],
-              y = .data[[sim_data_pos_names[2]]],
-              label = .data[["name"]]
-            ),
-            inherit.aes = FALSE,
-            show.legend = FALSE,
-            position = ggplot2::position_nudge(x = xnudge, y = ynudge)
-          )
-      }
-      xrange[2] <- xrange[2] + xnudge
-      yrange[2] <- yrange[2] + ynudge
-    }
+    plot_with_names <- sim_autoplot_add_names(sim_data, with_labels, pre, ranges)
+    pre <- plot_with_names$plot
+    ranges <- plot_with_names$ranges
   }
   if (!adjust_limits) {
     pre <- pre + ggplot2::lims(
-      x = xrange,
-      y = yrange
+      x = ranges$x,
+      y = ranges$y
     )
   }
   pre
