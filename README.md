@@ -287,20 +287,13 @@ origin_positions(b_blv_model) <- as.matrix(origins)
 destination_positions(b_blv_model) <- as.matrix(destinations)
 autoplot(b_blv_model,
   with_positions = TRUE,
-  arrow = arrow(length = unit(0.01, "npc"))
+  show_destination = TRUE,
+  show_production = TRUE,
+  cut_off = 0
 ) +
   scale_linewidth(range = c(0, 1.5)) +
   coord_sf(crs = "epsg:4326") +
-  geom_point(
-    data = origins,
-    mapping = aes(x = th_longitude, y = th_latitude), inherit.aes = FALSE,
-    color = "blueviolet", alpha = 0.5, size = 3
-  ) +
-  geom_point(
-    data = destinations,
-    mapping = aes(x = th_longitude, y = th_latitude), inherit.aes = FALSE,
-    color = "darkorange", alpha = 0.5, size = 3
-  )
+  scale_color_discrete(type = c("darkorange", "blueviolet"))
 ```
 
 <img src="man/figures/README-b_blv_france-1.png" alt="A geographical representation of the flows with dots showing the locations and arrows between them representation the flows. The figure tells the same story of the previous ones. It shows in particular star patterns with a central destination location that receives flows for all the surrounding origin locations. The figure confirms that flows are organised in a geographical way as most of the flow goes from one origin to its closests destination. However, the figure shows also destination locations that do not receive any flow, emphasizing the concentration effects associated to the return to scale parameter." width="100%" />

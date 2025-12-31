@@ -9,6 +9,9 @@
   flows = c("full", "destination", "attractiveness"),
   with_names = FALSE,
   with_positions = FALSE,
+  show_destination = FALSE,
+  show_attractiveness = FALSE,
+  show_production = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
   with_labels = FALSE,
@@ -26,6 +29,17 @@ location names (\code{FALSE} by default)}
 
 \item{with_positions}{specifies whether the graphical representation is based
 on location positions (\code{FALSE} by default)}
+
+\item{show_destination}{specifies whether the position based \code{"full"} flow
+figure includes a representation of the destination flows (\code{FALSE} by
+default)}
+
+\item{show_attractiveness}{specifies whether the position based \code{"full"} flow
+figure includes a representation of the attractivenesses  (\code{FALSE} by
+default)}
+
+\item{show_production}{specifies whether the position based \code{"full"} flow
+figure includes a representation of the productions (\code{FALSE} by default)}
 
 \item{cut_off}{cut off limit for inclusion of a graphical primitive when
 \code{with_positions = TRUE}. In the full flow matrix representation, segments
@@ -97,7 +111,19 @@ proportional to the flows. Only segments that carry a flow above the
 bipartite (see \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}), zero length segments corresponding to
 self exchange are removed. Additional parameters in \code{...} are submitted to
 \code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}. This can be used to override defaults parameters
-used for the arrow shapes, for instance. Those parameters must be named.
+used for the arrow shapes, for instance. Those parameters must be named. In
+addition to the individual flows, the representation can include location
+based information. If \code{show_production} is \code{TRUE}, the production constraints
+(obtained by \code{\link[=production]{production()}}) are shown as disks centred on the origin
+locations. If \code{show_destination} is \code{TRUE}, incoming flows (obtained by
+\code{\link[=destination_flow]{destination_flow()}}) are shown as disks centred on the destination
+locations. If \code{show_attractiveness} is \code{TRUE}, attractivenesses (obtained by
+\code{\link[=attractiveness]{attractiveness()}}) are shown as disks centred on the destination locations.
+\code{show_destination} and \code{show_attractiveness} are not compatible (only one can
+be \code{TRUE}). \code{show_production} is compatible with \code{show_destination} or
+\code{show_attractiveness} for bipartite models only (see \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}).
+When disks are used, segments are drawn without arrows, while the default
+drawing uses arrows. This can be modified with the additional parameters.
 \item \code{"destination"}: the function draws a disk at each destination location
 using for the \code{size} aesthetics the incoming flow at this destination
 location (using \code{\link[=destination_flow]{destination_flow()}}). Only destinations with an incoming
@@ -163,6 +189,22 @@ ggplot2::autoplot(flows, with_positions = TRUE) +
   ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(flows,
   with_positions = TRUE,
+  arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
+) +
+  ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
+## individual flows combined with destination flows
+## no arrows
+ggplot2::autoplot(flows,
+  with_positions = TRUE,
+  show_destination = TRUE
+) +
+  ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
+## readding arrows
+ggplot2::autoplot(flows,
+  with_positions = TRUE,
+  show_destination = TRUE,
   arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
 ) +
   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +

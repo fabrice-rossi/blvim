@@ -37,6 +37,31 @@ test_that("grid_autoplot works as expected", {
       ggplot2::scale_linewidth_continuous(range = c(0, 2)))
   )
   vdiffr::expect_doppelganger(
+    "Default flow graphs with dest",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_destination = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
+    "Default flow graphs with att",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_attractiveness = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
+    "Default flow graphs with prod",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::scale_size_continuous(range = c(0.5, 1.5)))
+  )
+  vdiffr::expect_doppelganger(
     "Flow graphs cut off",
     \() print(grid_autoplot(models_df, with_positions = TRUE, cut_off = 0.5) +
       ggplot2::scale_linewidth_continuous(range = c(0, 2)))
@@ -71,6 +96,69 @@ test_that("grid_autoplot works as expected", {
     \() print(grid_autoplot(models_df, paste(alpha, "~", round(beta, 3)),
       flows = "destination", fw_params = list(scale = "free_y")
     ) +
+      ggplot2::scale_size_continuous(range = c(0, 5)))
+  )
+})
+
+test_that("grid_autoplot works as expected in the bipartite case", {
+  config <- create_locations(10, 15, seed = 82)
+  alphas <- seq(1.25, 1.5, by = 0.125)
+  betas <- 1 / seq(0.1, 0.5, length.out = 6)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    epsilon = 0.1,
+    iter_max = 5000,
+    precision = .Machine$double.eps^0.5,
+  )
+  destination_positions(models) <- config$pd
+  origin_positions(models) <- config$pp
+  models_df <- sim_df(models)
+  vdiffr::expect_doppelganger(
+    "Default biflow graphs with dest",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_destination = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
+    "Default biflow graphs with att",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_attractiveness = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
+    "Default biflow graphs with prod",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::scale_size_continuous(range = c(0.5, 1.5)))
+  )
+  vdiffr::expect_doppelganger(
+    "Default biflow graphs with prod and dest",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_destination = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::scale_size_continuous(range = c(0, 5)))
+  )
+  vdiffr::expect_doppelganger(
+    "Default biflow graphs with prod and att",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_attractiveness = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
       ggplot2::scale_size_continuous(range = c(0, 5)))
   )
 })

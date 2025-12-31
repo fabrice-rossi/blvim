@@ -74,6 +74,9 @@ grid_autoplot <- function(sim_df, key,
                           flows = c("full", "destination", "attractiveness"),
                           with_names = FALSE,
                           with_positions = FALSE,
+                          show_destination = FALSE,
+                          show_attractiveness = FALSE,
+                          show_production = FALSE,
                           cut_off = 100 * .Machine$double.eps^0.5,
                           adjust_limits = FALSE,
                           with_labels = FALSE,
@@ -84,8 +87,18 @@ grid_autoplot <- function(sim_df, key,
   with_cut_off <- !missing(cut_off)
   with_adjust_limits <- !missing(adjust_limits)
   with_with_labels <- !missing(with_labels)
+  with_show_dest <- !missing(show_destination)
+  with_show_att <- !missing(show_attractiveness)
+  with_show_prod <- !missing(show_production)
   check_autoplot_params(
-    with_names, with_positions, cut_off, adjust_limits,
+    sim_column(sim_df)[[1]],
+    with_names,
+    with_positions,
+    show_destination,
+    show_attractiveness,
+    show_production,
+    cut_off,
+    adjust_limits,
     with_labels
   )
   if (!is.numeric(max_sims) || max_sims <= 0) {
@@ -105,7 +118,12 @@ grid_autoplot <- function(sim_df, key,
   check_dots_named(list(...))
   flows <- rlang::arg_match(flows)
   sim_autoplot_warning(
-    with_names, with_positions, with_cut_off, cut_off,
+    with_names, with_positions,
+    with_show_dest, with_show_att, with_show_prod,
+    show_destination,
+    show_attractiveness,
+    show_production,
+    with_cut_off, cut_off,
     with_adjust_limits, adjust_limits, with_with_labels,
     with_labels
   )
@@ -117,23 +135,39 @@ grid_autoplot <- function(sim_df, key,
     val <- rlang::eval_tidy({{ expr }}, sim_df)
     val_name <- rlang::as_label(expr)
   }
-  if (with_cut_off && with_positions) {
-    pre_data <- lapply(sim_column(sim_df), fortify.sim,
-      data = NULL, flows,
-      with_names,
-      with_positions, cut_off
-    )
-  } else {
-    pre_data <- lapply(sim_column(sim_df), fortify.sim,
-      data = NULL, flows,
-      with_names,
-      with_positions
-    )
-  }
+  pre_data <- lapply(
+    sim_column(sim_df), fortify_sim_internal,
+    flows,
+    with_names,
+    with_positions, cut_off
+  )
   final_df <- combine_df(pre_data, val, val_name)
+  if (with_positions && flows == "full" &&
+    (show_destination || show_attractiveness || show_production)) {
+    pre_data_point <- lapply(
+      sim_column(sim_df),
+      function(x) {
+        fortify_sim_agg(
+          x,
+          show_destination,
+          show_attractiveness, show_production,
+          cut_off
+        )$data
+      }
+    )
+    final_point <- list(
+      data = combine_df(pre_data_point, val, val_name),
+      flows = colnames(pre_data_point[[1]])[3]
+    )
+    ## fix the name if needed
+    colnames(final_point$data)[3] <- final_point$flows
+  } else {
+    final_point <- NULL
+  }
   pre <- sim_autoplot(
-    sim_column(sim_df)[[1]], final_df, flows, with_names,
-    with_positions, adjust_limits, with_labels, ...
+    sim_column(sim_df)[[1]], final_df, final_point, flows, with_names,
+    with_positions, cut_off, adjust_limits,
+    with_labels, ...
   )
   fw_parameters <- list(facets = ggplot2::vars(.data[[val_name]]))
   if (!is.null(fw_params)) {

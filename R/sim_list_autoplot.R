@@ -453,7 +453,10 @@ autoplot.sim_list <- function(object,
   with_with_labels <- !missing(with_labels)
   with_normalisation <- !missing(normalisation)
   check_autoplot_params(
-    with_names, with_positions, cut_off, adjust_limits,
+    object,
+    with_names, with_positions,
+    FALSE, FALSE, FALSE,
+    cut_off, adjust_limits,
     with_labels
   )
   check_quantiles(qmin, qmax)

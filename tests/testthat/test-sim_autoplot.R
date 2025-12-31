@@ -1,26 +1,57 @@
 test_that("autoplot.sim detects wrong parameters", {
   config <- create_locations(25, 25, seed = 25, symmetric = TRUE)
-  model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z, bipartite = FALSE)
+  destination_positions(model) <- config$pd
+  origin_positions(model) <- config$pp
+  ## basic type errors
   expect_error(ggplot2::autoplot(model, flows = "bla"))
   expect_error(ggplot2::autoplot(model, flows = "full", 1))
   expect_error(ggplot2::autoplot(model, flows = "full", FALSE, "bla"))
-  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, -2))
-  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, "ab"))
+  expect_error(ggplot2::autoplot(model, flows = "full", FALSE, FALSE, "bla"))
   expect_error(ggplot2::autoplot(model,
-    flows = "full", FALSE, FALSE, 0.01,
+    flows = "full", FALSE, FALSE, FALSE,
+    "bla"
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", FALSE, FALSE, FALSE,
+    FALSE, "bla"
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", FALSE, FALSE, FALSE,
+    FALSE, FALSE, -2
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", FALSE, FALSE, FALSE,
+    FALSE, FALSE, "ab"
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", FALSE, FALSE, FALSE, FALSE, FALSE, 0.01,
     2.5
   ))
   expect_error(ggplot2::autoplot(model,
-    flows = "full", FALSE, FALSE, 0.01,
+    flows = "full", FALSE, FALSE, FALSE, FALSE, FALSE, 0.01,
     TRUE, 4
   ))
   expect_error(ggplot2::autoplot(model,
-    flows = "full", FALSE, FALSE, 0.01,
+    flows = "full", FALSE, FALSE, FALSE, FALSE, FALSE, 0.01,
     TRUE, FALSE, 4
   ))
   expect_error(ggplot2::autoplot(model,
-    flows = "full", FALSE, FALSE, 0.01,
+    flows = "full", FALSE, FALSE, FALSE, FALSE, FALSE, 0.01,
     TRUE, FALSE, foo = 4, 5
+  ))
+  ## errors related to show
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", with_positions = TRUE,
+    show_destination = TRUE, show_attractiveness = TRUE
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", with_positions = TRUE,
+    show_destination = TRUE, show_production = TRUE
+  ))
+  expect_error(ggplot2::autoplot(model,
+    flows = "full", with_positions = TRUE,
+    show_attractiveness = TRUE, show_production = TRUE
   ))
 })
 
@@ -48,6 +79,10 @@ test_that("autoplot.sim warns about unused parameters", {
     with_positions = TRUE,
     with_labels = TRUE
   ))
+  ## show_* without position
+  expect_warning(ggplot2::autoplot(model, show_attractiveness = TRUE))
+  expect_warning(ggplot2::autoplot(model, show_destination = TRUE))
+  expect_warning(ggplot2::autoplot(model, show_production = TRUE))
 })
 
 test_that("autoplot.sim works as expected (without names)", {
@@ -286,6 +321,69 @@ test_that("autoplot.sim works as expected (with positions and names) base ggplot
     \() print(ggplot2::autoplot(model, "destination",
       with_positions = TRUE, cut_off = 0.1,
       adjust_limits = TRUE, with_names = TRUE
+    ))
+  )
+})
+
+test_that("autoplot.sim works as expected (with positions and mixed graphs)", {
+  ## bipartite case
+  config <- create_locations(20, 15, seed = 124)
+  model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  origin_positions(model) <- config$pp
+  destination_positions(model) <- config$pd
+  vdiffr::expect_doppelganger(
+    "Flows and destination flows",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_destination = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Flows and attractivenesses ",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_attractiveness = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Flows and production",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_production = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Flows, production and destination",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_production = TRUE,
+      show_destination = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Flows, productions and attractiveness",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_production = TRUE,
+      show_attractiveness = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Flows, productions and attractiveness, cut off",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_production = TRUE,
+      show_attractiveness = TRUE,
+      cut_off = 0.1
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Flows, destination, cut off, limits",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_destination = TRUE,
+      cut_off = 1,
+      adjust_limits = FALSE
     ))
   )
 })

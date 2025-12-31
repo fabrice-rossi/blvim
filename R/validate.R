@@ -116,7 +116,12 @@ check_dots_named <- function(dot_list, call = rlang::caller_env()) {
   }
 }
 
-check_autoplot_params <- function(with_names, with_positions, cut_off,
+check_autoplot_params <- function(sim,
+                                  with_names, with_positions,
+                                  show_destination,
+                                  show_attractiveness,
+                                  show_production,
+                                  cut_off,
                                   adjust_limits, with_labels,
                                   call = rlang::caller_env()) {
   if (!rlang::is_logical(with_names)) {
@@ -134,6 +139,50 @@ check_autoplot_params <- function(with_names, with_positions, cut_off,
       ),
       call = call
     )
+  }
+  if (!rlang::is_logical(show_destination)) {
+    cli::cli_abort(
+      c("{.arg show_destination} must be a logical value",
+        "x" = "{.arg show_destination} is {.val {show_destination}}"
+      ),
+      call = call
+    )
+  }
+  if (!rlang::is_logical(show_attractiveness)) {
+    cli::cli_abort(
+      c("{.arg show_attractiveness} must be a logical value",
+        "x" = "{.arg show_attractiveness} is {.val {show_attractiveness}}"
+      ),
+      call = call
+    )
+  }
+  if (!rlang::is_logical(show_production)) {
+    cli::cli_abort(
+      c("{.arg show_production} must be a logical value",
+        "x" = "{.arg show_production} is {.val {show_production}}"
+      ),
+      call = call
+    )
+  }
+  if (show_destination && show_attractiveness) {
+    cli::cli_abort("only one of {.arg show_destination} and
+{.arg show_attractiveness} can be {.val TRUE}",
+      call = call
+    )
+  }
+  if (show_production && !sim_is_bipartite(sim)) {
+    if (show_destination) {
+      cli::cli_abort("only one of {.arg show_production} and
+{.arg show_destination} can be {.val TRUE} if the model is not bipartite",
+        call = call
+      )
+    }
+    if (show_attractiveness) {
+      cli::cli_abort("only one of {.arg show_production} and
+{.arg show_attractiveness} can be {.val TRUE} if the model is not bipartite",
+        call = call
+      )
+    }
   }
   if (!is.numeric(cut_off) || cut_off < 0) {
     cli::cli_abort(

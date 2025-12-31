@@ -1,3 +1,45 @@
+## build a data frame version of aggregated flows specifically designed
+## for mixed representation (individual flows + aggregated ones)
+## it is assumed that validation of the parameters has already been done
+fortify_sim_agg <- function(sim,
+                            show_destination,
+                            show_attractiveness,
+                            show_production,
+                            cut_off) {
+  if (show_destination || show_attractiveness) {
+    flows <- ifelse(show_destination, "destination", "attractiveness")
+    dest <- fortify_sim_internal(sim,
+      flows = flows,
+      with_names = TRUE,
+      with_positions = TRUE,
+      cut_off = cut_off
+    )
+  }
+  if (show_production) {
+    prod <- positions_as_df(origin_positions(sim), NULL)
+    prod$production <- production(sim)
+    prod$name <- origin_names(sim)
+    if (is.null(prod$name)) {
+      prod$name <- seq_len(nrow(prod))
+    }
+  }
+  if (!show_destination && !show_attractiveness) {
+    sim_data <- prod
+    flows <- "production"
+  } else if (show_production) {
+    ## combined case
+    dest$type <- rep(flows, nrow(dest))
+    prod$type <- rep("production", nrow(prod))
+    flows <- paste("production", flows, sep = "\n")
+    names(dest)[3] <- flows
+    names(prod)[3] <- flows
+    sim_data <- rbind(dest, prod)
+  } else {
+    sim_data <- dest
+  }
+  list(data = sim_data, flows = flows)
+}
+
 fortify_sim_internal <- function(model,
                                  flows = c("full", "destination", "attractiveness"),
                                  with_names = FALSE,
@@ -186,7 +228,9 @@ fortify.sim <- function(model, data,
   with_cut_off <- !missing(cut_off)
   flows <- rlang::arg_match(flows)
   sim_autoplot_warning(
-    with_names, with_positions, with_cut_off, cut_off,
+    with_names, with_positions,
+    FALSE, FALSE, FALSE, NA, NA, NA,
+    with_cut_off, cut_off,
     FALSE, NA, FALSE, NA
   )
   fortify_sim_internal(model, flows, with_names, with_positions, cut_off)

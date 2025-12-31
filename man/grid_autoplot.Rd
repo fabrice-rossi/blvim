@@ -10,6 +10,9 @@ grid_autoplot(
   flows = c("full", "destination", "attractiveness"),
   with_names = FALSE,
   with_positions = FALSE,
+  show_destination = FALSE,
+  show_attractiveness = FALSE,
+  show_production = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
   with_labels = FALSE,
@@ -33,6 +36,17 @@ location names (\code{FALSE} by default)}
 
 \item{with_positions}{specifies whether the graphical representation is based
 on location positions (\code{FALSE} by default)}
+
+\item{show_destination}{specifies whether the position based \code{"full"} flow
+figure includes a representation of the destination flows (\code{FALSE} by
+default)}
+
+\item{show_attractiveness}{specifies whether the position based \code{"full"} flow
+figure includes a representation of the attractivenesses  (\code{FALSE} by
+default)}
+
+\item{show_production}{specifies whether the position based \code{"full"} flow
+figure includes a representation of the productions (\code{FALSE} by default)}
 
 \item{cut_off}{cut off limit for inclusion of a graphical primitive when
 \code{with_positions = TRUE}. In the full flow matrix representation, segments

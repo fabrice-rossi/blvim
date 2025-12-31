@@ -1,4 +1,8 @@
 sim_autoplot_warning <- function(with_names, with_positions,
+                                 with_show_dest, with_show_att, with_show_prod,
+                                 show_destination,
+                                 show_attractiveness,
+                                 show_production,
                                  with_cut_off, cut_off,
                                  with_adjust_limits, adjust_limits,
                                  with_with_labels, with_labels,
@@ -31,6 +35,33 @@ is {.val {FALSE}}",
         call = call
       )
     }
+    if (with_show_dest) {
+      cli::cli_warn(
+        c("{.arg show_destination} is not used when {.arg with_positions}
+is {.val {FALSE}}",
+          "!" = "{.arg show_destination} is {.val {show_destination}}"
+        ),
+        call = call
+      )
+    }
+    if (with_show_att) {
+      cli::cli_warn(
+        c("{.arg show_attractiveness} is not used when {.arg with_positions}
+is {.val {FALSE}}",
+          "!" = "{.arg show_attractiveness} is {.val {show_attractiveness}}"
+        ),
+        call = call
+      )
+    }
+    if (with_show_prod) {
+      cli::cli_warn(
+        c("{.arg show_production} is not used when {.arg with_positions}
+is {.val {FALSE}}",
+          "!" = "{.arg show_production} is {.val {show_production}}"
+        ),
+        call = call
+      )
+    }
   }
   if (!with_names && with_positions) {
     if (with_with_labels) {
@@ -45,13 +76,19 @@ is {.val {FALSE}}",
   }
 }
 
-sim_autoplot_flow_pos <- function(sim, sim_data, segment_parameters, adjust_limits) {
+sim_autoplot_flow_pos <- function(sim, sim_data,
+                                  sim_data_point,
+                                  segment_parameters,
+                                  adjust_limits) {
   if (!sim_is_bipartite(sim)) {
     ## we remove zero length segments
     sim_data <- sim_data[sim_data$x != sim_data$xend |
       sim_data$y != sim_data$yend, ]
   }
-  if (!rlang::has_name(segment_parameters, "arrow")) {
+  if (!rlang::has_name(segment_parameters, "arrow") &&
+    (is.null(sim_data_point) || sim_data_point$flows == "production")) {
+    ## do not use arrow when showing destination values unless asked by the
+    ## user
     segment_parameters$arrow <-
       ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
   }
@@ -60,6 +97,9 @@ sim_autoplot_flow_pos <- function(sim, sim_data, segment_parameters, adjust_limi
   }
   if (!rlang::has_name(segment_parameters, "linejoin")) {
     segment_parameters$linejoin <- "round"
+  }
+  if (!rlang::has_name(segment_parameters, "alpha")) {
+    segment_parameters$alpha <- ifelse(is.null(sim_data_point), 1, 0.75)
   }
   pre <- ggplot2::ggplot(
     sim_data,
@@ -72,6 +112,34 @@ sim_autoplot_flow_pos <- function(sim, sim_data, segment_parameters, adjust_limi
     )
   ) +
     do.call(ggplot2::geom_segment, segment_parameters)
+  if (!is.null(sim_data_point)) {
+    sim_data_pos_names <- names(sim_data_point$data)
+    if (!is.null(sim_data_point$data[["type"]])) {
+      pre <- pre +
+        ggplot2::geom_point(
+          data = sim_data_point$data,
+          ggplot2::aes(
+            x = .data[[sim_data_pos_names[1]]],
+            y = .data[[sim_data_pos_names[2]]],
+            size = .data[[sim_data_point$flows]],
+            color = .data[["type"]]
+          ),
+          inherit.aes = FALSE,
+          alpha = 0.75
+        )
+    } else {
+      pre <- pre + ggplot2::geom_point(
+        data = sim_data_point$data,
+        ggplot2::aes(
+          x = .data[[sim_data_pos_names[1]]],
+          y = .data[[sim_data_pos_names[2]]],
+          size = .data[[sim_data_point$flows]],
+        ),
+        inherit.aes = FALSE,
+        alpha = 0.75
+      )
+    }
+  }
   if (!adjust_limits) {
     positions <- location_positions(sim)
     pre <- pre + ggplot2::lims(
@@ -171,9 +239,11 @@ sim_autoplot_destination_pos <- function(sim, sim_data, flows,
 }
 
 sim_autoplot <- function(sim, sim_data,
+                         sim_data_point,
                          flows,
                          with_names,
                          with_positions,
+                         cut_off,
                          adjust_limits,
                          with_labels,
                          ...) {
@@ -184,7 +254,11 @@ sim_autoplot <- function(sim, sim_data,
         adjust_limits, with_labels
       )
     } else {
-      sim_autoplot_flow_pos(sim, sim_data, list(...), adjust_limits)
+      sim_autoplot_flow_pos(
+        sim, sim_data, sim_data_point,
+        list(...),
+        adjust_limits
+      )
     }
   } else {
     if (flows == "destination" || flows == "attractiveness") {
@@ -298,7 +372,19 @@ sim_autoplot <- function(sim, sim_data,
 #' bipartite (see [sim_is_bipartite()]), zero length segments corresponding to
 #' self exchange are removed. Additional parameters in `...` are submitted to
 #' [ggplot2::geom_segment()]. This can be used to override defaults parameters
-#' used for the arrow shapes, for instance. Those parameters must be named.
+#' used for the arrow shapes, for instance. Those parameters must be named. In
+#' addition to the individual flows, the representation can include location
+#' based information. If `show_production` is `TRUE`, the production constraints
+#' (obtained by [production()]) are shown as disks centred on the origin
+#' locations. If `show_destination` is `TRUE`, incoming flows (obtained by
+#' [destination_flow()]) are shown as disks centred on the destination
+#' locations. If `show_attractiveness` is `TRUE`, attractivenesses (obtained by
+#' [attractiveness()]) are shown as disks centred on the destination locations.
+#' `show_destination` and `show_attractiveness` are not compatible (only one can
+#' be `TRUE`). `show_production` is compatible with `show_destination` or
+#' `show_attractiveness` for bipartite models only (see [sim_is_bipartite()]).
+#' When disks are used, segments are drawn without arrows, while the default
+#' drawing uses arrows. This can be modified with the additional parameters.
 #' -  `"destination"`: the function draws a disk at each destination location
 #' using for the `size` aesthetics the incoming flow at this destination
 #' location (using [destination_flow()]). Only destinations with an incoming
@@ -322,6 +408,14 @@ sim_autoplot <- function(sim, sim_data,
 #'   location names (`FALSE` by default)
 #' @param with_positions specifies whether the graphical representation is based
 #'   on location positions (`FALSE` by default)
+#' @param show_destination specifies whether the position based `"full"` flow
+#'   figure includes a representation of the destination flows (`FALSE` by
+#'   default)
+#' @param show_attractiveness specifies whether the position based `"full"` flow
+#'   figure includes a representation of the attractivenesses  (`FALSE` by
+#'   default)
+#' @param show_production specifies whether the position based `"full"` flow
+#'   figure includes a representation of the productions (`FALSE` by default)
 #' @param cut_off cut off limit for inclusion of a graphical primitive when
 #'   `with_positions = TRUE`. In the full flow matrix representation, segments
 #'   are removed when their flow is smaller than the cut off. In the
@@ -389,10 +483,30 @@ sim_autoplot <- function(sim, sim_data,
 #' ) +
 #'   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
 #'   ggplot2::coord_sf(crs = "epsg:4326")
+#' ## individual flows combined with destination flows
+#' ## no arrows
+#' ggplot2::autoplot(flows,
+#'   with_positions = TRUE,
+#'   show_destination = TRUE
+#' ) +
+#'   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
+#' ## readding arrows
+#' ggplot2::autoplot(flows,
+#'   with_positions = TRUE,
+#'   show_destination = TRUE,
+#'   arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
+#' ) +
+#'   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+#'   ggplot2::coord_sf(crs = "epsg:4326")
+#'
 autoplot.sim <- function(object,
                          flows = c("full", "destination", "attractiveness"),
                          with_names = FALSE,
                          with_positions = FALSE,
+                         show_destination = FALSE,
+                         show_attractiveness = FALSE,
+                         show_production = FALSE,
                          cut_off = 100 * .Machine$double.eps^0.5,
                          adjust_limits = FALSE,
                          with_labels = FALSE,
@@ -400,33 +514,51 @@ autoplot.sim <- function(object,
   with_cut_off <- !missing(cut_off)
   with_adjust_limits <- !missing(adjust_limits)
   with_with_labels <- !missing(with_labels)
+  with_show_dest <- !missing(show_destination)
+  with_show_att <- !missing(show_attractiveness)
+  with_show_prod <- !missing(show_production)
   check_autoplot_params(
-    with_names, with_positions, cut_off, adjust_limits,
+    object,
+    with_names,
+    with_positions,
+    show_destination,
+    show_attractiveness,
+    show_production,
+    cut_off,
+    adjust_limits,
     with_labels
   )
   check_dots_named(list(...))
   flows <- rlang::arg_match(flows)
   sim_autoplot_warning(
-    with_names, with_positions, with_cut_off, cut_off,
+    with_names, with_positions,
+    with_show_dest, with_show_att, with_show_prod,
+    show_destination,
+    show_attractiveness,
+    show_production,
+    with_cut_off, cut_off,
     with_adjust_limits, adjust_limits, with_with_labels,
     with_labels
   )
-  if (with_cut_off && with_positions) {
-    sim_data <- fortify.sim(object,
-      data = NULL, flows = flows,
-      with_names = with_names,
-      with_positions = with_positions,
-      cut_off = cut_off
+  sim_data <- fortify_sim_internal(object,
+    flows = flows,
+    with_names = with_names,
+    with_positions = with_positions,
+    cut_off = cut_off
+  )
+  if (with_positions && flows == "full" &&
+    (show_destination || show_attractiveness || show_production)) {
+    sim_data_point <- fortify_sim_agg(
+      object, show_destination,
+      show_attractiveness, show_production,
+      cut_off
     )
   } else {
-    sim_data <- fortify.sim(object,
-      data = NULL, flows = flows,
-      with_names = with_names,
-      with_positions = with_positions
-    )
+    sim_data_point <- NULL
   }
   sim_autoplot(
-    object, sim_data, flows, with_names, with_positions,
+    object, sim_data, sim_data_point, flows, with_names, with_positions,
+    cut_off,
     adjust_limits, with_labels, ...
   )
 }

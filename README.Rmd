@@ -327,18 +327,11 @@ origin_positions(b_blv_model) <- as.matrix(origins)
 destination_positions(b_blv_model) <- as.matrix(destinations)
 autoplot(b_blv_model,
   with_positions = TRUE,
-  arrow = arrow(length = unit(0.01, "npc"))
+  show_destination = TRUE,
+  show_production = TRUE,
+  cut_off = 0
 ) +
   scale_linewidth(range = c(0, 1.5)) +
   coord_sf(crs = "epsg:4326") +
-  geom_point(
-    data = origins,
-    mapping = aes(x = th_longitude, y = th_latitude), inherit.aes = FALSE,
-    color = "blueviolet", alpha = 0.5, size = 3
-  ) +
-  geom_point(
-    data = destinations,
-    mapping = aes(x = th_longitude, y = th_latitude), inherit.aes = FALSE,
-    color = "darkorange", alpha = 0.5, size = 3
-  )
+  scale_color_discrete(type = c("darkorange", "blueviolet"))
 ```
