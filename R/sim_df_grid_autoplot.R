@@ -142,8 +142,9 @@ grid_autoplot <- function(sim_df, key,
     with_positions, cut_off
   )
   final_df <- combine_df(pre_data, val, val_name)
+  show_points <- show_destination || show_attractiveness || show_production
   if (with_positions && flows == "full" &&
-    (show_destination || show_attractiveness || show_production)) {
+    (show_points || with_names)) {
     pre_data_point <- lapply(
       sim_column(sim_df),
       function(x) {
@@ -165,7 +166,7 @@ grid_autoplot <- function(sim_df, key,
     final_point <- NULL
   }
   pre <- sim_autoplot(
-    sim_column(sim_df)[[1]], final_df, final_point, flows, with_names,
+    sim_column(sim_df)[[1]], final_df, final_point, show_points, flows, with_names,
     with_positions, cut_off, adjust_limits,
     with_labels, ...
   )

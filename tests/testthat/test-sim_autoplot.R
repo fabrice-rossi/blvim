@@ -255,6 +255,22 @@ test_that("autoplot.sim works as expected (with positions and names) ggrepel", {
       with_names = TRUE, cut_off = 0, with_labels = TRUE
     ))
   )
+  vdiffr::expect_doppelganger(
+    "Full flow label",
+    \() print(ggplot2::autoplot(model, "full",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0,
+      with_labels = TRUE
+    ) + ggplot2::scale_linewidth(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
+    "Full flow no label",
+    \() print(ggplot2::autoplot(model, "full",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0,
+    ) + ggplot2::scale_linewidth(range = c(0, 2)))
+  )
+
   skip_on_os("mac")
   ## subtle differences appear between linux figures and mac os figures.
   vdiffr::expect_doppelganger(
@@ -298,6 +314,21 @@ test_that("autoplot.sim works as expected (with positions and names) base ggplot
   origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
   local_mocked_bindings(has_ggrepel = function() FALSE)
   vdiffr::expect_doppelganger(
+    "Full flow label base",
+    \() print(ggplot2::autoplot(model, "full",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0,
+      with_labels = TRUE
+    ) + ggplot2::scale_linewidth(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
+    "Full flow no label base",
+    \() print(ggplot2::autoplot(model, "full",
+      with_positions = TRUE,
+      with_names = TRUE, cut_off = 0,
+    ) + ggplot2::scale_linewidth(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
     "Destination dotplot text base",
     \() print(ggplot2::autoplot(model, "destination",
       with_positions = TRUE,
@@ -333,6 +364,8 @@ test_that("autoplot.sim works as expected (with positions and mixed graphs)", {
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
   origin_positions(model) <- config$pp
   destination_positions(model) <- config$pd
+  destination_names(model) <- sample(letters, 15, replace = FALSE)
+  origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
   vdiffr::expect_doppelganger(
     "Flows and destination flows",
     \() print(ggplot2::autoplot(model,
@@ -384,6 +417,18 @@ test_that("autoplot.sim works as expected (with positions and mixed graphs)", {
     \() print(ggplot2::autoplot(model,
       with_positions = TRUE,
       show_destination = TRUE,
+      cut_off = 1,
+      adjust_limits = FALSE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "Flows, destination, cut off, limits, labels",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_destination = TRUE,
+      show_production = TRUE,
+      with_names = TRUE,
+      with_labels = TRUE,
       cut_off = 1,
       adjust_limits = FALSE
     ))

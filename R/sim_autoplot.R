@@ -78,8 +78,11 @@ is {.val {FALSE}}",
 
 sim_autoplot_flow_pos <- function(sim, sim_data,
                                   sim_data_point,
-                                  segment_parameters,
-                                  adjust_limits) {
+                                  show_points,
+                                  with_names,
+                                  adjust_limits,
+                                  with_labels,
+                                  segment_parameters) {
   sim_data_names <- names(sim_data)[c(1, 3)]
   if (!sim_is_bipartite(sim)) {
     ## we remove zero length segments
@@ -87,7 +90,7 @@ sim_autoplot_flow_pos <- function(sim, sim_data,
       sim_data[[sim_data_names[2]]] != sim_data$yend, ]
   }
   if (!rlang::has_name(segment_parameters, "arrow") &&
-    (is.null(sim_data_point) || sim_data_point$flows == "production")) {
+    (!show_points || sim_data_point$flows == "production")) {
     ## do not use arrow when showing destination values unless asked by the
     ## user
     segment_parameters$arrow <-
@@ -100,7 +103,7 @@ sim_autoplot_flow_pos <- function(sim, sim_data,
     segment_parameters$linejoin <- "round"
   }
   if (!rlang::has_name(segment_parameters, "alpha")) {
-    segment_parameters$alpha <- ifelse(is.null(sim_data_point), 1, 0.75)
+    segment_parameters$alpha <- ifelse(!show_points, 1, 0.75)
   }
   pre <- ggplot2::ggplot(
     sim_data,
@@ -113,7 +116,18 @@ sim_autoplot_flow_pos <- function(sim, sim_data,
     )
   ) +
     do.call(ggplot2::geom_segment, segment_parameters)
-  if (!is.null(sim_data_point)) {
+  positions <- location_positions(sim)
+  ranges <- list(
+    x = range(
+      positions[["destination"]][, 1],
+      positions[["origin"]][, 1]
+    ),
+    y = range(
+      positions[["destination"]][, 2],
+      positions[["origin"]][, 2]
+    )
+  )
+  if (show_points) {
     sim_data_pos_names <- names(sim_data_point$data)
     if (!is.null(sim_data_point$data[["type"]])) {
       pre <- pre +
@@ -141,17 +155,19 @@ sim_autoplot_flow_pos <- function(sim, sim_data,
       )
     }
   }
+  if (with_names) {
+    plot_with_names <- sim_autoplot_add_names(
+      sim_data_point$data, with_labels,
+      pre, ranges
+    )
+    pre <- plot_with_names$plot
+    ranges <- plot_with_names$ranges
+  }
   if (!adjust_limits) {
     positions <- location_positions(sim)
     pre <- pre + ggplot2::lims(
-      x = range(
-        positions[["destination"]][, 1],
-        positions[["origin"]][, 1]
-      ),
-      y = range(
-        positions[["destination"]][, 2],
-        positions[["origin"]][, 2]
-      )
+      x = ranges$x,
+      y = ranges$y
     )
   }
   pre
@@ -256,6 +272,7 @@ sim_autoplot_destination_pos <- function(sim, sim_data, flows,
 
 sim_autoplot <- function(sim, sim_data,
                          sim_data_point,
+                         show_points,
                          flows,
                          with_names,
                          with_positions,
@@ -272,8 +289,11 @@ sim_autoplot <- function(sim, sim_data,
     } else {
       sim_autoplot_flow_pos(
         sim, sim_data, sim_data_point,
-        list(...),
-        adjust_limits
+        show_points,
+        with_names,
+        adjust_limits,
+        with_labels,
+        list(...)
       )
     }
   } else {
@@ -411,11 +431,15 @@ sim_autoplot <- function(sim, sim_data,
 #' and `"attractiveness"` graphics should be almost identical. Only destinations
 #' with an attractiveness above  the `cut_off` value are included.
 #'
-#' For the last two representations and when `with_names` is `TRUE`, the names
-#' of the destinations are added to the graphical representation. If
+#' For the position based representations and when `with_names` is `TRUE`, the
+#' names of the destinations are added to the graphical representation . If
 #' `with_labels` is `TRUE` the names are represented as labels instead of plain
 #' texts (see [ggplot2::geom_label()]). If the `ggrepel` package is installed,
-#' its functions are used instead of `ggplot2` native functions.
+#' its functions are used instead of `ggplot2` native functions. When disks are
+#' used to show aggregated flows, the names match the chosen locations: for
+#' destination flow and attractiveness, destination locations are named, while
+#' for production, origin locations are named (they can be both named when the
+#' model is bipartite).
 #'
 #' @param object a spatial interaction model object
 #' @param flows  `"full"` (default),  `"destination"` or `"attractiveness"`, see
@@ -562,18 +586,28 @@ autoplot.sim <- function(object,
     with_positions = with_positions,
     cut_off = cut_off
   )
+  show_points <- show_destination || show_attractiveness || show_production
   if (with_positions && flows == "full" &&
-    (show_destination || show_attractiveness || show_production)) {
-    sim_data_point <- fortify_sim_agg(
-      object, show_destination,
-      show_attractiveness, show_production,
-      cut_off
-    )
+    (show_points || with_names)) {
+    if (!show_points) {
+      ## show destination names by default
+      sim_data_point <- fortify_sim_agg(
+        object, TRUE,
+        FALSE, FALSE,
+        cut_off
+      )
+    } else {
+      sim_data_point <- fortify_sim_agg(
+        object, show_destination,
+        show_attractiveness, show_production,
+        cut_off
+      )
+    }
   } else {
     sim_data_point <- NULL
   }
   sim_autoplot(
-    object, sim_data, sim_data_point, flows, with_names, with_positions,
+    object, sim_data, sim_data_point, show_points, flows, with_names, with_positions,
     cut_off,
     adjust_limits, with_labels, ...
   )
