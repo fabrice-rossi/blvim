@@ -22,9 +22,16 @@ to_rect <- function(x, inverse = FALSE) {
 #' @param cut_off cut off threshold
 #'
 #' @noRd
-flow_to_lines <- function(op, dp, Y, cut_off) {
+flow_to_lines <- function(op, dp, Y, cut_off, use_names = FALSE) {
   x_df <- expand.grid(x = op[, 1], xend = dp[, 1])
   y_df <- expand.grid(y = op[, 2], yend = dp[, 2])
+  if (use_names) {
+    dim_names <- colnames(op)
+    if (!is.null(dim_names)) {
+      names(x_df)[1] <- dim_names[1]
+      names(y_df)[1] <- dim_names[2]
+    }
+  }
   pre <- cbind(x_df, y_df, flow = as.vector(Y))
   pre[pre$flow >= cut_off, ]
 }

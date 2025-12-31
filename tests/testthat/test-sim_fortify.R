@@ -1,6 +1,7 @@
 test_that("fortify.sim remove values before the cut off", {
   config <- create_locations(20, 15, seed = 412)
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  colnames(config$pp) <- c("from_X", "from_Y")
   origin_positions(model) <- config$pp
   colnames(config$pd) <- c("bli", "foo")
   destination_positions(model) <- config$pd
@@ -11,7 +12,7 @@ test_that("fortify.sim remove values before the cut off", {
   ### dimension 20*15 rows (all the flows) and 5 columns
   expect_equal(dim(m_flows), c(nrow(config$pp) * nrow(config$pd), 5))
   ### column names
-  expect_named(m_flows, c("x", "xend", "y", "yend", "flow"))
+  expect_named(m_flows, c("from_X", "xend", "from_Y", "yend", "flow"))
   ### values (we rely on flows_df which is tested in test-sim)
   expect_equal(m_flows$flow, flows_df(model)$flow)
   ### filtering

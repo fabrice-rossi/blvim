@@ -15,7 +15,8 @@ test_that("grid_var_autoplot works as expected", {
   destination_positions(models) <- config$pd
   models_df <- sim_df(models)
   models_df$group <- as.factor(sample(c(0, 1, 2), nrow(models_df),
-                                      replace = TRUE))
+    replace = TRUE
+  ))
   vdiffr::expect_doppelganger(
     "Default flow matrices iter",
     \() print(grid_var_autoplot(models_df, iterations,

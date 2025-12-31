@@ -139,6 +139,8 @@ test_that("autoplot.sim works as expected (with names)", {
 test_that("autoplot.sim works as expected (with positions)", {
   config <- create_locations(20, 15, seed = 124)
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  colnames(config$pp) <- c("X", "Y")
+  colnames(config$pd) <- c("X", "Y")
   origin_positions(model) <- config$pp
   destination_positions(model) <- config$pd
   vdiffr::expect_doppelganger(

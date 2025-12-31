@@ -82,7 +82,8 @@ fortify_sim_internal <- function(model,
         positions$origin,
         positions$destination,
         flows(model),
-        cut_off
+        cut_off,
+        use_names = TRUE
       )
       sim_data
     }
@@ -165,7 +166,8 @@ fortify_sim_internal <- function(model,
 #' -  `"full"`: this is the default case for which the full flow matrix is extracted.
 #' Positions for both origin and destination locations are needed. The data
 #' frame contains five columns:
-#'    - `x` and `y` are used for the coordinates of the origin locations
+#'    - the first two columns are used for the coordinates of the origin
+#'    locations (see below for the names of the columns)
 #'    - `xend` and `yend` are used for the coordinates of the destination locations
 #'    - `flow` is used for the flows
 #' - `"destination"` and `"attractiveness"` produce both a data frame with three
@@ -200,12 +202,14 @@ fortify_sim_internal <- function(model,
 #' @returns a data frame, see details
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
 #' positions <- matrix(rnorm(10 * 2), ncol = 2)
+#' colnames(positions) <- c("X", "Y")
 #' distances <- as.matrix(dist(positions))
 #' production <- rep(1, 10)
 #' attractiveness <- c(2, rep(1, 9))
 #' flows <- blvim(distances, production, 1.5, 4, attractiveness,
 #'   origin_data =
-#'     list(names = LETTERS[1:10], positions = positions), destination_data =
+#'     list(names = LETTERS[1:10], positions = positions),
+#'   destination_data =
 #'     list(names = LETTERS[1:10], positions = positions)
 #' )
 #' ggplot2::fortify(flows)

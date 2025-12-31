@@ -80,10 +80,11 @@ sim_autoplot_flow_pos <- function(sim, sim_data,
                                   sim_data_point,
                                   segment_parameters,
                                   adjust_limits) {
+  sim_data_names <- names(sim_data)[c(1, 3)]
   if (!sim_is_bipartite(sim)) {
     ## we remove zero length segments
-    sim_data <- sim_data[sim_data$x != sim_data$xend |
-      sim_data$y != sim_data$yend, ]
+    sim_data <- sim_data[sim_data[[sim_data_names[1]]] != sim_data$xend |
+      sim_data[[sim_data_names[2]]] != sim_data$yend, ]
   }
   if (!rlang::has_name(segment_parameters, "arrow") &&
     (is.null(sim_data_point) || sim_data_point$flows == "production")) {
@@ -104,9 +105,9 @@ sim_autoplot_flow_pos <- function(sim, sim_data,
   pre <- ggplot2::ggplot(
     sim_data,
     ggplot2::aes(
-      x = .data[["x"]],
+      x = .data[[sim_data_names[1]]],
       xend = .data[["xend"]],
-      y = .data[["y"]],
+      y = .data[[sim_data_names[2]]],
       yend = .data[["yend"]],
       linewidth = .data[["flow"]]
     )
