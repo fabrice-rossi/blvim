@@ -57,6 +57,9 @@ in different direct or aggregated forms.</p>
 <span>  flows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"full"</span>, <span class="st">"destination"</span>, <span class="st">"attractiveness"</span><span class="op">)</span>,</span>
 <span>  with_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  with_positions <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_destination <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_attractiveness <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_production <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cut_off <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.5</span>,</span>
 <span>  adjust_limits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  with_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -85,6 +88,23 @@ location names (<code>FALSE</code> by default)</p></dd>
 <dt id="arg-with-positions">with_positions<a class="anchor" aria-label="anchor" href="#arg-with-positions"></a></dt>
 <dd><p>specifies whether the graphical representation is based
 on location positions (<code>FALSE</code> by default)</p></dd>
+
+
+<dt id="arg-show-destination">show_destination<a class="anchor" aria-label="anchor" href="#arg-show-destination"></a></dt>
+<dd><p>specifies whether the position based <code>"full"</code> flow
+figure includes a representation of the destination flows (<code>FALSE</code> by
+default)</p></dd>
+
+
+<dt id="arg-show-attractiveness">show_attractiveness<a class="anchor" aria-label="anchor" href="#arg-show-attractiveness"></a></dt>
+<dd><p>specifies whether the position based <code>"full"</code> flow
+figure includes a representation of the attractivenesses  (<code>FALSE</code> by
+default)</p></dd>
+
+
+<dt id="arg-show-production">show_production<a class="anchor" aria-label="anchor" href="#arg-show-production"></a></dt>
+<dd><p>specifies whether the position based <code>"full"</code> flow
+figure includes a representation of the productions (<code>FALSE</code> by default)</p></dd>
 
 
 <dt id="arg-cut-off">cut_off<a class="anchor" aria-label="anchor" href="#arg-cut-off"></a></dt>
@@ -155,7 +175,19 @@ proportional to the flows. Only segments that carry a flow above the
 bipartite (see <code><a href="sim_is_bipartite.html">sim_is_bipartite()</a></code>), zero length segments corresponding to
 self exchange are removed. Additional parameters in <code>...</code> are submitted to
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">ggplot2::geom_segment()</a></code>. This can be used to override defaults parameters
-used for the arrow shapes, for instance. Those parameters must be named.</p></li>
+used for the arrow shapes, for instance. Those parameters must be named. In
+addition to the individual flows, the representation can include location
+based information. If <code>show_production</code> is <code>TRUE</code>, the production constraints
+(obtained by <code><a href="production.html">production()</a></code>) are shown as disks centred on the origin
+locations. If <code>show_destination</code> is <code>TRUE</code>, incoming flows (obtained by
+<code><a href="destination_flow.html">destination_flow()</a></code>) are shown as disks centred on the destination
+locations. If <code>show_attractiveness</code> is <code>TRUE</code>, attractivenesses (obtained by
+<code><a href="attractiveness.html">attractiveness()</a></code>) are shown as disks centred on the destination locations.
+<code>show_destination</code> and <code>show_attractiveness</code> are not compatible (only one can
+be <code>TRUE</code>). <code>show_production</code> is compatible with <code>show_destination</code> or
+<code>show_attractiveness</code> for bipartite models only (see <code><a href="sim_is_bipartite.html">sim_is_bipartite()</a></code>).
+When disks are used, segments are drawn without arrows, while the default
+drawing uses arrows. This can be modified with the additional parameters.</p></li>
 <li><p><code>"destination"</code>: the function draws a disk at each destination location
 using for the <code>size</code> aesthetics the incoming flow at this destination
 location (using <code><a href="destination_flow.html">destination_flow()</a></code>). Only destinations with an incoming
@@ -190,7 +222,8 @@ its functions are used instead of <code>ggplot2</code> native functions.</p>
 <span class="r-in"><span>  destination_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    names <span class="op">=</span> <span class="va">french_cities</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>    positions <span class="op">=</span> <span class="va">positions</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  bipartite <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">flows</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim-1.png" alt="" width="700" height="433"></span>
@@ -238,6 +271,24 @@ its functions are used instead of <code>ggplot2</code> native functions.</p>
 <span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="st">"epsg:4326"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.sim-10.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co">## individual flows combined with destination flows</span></span></span>
+<span class="r-in"><span><span class="co">## no arrows</span></span></span>
+<span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">flows</span>,</span></span>
+<span class="r-in"><span>  with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  show_destination <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="st">"epsg:4326"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="autoplot.sim-11.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co">## readding arrows</span></span></span>
+<span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">flows</span>,</span></span>
+<span class="r-in"><span>  with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  show_destination <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  arrow <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="st">"npc"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="st">"epsg:4326"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="autoplot.sim-12.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

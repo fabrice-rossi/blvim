@@ -141,7 +141,8 @@ extractions. Notice that if no positions are known for the locations, the use
 of <code>with_positions = TRUE</code> is an error. Depending on <code>flows</code> we have the
 following representations:</p><ul><li><p><code>"full"</code>: this is the default case for which the full flow matrix is extracted.
 Positions for both origin and destination locations are needed. The data
-frame contains five columns:</p><ul><li><p><code>x</code> and <code>y</code> are used for the coordinates of the origin locations</p></li>
+frame contains five columns:</p><ul><li><p>the first two columns are used for the coordinates of the origin
+locations (see below for the names of the columns)</p></li>
 <li><p><code>xend</code> and <code>yend</code> are used for the coordinates of the destination locations</p></li>
 <li><p><code>flow</code> is used for the flows</p></li>
 </ul></li>
@@ -167,12 +168,14 @@ than the <code>cut_off</code> value.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">positions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">"Y"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">positions</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">production</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="blvim.html">blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">4</span>, <span class="va">attractiveness</span>,</span></span>
 <span class="r-in"><span>  origin_data <span class="op">=</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span>, destination_data <span class="op">=</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  destination_data <span class="op">=</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>, positions <span class="op">=</span> <span class="va">positions</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/fortify.html" class="external-link">fortify</a></span><span class="op">(</span><span class="va">flows</span><span class="op">)</span></span></span>
@@ -303,7 +306,7 @@ than the <code>cut_off</code> value.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> J          10   9.018186e-07</span>
 <span class="r-in"><span><span class="co">## positions</span></span></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/fortify.html" class="external-link">fortify</a></span><span class="op">(</span><span class="va">flows</span>, flows <span class="op">=</span> <span class="st">"attractiveness"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             x           y attractiveness</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             X           Y attractiveness</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.04996490 -0.20608719   5.017162e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.44479712  0.02956075   1.952025e-06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  2.75541758  0.54982754   9.999708e-01</span>
@@ -316,7 +319,7 @@ than the <code>cut_off</code> value.</p>
 <span class="r-in"><span>  flows <span class="op">=</span> <span class="st">"destination"</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  with_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             x          y destination name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             X          Y destination name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.04996490 -0.2060872   5.0171654    A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  2.75541758  0.5498275   0.9999708    D</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.04653138 -2.2741149   0.9983180    E</span>
@@ -324,7 +327,7 @@ than the <code>cut_off</code> value.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8 -1.91172049  0.2133557   0.9954184    H</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.86208648  1.0743459   0.9891676    I</span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/fortify.html" class="external-link">fortify</a></span><span class="op">(</span><span class="va">flows</span>, with_positions <span class="op">=</span> <span class="cn">TRUE</span>, cut_off <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              x        xend           y       yend      flow</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              X        xend           Y       yend      flow</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  -0.04996490 -0.04996490 -0.20608719 -0.2060872 0.9997707</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  -0.25148344 -0.04996490  0.01917759 -0.2060872 0.9989630</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3   0.44479712 -0.04996490  0.02956075 -0.2060872 0.9911611</span>

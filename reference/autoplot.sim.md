@@ -12,6 +12,9 @@ autoplot(
   flows = c("full", "destination", "attractiveness"),
   with_names = FALSE,
   with_positions = FALSE,
+  show_destination = FALSE,
+  show_attractiveness = FALSE,
+  show_production = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
   with_labels = FALSE,
@@ -39,6 +42,21 @@ autoplot(
 
   specifies whether the graphical representation is based on location
   positions (`FALSE` by default)
+
+- show_destination:
+
+  specifies whether the position based `"full"` flow figure includes a
+  representation of the destination flows (`FALSE` by default)
+
+- show_attractiveness:
+
+  specifies whether the position based `"full"` flow figure includes a
+  representation of the attractivenesses (`FALSE` by default)
+
+- show_production:
+
+  specifies whether the position based `"full"` flow figure includes a
+  representation of the productions (`FALSE` by default)
 
 - cut_off:
 
@@ -131,7 +149,26 @@ following representations:
   Additional parameters in `...` are submitted to
   [`ggplot2::geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html).
   This can be used to override defaults parameters used for the arrow
-  shapes, for instance. Those parameters must be named.
+  shapes, for instance. Those parameters must be named. In addition to
+  the individual flows, the representation can include location based
+  information. If `show_production` is `TRUE`, the production
+  constraints (obtained by
+  [`production()`](https://fabrice-rossi.github.io/blvim/reference/production.md))
+  are shown as disks centred on the origin locations. If
+  `show_destination` is `TRUE`, incoming flows (obtained by
+  [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md))
+  are shown as disks centred on the destination locations. If
+  `show_attractiveness` is `TRUE`, attractivenesses (obtained by
+  [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md))
+  are shown as disks centred on the destination locations.
+  `show_destination` and `show_attractiveness` are not compatible (only
+  one can be `TRUE`). `show_production` is compatible with
+  `show_destination` or `show_attractiveness` for bipartite models only
+  (see
+  [`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)).
+  When disks are used, segments are drawn without arrows, while the
+  default drawing uses arrows. This can be modified with the additional
+  parameters.
 
 - `"destination"`: the function draws a disk at each destination
   location using for the `size` aesthetics the incoming flow at this
@@ -175,7 +212,8 @@ flows <- blvim(distances, production, 1.5, 1 / 150, attractiveness,
   destination_data = list(
     names = french_cities$name[1:10],
     positions = positions
-  )
+  ),
+  bipartite = FALSE
 )
 ggplot2::autoplot(flows)
 
@@ -218,6 +256,24 @@ ggplot2::autoplot(flows, with_positions = TRUE) +
 
 ggplot2::autoplot(flows,
   with_positions = TRUE,
+  arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
+) +
+  ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
+
+## individual flows combined with destination flows
+## no arrows
+ggplot2::autoplot(flows,
+  with_positions = TRUE,
+  show_destination = TRUE
+) +
+  ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+  ggplot2::coord_sf(crs = "epsg:4326")
+
+## readding arrows
+ggplot2::autoplot(flows,
+  with_positions = TRUE,
+  show_destination = TRUE,
   arrow = ggplot2::arrow(length = ggplot2::unit(0.025, "npc"))
 ) +
   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +

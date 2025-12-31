@@ -66,6 +66,9 @@ alternative graphical representation to the one produced by
 <span>  flows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"full"</span>, <span class="st">"destination"</span>, <span class="st">"attractiveness"</span><span class="op">)</span>,</span>
 <span>  with_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  with_positions <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_destination <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_attractiveness <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_production <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cut_off <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.5</span>,</span>
 <span>  adjust_limits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  with_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -102,6 +105,23 @@ location names (<code>FALSE</code> by default)</p></dd>
 <dt id="arg-with-positions">with_positions<a class="anchor" aria-label="anchor" href="#arg-with-positions"></a></dt>
 <dd><p>specifies whether the graphical representation is based
 on location positions (<code>FALSE</code> by default)</p></dd>
+
+
+<dt id="arg-show-destination">show_destination<a class="anchor" aria-label="anchor" href="#arg-show-destination"></a></dt>
+<dd><p>specifies whether the position based <code>"full"</code> flow
+figure includes a representation of the destination flows (<code>FALSE</code> by
+default)</p></dd>
+
+
+<dt id="arg-show-attractiveness">show_attractiveness<a class="anchor" aria-label="anchor" href="#arg-show-attractiveness"></a></dt>
+<dd><p>specifies whether the position based <code>"full"</code> flow
+figure includes a representation of the attractivenesses  (<code>FALSE</code> by
+default)</p></dd>
+
+
+<dt id="arg-show-production">show_production<a class="anchor" aria-label="anchor" href="#arg-show-production"></a></dt>
+<dd><p>specifies whether the position based <code>"full"</code> flow
+figure includes a representation of the productions (<code>FALSE</code> by default)</p></dd>
 
 
 <dt id="arg-cut-off">cut_off<a class="anchor" aria-label="anchor" href="#arg-cut-off"></a></dt>

@@ -17,6 +17,9 @@ grid_autoplot(
   flows = c("full", "destination", "attractiveness"),
   with_names = FALSE,
   with_positions = FALSE,
+  show_destination = FALSE,
+  show_attractiveness = FALSE,
+  show_production = FALSE,
   cut_off = 100 * .Machine$double.eps^0.5,
   adjust_limits = FALSE,
   with_labels = FALSE,
@@ -52,6 +55,21 @@ grid_autoplot(
 
   specifies whether the graphical representation is based on location
   positions (`FALSE` by default)
+
+- show_destination:
+
+  specifies whether the position based `"full"` flow figure includes a
+  representation of the destination flows (`FALSE` by default)
+
+- show_attractiveness:
+
+  specifies whether the position based `"full"` flow figure includes a
+  representation of the attractivenesses (`FALSE` by default)
+
+- show_production:
+
+  specifies whether the position based `"full"` flow figure includes a
+  representation of the productions (`FALSE` by default)
 
 - cut_off:
 

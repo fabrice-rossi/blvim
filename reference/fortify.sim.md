@@ -111,7 +111,8 @@ following representations:
   extracted. Positions for both origin and destination locations are
   needed. The data frame contains five columns:
 
-  - `x` and `y` are used for the coordinates of the origin locations
+  - the first two columns are used for the coordinates of the origin
+    locations (see below for the names of the columns)
 
   - `xend` and `yend` are used for the coordinates of the destination
     locations
@@ -146,12 +147,14 @@ smaller than the `cut_off` value.
 
 ``` r
 positions <- matrix(rnorm(10 * 2), ncol = 2)
+colnames(positions) <- c("X", "Y")
 distances <- as.matrix(dist(positions))
 production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
 flows <- blvim(distances, production, 1.5, 4, attractiveness,
   origin_data =
-    list(names = LETTERS[1:10], positions = positions), destination_data =
+    list(names = LETTERS[1:10], positions = positions),
+  destination_data =
     list(names = LETTERS[1:10], positions = positions)
 )
 ggplot2::fortify(flows)
@@ -282,7 +285,7 @@ ggplot2::fortify(flows, flows = "attractiveness")
 #> J          10   9.018186e-07
 ## positions
 ggplot2::fortify(flows, flows = "attractiveness", with_positions = TRUE)
-#>             x           y attractiveness
+#>             X           Y attractiveness
 #> 1 -0.04996490 -0.20608719   5.017162e+00
 #> 3  0.44479712  0.02956075   1.952025e-06
 #> 4  2.75541758  0.54982754   9.999708e-01
@@ -295,7 +298,7 @@ ggplot2::fortify(flows,
   flows = "destination", with_positions = TRUE,
   with_names = TRUE
 )
-#>             x          y destination name
+#>             X          Y destination name
 #> 1 -0.04996490 -0.2060872   5.0171654    A
 #> 4  2.75541758  0.5498275   0.9999708    D
 #> 5  0.04653138 -2.2741149   0.9983180    E
@@ -303,7 +306,7 @@ ggplot2::fortify(flows,
 #> 8 -1.91172049  0.2133557   0.9954184    H
 #> 9  0.86208648  1.0743459   0.9891676    I
 ggplot2::fortify(flows, with_positions = TRUE, cut_off = 0.1)
-#>              x        xend           y       yend      flow
+#>              X        xend           Y       yend      flow
 #> 1  -0.04996490 -0.04996490 -0.20608719 -0.2060872 0.9997707
 #> 2  -0.25148344 -0.04996490  0.01917759 -0.2060872 0.9989630
 #> 3   0.44479712 -0.04996490  0.02956075 -0.2060872 0.9911611
