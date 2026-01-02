@@ -29,7 +29,14 @@ representations (see `vignette("grid")` for details on this aspect).
 
 ## Installation
 
-You can install `blvim` from [R-universe](https://r-universe.dev/) with:
+You can install `blvim` from CRAN with:
+
+``` r
+install.packages('blvim')
+```
+
+You can install the development version from
+[R-universe](https://r-universe.dev/) with:
 
 ``` r
 install.packages('blvim', repos = c('https://fabrice-rossi.r-universe.dev'))
