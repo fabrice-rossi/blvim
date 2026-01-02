@@ -13,3 +13,4 @@ devtools
 vignettes/grid_cache
 ^data-raw$
 .lintr
+^cran-comments\.md$
