@@ -39,6 +39,14 @@ static model)
 (for models produced by \code{\link[=blvim]{blvim()}} and related approaches), \code{FALSE} for no
 convergence and \code{NA} for static models
 }
+
+The resulting object behaves mostly like a \code{data.frame} and support standard
+extraction and replacement operators. The object tries to keep its \code{sim_df}
+class during modifications. In particular, \code{names<-.sim_df()} tracks
+name change for the \code{sim_list} column. If a modification or an extraction
+operation changes the type of the \code{sim_list} column or drops it, the
+resulting object is a standard \code{data.frame}. See \code{\link{[.sim_df}}
+for details.
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
@@ -52,4 +60,10 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
 )
 all_flows_df <- sim_df(all_flows)
 all_flows_df$converged
+## change the name of the sim column
+names(all_flows_df)[6] <- "models"
+## still a sim_df
+class(all_flows_df)
+## get the models
+sim_column(all_flows_df)
 }

@@ -81,3 +81,57 @@ test_that("sim_df names handling", {
   models_df <- sim_df(models, sim_column = "a column")
   test_sim_df_names(models_df, models)
 })
+
+test_that("sim_df modifications keep the data frame consistent", {
+  config <- create_locations(25, 20, seed = 48)
+  alphas <- seq(1.25, 2, by = 0.25)
+  betas <- 1 / seq(0.05, 0.5, length.out = 4)
+  models <- grid_blvim(config$costs,
+    config$X,
+    alphas,
+    betas,
+    config$Z,
+    iter_max = 10000,
+    precision = .Machine$double.eps^0.5
+  )
+  models_df <- sim_df(models)
+  alphas_2 <- seq(1.5, 2.25, by = 0.25)
+  betas_2 <- 1 / seq(0.15, 0.6, length.out = 4)
+  models_2 <- grid_blvim(config$costs,
+    config$X,
+    alphas_2,
+    betas_2,
+    config$Z,
+    iter_max = 10000,
+    precision = .Machine$double.eps^0.5
+  )
+  models_df_2 <- sim_df(models_2)
+  ## name based
+  models_df_1_to_2 <- models_df
+  models_df_1_to_2$sim <- models_2
+  expect_equal(models_df_2, models_df_1_to_2)
+  ## bracket based
+  models_df_1_to_2 <- models_df
+  models_df_1_to_2[["sim"]] <- models_2
+  expect_equal(models_df_2, models_df_1_to_2)
+  models_df_1_to_2 <- models_df
+  models_df_1_to_2[, 6] <- models_2
+  expect_equal(models_df_2, models_df_1_to_2)
+  models_df_1_to_2 <- models_df
+  models_df_1_to_2[, "sim"] <- models_2
+  expect_equal(models_df_2, models_df_1_to_2)
+  ## core column modification are forbidden
+  expect_no_condition(models_df$alpha <- models_df$alpha)
+  expect_error(models_df$alpha <- models_df_2$alpha)
+  for (col in c(
+    "alpha", "beta", "diversity", "iterations",
+    "converged"
+  )) {
+    ## ok
+    expect_no_condition(models_df[[col]] <- models_df[[col]])
+    ## ko
+    new_val <- sample(models_df[[col]][-1], nrow(models_df), replace = TRUE)
+    expect_false(identical(new_val, models_df[[col]]))
+    expect_error(models_df[[col]] <- new_val)
+  }
+})

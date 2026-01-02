@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_df.R
 \name{sim_column}
 \alias{sim_column}
-\title{Get the collection of spatial interaction models from a sim data frame}
+\title{Get the collection of spatial interaction models from a SIM data frame}
 \usage{
 sim_column(sim_df)
 }
@@ -15,7 +15,7 @@ the collection of spatial interaction models in the \code{sim_df} object,
 as a \code{sim_list} object
 }
 \description{
-Get the collection of spatial interaction models from a sim data frame
+Get the collection of spatial interaction models from a SIM data frame
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
