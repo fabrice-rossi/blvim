@@ -22,8 +22,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Boltzmann–Lotka–Volterra Interaction Model">
-<meta name="description" content="Estimates Boltzmann–Lotka–Volterra (BLV) interaction model efficiently. See Wilson, A. (2008) &lt;dx.doi.org/10.1098/rsif.2007.1288&gt;.">
-<meta property="og:description" content="Estimates Boltzmann–Lotka–Volterra (BLV) interaction model efficiently. See Wilson, A. (2008) &lt;dx.doi.org/10.1098/rsif.2007.1288&gt;.">
+<meta name="description" content="Estimates Boltzmann–Lotka–Volterra (BLV) interaction model efficiently. Enables programmatic and graphical exploration of the solution space of BLV models when parameters are varied. See Wilson, A. (2008) &lt;dx.doi.org/10.1098/rsif.2007.1288&gt;.">
+<meta property="og:description" content="Estimates Boltzmann–Lotka–Volterra (BLV) interaction model efficiently. Enables programmatic and graphical exploration of the solution space of BLV models when parameters are varied. See Wilson, A. (2008) &lt;dx.doi.org/10.1098/rsif.2007.1288&gt;.">
 <meta property="og:image" content="https://fabrice-rossi.github.io/blvim/logo.svg">
 </head>
 <body>
@@ -51,6 +51,7 @@
     <li><a class="dropdown-item" href="articles/theory.html">Theoretical Background</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -77,8 +78,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install <code>blvim</code> from <a href="https://r-universe.dev/" class="external-link">R-universe</a> with:</p>
+<p>You can install <code>blvim</code> from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'blvim'</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the development version from <a href="https://r-universe.dev/" class="external-link">R-universe</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'blvim'</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'https://fabrice-rossi.r-universe.dev'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -91,13 +95,13 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>The package is loaded in a standard way.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://fabrice-rossi.github.io/blvim/">blvim</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="input-data">Input data<a class="anchor" aria-label="anchor" href="#input-data"></a>
 </h3>
 <p>To compute a spatial interaction model with <code>blvim</code>, you need at least a cost matrix. The package comes with distance data for a selection of large French cities. We use the 30 largest ones as origin locations and the 20 smallest ones as destination locations. The cost matrix is the distance between the cities (in meters).</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## 30 largest cities</span></span>
 <span><span class="va">origins</span> <span class="op">&lt;-</span> <span class="va">french_cities</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"th_longitude"</span>, <span class="st">"th_latitude"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">## 20 smallest cities</span></span>
@@ -115,10 +119,10 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cost_matrix</span><span class="op">)</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">french_cities</span><span class="op">[</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">)</span> <span class="op">-</span> <span class="fl">19</span><span class="op">)</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">)</span>, <span class="st">"name"</span><span class="op">]</span></span></code></pre></div>
 <p>Additionally, since we focus on <strong>production-constrained models</strong>, we must specify the production for each origin location (a vector of positive values <span class="math inline">\((X_i)_{1\leq i\leq n}\)</span>). Here, we assume a common unitary production.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">origins</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, the simple <strong>static</strong> model requires an attractiveness value for each destination location, a vector of positive values <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span>. We again assume a common unitary attractiveness.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">destinations</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We could use the population of the cities as production constraints for instance.</p>
 </div>
@@ -134,7 +138,7 @@ Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(
 \forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.
 \]</span></p>
 <p>The model is obtained using the <code><a href="reference/static_blvim.html">static_blvim()</a></code> function:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">cost_matrix</span>, <span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">1.1</span>, beta <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">500000</span>, <span class="va">Z</span><span class="op">)</span></span>
 <span><span class="va">a_model</span></span>
 <span><span class="co">#&gt; Spatial interaction model with 30 origin locations and 20 destination locations</span></span>
@@ -142,10 +146,10 @@ Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(
 <span><span class="co">#&gt; • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) =</span></span>
 <span><span class="co">#&gt; 2e-06</span></span></code></pre></div>
 <p>Several functions are provided to extract parts of the result. In particular <code><a href="reference/flows.html">flows()</a></code> returns the flow matrix <span class="math inline">\(Y\)</span>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a_model_flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/flows.html">flows</a></span><span class="op">(</span><span class="va">a_model</span><span class="op">)</span></span></code></pre></div>
 <p>which can be displayed using, for instance, the <code><a href="https://rdrr.io/r/graphics/image.html" class="external-link">image()</a></code> function.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/image.html" class="external-link">image</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">a_model_flows</span><span class="op">)</span><span class="op">[</span>, <span class="fl">30</span><span class="op">:</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">gray.colors</a></span><span class="op">(</span><span class="fl">20</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
@@ -154,20 +158,20 @@ Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_flow-1.png" alt="A matrix representation of the flows. It shows no particular structure in the flow apart from a dominating flow from Nice to Cagnes-sur-Mer." width="50%" style="display: block; margin: auto;"></p>
 <p>In this representation, each row shows the flows from one origin location to all destination locations. The package also provides a <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">ggplot2::autoplot()</a></code> function, which can be used as follows:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">a_model</span>, <span class="st">"full"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_flow_ggplot2-1.png" alt="A matrix representation of the flows. The color scheme is more contrasted than in the previous figure, but does not show much more strucutre. The dominating flow is Nice to Cagnes-sur-Mer, but the figure shows that there are additional important flows." width="80%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/static_blvim.html">static_blvim</a></span><span class="op">(</span><span class="va">cost_matrix</span>, <span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">1.1</span>, beta <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">100000</span>, <span class="va">Z</span><span class="op">)</span></span>
 <span><span class="va">b_model</span></span>
 <span><span class="co">#&gt; Spatial interaction model with 30 origin locations and 20 destination locations</span></span>
 <span><span class="co">#&gt; • Model: Wilson's production constrained</span></span>
 <span><span class="co">#&gt; • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) =</span></span>
 <span><span class="co">#&gt; 1e-05</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">b_model</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -183,7 +187,7 @@ Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(
 Z_j =\sum_{i=1}^{n}Y_{ij},
 \]</span></p>
 <p>where the flows are given by the equations above. The model is estimated using the <code><a href="reference/blvim.html">blvim()</a></code> function as follows.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a_blv_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blvim.html">blvim</a></span><span class="op">(</span><span class="va">cost_matrix</span>, <span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">1.1</span>, beta <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">500000</span>, <span class="va">Z</span><span class="op">)</span></span>
 <span><span class="va">a_blv_model</span></span>
 <span><span class="co">#&gt; Spatial interaction model with 30 origin locations and 20 destination locations</span></span>
@@ -192,22 +196,22 @@ Z_j =\sum_{i=1}^{n}Y_{ij},
 <span><span class="co">#&gt; 2e-06</span></span>
 <span><span class="co">#&gt; ℹ The BLV model converged after 4800 iterations.</span></span></code></pre></div>
 <p>Notice that we start with some initial values of the attractiveness, but the final values are different. These final values can be obtained using the <code><a href="reference/attractiveness.html">attractiveness()</a></code> function (and visualised here using a bar plot).</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">a_final_Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/attractiveness.html">attractiveness</a></span><span class="op">(</span><span class="va">a_blv_model</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span><span class="va">a_final_Z</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_blv_Z-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Only one bar is visible: Vaulx-en-Vellin dominates the destination locations." width="80%" style="display: block; margin: auto;"> In this particular example, one destination location acts as a global attractor of all the flows. This pattern is also visible in the final flow matrix.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">a_blv_model</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_blv_flow-1.png" alt="A matrix representation of the flows. The matrix has only one black column, showing that all the flow goes to Vaulx-en-Vellin." width="80%" style="display: block; margin: auto;"></p>
 <p>The <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> function can also be used to show the destination flows or the attractivenesses values:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">a_blv_model</span>, <span class="st">"attractiveness"</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-a_blv_Z_ggplot2-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Only one bar is visible: Vaulx-en-Vellin dominates the destination locations." width="100%"></p>
 <p>Naturally, the results are strongly influenced by the parameters, as shown in this second example.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b_blv_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blvim.html">blvim</a></span><span class="op">(</span><span class="va">cost_matrix</span>, <span class="va">X</span>, alpha <span class="op">=</span> <span class="fl">1.1</span>, beta <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">50000</span>, <span class="va">Z</span><span class="op">)</span></span>
 <span><span class="va">b_blv_model</span></span>
 <span><span class="co">#&gt; Spatial interaction model with 30 origin locations and 20 destination locations</span></span>
@@ -215,17 +219,17 @@ Z_j =\sum_{i=1}^{n}Y_{ij},
 <span><span class="co">#&gt; • Parameters: return to scale (alpha) = 1.1 and inverse cost scale (beta) =</span></span>
 <span><span class="co">#&gt; 2e-05</span></span>
 <span><span class="co">#&gt; ℹ The BLV model converged after 5700 iterations.</span></span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">b_blv_model</span>, <span class="st">"attractiveness"</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-b_blv_Z-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Nine out of the twenty destination locations remain attractive. Vaulx-en-Vellin is still the most attractive location, but Cholet and Arles are quite attractive also. They are closely followed by Saint-Ouen-sur-Seine and Saint-Quentin. Then the graph shows a set of four remaining attractive destinations but with small values (between 0.5 and 1.5, compared to 4 or more for the other locations). The cities are Albi, Cagnes-sur-Mer, Vannes and Bayonne." width="100%"></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">b_blv_model</span>, with_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-b_blv_flow-1.png" alt="A matrix representation of the flows. The figure shows essentially the same things as the previous bar plot. In most of the cases, the flow outgoing from a origin location goes to a unique destination location. The main exception is the pair Saint-Ouen-sur-Seine and Saint-Quentin who share incoming flows." width="80%" style="display: block; margin: auto;"></p>
 <p><code>bvlim</code> offers a collection of graphical representations that can leverage the data associated to the origin and destination locations. For instance, we can display the full flows using geographical coordinates of the cities.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/origin_positions.html">origin_positions</a></span><span class="op">(</span><span class="va">b_blv_model</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">origins</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/destination_positions.html">destination_positions</a></span><span class="op">(</span><span class="va">b_blv_model</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">destinations</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">b_blv_model</span>,</span>
@@ -268,7 +272,7 @@ Z_j =\sum_{i=1}^{n}Y_{ij},
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Fabrice Rossi <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4638-1286" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Fabrice Rossi <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0003-4638-1286" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 

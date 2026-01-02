@@ -1,6 +1,6 @@
-# Get the collection of spatial interaction models from a sim data frame
+# Get the collection of spatial interaction models from a SIM data frame
 
-Get the collection of spatial interaction models from a sim data frame
+Get the collection of spatial interaction models from a SIM data frame
 
 ## Usage
 

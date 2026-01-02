@@ -37,6 +37,7 @@ details for the default columns."><meta property="og:image" content="https://fab
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/grid.html">Systematic exploration of the BLV solution space</a></li>
     <li><a class="dropdown-item" href="../articles/theory.html">Theoretical Background</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/fabrice-rossi/blvim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -96,7 +97,14 @@ static model)</p></li>
 <li><p><code>converged</code>: <code>TRUE</code> is the iterative calculation of the model converged
 (for models produced by <code><a href="blvim.html">blvim()</a></code> and related approaches), <code>FALSE</code> for no
 convergence and <code>NA</code> for static models</p></li>
-</ul></div>
+</ul><p>The resulting object behaves mostly like a <code>data.frame</code> and support standard
+extraction and replacement operators. The object tries to keep its <code>sim_df</code>
+class during modifications. In particular, <code>names&lt;-.sim_df()</code> tracks
+name change for the <code>sim_list</code> column. If a modification or an extraction
+operation changes the type of the <code>sim_list</code> column or drops it, the
+resulting object is a standard <code>data.frame</code>. See <code><a href="sim_df_extract.html">[.sim_df</a></code>
+and <code><a href="names-set-.sim_df.html">names&lt;-.sim_df()</a></code> for details.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -113,6 +121,17 @@ convergence and <code>NA</code> for static models</p></li>
 <span class="r-in"><span><span class="va">all_flows_df</span><span class="op">$</span><span class="va">converged</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13]  TRUE  TRUE FALSE</span>
+<span class="r-in"><span><span class="co">## change the name of the sim column</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span><span class="op">[</span><span class="fl">6</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"models"</span></span></span>
+<span class="r-in"><span><span class="co">## still a sim_df</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sim_df"     "data.frame"</span>
+<span class="r-in"><span><span class="co">## get the models</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="sim_column.html">sim_column</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Collection of <span style="color: #0000BB;">15</span> spatial interaction models with <span style="color: #0000BB;">10</span> origin locations and <span style="color: #0000BB;">10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> destination locations computed on the following grid:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • alpha: <span style="color: #0000BB;">1.05</span>, <span style="color: #0000BB;">1.25</span>, and <span style="color: #0000BB;">1.45</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> • beta: <span style="color: #0000BB;">0.0025</span>, <span style="color: #0000BB;">0.00375</span>, <span style="color: #0000BB;">0.005</span>, <span style="color: #0000BB;">0.00625</span>, and <span style="color: #0000BB;">0.0075</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

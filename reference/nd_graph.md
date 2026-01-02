@@ -17,6 +17,9 @@ non bipartite setting.
 
 ``` r
 nd_graph(sim, definition = c("ND", "RW"), ...)
+
+# S3 method for class 'sim'
+nd_graph(sim, definition = c("ND", "RW"), ...)
 ```
 
 ## Arguments

@@ -88,11 +88,11 @@ summary(all_flows)
 #> Spatial interaction model with 15 origin locations and 15 destination locations
 #> • Model: Wilson's production constrained
 #> • Parameters: return to scale (alpha) = 1.25 and inverse cost scale (beta) = 2
-#> ℹ The BLV model converged after 700 iterations.
+#> ℹ The BLV model converged after 900 iterations.
 #> 
 #> ── Homogeneity 
-#> distortion: 1.779
-#> within variance: 86.926
+#> distortion: 2.559
+#> within variance: 111.523
 #> 
 #> ── Terminals ──
 #> 

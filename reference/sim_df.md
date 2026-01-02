@@ -53,6 +53,18 @@ following columns:
   and related approaches), `FALSE` for no convergence and `NA` for
   static models
 
+The resulting object behaves mostly like a `data.frame` and support
+standard extraction and replacement operators. The object tries to keep
+its `sim_df` class during modifications. In particular,
+`names<-.sim_df()` tracks name change for the `sim_list` column. If a
+modification or an extraction operation changes the type of the
+`sim_list` column or drops it, the resulting object is a standard
+`data.frame`. See
+[`[.sim_df`](https://fabrice-rossi.github.io/blvim/reference/sim_df_extract.md)
+and
+[`names<-.sim_df()`](https://fabrice-rossi.github.io/blvim/reference/names-set-.sim_df.md)
+for details.
+
 ## Examples
 
 ``` r
@@ -69,4 +81,15 @@ all_flows_df <- sim_df(all_flows)
 all_flows_df$converged
 #>  [1]  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE
 #> [13]  TRUE  TRUE FALSE
+## change the name of the sim column
+names(all_flows_df)[6] <- "models"
+## still a sim_df
+class(all_flows_df)
+#> [1] "sim_df"     "data.frame"
+## get the models
+sim_column(all_flows_df)
+#> Collection of 15 spatial interaction models with 10 origin locations and 10
+#> destination locations computed on the following grid:
+#> • alpha: 1.05, 1.25, and 1.45
+#> • beta: 0.0025, 0.00375, 0.005, 0.00625, and 0.0075
 ```

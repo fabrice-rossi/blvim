@@ -17,7 +17,14 @@ for details on this aspect).
 
 ## Installation
 
-You can install `blvim` from [R-universe](https://r-universe.dev/) with:
+You can install `blvim` from CRAN with:
+
+``` r
+install.packages('blvim')
+```
+
+You can install the development version from
+[R-universe](https://r-universe.dev/) with:
 
 ``` r
 install.packages('blvim', repos = c('https://fabrice-rossi.r-universe.dev'))
@@ -349,23 +356,25 @@ parameters.
   : Extract the return to scale parameter used to compute this model
 - [`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)
   : Reports whether the spatial interaction model is bipartite
-- [`destination_names()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
-  [`` `destination_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
-  : Names of destination locations in a spatial interaction model
 - [`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md)
   [`` `location_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/location_names.md)
   : Names of origin and destination locations in a spatial interaction
   model
-- [`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
-  [`` `origin_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
-  : Names of origin locations in a spatial interaction model
-- [`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
-  [`` `destination_positions<-`() ``](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
-  : positions of destination locations in a spatial interaction model
 - [`location_positions()`](https://fabrice-rossi.github.io/blvim/reference/location_positions.md)
   [`` `location_positions<-`() ``](https://fabrice-rossi.github.io/blvim/reference/location_positions.md)
   : Positions of origin and destination locations in a spatial
   interaction model
+- [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
+  : Compute the flows incoming at each destination location
+- [`destination_names()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
+  [`` `destination_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
+  : Names of destination locations in a spatial interaction model
+- [`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
+  [`` `destination_positions<-`() ``](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
+  : positions of destination locations in a spatial interaction model
+- [`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
+  [`` `origin_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
+  : Names of origin locations in a spatial interaction model
 - [`origin_positions()`](https://fabrice-rossi.github.io/blvim/reference/origin_positions.md)
   [`` `origin_positions<-`() ``](https://fabrice-rossi.github.io/blvim/reference/origin_positions.md)
   : Positions of origin locations in a spatial interaction model
@@ -447,8 +456,15 @@ grid of parameters.
 - [`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md)
   : Create a spatial interaction models data frame from a collection of
   interaction models
+- [`` `$<-`( ``*`<sim_df>`*`)`](https://fabrice-rossi.github.io/blvim/reference/sim_df_extract.md)
+  [`` `[[<-`( ``*`<sim_df>`*`)`](https://fabrice-rossi.github.io/blvim/reference/sim_df_extract.md)
+  [`` `[`( ``*`<sim_df>`*`)`](https://fabrice-rossi.github.io/blvim/reference/sim_df_extract.md)
+  [`` `[<-`( ``*`<sim_df>`*`)`](https://fabrice-rossi.github.io/blvim/reference/sim_df_extract.md)
+  : Extract or replace parts of a SIM data frame
+- [`` `names<-`( ``*`<sim_df>`*`)`](https://fabrice-rossi.github.io/blvim/reference/names-set-.sim_df.md)
+  : Set the column names of a SIM data frame
 - [`sim_column()`](https://fabrice-rossi.github.io/blvim/reference/sim_column.md)
-  : Get the collection of spatial interaction models from a sim data
+  : Get the collection of spatial interaction models from a SIM data
   frame
 - [`sim_distance()`](https://fabrice-rossi.github.io/blvim/reference/sim_distance.md)
   : Compute all pairwise distances between the spatial interaction
