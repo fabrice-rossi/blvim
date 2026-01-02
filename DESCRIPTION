@@ -8,7 +8,9 @@ Authors@R:
            email = "Fabrice.Rossi@apiacoa.org", 
            comment = c(ORCID = "0000-0003-4638-1286"))
 Description: Estimates Boltzmann–Lotka–Volterra (BLV) interaction model 
-    efficiently. See Wilson, A. (2008) <dx.doi.org/10.1098/rsif.2007.1288>.
+    efficiently. Enables programmatic and graphical exploration of the solution
+    space of BLV models when parameters are varied. See Wilson, A. (2008) 
+    <dx.doi.org/10.1098/rsif.2007.1288>.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
