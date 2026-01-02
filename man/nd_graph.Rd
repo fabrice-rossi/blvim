@@ -2,9 +2,12 @@
 % Please edit documentation in R/nd_graph.R
 \name{nd_graph}
 \alias{nd_graph}
+\alias{nd_graph.sim}
 \title{Compute the Nystuen and Dacey graph for a spatial interaction model}
 \usage{
 nd_graph(sim, definition = c("ND", "RW"), ...)
+
+\method{nd_graph}{sim}(sim, definition = c("ND", "RW"), ...)
 }
 \arguments{
 \item{sim}{a spatial interaction model object}

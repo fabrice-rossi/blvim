@@ -1,3 +1,8 @@
+## tools for graphical representations
+
+## turns a collection of values into a collection of intervals. If the sorted
+## values in x are a, b, c, the output is x_0, (a+b)/2, (b+c)/2, x_1
+## with x_0=a-(b-a)/2 and x_1=c+(b+c)/2
 to_rect <- function(x, inverse = FALSE) {
   if (inverse) {
     x <- 1 / x

@@ -60,6 +60,7 @@ nd_graph <- function(sim, definition = c("ND", "RW"), ...) {
 }
 
 #' @export
+#' @rdname nd_graph
 nd_graph.sim <- function(sim, definition = c("ND", "RW"), ...) {
   definition <- rlang::arg_match(definition, c("ND", "RW"))
   if (sim_is_bipartite(sim)) {
