@@ -40,6 +40,7 @@ Suggests:
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 URL: https://fabrice-rossi.github.io/blvim/
+     https://fabrice-rossi.r-universe.dev/blvim
 BugReports: https://github.com/fabrice-rossi/blvim/issues
 VignetteBuilder: knitr
 Depends: 

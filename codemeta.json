@@ -4,6 +4,7 @@
   "identifier": "blvim",
   "description": "Estimates Boltzmann–Lotka–Volterra (BLV) interaction model efficiently. See Wilson, A. (2008) <dx.doi.org/10.1098/rsif.2007.1288>.",
   "name": "blvim: Boltzmann–Lotka–Volterra Interaction Model",
+  "relatedLink": "https://fabrice-rossi.github.io/blvim/",
   "codeRepository": "https://github.com/fabrice-rossi/blvim",
   "issueTracker": "https://github.com/fabrice-rossi/blvim/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
@@ -13,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.5.1 (2025-06-13)",
+  "runtimePlatform": "R version 4.5.2 (2025-10-31)",
   "author": [
     {
       "@type": "Person",
@@ -257,10 +258,16 @@
       "identifier": "stats",
       "name": "stats"
     },
+    "6": {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 3.5"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "31753.296KB",
-  "relatedLink": "https://fabrice-rossi.github.io/blvim/",
+  "fileSize": "16554.053KB",
+  "releaseNotes": "https://github.com/fabrice-rossi/blvim/blob/main/NEWS.md",
   "readme": "https://github.com/fabrice-rossi/blvim/blob/main/README.md",
   "contIntegration": ["https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/fabrice-rossi/blvim"],
   "keywords": ["r", "r-package", "r-stats", "spatial-analysis", "spatial-interaction-modeling", "boltzmann-lotka-volterra"]
