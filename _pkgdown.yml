@@ -41,6 +41,7 @@ reference:
   - quantile.sim_list
   - sim_df
   - sim_df_extract
+  - names<-.sim_df
   - sim_column
   - sim_distance
   - sim_list

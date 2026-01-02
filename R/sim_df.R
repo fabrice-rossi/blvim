@@ -69,7 +69,7 @@ recompute_sim_df <- function(sim_df) {
 #' name change for the `sim_list` column. If a modification or an extraction
 #' operation changes the type of the `sim_list` column or drops it, the
 #' resulting object is a standard `data.frame`. See \code{\link{[.sim_df}}
-#' for details.
+#' and [names<-.sim_df()] for details.
 #'
 #' @param x a collection of spatial interaction models, an object of class
 #'   `sim_list`
@@ -144,18 +144,20 @@ sim_column <- function(sim_df) {
 #' Replacement functions maintain this property by updating the columns after
 #' any modification of the `sim_list` column. Modifications of the core columns
 #' are rejected (removing a core column is accepted but this turns the `sim_df`
-#' into a standard `data.frame`). Renaming the `sim_list` column is supported
-#' but renaming a core column turns also the `sim_df`  into a standard
-#' `data.frame`.
+#' into a standard `data.frame`).
 #'
 #' In addition, the `sim_list` column obeys to restriction on `sim_list`
 #' modifications (i.e, a `sim_list` contains a homogeneous collection of spatial
 #' interaction models).
 #'
+#' Extraction functions keep the `sim_df` class only if the result is a data
+#' frame with a `sim_list` column, the core columns and potentially additional
+#' columns.
+#'
 #' @param x  data frame of spatial interaction models, an object of class
 #'   `sim_df`
 #' @param name a literal character string
-#' @param logical. If `TRUE` the result is coerced to the lowest possible
+#' @param drop If `TRUE` the result is coerced to the lowest possible
 #'   dimension. The default is to drop if only one column is left, but not to
 #'   drop if only one row is left.
 #' @param i,j,...	 elements to extract or replace. For `[` and `[[`, these are
@@ -164,11 +166,51 @@ sim_column <- function(sim_df) {
 #'   matrix is allowed.
 #' @param value a suitable replacement value: it will be repeated a whole number
 #'   of times if necessary and it may be coerced: see the Coercion section in
-#'   \code{\link[base]{[.data.frame}} If NULL, deletes the column if a single
+#'   \code{\link[base]{[.data.frame}}. If NULL, deletes the column if a single
 #'   column is selected.
 #'
 #' @name sim_df_extract
-#' @return something
+#' @return For `[` a `sim_df`, a `data.frame` or a single column depending on the
+#'  values of `i` and `j`.
+#'
+#'  For `[[` a column of the `sim_df` (or `NULL`) or an element of a column when
+#'  two indices are used.
+#'
+#'  For `$` a column of the `sim_df` (or `NULL`).
+#'
+#'  For `[<-`, `[[<-`, and `$<-` a `sim_df` or a data frame (see
+#'  details).
+#' @examples
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- rep(1, 10)
+#' attractiveness <- log(french_cities$area[1:10])
+#' all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
+#'   seq(1, 3, by = 0.5) / 400,
+#'   attractiveness,
+#'   bipartite = FALSE,
+#'   epsilon = 0.1, iter_max = 1000,
+#' )
+#' all_flows_df <- sim_df(all_flows)
+#' ## the models as a sim_list
+#' all_flows_df[, "sim"]
+#' ## sub data frame, a sim_df
+#' all_flows_df[1:5, ]
+#' ## sub data frame, not a sim_df (alpha is missing)
+#' all_flows_df[6:10, 2:6]
+#' all_flows_2 <- grid_blvim(distances, log(french_cities$population[1:10]),
+#'   seq(1.05, 1.45, by = 0.2),
+#'   seq(1, 3, by = 0.5) / 400,
+#'   attractiveness,
+#'   bipartite = FALSE,
+#'   epsilon = 0.1, iter_max = 1000,
+#' )
+#' ## replace the sim_list column by the new models
+#' ## before
+#' all_flows_df$diversity
+#' all_flows_df$sim <- all_flows_2
+#' ## after (all core columns have been updated)
+#' all_flows_df$diversity
+#'
 NULL
 #> NULL
 
@@ -296,8 +338,38 @@ NULL
 }
 
 
-#' @rdname sim_df_extract
+#' Set the column names of a SIM data frame
+#'
+#' Set the column names of a SIM data frame. Renaming the `sim_list` column is
+#' supported and tracked, but renaming any core column turns the `sim_df`
+#' into a standard `data.frame`.
+#'
+#' @param x  data frame of spatial interaction models, an object of class
+#'   `sim_df`
+#' @param value unique names for the columns of the data frame
+#' @returns a `sim_df` data frame if possible, a standard `data.frame` when
+#'  this is not possible.
 #' @export
+#' @examples
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- rep(1, 10)
+#' attractiveness <- log(french_cities$area[1:10])
+#' all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
+#'   seq(1, 3, by = 0.5) / 400,
+#'   attractiveness,
+#'   bipartite = FALSE,
+#'   epsilon = 0.1, iter_max = 1000,
+#' )
+#' all_flows_df <- sim_df(all_flows)
+#' names(all_flows_df)
+#' names(all_flows_df)[6] <- "my_sim"
+#' names(all_flows_df)
+#' ## still a sim_df
+#' class(all_flows_df)
+#' names(all_flows_df)[1] <- "return to scale"
+#' names(all_flows_df)
+#' ## not a sim_df
+#' class(all_flows_df)
 `names<-.sim_df` <- function(x, value) {
   sim_column <- attr(x, "sim_column")
   position <- match(sim_column, names(x))

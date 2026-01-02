@@ -46,7 +46,7 @@ class during modifications. In particular, \code{names<-.sim_df()} tracks
 name change for the \code{sim_list} column. If a modification or an extraction
 operation changes the type of the \code{sim_list} column or drops it, the
 resulting object is a standard \code{data.frame}. See \code{\link{[.sim_df}}
-for details.
+and \code{\link[=names<-.sim_df]{names<-.sim_df()}} for details.
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km

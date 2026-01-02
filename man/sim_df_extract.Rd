@@ -6,7 +6,6 @@
 \alias{[[<-.sim_df}
 \alias{[.sim_df}
 \alias{[<-.sim_df}
-\alias{names<-.sim_df}
 \title{Extract or replace parts of a SIM data frame}
 \usage{
 \method{$}{sim_df}(x, name) <- value
@@ -16,8 +15,6 @@
 \method{[}{sim_df}(x, i, j, ..., drop)
 
 \method{[}{sim_df}(x, i, j) <- value
-
-\method{names}{sim_df}(x) <- value
 }
 \arguments{
 \item{x}{data frame of spatial interaction models, an object of class
@@ -27,7 +24,7 @@
 
 \item{value}{a suitable replacement value: it will be repeated a whole number
 of times if necessary and it may be coerced: see the Coercion section in
-\code{\link[base]{[.data.frame}} If NULL, deletes the column if a single
+\code{\link[base]{[.data.frame}}. If NULL, deletes the column if a single
 column is selected.}
 
 \item{i, j, ...}{elements to extract or replace. For \code{[} and \code{[[}, these are
@@ -35,12 +32,21 @@ numeric or character or, for \code{[} only, empty or logical. Numeric values are
 coerced to integer as if by as.integer. For replacement by \code{[}, a logical
 matrix is allowed.}
 
-\item{logical.}{If \code{TRUE} the result is coerced to the lowest possible
+\item{drop}{If \code{TRUE} the result is coerced to the lowest possible
 dimension. The default is to drop if only one column is left, but not to
 drop if only one row is left.}
 }
 \value{
-something
+For \code{[} a \code{sim_df}, a \code{data.frame} or a single column depending on the
+values of \code{i} and \code{j}.
+
+For \code{[[} a column of the \code{sim_df} (or \code{NULL}) or an element of a column when
+two indices are used.
+
+For \code{$} a column of the \code{sim_df} (or \code{NULL}).
+
+For \verb{[<-}, \verb{[[<-}, and \verb{$<-} a \code{sim_df} or a data frame (see
+details).
 }
 \description{
 Extract or replace subsets of SIM data frames. The behaviour of the functions
@@ -55,11 +61,45 @@ In a \code{sim_df}, the core columns are derived from the \code{sim_list} column
 Replacement functions maintain this property by updating the columns after
 any modification of the \code{sim_list} column. Modifications of the core columns
 are rejected (removing a core column is accepted but this turns the \code{sim_df}
-into a standard \code{data.frame}). Renaming the \code{sim_list} column is supported
-but renaming a core column turns also the \code{sim_df}  into a standard
-\code{data.frame}.
+into a standard \code{data.frame}).
 
 In addition, the \code{sim_list} column obeys to restriction on \code{sim_list}
 modifications (i.e, a \code{sim_list} contains a homogeneous collection of spatial
 interaction models).
+
+Extraction functions keep the \code{sim_df} class only if the result is a data
+frame with a \code{sim_list} column, the core columns and potentially additional
+columns.
+}
+\examples{
+distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+production <- rep(1, 10)
+attractiveness <- log(french_cities$area[1:10])
+all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
+  seq(1, 3, by = 0.5) / 400,
+  attractiveness,
+  bipartite = FALSE,
+  epsilon = 0.1, iter_max = 1000,
+)
+all_flows_df <- sim_df(all_flows)
+## the models as a sim_list
+all_flows_df[, "sim"]
+## sub data frame, a sim_df
+all_flows_df[1:5, ]
+## sub data frame, not a sim_df (alpha is missing)
+all_flows_df[6:10, 2:6]
+all_flows_2 <- grid_blvim(distances, log(french_cities$population[1:10]),
+  seq(1.05, 1.45, by = 0.2),
+  seq(1, 3, by = 0.5) / 400,
+  attractiveness,
+  bipartite = FALSE,
+  epsilon = 0.1, iter_max = 1000,
+)
+## replace the sim_list column by the new models
+## before
+all_flows_df$diversity
+all_flows_df$sim <- all_flows_2
+## after (all core columns have been updated)
+all_flows_df$diversity
+
 }
