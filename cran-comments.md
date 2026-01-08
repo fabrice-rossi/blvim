@@ -1,6 +1,11 @@
+## Resubmission
+
+This is a resubmission. In this version I have modified examples to make sure
+they run under 5 seconds. 
+
 ## R CMD check results
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 1 notes
 
 * This is a new release.
 * Possibly misspelled words in DESCRIPTION:
