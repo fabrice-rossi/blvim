@@ -14,3 +14,4 @@ vignettes/grid_cache
 ^data-raw$
 .lintr
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
