@@ -146,8 +146,8 @@ positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- log(french_cities$area[1:10])
-all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
-  seq(1, 3, by = 0.5) / 400,
+all_flows <- grid_blvim(distances, production, seq(1.05, 1.35, by = 0.1),
+  seq(1, 2.5, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
   epsilon = 0.1, iter_max = 1000,
@@ -168,16 +168,11 @@ grid_autoplot(all_flows_df)
 grid_autoplot(all_flows_df, paste(alpha, "~", beta))
 
 ## bar plots
-grid_autoplot(all_flows_df, flows = "destination")
-
 grid_autoplot(all_flows_df, flows = "attractiveness")
 
 ## with positions
-grid_autoplot(all_flows_df, flows = "destination", with_positions = TRUE) +
-  ggplot2::scale_size_continuous(range = c(0, 2)) +
-  ggplot2::coord_sf(crs = "epsg:4326")
-
-grid_autoplot(all_flows_df, with_positions = TRUE) +
+grid_autoplot(all_flows_df, with_positions = TRUE, show_destination = TRUE) +
   ggplot2::scale_linewidth_continuous(range = c(0, 1)) +
+  ggplot2::scale_size_continuous(range = c(0, 2)) +
   ggplot2::coord_sf(crs = "epsg:4326")
 ```
