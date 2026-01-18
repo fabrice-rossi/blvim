@@ -365,6 +365,71 @@ test_that("autoplot.sim works as expected (with positions and mixed graphs)", {
   destination_positions(model) <- config$pd
   destination_names(model) <- sample(letters, 15, replace = FALSE)
   origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
+  ## first without legend
+  vdiffr::expect_doppelganger(
+    "NL Flows and destination flows",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_destination = TRUE
+    ) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Flows and attractivenesses ",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_attractiveness = TRUE
+    ) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Flows and production",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Flows, production and destination",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_production = TRUE,
+      show_destination = TRUE
+    ))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Flows, productions and attractiveness",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_production = TRUE,
+      show_attractiveness = TRUE
+    ) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Flows, productions and attractiveness, cut off",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_production = TRUE,
+      show_attractiveness = TRUE,
+      cut_off = 0.1
+    ) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Flows, destination, cut off, limits",
+    \() print(ggplot2::autoplot(model,
+      with_positions = TRUE,
+      show_destination = TRUE,
+      cut_off = 1,
+      adjust_limits = FALSE
+    ) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  ## then with legend
+  ## legend order is different on github CI
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     "Flows and destination flows",
     \() print(ggplot2::autoplot(model,

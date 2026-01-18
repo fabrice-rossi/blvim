@@ -37,31 +37,6 @@ test_that("grid_autoplot works as expected", {
       ggplot2::scale_linewidth_continuous(range = c(0, 2)))
   )
   vdiffr::expect_doppelganger(
-    "Default flow graphs with dest",
-    \() print(grid_autoplot(models_df,
-      with_positions = TRUE,
-      show_destination = TRUE
-    ) +
-      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
-  )
-  vdiffr::expect_doppelganger(
-    "Default flow graphs with att",
-    \() print(grid_autoplot(models_df,
-      with_positions = TRUE,
-      show_attractiveness = TRUE
-    ) +
-      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
-  )
-  vdiffr::expect_doppelganger(
-    "Default flow graphs with prod",
-    \() print(grid_autoplot(models_df,
-      with_positions = TRUE,
-      show_production = TRUE
-    ) +
-      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
-      ggplot2::scale_size_continuous(range = c(0.5, 1.5)))
-  )
-  vdiffr::expect_doppelganger(
     "Flow graphs cut off",
     \() print(grid_autoplot(models_df, with_positions = TRUE, cut_off = 0.5) +
       ggplot2::scale_linewidth_continuous(range = c(0, 2)))
@@ -98,6 +73,63 @@ test_that("grid_autoplot works as expected", {
     ) +
       ggplot2::scale_size_continuous(range = c(0, 5)))
   )
+  ## first without legend
+  vdiffr::expect_doppelganger(
+    "NL Default flow graphs with att",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_attractiveness = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Default flow graphs with prod",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::scale_size_continuous(range = c(0.5, 1.5)) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Default flow graphs with dest",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_destination = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  ## then with legend
+  ## legend order is different on github CI
+  skip_on_ci()
+  vdiffr::expect_doppelganger(
+    "Default flow graphs with att",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_attractiveness = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
+  )
+  vdiffr::expect_doppelganger(
+    "Default flow graphs with prod",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::scale_size_continuous(range = c(0.5, 1.5)))
+  )
+  vdiffr::expect_doppelganger(
+    "Default flow graphs with dest",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_destination = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)))
+  )
 })
 
 test_that("grid_autoplot works as expected in the bipartite case", {
@@ -116,6 +148,62 @@ test_that("grid_autoplot works as expected in the bipartite case", {
   destination_positions(models) <- config$pd
   origin_positions(models) <- config$pp
   models_df <- sim_df(models)
+
+  ## first without legend
+  vdiffr::expect_doppelganger(
+    "NL Default biflow graphs with dest",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_destination = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Default biflow graphs with att",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_attractiveness = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Default biflow graphs with prod",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::scale_size_continuous(range = c(0.5, 1.5)) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Default biflow graphs with prod and dest",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_destination = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::scale_size_continuous(range = c(0, 5)) +
+      ggplot2::theme(legend.position = "none"))
+  )
+  vdiffr::expect_doppelganger(
+    "NL Default biflow graphs with prod and att",
+    \() print(grid_autoplot(models_df,
+      with_positions = TRUE,
+      show_attractiveness = TRUE,
+      show_production = TRUE
+    ) +
+      ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
+      ggplot2::scale_size_continuous(range = c(0, 5)) +
+      ggplot2::theme(legend.position = "none"))
+  )
+
+  ## then with legend
+  ## legend order is different on github CI
+  skip_on_ci()
   vdiffr::expect_doppelganger(
     "Default biflow graphs with dest",
     \() print(grid_autoplot(models_df,
