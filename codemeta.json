@@ -8,13 +8,19 @@
   "codeRepository": "https://github.com/fabrice-rossi/blvim",
   "issueTracker": "https://github.com/fabrice-rossi/blvim/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.1",
+  "version": "0.1.1.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
   "runtimePlatform": "R version 4.5.2 (2025-10-31)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -275,7 +281,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "16570.101KB",
+  "fileSize": "16570.139KB",
   "releaseNotes": "https://github.com/fabrice-rossi/blvim/blob/main/NEWS.md",
   "readme": "https://github.com/fabrice-rossi/blvim/blob/main/README.md",
   "contIntegration": ["https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/fabrice-rossi/blvim"],

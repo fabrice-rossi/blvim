@@ -1,6 +1,6 @@
 Package: blvim
 Title: Boltzmann–Lotka–Volterra Interaction Model
-Version: 0.1.1
+Version: 0.1.1.9000
 Authors@R: 
     person(given = "Fabrice", 
            family = "Rossi", 
