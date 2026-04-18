@@ -27,6 +27,7 @@
 #' length(all_flows)
 #' all_flows[[2]]
 grid_blvim <- function(costs, X, alphas, betas, Z,
+                       kappa = 1,
                        bipartite = TRUE, origin_data = NULL,
                        destination_data = NULL,
                        epsilon = 0.01,
@@ -46,6 +47,7 @@ grid_blvim <- function(costs, X, alphas, betas, Z,
       params$alpha[k],
       params$beta[k],
       Z,
+      kappa,
       bipartite,
       origin_data,
       destination_data,

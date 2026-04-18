@@ -10,6 +10,7 @@ grid_blvim(
   alphas,
   betas,
   Z,
+  kappa = 1,
   bipartite = TRUE,
   origin_data = NULL,
   destination_data = NULL,
@@ -31,6 +32,9 @@ grid_blvim(
 \item{betas}{a vector of cost inverse scale parameters}
 
 \item{Z}{a vector of initial destination attractivenesses}
+
+\item{kappa}{a vector of conversion factors between attractivenesses and
+incoming flows (positive values). Defaults to 1 for all destinations.}
 
 \item{bipartite}{when \code{TRUE} (default value), the origin and destination
 locations are considered to be distinct. When \code{FALSE}, a single set of

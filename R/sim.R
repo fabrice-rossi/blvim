@@ -385,3 +385,31 @@ sim_is_bipartite <- function(sim) {
 sim_is_bipartite.sim <- function(sim) {
   sim$bipartite
 }
+
+#' Returns the conversion factors between attractivenesses and incoming flows
+#'
+#' Some spatial interaction models use conversion factors between attractivenesses
+#' and incoming flows to check whether they are at equilibrium (see for instance
+#' [blvim()]). This function retuns the conversion factors used to build this
+#' sim is applicable, and `NA` when not applicable.
+#'
+#' @param sim a spatial interaction model object (an object of class `sim`)
+#' @param ... additional parameters
+#'
+#' @returns NA or a vector of conversion factors, see above.
+#' @export
+#' @seealso [blvim()]
+#' @examples
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+#' sim_conversion(model) ## must NA
+sim_conversion <- function(sim, ...) {
+  UseMethod("sim_conversion")
+}
+
+#' @export
+sim_conversion.sim <- function(sim, ...) {
+  NA
+}

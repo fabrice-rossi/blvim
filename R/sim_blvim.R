@@ -1,5 +1,5 @@
 new_sim_blvim <- function(Y, Z, costs, alpha, beta, bipartite, origin_data,
-                          destination_data, iteration, converged, ...,
+                          destination_data, iteration, converged, kappa, ...,
                           class = character()) {
   new_sim_wpc(Y,
     Z,
@@ -11,6 +11,7 @@ new_sim_blvim <- function(Y, Z, costs, alpha, beta, bipartite, origin_data,
     destination_data,
     iteration = iteration,
     converged = converged,
+    kappa = kappa,
     ...,
     class = c(class, "sim_blvim")
   )
@@ -41,4 +42,9 @@ sim_iterations.sim_blvim <- function(sim, ...) {
 #' @export
 sim_converged.sim_blvim <- function(sim, ...) {
   sim$converged
+}
+
+#' @export
+sim_conversion.sim_blvim <- function(sim, ...) {
+  sim$kappa
 }

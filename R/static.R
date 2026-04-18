@@ -109,7 +109,7 @@
 #'   [destination_positions()]
 static_blvim <- function(costs, X, alpha, beta, Z, bipartite = TRUE,
                          origin_data = NULL, destination_data = NULL) {
-  check_configuration(costs, X, alpha, beta, Z, bipartite)
+  check_configuration(costs, X, alpha, beta, Z, 1, bipartite)
   Y <- we_oc(costs, X, alpha, beta, Z)
   new_sim_wpc(
     Y, Z, costs, alpha, beta, bipartite, origin_data,

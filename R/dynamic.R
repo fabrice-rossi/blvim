@@ -15,14 +15,16 @@
 #' \deqn{\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},}
 #'
 #' for destination \eqn{j}. This enables updating the attractivenesses by making
-#' them closer to the received flows, i.e. trying to reduce \eqn{|D_j-Z_j|}.
+#' them closer to the received flows, i.e. trying to reduce \eqn{|D_j-\kappa_j Z_j|},
+#' where \eqn{\kappa_j} is a conversion factor between the attractiveness and
+#' the destination flow.
 #'
 #' A. Wilson and co-authors proposed two different update strategies:
 #'
 #' 1. The original model proposed in Harris & Wilson (1978) updates the
-#' \eqn{Z_j} as follows \deqn{Z_j^{t+1} = Z_j^{t} + \epsilon (D^{t}_j-Z^{t}_j)}
+#' \eqn{Z_j} as follows \deqn{Z_j^{t+1} = Z_j^{t} + \epsilon \left(\frac{D^{t}_j}{\kappa_j}-Z^{t}_j\right)}
 #' 2. In Wilson (2008), the update is given by \deqn{Z_j^{t+1} = Z_j^{t} +
-#' \epsilon (D^{t}_j-Z^{t}_j)Z^{t}_j}
+#' \epsilon \left(\frac{D^{t}_j}{\kappa_j}-Z^{t}_j\right)Z^{t}_j}
 #'
 #' In both cases, \eqn{\epsilon} is given by the `epsilon` parameter. It should
 #' be smaller than 1. The first update is used when the `quadratic` parameter is
@@ -36,6 +38,8 @@
 #' parameter.
 #'
 #' @param Z a vector of initial destination attractivenesses
+#' @param kappa a vector of conversion factors between attractivenesses and
+#'   incoming flows (positive values). Defaults to 1 for all destinations.
 #' @param epsilon the update intensity
 #' @param iter_max the maximal number of steps of the BLV dynamic
 #' @param conv_check number of iterations between to convergence test
@@ -69,20 +73,30 @@
 #' @seealso [grid_blvim()] for systematic exploration of parameter influence,
 #' [static_blvim()] for the static model.
 blvim <- function(costs, X, alpha, beta, Z,
+                  kappa = 1,
                   bipartite = TRUE, origin_data = NULL, destination_data = NULL,
                   epsilon = 0.01,
                   iter_max = 50000,
                   conv_check = 100,
                   precision = 1e-6,
                   quadratic = FALSE) {
-  check_configuration(costs, X, alpha, beta, Z, bipartite)
+  check_configuration(costs, X, alpha, beta, Z, kappa, bipartite)
+  all_kappa <- rep(1, length(Z))
+  if (isTRUE(kappa == 1)) {
+    ## no real kappa
+    with_kappa <- FALSE
+  } else {
+    with_kappa <- TRUE
+    all_kappa[1:length(Z)] <- kappa
+  }
   pre <- blv(
-    costs, X, alpha, beta, Z, epsilon, iter_max, conv_check, precision,
-    quadratic
+    costs, X, alpha, beta, Z, all_kappa, epsilon, iter_max, conv_check, precision,
+    quadratic, with_kappa
   )
   new_sim_blvim(pre$Y, pre$Z[, 1], costs, alpha, beta,
     bipartite, origin_data, destination_data,
     iteration = pre$iter + 1L,
-    converged = pre$iter < iter_max
+    converged = pre$iter < iter_max,
+    kappa = all_kappa
   )
 }

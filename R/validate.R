@@ -11,7 +11,8 @@
 #'
 #' @noRd
 #' @returns nothing
-check_configuration <- function(costs, X, alpha, beta, Z, bipartite, call = rlang::caller_env()) {
+check_configuration <- function(costs, X, alpha, beta, Z, kappa, bipartite,
+                                call = rlang::caller_env()) {
   ## basic check for bipartite
   if (!bipartite && length(X) != length(Z)) {
     cli::cli_abort(
@@ -54,6 +55,14 @@ check_configuration <- function(costs, X, alpha, beta, Z, bipartite, call = rlan
     cli::cli_abort(
       c("{.arg beta} must be a positive number",
         "x" = "{.arg beta} is {.val {head(beta)}}"
+      ),
+      call = call
+    )
+  }
+  if (!is.numeric(kappa) || any(kappa <= 0)) {
+    cli::cli_abort(
+      c("{.arg kappa} must be a vector of positive number",
+        "x" = "{.arg kappa} is {.val {head(kappa)}}"
       ),
       call = call
     )

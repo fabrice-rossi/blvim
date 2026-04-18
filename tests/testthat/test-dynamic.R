@@ -10,6 +10,9 @@ test_that("blvim detects errors", {
   expect_error(blvim(config$costs, config$X, -1.5, 1, config$Z))
   ## negative inverse cost
   expect_error(blvim(config$costs, config$X, 1.5, -1, config$Z))
+  ## wrong kappa
+  expect_error(blvim(config$costs, config$X, 1.5, 1, config$Z, -2))
+  expect_error(blvim(config$costs, config$X, 1.5, 1, config$Z, "A"))
 })
 
 test_that("blvim fulfills its contracts", {
@@ -26,6 +29,29 @@ test_that("blvim fulfills its contracts", {
   expect_equal(destination_flow(model), attractiveness(model),
     tolerance = 10 * (.Machine$double.eps^0.5)
   )
+})
+
+test_that("blvim fulfills its contracts with kappas", {
+  config <- create_locations(40, 50, seed = 0)
+  for (rep in 1:10) {
+    kappas <- runif(length(config$Z), min = 0.5, max = 2)
+    model <- blvim(config$costs, config$X, 1.5, 10, config$Z,
+      kappa = kappas,
+      precision = (.Machine$double.eps^0.5),
+      epsilon = 0.1,
+    )
+    expect_equal(dim(flows(model)), c(length(config$X), length(config$Z)))
+    ## production constraints
+    expect_equal(rowSums(flows(model)), config$X)
+    expect_equal(production(model), config$X)
+    ## attractiveness times kappas should equal to the destination flows
+    ## as testthat comparison model is different from ours, we set at relatively
+    ## high value of tolerance
+    expect_equal(destination_flow(model), attractiveness(model) * kappas,
+      tolerance = 10 * (.Machine$double.eps^0.5)
+    )
+    expect_equal(kappas, sim_conversion(model))
+  }
 })
 
 test_that("blvim computes the BLV model", {

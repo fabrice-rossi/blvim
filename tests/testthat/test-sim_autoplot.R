@@ -396,7 +396,7 @@ test_that("autoplot.sim works as expected (with positions and mixed graphs)", {
       with_positions = TRUE,
       show_production = TRUE,
       show_destination = TRUE
-    )+
+    ) +
       ggplot2::theme(legend.position = "none"))
   )
   vdiffr::expect_doppelganger(

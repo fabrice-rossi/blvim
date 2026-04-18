@@ -9,11 +9,13 @@ Rcpp::List blv(const arma::mat& costs,
                double alpha,
                double beta,
                const arma::vec& Z_init,
+               const arma::vec& kappa,
                double epsilon,
                int iter_max,
                int conv_check,
                double precision,
-               bool quadratic) {
+               bool quadratic,
+               bool use_kappa) {
   arma::mat exp_beta_costs = arma::exp(-beta * costs);
   arma::vec Z(Z_init);
   arma::mat Y;
@@ -26,6 +28,9 @@ Rcpp::List blv(const arma::mat& costs,
     Y = ((X / (exp_beta_costs * Z_alpha)) * Z_alpha.t()) % exp_beta_costs;
     // dynamic part
     arma::vec D = (arma::sum(Y, 0)).t();
+    if (use_kappa) {
+      D = D / kappa;
+    }
     arma::vec delta_Z;
     if(quadratic) {
       delta_Z = (D - Z) % Z;

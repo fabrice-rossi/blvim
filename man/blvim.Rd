@@ -10,6 +10,7 @@ blvim(
   alpha,
   beta,
   Z,
+  kappa = 1,
   bipartite = TRUE,
   origin_data = NULL,
   destination_data = NULL,
@@ -30,6 +31,9 @@ blvim(
 \item{beta}{the inverse cost scale parameter}
 
 \item{Z}{a vector of initial destination attractivenesses}
+
+\item{kappa}{a vector of conversion factors between attractivenesses and
+incoming flows (positive values). Defaults to 1 for all destinations.}
 
 \item{bipartite}{when \code{TRUE} (default value), the origin and destination
 locations are considered to be distinct. When \code{FALSE}, a single set of
@@ -75,14 +79,16 @@ follows
 \deqn{\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},}
 
 for destination \eqn{j}. This enables updating the attractivenesses by making
-them closer to the received flows, i.e. trying to reduce \eqn{|D_j-Z_j|}.
+them closer to the received flows, i.e. trying to reduce \eqn{|D_j-\kappa_j Z_j|},
+where \eqn{\kappa_j} is a conversion factor between the attractiveness and
+the destination flow.
 
 A. Wilson and co-authors proposed two different update strategies:
 \enumerate{
 \item The original model proposed in Harris & Wilson (1978) updates the
-\eqn{Z_j} as follows \deqn{Z_j^{t+1} = Z_j^{t} + \epsilon (D^{t}_j-Z^{t}_j)}
+\eqn{Z_j} as follows \deqn{Z_j^{t+1} = Z_j^{t} + \epsilon \left(\frac{D^{t}_j}{\kappa_j}-Z^{t}_j\right)}
 \item In Wilson (2008), the update is given by \deqn{Z_j^{t+1} = Z_j^{t} +
-\epsilon (D^{t}_j-Z^{t}_j)Z^{t}_j}
+\epsilon \left(\frac{D^{t}_j}{\kappa_j}-Z^{t}_j\right)Z^{t}_j}
 }
 
 In both cases, \eqn{\epsilon} is given by the \code{epsilon} parameter. It should
