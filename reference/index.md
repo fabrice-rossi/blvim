@@ -16,6 +16,9 @@ parameters.
   : Extract the inverse cost scale parameter used to compute this model
 - [`return_to_scale()`](https://fabrice-rossi.github.io/blvim/reference/return_to_scale.md)
   : Extract the return to scale parameter used to compute this model
+- [`sim_conversion()`](https://fabrice-rossi.github.io/blvim/reference/sim_conversion.md)
+  : Returns the conversion factors between attractivenesses and incoming
+  flows
 - [`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)
   : Reports whether the spatial interaction model is bipartite
 - [`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md)

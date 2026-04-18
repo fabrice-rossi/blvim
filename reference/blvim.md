@@ -17,6 +17,7 @@ blvim(
   alpha,
   beta,
   Z,
+  kappa = 1,
   bipartite = TRUE,
   origin_data = NULL,
   destination_data = NULL,
@@ -49,6 +50,11 @@ blvim(
 - Z:
 
   a vector of initial destination attractivenesses
+
+- kappa:
+
+  a vector of conversion factors between attractivenesses and incoming
+  flows (positive values). Defaults to 1 for all destinations.
 
 - bipartite:
 
@@ -106,16 +112,17 @@ Then the flows received at a destination are computed as follows
 
 for destination \\j\\. This enables updating the attractivenesses by
 making them closer to the received flows, i.e. trying to reduce
-\\\|D_j-Z_j\|\\.
+\\\|D_j-\kappa_j Z_j\|\\, where \\\kappa_j\\ is a conversion factor
+between the attractiveness and the destination flow.
 
 A. Wilson and co-authors proposed two different update strategies:
 
 1.  The original model proposed in Harris & Wilson (1978) updates the
     \\Z_j\\ as follows \$\$Z_j^{t+1} = Z_j^{t} + \epsilon
-    (D^{t}\_j-Z^{t}\_j)\$\$
+    \left(\frac{D^{t}\_j}{\kappa_j}-Z^{t}\_j\right)\$\$
 
 2.  In Wilson (2008), the update is given by \$\$Z_j^{t+1} = Z_j^{t} +
-    \epsilon (D^{t}\_j-Z^{t}\_j)Z^{t}\_j\$\$
+    \epsilon \left(\frac{D^{t}\_j}{\kappa_j}-Z^{t}\_j\right)Z^{t}\_j\$\$
 
 In both cases, \\\epsilon\\ is given by the `epsilon` parameter. It
 should be smaller than 1. The first update is used when the `quadratic`

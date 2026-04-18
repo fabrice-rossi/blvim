@@ -198,10 +198,12 @@ flows as revenues, then the capacity/attractiveness of a destination
 location should be adapted to those revenues (for production-constrained
 models). Essentially, this could be written as:</p>
 <p><span class="math display">\[
-\forall j,\ Z_j=\kappa D_j,
+\forall j,\ \kappa_j Z_j= D_j,
 \]</span></p>
-<p>where <span class="math inline">\(\kappa\)</span> is a conversion
-factor between capacity and revenues, and where <span class="math inline">\(D_j\)</span> is the total flow incoming in <span class="math inline">\(Z_j\)</span>, i.e.:</p>
+<p>where the <span class="math inline">\(\kappa_j\)</span> are
+destination specific conversion factors between capacities and costs,
+and where <span class="math inline">\(D_j\)</span> is the total flow
+incoming in <span class="math inline">\(Z_j\)</span>, i.e.:</p>
 <p><span class="math display">\[
 \forall j,\  D_j=\sum_{i=1}^nY_{ij}.
 \]</span></p>
@@ -212,11 +214,12 @@ assume given the production constraints <span class="math inline">\((X_i)_{1\leq
 p}\)</span>, then the attractiveness <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span> is a solution of
 the following collection of fixed-point equations:</p>
 <p><span class="math display">\[
-\forall
-j,\  Z_j=\kappa\sum_{i=1}^n\left(\frac{X_iZ_j^{\alpha}\exp(-\beta
+\forall j,\  \kappa_j
+Z_j=\sum_{i=1}^n\left(\frac{X_iZ_j^{\alpha}\exp(-\beta
 c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})}\right),
 \]</span></p>
-<p>where <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(\kappa\)</span> are fixed parameters.</p>
+<p>where <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\((\kappa_j)_{1\leq j\leq p}\)</span> are fixed
+parameters.</p>
 <p>From the <span class="math inline">\((Z_j)_{1\leq j\leq p}\)</span>,
 the flows are computed using the standard production-constrained maximum
 entropy model.</p>
@@ -231,7 +234,7 @@ Wilson (1978). We start with some initial values of the <span class="math inline
 iterate:</p>
 <p><span class="math display">\[
 \forall j,\ Z_j^{t+1} :=
-\kappa\sum_{i=1}^n\left(\frac{X_i{(Z^{t}_j)}^{\alpha}\exp(-\beta
+\frac{1}{\kappa_j}\sum_{i=1}^n\left(\frac{X_i{(Z^{t}_j)}^{\alpha}\exp(-\beta
 c_{ij})}{\sum_{k=1}^p{(Z^{t}_k)}^{\alpha}\exp(-\beta c_{ik})}\right),
 \]</span></p>
 <p>until convergence.</p>
@@ -245,7 +248,8 @@ again with some initial values of the <span class="math inline">\(Z\)</span>s an
 \forall j,\ D_j^{t} &amp;:=
 \sum_{i=1}^n\left(\frac{X_i{(Z^{t}_j)}^{\alpha}\exp(-\beta
 c_{ij})}{\sum_{k=1}^p{(Z^{t}_k)}^{\alpha}\exp(-\beta c_{ik})}\right),\\
-\forall j,\ Z_j^{t+1} &amp;:= Z_j^t +\epsilon(\kappa D^{t}_j-Z^{t}_j).
+\forall j,\ Z_j^{t+1} &amp;:= Z_j^t +\epsilon\left(\frac{1}{\kappa_j}
+D^{t}_j-Z^{t}_j\right).
 \end{align*}
 \]</span></p>
 <p>Using <span class="math inline">\(\epsilon&lt;1\)</span>, typically a
@@ -255,7 +259,8 @@ added value of preventing oscillation behaviour.</p>
 <p>A variant of the dynamic model has been proposed by Wilson in 2008,
 replacing the second update by a quadratic version:</p>
 <p><span class="math display">\[
-\forall j,\ Z_j^{t+1} := Z_j^t +\epsilon(\kappa D^{t}_j-Z^{t}_j)Z^{t}_j.
+\forall j,\ Z_j^{t+1} := Z_j^t +\epsilon\left(\frac{1}{\kappa_j}
+D^{t}_j-Z^{t}_j\right)Z^{t}_j.
 \]</span></p>
 <p>Both solutions are implemented in <code><a href="../reference/blvim.html">blvim()</a></code>.</p>
 </div>

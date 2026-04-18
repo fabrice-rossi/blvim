@@ -100,10 +100,11 @@ as revenues, then the capacity/attractiveness of a destination location
 should be adapted to those revenues (for production-constrained models).
 Essentially, this could be written as:
 
-\\ \forall j,\\ Z_j=\kappa D_j, \\
+\\ \forall j,\\ \kappa_j Z_j= D_j, \\
 
-where \\\kappa\\ is a conversion factor between capacity and revenues,
-and where \\D_j\\ is the total flow incoming in \\Z_j\\, i.e.:
+where the \\\kappa_j\\ are destination specific conversion factors
+between capacities and costs, and where \\D_j\\ is the total flow
+incoming in \\Z_j\\, i.e.:
 
 \\ \forall j,\\ D_j=\sum\_{i=1}^nY\_{ij}. \\
 
@@ -114,11 +115,12 @@ matrix \\(c\_{ij})\_{1\leq i\leq n, 1\leq j\leq p}\\, then the
 attractiveness \\(Z_j)\_{1\leq j\leq p}\\ is a solution of the following
 collection of fixed-point equations:
 
-\\ \forall j,\\
-Z_j=\kappa\sum\_{i=1}^n\left(\frac{X_iZ_j^{\alpha}\exp(-\beta
+\\ \forall j,\\ \kappa_j
+Z_j=\sum\_{i=1}^n\left(\frac{X_iZ_j^{\alpha}\exp(-\beta
 c\_{ij})}{\sum\_{k=1}^pZ_k^{\alpha}\exp(-\beta c\_{ik})}\right), \\
 
-where \\\alpha\\, \\\beta\\, and \\\kappa\\ are fixed parameters.
+where \\\alpha\\, \\\beta\\, and \\(\kappa_j)\_{1\leq j\leq p}\\ are
+fixed parameters.
 
 From the \\(Z_j)\_{1\leq j\leq p}\\, the flows are computed using the
 standard production-constrained maximum entropy model.
@@ -132,7 +134,7 @@ Wilson (1978). We start with some initial values of the \\Z\\s, denoted
 \\(Z^{0}\_j)\_{1\leq j\leq p}\\, and then iterate:
 
 \\ \forall j,\\ Z_j^{t+1} :=
-\kappa\sum\_{i=1}^n\left(\frac{X_i{(Z^{t}\_j)}^{\alpha}\exp(-\beta
+\frac{1}{\kappa_j}\sum\_{i=1}^n\left(\frac{X_i{(Z^{t}\_j)}^{\alpha}\exp(-\beta
 c\_{ij})}{\sum\_{k=1}^p{(Z^{t}\_k)}^{\alpha}\exp(-\beta
 c\_{ik})}\right), \\
 
@@ -147,8 +149,9 @@ of the \\Z\\s and then iterate:
 \\ \begin{align\*} \forall j,\\ D_j^{t} &:=
 \sum\_{i=1}^n\left(\frac{X_i{(Z^{t}\_j)}^{\alpha}\exp(-\beta
 c\_{ij})}{\sum\_{k=1}^p{(Z^{t}\_k)}^{\alpha}\exp(-\beta
-c\_{ik})}\right),\\ \forall j,\\ Z_j^{t+1} &:= Z_j^t +\epsilon(\kappa
-D^{t}\_j-Z^{t}\_j). \end{align\*} \\
+c\_{ik})}\right),\\ \forall j,\\ Z_j^{t+1} &:= Z_j^t
++\epsilon\left(\frac{1}{\kappa_j} D^{t}\_j-Z^{t}\_j\right).
+\end{align\*} \\
 
 Using \\\epsilon\<1\\, typically a small value of \\0.01\\, gives a full
 trajectory for the \\Z\\s with the added value of preventing oscillation
@@ -157,8 +160,8 @@ behaviour.
 A variant of the dynamic model has been proposed by Wilson in 2008,
 replacing the second update by a quadratic version:
 
-\\ \forall j,\\ Z_j^{t+1} := Z_j^t +\epsilon(\kappa
-D^{t}\_j-Z^{t}\_j)Z^{t}\_j. \\
+\\ \forall j,\\ Z_j^{t+1} := Z_j^t +\epsilon\left(\frac{1}{\kappa_j}
+D^{t}\_j-Z^{t}\_j\right)Z^{t}\_j. \\
 
 Both solutions are implemented in
 [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md).

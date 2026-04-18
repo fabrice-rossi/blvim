@@ -76,6 +76,7 @@ returns an object of class <code>sim_list</code> which contains the resulting fl
 <span>  <span class="va">alphas</span>,</span>
 <span>  <span class="va">betas</span>,</span>
 <span>  <span class="va">Z</span>,</span>
+<span>  kappa <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  bipartite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  origin_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  destination_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -110,6 +111,11 @@ returns an object of class <code>sim_list</code> which contains the resulting fl
 
 <dt id="arg-z">Z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
 <dd><p>a vector of initial destination attractivenesses</p></dd>
+
+
+<dt id="arg-kappa">kappa<a class="anchor" aria-label="anchor" href="#arg-kappa"></a></dt>
+<dd><p>a vector of conversion factors between attractivenesses and
+incoming flows (positive values). Defaults to 1 for all destinations.</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>

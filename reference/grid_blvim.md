@@ -18,6 +18,7 @@ grid_blvim(
   alphas,
   betas,
   Z,
+  kappa = 1,
   bipartite = TRUE,
   origin_data = NULL,
   destination_data = NULL,
@@ -51,6 +52,11 @@ grid_blvim(
 - Z:
 
   a vector of initial destination attractivenesses
+
+- kappa:
+
+  a vector of conversion factors between attractivenesses and incoming
+  flows (positive values). Defaults to 1 for all destinations.
 
 - bipartite:
 

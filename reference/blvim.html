@@ -76,6 +76,7 @@ attractivenesses according the received flows.</p>
 <span>  <span class="va">alpha</span>,</span>
 <span>  <span class="va">beta</span>,</span>
 <span>  <span class="va">Z</span>,</span>
+<span>  kappa <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  bipartite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  origin_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  destination_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -109,6 +110,11 @@ attractivenesses according the received flows.</p>
 
 <dt id="arg-z">Z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
 <dd><p>a vector of initial destination attractivenesses</p></dd>
+
+
+<dt id="arg-kappa">kappa<a class="anchor" aria-label="anchor" href="#arg-kappa"></a></dt>
+<dd><p>a vector of conversion factors between attractivenesses and
+incoming flows (positive values). Defaults to 1 for all destinations.</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
@@ -163,11 +169,13 @@ constrained entropy maximising model proposed by A. Wilson and implemented in
 follows</p>
 <p>$$\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},$$</p>
 <p>for destination \(j\). This enables updating the attractivenesses by making
-them closer to the received flows, i.e. trying to reduce \(|D_j-Z_j|\).</p>
+them closer to the received flows, i.e. trying to reduce \(|D_j-\kappa_j Z_j|\),
+where \(\kappa_j\) is a conversion factor between the attractiveness and
+the destination flow.</p>
 <p>A. Wilson and co-authors proposed two different update strategies:</p><ol><li><p>The original model proposed in Harris &amp; Wilson (1978) updates the
-\(Z_j\) as follows $$Z_j^{t+1} = Z_j^{t} + \epsilon (D^{t}_j-Z^{t}_j)$$</p></li>
+\(Z_j\) as follows $$Z_j^{t+1} = Z_j^{t} + \epsilon \left(\frac{D^{t}_j}{\kappa_j}-Z^{t}_j\right)$$</p></li>
 <li><p>In Wilson (2008), the update is given by $$Z_j^{t+1} = Z_j^{t} +
-\epsilon (D^{t}_j-Z^{t}_j)Z^{t}_j$$</p></li>
+\epsilon \left(\frac{D^{t}_j}{\kappa_j}-Z^{t}_j\right)Z^{t}_j$$</p></li>
 </ol><p>In both cases, \(\epsilon\) is given by the <code>epsilon</code> parameter. It should
 be smaller than 1. The first update is used when the <code>quadratic</code> parameter is
 <code>FALSE</code> which is the default value. The second update is used when
