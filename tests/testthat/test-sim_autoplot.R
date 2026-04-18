@@ -255,6 +255,8 @@ test_that("autoplot.sim works as expected (with positions and names) ggrepel", {
       with_names = TRUE, cut_off = 0, with_labels = TRUE
     ))
   )
+  skip_on_os("mac")
+  ## subtle differences appear between linux figures and mac os figures.
   vdiffr::expect_doppelganger(
     "Full flow label",
     \() print(ggplot2::autoplot(model, "full",
@@ -263,8 +265,6 @@ test_that("autoplot.sim works as expected (with positions and names) ggrepel", {
       with_labels = TRUE
     ) + ggplot2::scale_linewidth(range = c(0, 2)))
   )
-  skip_on_os("mac")
-  ## subtle differences appear between linux figures and mac os figures.
   vdiffr::expect_doppelganger(
     "Full flow no label",
     \() print(ggplot2::autoplot(model, "full",
