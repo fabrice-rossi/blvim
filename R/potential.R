@@ -29,7 +29,7 @@ blv_potential <- function(sim, kappa = rep(1, ncol(costs(sim)))) {
 
 
 ## ---------------------------------------------------------------------------
-## 2. GRADIENT OF f (unconstrained)
+## 2. GRADIENT OF f
 ## ---------------------------------------------------------------------------
 
 blv_gradient <- function(sim, kappa = rep(1, ncol(costs(sim)))) {
@@ -43,7 +43,7 @@ blv_gradient <- function(sim, kappa = rep(1, ncol(costs(sim)))) {
 }
 
 ## ---------------------------------------------------------------------------
-## 3. JACOBIAN OF G (fixed-point residual)
+## 3. JACOBIAN OF G (fixed-point)
 ## ---------------------------------------------------------------------------
 
 blv_jacobian_G <- function(sim, kappa = rep(1, ncol(costs(sim)))) {
