@@ -253,6 +253,180 @@ locations which is very sparse (it has $p-t$ edges, where $p$ is the number of
 locations and $t$ the number of terminals). The function `nd_graph()` computes
 this graph according to both terminal definitions.
 
+## Potential function from Osawa et al (2025)
+
+Before going further we introduce simplified notation for the HW model : 
+
+$$
+w_{ij}=w_{ij}(\beta)=\exp(-\beta c_{ij})
+\qquad
+S_i=S_i(\mathbf{Z},\alpha,\beta)=\sum_{k=1}^pZ_k^{\alpha}w_{ik}
+\qquad
+P_{ij}=\frac{Z_j^{\alpha}w_{ij}}{S_i}
+$$
+so that $P_{ij}$ is the share of origin $i$'s demand attracted to destination $j$.
+The total flow received by destination $j$ is
+
+$$
+D_j(\mathbf{Z},\alpha,\beta) = \sum_{i=1}^n X_i P_{ij},
+$$
+and the Harris--Wilson fixed-point residual is
+
+$$
+G_j(\mathbf{Z},\alpha,\beta) = D_j(\mathbf{Z},\alpha,\beta) - \kappa_j Z_j,
+$$
+where $\kappa_j > 0$ is the capacity cost at destination $j$.
+A **Harris--Wilson equilibrium** is a vector $\mathbf{Z}^* \geq 0$ satisfying
+$G(\mathbf{Z}^*) = \mathbf{0}$.
+
+### The potential function
+
+In 2025 the team of researcher compose by Osawa Akamatsu and Kogure, introduce a new concept : the HW model can be seen as a large population potential game. This concept which come from the game theory allows us to see the HW models as a single maximisation problem, characterize by a potential function defined as : 
+
+$$
+f(\mathbf{Z},\alpha,\beta)=A(\mathbf{Z},\alpha,\beta)-\sum_{j=1}^p\kappa_jZ_j
+$$
+$$
+A(\mathbf{Z},\alpha,\beta)=\frac{1}{\alpha}\sum_{i=1}^nX_i\log S_i=\frac{1}{\alpha}\sum_{i=1}^n X_i
+    \log\!\left(\sum_{j=1}^p Z_j^{\alpha}\,\exp(-\beta c_{ij})\right)
+$$
+
+The authors look for vectors $\mathbf{Z}$ that maximise $f$ subject to the budget
+constraint $\sum_j \kappa_j Z_j = \sum_i X_i$ and the non-negativity constraint
+$Z_j \geq 0$ for all $j$. By the stochastic-stability result of Sandholm (2010, §12.2), the global maximiser(s) of $f$ correspond to the most likely spatial patterns when small random perturbations can occur.
+
+### Gradient of the potential function
+
+Differentiating $A$ with respect to $Z_j$ gives
+
+$$
+\frac{\partial A}{\partial Z_j}
+  = \frac{1}{\alpha}\sum_{i=1}^n X_i \cdot \frac{\alpha Z_j^{\alpha-1}\,w_{ij}}{S_i}
+  = \sum_{i=1}^n X_i\,\frac{Z_j^{\alpha-1}\,w_{ij}}{S_i}.
+$$
+
+Recognising that $Z_j^{\alpha-1} w_{ij} / S_i = P_{ij} / Z_j$, this becomes
+
+$$
+\frac{\partial A}{\partial Z_j} = \frac{1}{Z_j}\sum_{i=1}^n X_i P_{ij} = \frac{D_j}{Z_j}
+$$
+Adding the derivative of the linear term $-\kappa_j Z_j$, we obtain
+
+$$
+\frac{\partial f}{\partial Z_j}(\mathbf{Z},\alpha,\beta)
+  = \frac{D_j - \kappa_j Z_j}{Z_j}
+  = \frac{G_j(\mathbf{Z},\alpha,\beta)}{Z_j}
+$$
+The gradient $\nabla f$ vanishes at an interior point ($Z_j > 0$ for all $j$) if and only if $G(\mathbf{Z}) = \mathbf{0}$, i.e. at a Harris--Wilson equilibrium. Conversely, if $Z_j = 0$, the gradient is not directly defined, but the KKT analysis below shows that boundary points can also be critical points of the constrained problem.
+
+Every interior maximum of $f$ is a Harris--Wilson equilibrium; the converse is false
+in general. $G$ is not the gradient of $f$ : $\partial f/\partial Z_j = G_j/Z_j \neq G_j$. It follows that the Jacobian of $G$ is not the Hessian of $f$, although the two are closely related at equilibrium
+
+### Hessian of the potential function
+
+We first record the derivative of the softmax share $P_{ij}$ with respect to $Z_k$:
+
+$$
+\frac{\partial P_{ij}}{\partial Z_k}
+  = \frac{\alpha\,\delta_{jk}\,S_i\,Z_j^{\alpha-1}w_{ij}
+         - \alpha\,Z_k^{\alpha-1}w_{ik}\,Z_j^{\alpha}w_{ij}}{S_i^2}
+  = \frac{\alpha}{Z_k}\,P_{ik}\bigl(\delta_{jk} - P_{ij}\bigr),
+$$
+
+where $\delta_{jk}$ is the Kronecker symbol.
+
+#### Off-diagonal entries ($j \neq k$)
+
+Starting from $\partial f/\partial Z_j = D_j/Z_j - \kappa_j$ and differentiating with
+respect to $Z_k \neq Z_j$:
+
+$$
+\frac{\partial^2 f}{\partial Z_j\,\partial Z_k}
+  = \frac{1}{Z_j}\frac{\partial D_j}{\partial Z_k}
+  = \frac{1}{Z_j}\sum_{i=1}^n X_i\,\frac{\partial P_{ij}}{\partial Z_k}
+  = \frac{1}{Z_j}\sum_{i=1}^n X_i\,\frac{\alpha}{Z_k}\,P_{ik}(0 - P_{ij}),
+$$
+which gives
+
+$$
+H_{jk} = -\frac{\alpha}{Z_j Z_k}\sum_{i=1}^n X_i\,P_{ij}\,P_{ik}
+        = -\alpha\,Z_j^{\alpha-1}Z_k^{\alpha-1}
+          \sum_{i=1}^n X_i\,\frac{w_{ij}\,w_{ik}}{S_i^2},
+\qquad j \neq k.
+$$
+
+#### Diagonal entries ($j = k$)
+
+Differentiating $\partial f/\partial Z_j = D_j/Z_j - \kappa_j$ with respect to $Z_j$:
+
+$$
+\frac{\partial^2 f}{\partial Z_j^2}
+  = -\frac{D_j}{Z_j^2} + \frac{1}{Z_j}\frac{\partial D_j}{\partial Z_j}.
+$$
+Using $\partial D_j/\partial Z_j = \sum_i X_i (\alpha/Z_j) P_{ij}(1-P_{ij})$:
+
+$$
+\frac{\partial^2 f}{\partial Z_j^2}
+  = -\frac{D_j}{Z_j^2}
+    + \frac{\alpha}{Z_j^2}\sum_{i=1}^n X_i\,P_{ij}(1-P_{ij}).
+$$
+
+At an **interior equilibrium** where $G_j = 0$, that is $D_j = \kappa_j Z_j$:
+
+$$
+H_{jj} = \frac{\alpha - 1}{Z_j^2}\sum_{i=1}^n X_i\,P_{ij}
+         - \frac{\alpha}{Z_j^2}\sum_{i=1}^n X_i\,P_{ij}^2.
+$$
+
+#### Summary: the full Hessian
+
+Collecting both cases, the Hessian matrix $H = (H_{jk})_{1 \leq j,k \leq p}$ evaluated
+at an interior equilibrium is
+
+$$
+H_{jk} =
+\begin{cases}
+\displaystyle
+  (\alpha-1)\,Z_j^{\alpha-2}\sum_i X_i\,\dfrac{w_{ij}}{S_i}
+  - \alpha\,Z_j^{2(\alpha-1)}\sum_i X_i\,\dfrac{w_{ij}^2}{S_i^2},
+  & j = k, \\[12pt]
+\displaystyle
+  -\alpha\,Z_j^{\alpha-1}Z_k^{\alpha-1}
+  \sum_i X_i\,\dfrac{w_{ij}\,w_{ik}}{S_i^2},
+  & j \neq k.
+\end{cases}
+$$
+
+### KKT Conditions and Equilibrium Structure
+
+The Lagrangian of the constrained maximisation problem ($\max f$ subject to
+$\sum_j \kappa_j Z_j = \sum_i X_i$, $Z_j \geq 0$) is
+
+$$
+\mathcal{L}(\mathbf{Z},\mu,\boldsymbol{\lambda})
+  = -f(\mathbf{Z},\alpha,\beta)
+    - \sum_{j=1}^p \lambda_j Z_j
+    + \mu\!\left(\sum_{i=1}^n X_i - \sum_{j=1}^p \kappa_j Z_j\right).
+$$
+
+The first-order KKT conditions give, for each $j$:
+
+$$
+\frac{\partial \mathcal{L}}{\partial Z_j}
+  = -\frac{D_j}{Z_j} + \kappa_j - \lambda_j - \mu\kappa_j = 0,
+  \qquad \lambda_j \geq 0, \quad \lambda_j Z_j = 0.
+$$
+Multiplying by $Z_j$ and summing over $j$, and using $\sum_j D_j = \sum_i X_i = \sum_j \kappa_j Z_j$,
+one finds $\mu = -2$. Therefore:
+
+- If $Z_j > 0$: complementary slackness forces $\lambda_j = 0$, and the condition
+  reduces to $D_j = \kappa_j Z_j$, i.e. $G_j = 0$.
+- If $Z_j = 0$: $\lambda_j$ absorbs the residual and the condition is automatically
+  satisfied.
+
+Hence every KKT point of the constrained problem is a Harris--Wilson equilibrium
+(possibly with inactive destinations), and conversely.
+
 ## References
 
 Harris, B. (1964). "A model of locational equilibrium for retail trade", 
@@ -279,5 +453,7 @@ Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
 Soc. Interface.5865–871 <https://dx.doi.org/10.1098/rsif.2007.1288>
 
+Osawa, M., Akamatsu, T., & Kogure, Y. (2025). Retail location as a potential game: the Harris--Wilson model revisited. *Working paper*.
 
+Sandholm, W. H. (2010). *Population Games and Evolutionary Dynamics*. MIT Press.
 
