@@ -427,6 +427,204 @@ one finds $\mu = -2$. Therefore:
 Hence every KKT point of the constrained problem is a Harris--Wilson equilibrium
 (possibly with inactive destinations), and conversely.
 
+## Stability Analysis and Bifurcation
+
+### Local Stability via the Jacobian of $G$
+
+The BLV dynamic model takes the form $\dot{Z}_j = \varepsilon\, G_j(\mathbf{Z},\alpha,\beta)$.
+The local stability of an equilibrium $\mathbf{Z}^*$ is governed by the
+**Jacobian of $G$**,
+
+$$
+J_G(\mathbf{Z}^*,\alpha,\beta)
+= \left(\frac{\partial G_j}{\partial Z_k}\right)_{j,k}.
+$$
+
+The equilibrium $\mathbf{Z}^*$ is locally asymptotically stable if and only if
+all eigenvalues of $J_G$ have strictly negative real part:
+
+$$
+\mathbf{Z}^* \text{ is locally stable}
+\quad\Longleftrightarrow\quad
+\lambda_{\max}\!\bigl(J_G(\mathbf{Z}^*,\alpha,\beta)\bigr) < 0.
+$$
+
+Using $\partial P_{ij}/\partial Z_k = (\alpha/Z_k)\,P_{ik}(\delta_{jk} - P_{ij})$,
+the entries of $J_G$ are explicit. For $j \neq k$:
+
+$$
+\frac{\partial G_j}{\partial Z_k}
+= -\frac{\alpha}{Z_k}\sum_{i=1}^n X_i\,P_{ij}\,P_{ik} \leq 0,
+$$
+
+and for the diagonal, using $D_j = \kappa_j Z_j^*$ at equilibrium:
+
+$$
+\frac{\partial G_j}{\partial Z_j}\bigg|_{\mathbf{Z}^*}
+= \frac{\alpha}{Z_j^*}\!\left[D_j - \sum_{i=1}^n X_i P_{ij}^2\right] - \kappa_j
+= (\alpha-2)\kappa_j - \frac{\alpha}{Z_j^*}\sum_{i=1}^n X_i P_{ij}^2.
+$$
+
+A **primary bifurcation** occurs at the critical value $\beta_c$ where
+$\lambda_{\max}(J_G)$ first reaches zero along the dispersed branch.
+
+### Behaviour of Collapsed Destinations
+
+The iterative BLV scheme preserves positivity: if $Z_j^t > 0$ and
+$\varepsilon < 1/\kappa_j$, then $Z_j^{t+1} = (1-\varepsilon\kappa_j)Z_j^t +
+\varepsilon D_j^t > 0$. So $Z_j^* > 0$ at any finite iterate. However, for a
+destination that has effectively collapsed, $Z_j^* \ll 1$ and
+$P_{ij} \propto (Z_j^*)^\alpha \to 0$.
+
+Examining the diagonal entry of $J_G$ for such a destination:
+
+$$
+\frac{\partial G_j}{\partial Z_j}\bigg|_{\mathbf{Z}^*}
+= (\alpha-2)\kappa_j - \frac{\alpha}{Z_j^*}\sum_{i=1}^n X_i P_{ij}^2
+\sim (\alpha-2)\kappa_j - \alpha\kappa_j (Z_j^*)^{\alpha-1}
+\xrightarrow{Z_j^*\to 0}
+(\alpha-2)\kappa_j,
+$$
+
+which remains **bounded**. The off-diagonal entries in the column and row of $j$,
+of the form $-(\alpha/Z_k)\sum_i X_i P_{ij} P_{ik}$, vanish as $P_{ij} \to 0$.
+Collapsed destinations therefore **decouple** cleanly in $J_G$: their rows and
+columns both tend to zero, and $\lambda_{\max}(J_G)$ is determined entirely by
+the remaining active destinations.
+
+
+## The Active Subspace
+
+### Definition and Motivation
+
+Even though $J_G$ itself remains well-behaved for collapsed destinations, the
+**augmented system** used to locate bifurcation points involves solving a linear
+system with $J_G$ as its principal block. For a near-collapsed destination $j$,
+the diagonal entry $(\alpha-2)\kappa_j - (\alpha/Z_j^*)\sum_i X_i P_{ij}^2$
+contains a term $\alpha/Z_j^* \to +\infty$ multiplied by $\sum_i X_i P_{ij}^2
+\sim (Z_j^*)^{2\alpha} \to 0$; their product $\sim (Z_j^*)^{2\alpha-1}$ may
+vanish, but it does so through a near-cancellation that makes $J_G$ ill-conditioned
+near collapsed destinations. To avoid this ill-conditioning, all subsequent
+analysis — augmented systems, bifurcation direction, and type classification — is
+restricted to the **active subspace** $\mathcal{A}^*$.
+
+The **active subspace** $\mathcal{A}^* \subseteq \{1, \ldots, p\}$ is the largest
+subset of destinations for which the restricted Jacobian is globally stable:
+
+$$
+\mathcal{A}^* = \underset{|\mathcal{A}|}{\arg\max}\,
+\bigl\{
+  \mathcal{A} \subseteq \{1, \ldots, p\}
+  :
+  \lambda_{\max}\!\bigl(J_{G_{\mathcal{A}}}\bigr) \leq 0
+\bigr\},
+$$
+
+where $J_{G_{\mathcal{A}}}$ denotes the principal submatrix of $J_G$ indexed by
+$\mathcal{A}$.
+
+### Construction by Successive Elimination
+
+The active subspace is constructed by the following greedy algorithm. Starting
+from the full index set $\mathcal{A} = \{1, \ldots, p\}$:
+
+1. Compute $\lambda_{\max}(J_{G_{\mathcal{A}}})$.
+2. If $\lambda_{\max} \leq 0$, stop: $\mathcal{A}^* = \mathcal{A}$.
+3. Otherwise, remove the index with the largest diagonal entry of $J_G$:
+$$
+j^* = \underset{j \in \mathcal{A}}{\arg\max}\;
+      \frac{\partial G_j}{\partial Z_j}\bigg|_{\mathbf{Z}^*},
+\qquad
+\mathcal{A} \leftarrow \mathcal{A} \setminus \{j^*\},
+$$
+and return to step 1.
+
+The algorithm terminates in at most $p - 1$ steps. The key observation is that
+for a collapsed destination, the diagonal entry of $J_G$ satisfies
+$({\partial G_j}/{\partial Z_j})|_{\mathbf{Z}^*} \approx (\alpha-2)\kappa_j > 0$
+(for $\alpha > 2$) or may be large and positive through the $\alpha/Z_j^*$ term
+(for $\alpha < 2$ when $Z_j^*$ is very small), making it the first candidate for
+removal. Once all such destinations are removed, the remaining submatrix has
+non-positive off-diagonal entries; by Gershgorin's theorem, it is negative
+semi-definite once the diagonal entries are all non-positive.
+
+### The Reduced Stability Signal
+
+On the active subspace $\mathcal{A}^*$, the restricted spectral radius
+$\lambda_{\max}(J_{G_{\mathcal{A}^*}})$ remains bounded and interpretable
+throughout the parameter range. Its evolution along a warm-start continuation
+in $\beta$ reveals two types of events:
+
+- **Primary bifurcation**: $\lambda_{\max}(J_{G_{\mathcal{A}^*}})$ reaches
+  zero from below just before the first destination collapses, signalling the
+  loss of stability of the fully dispersed equilibrium ($\mathcal{A}^* =
+  \{1,\ldots,p\}$).
+- **Secondary bifurcations**: each successive reduction of $|\mathcal{A}^*|$
+  marks the collapse of one or more previously active destinations. Just before
+  each event, $\lambda_{\max}(J_{G_{\mathcal{A}^*}})$ again approaches zero.
+
+## Augmented Systems for Exact Bifurcation Location
+
+All augmented systems below are formulated on the active subspace $\mathcal{A}^*$
+of size $q = |\mathcal{A}^*|$, using the restricted Jacobian
+$J_{G_{\mathcal{A}^*}} \in \mathbb{R}^{q \times q}$ and the restricted
+unknown vector $\mathbf{Z}^*_{\mathcal{A}^*} \in \mathbb{R}^q$. This avoids the
+ill-conditioning introduced by near-collapsed destinations.
+
+### One Free Parameter: Locating $\beta_c$ Exactly
+
+To locate the bifurcation point without relying on grid resolution, we apply the
+standard augmented system of Kuznetsov (1995, Ch. 10). At a codimension-1
+bifurcation, $J_{G_{\mathcal{A}^*}}(\mathbf{Z}^*,\beta_c)$ has a one-dimensional
+kernel spanned by $\boldsymbol{\psi} \in \mathbb{R}^q$. The triple
+$(\mathbf{Z}^*_{\mathcal{A}^*}, \beta_c, \boldsymbol{\psi})$ satisfies the
+$(2q+1)$-dimensional square system:
+
+$$
+\begin{cases}
+G_{\mathcal{A}^*}(\mathbf{Z}^*_{\mathcal{A}^*},\, \beta_c) = \mathbf{0},
+  & (q \text{ equations})\\[6pt]
+J_{G_{\mathcal{A}^*}}(\mathbf{Z}^*_{\mathcal{A}^*},\, \beta_c)\,
+  \boldsymbol{\psi} = \mathbf{0},
+  & (q \text{ equations})\\[6pt]
+\boldsymbol{\psi}^\top \boldsymbol{\psi}_0 = 1,
+  & (1 \text{ equation})
+\end{cases}
+$$
+
+where $\boldsymbol{\psi}_0 \in \mathbb{R}^q$ is an approximate null vector from a
+grid estimate, providing phase and sign normalisation. The normalisation is linear
+in $\boldsymbol{\psi}$, preserving sparsity of the system Jacobian. Kuznetsov
+(1995, Ch. 10) proves that this Jacobian is non-singular at a generic
+codimension-1 point, ensuring local quadratic convergence of Newton's method.
+
+The vector $\boldsymbol{\psi}$ encodes the **direction of the emerging branch**
+within $\mathcal{A}^*$: destinations with $\psi_j > 0$ agglomerate; those with
+$\psi_j < 0$ retract.
+
+### Two Free Parameters: The Bifurcation Curve in $(\alpha,\beta)$-Space
+
+Allowing both $\alpha$ and $\beta$ to vary, the augmented system becomes the
+$(2q+1)$-dimensional system in the $(2q+2)$ unknowns
+$(\mathbf{Z}^*_{\mathcal{A}^*}, \alpha, \beta, \boldsymbol{\psi})$:
+
+$$
+\begin{cases}
+G_{\mathcal{A}^*}(\mathbf{Z}^*_{\mathcal{A}^*},\, \alpha,\, \beta) = \mathbf{0},\\[6pt]
+J_{G_{\mathcal{A}^*}}(\mathbf{Z}^*_{\mathcal{A}^*},\, \alpha,\, \beta)\,
+  \boldsymbol{\psi} = \mathbf{0},\\[6pt]
+\boldsymbol{\psi}^\top \boldsymbol{\psi}_0 = 1.
+\end{cases}
+$$
+
+This under-determined system (one free degree) defines a smooth curve in the
+solution space. It is traced by **pseudo-arclength continuation** (Keller, 1977):
+at each step a predictor advances along the tangent to the curve, and a corrector
+Newton solve enforces the system augmented by one arclength constraint. The
+projection onto the $(\alpha, \beta^{-1})$-plane gives the complete **phase
+boundary** of the BLV model, extending the single-point analysis of Osawa et al.
+(2025) to a full bifurcation portrait in two-parameter space.
+
 ## References
 
 Harris, B. (1964). "A model of locational equilibrium for retail trade", 
@@ -452,6 +650,10 @@ London: Routledge.
 Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
 Soc. Interface.5865–871 <https://dx.doi.org/10.1098/rsif.2007.1288>
+
+Kuznetsov, Y. A. (1995). *Elements of Applied Bifurcation Theory*. Springer.
+
+Keller, H. B. (1977). "Numerical solution of bifurcation and nonlinear eigenvalue problems", in *Applications of Bifurcation Theory*, P. H. Rabinowitz (ed.), Academic Press, 359--384.
 
 Osawa, M., Akamatsu, T., & Kogure, Y. (2025). Retail location as a potential game: the Harris--Wilson model revisited. *Working paper*.
 
