@@ -312,11 +312,9 @@ blv_split_direction <- function(sim,
 ## G(Z0, beta0) ~ 0  AND  H(Z0, beta0) * phi0 ~ 0.
 ##
 ## The second condition means lambda_max(H) must be close to 0, i.e. we
-## must start near beta_c. The key insight from Cyprien's document (Partie III):
+## must start near beta_c. The key insight is to take as the optimal initialisation
+## point the last with K active cities, just befor the primary bifurcation.
 ##
-##   "Le point d'initialisation optimal est le dernier point de la grille où
-##    toutes les K villes sont encore actives (n_active = K), soit juste avant
-##    la bifurcation primaire."
 ##
 ## ALGORITHM
 ## ---------
@@ -334,7 +332,7 @@ blv_split_direction <- function(sim,
 ## --------------
 ## Data: eurodist (as.matrix(eurodist), NO unit conversion — used as-is).
 ##       alpha = 1.4, kappa = 1, K = 21 cities.
-## Expected result: beta_c^-1 ~ 91.1 (eurodist units = miles).
+## Expected result: beta_c^-1 ~ 91.1.
 ##
 ## Code used to produce the working warm-start (beta^-1 = 91, lmax = -0.017):
 
@@ -356,7 +354,7 @@ blv_split_direction <- function(sim,
 ##
 ## Result at beta^-1 = 91: n_active = 21/21, lambda_max(H) = -0.017
 ## Newton converged in 3 iterations, ||F|| = 5.96e-11
-## beta_c^-1 = 91.1024  (eurodist units)
+## beta_c^-1 = 91.1024
 ## Brussels rank 1 in phi: PASS
 ##
 ## WHY THIS WORKS
@@ -370,7 +368,7 @@ blv_split_direction <- function(sim,
 ##
 ## REQUIREMENTS
 ## ------------
-## - blv_hessian must use the EXACT formula (Cyprien 2026):
+## - blv_hessian must use the EXACT formula :
 ##   H_jj = kappa/Z_j^2 * [(alpha-1)*D_j - alpha*sum_i X_i P_ij^2]
 ##   NOT the approximation diag(1/Z) * J_G (only valid at Z_j = 1).
 ## - nleqslv package must be installed.
