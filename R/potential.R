@@ -540,10 +540,6 @@ plot_blv_bifurcation <- function(sim,
 ##     (c) Newton (blv_augmented_1param) à partir de ce point bien placé.
 ##
 ## =============================================================================
-
-library(blvim)
-library(nleqslv)
-
 ## --- Helper : trouve le dernier beta_inv pour lequel lambda_max(H) < 0
 ## sur l'équilibre cold-start Z=1, en partant d'un beta_inv_ref donné.
 ## Renvoie le sim_blvim correspondant (point juste sous-critique).
