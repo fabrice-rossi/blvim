@@ -255,6 +255,7 @@ blv_restricted <- function(sim,
     mode         = mode
   )
 }
+
 ## ---------------------------------------------------------------------------
 ## 7. SPLIT DIRECTION — dominant eigenvector of H (active destinations only)
 ## ---------------------------------------------------------------------------
@@ -313,7 +314,7 @@ blv_split_direction <- function(sim,
 ##
 ## The second condition means lambda_max(H) must be close to 0, i.e. we
 ## must start near beta_c. The key insight is to take as the optimal initialisation
-## point the last with K active cities, just befor the primary bifurcation.
+## point the last with K active cities, just before the primary bifurcation.
 ##
 ##
 ## ALGORITHM
@@ -376,97 +377,313 @@ blv_split_direction <- function(sim,
 ## =============================================================================
 
 blv_augmented_1param <- function(sim,
-                                 kappa    = rep(1, ncol(costs(sim))),
-                                 tol      = 1e-10,
-                                 max_iter = 500L,
-                                 verbose  = FALSE) {
+                                 kappa      = rep(1, ncol(costs(sim))),
+                                 beta_start = NULL,
+                                 phi_start  = NULL,
+                                 tol        = 1e-10,
+                                 max_iter   = 500L,
+                                 verbose    = FALSE) {
 
   if (!requireNamespace("nleqslv", quietly = TRUE))
-    stop("Package 'nleqslv' required. Install with install.packages('nleqslv').")
+    stop("Package 'nleqslv' required.")
 
+  # --- PREPARATION DES DONNEES ---
   alpha  <- return_to_scale(sim)
   C_full <- costs(sim)
   X_full <- unname(production(sim))
   dnames <- destination_names(sim)
   K      <- length(dnames)
 
-  ## Warm-start: Z and beta directly from sim (no subspace restriction)
+  # 1. Initialisation des variables d'état (Warm-start)
   Z0    <- pmax(unname(attractiveness(sim)), 1e-6)
-  beta0 <- inverse_cost(sim)
+  beta0 <- if (!is.null(beta_start)) beta_start else inverse_cost(sim)
 
-  ## phi_0: dominant eigenvector of H (unit norm for normalisation)
-  H0   <- blv_hessian(sim, kappa)
-  eig0 <- eigen(H0, symmetric = TRUE)
-  phi0 <- eig0$vectors[, 1]
-  phi0 <- phi0 / sqrt(sum(phi0^2))
+  # 2. Gestion du vecteur propre de référence (Ancrage)
+  # On calcule phi_ref une seule fois pour fixer la branche
+  if (!is.null(phi_start)) {
+    phi_ref <- phi_start
+  } else {
+    H0      <- blv_hessian(sim, kappa)
+    eig0    <- eigen(H0, symmetric = TRUE)
+    phi_ref <- eig0$vectors[, 1]
+  }
+  # Normalisation de sécurité de la référence
+  phi_ref <- phi_ref / sqrt(sum(phi_ref^2))
 
-  if (verbose)
-    cat(sprintf("  K = %d | lambda_max(H) at start = %.6f\n",
-                K, eig0$values[1]))
+  # On identifie l'indice de la ville "pivot" (ex: Brussels)
+  idx_ref <- which.max(abs(phi_ref))
+  val_ref <- phi_ref[idx_ref]
 
-  ## Residual: u = (Z [K], beta [1], phi [K]), length 2K+1
+  # --- LE SYSTEME AUGMENTE DE KUZNETSOV ---
   F_aug <- function(u) {
     Z    <- u[seq_len(K)]
     beta <- u[K + 1L]
     phi  <- u[K + 1L + seq_len(K)]
 
+    # Protections numériques
     if (!is.finite(beta) || beta <= 0 || any(Z <= 0))
-      return(rep(1e6, 2L * K + 1L))
+      return(rep(1e8, 2L * K + 1L))
 
-    ## Compute static flows at (Z, beta)
+    # Calcul de l'état stationnaire (Z, beta)
     s <- static_blvim(
       costs = C_full, X = X_full, alpha = alpha, beta = beta,
       Z = Z, bipartite = FALSE
     )
 
-    ## Block 1: grad_f_j = kappa_j * D_j / Z_j - 1 = 0
+    # Bloc 1 : Équilibre des flux (K équations)
     D   <- unname(destination_flow(s))
     F_v <- kappa * D / Z - 1.0
 
-    ## Block 2: H(Z, beta) * phi = 0
+    # Bloc 2 : Singularité du Hessien (H * phi = 0) (K équations)
     H_A  <- blv_hessian(s, kappa)
     Hphi <- as.vector(H_A %*% phi)
 
-    ## Block 3: phi' phi_0 = 1
-    c(F_v, Hphi, sum(phi * phi0) - 1.0)
+    # Bloc 3 : L'ANCRAGE CHIRURGICAL (1 équation scalaire)
+    # On force la composante de la ville pivot à rester stable.
+    # Cela fixe la norme ET le signe de phi.
+    F_norm <- phi[idx_ref] - val_ref
+
+    c(F_v, Hphi, F_norm)
   }
 
-  u0 <- c(Z0, beta0, phi0)
-  if (verbose)
-    cat(sprintf("  ||F(u0)|| = %.3e\n", sqrt(sum(F_aug(u0)^2))))
+  # --- RESOLUTION ---
+  u0 <- c(Z0, beta0, phi_ref)
 
   sol <- nleqslv::nleqslv(
     x       = u0,
     fn      = F_aug,
     method  = "Newton",
+    global  = "dbldog", # Stratégie "Double Dogleg" pour éviter les sauts brutaux
     control = list(maxit         = max_iter,
                    ftol          = tol,
                    xtol          = tol,
-                   allowSingular = TRUE,
-                   trace         = if (verbose) 1L else 0L)
+                   allowSingular = TRUE)
   )
 
   converged <- sol$termcd %in% c(1L, 2L, 3L)
-  residual  <- sqrt(sum(sol$fvec^2))
 
-  if (!converged)
-    warning("blv_augmented_1param: did not converge (termcd=", sol$termcd,
-            ", ||F||=", formatC(residual, format = "e", digits = 2), ")")
-
+  # --- EXTRACTION ET POST-TRAITEMENT ---
   Z_c    <- sol$x[seq_len(K)]
   beta_c <- sol$x[K + 1L]
   phi    <- sol$x[K + 1L + seq_len(K)]
-  phi    <- phi / max(abs(phi))
-  if (phi[which.max(Z_c)] < 0) phi <- -phi
+
+  # On normalise proprement pour l'utilisateur final (max amplitude = 1)
+  phi_norm <- phi / max(abs(phi))
+  # Sécurité signe : la ville la plus attractive doit être positive
+  if (phi_norm[which.max(Z_c)] < 0) phi_norm <- -phi_norm
 
   list(
     beta_c       = beta_c,
     beta_c_inv   = 1.0 / beta_c,
     Z_c          = setNames(Z_c, dnames),
-    phi          = setNames(phi, dnames),
-    direction    = setNames(ifelse(phi > 0, "emerging", "retracting"), dnames),
+    phi          = setNames(phi_norm, dnames),
+    direction    = setNames(ifelse(phi_norm > 0, "emerging", "retracting"), dnames),
     converged    = converged,
-    termcd       = sol$termcd,
-    residual     = residual
+    residual     = sqrt(sum(sol$fvec^2)),
+    termcd       = sol$termcd
   )
 }
+
+
+## ---------------------------------------------------------------------------
+## 8. FONCTION PLOT
+## ---------------------------------------------------------------------------
+plot_blv_bifurcation <- function(sim,
+                                 kappa = rep(1, ncol(costs(sim))),
+                                 threshold = 1e-3) {
+
+  # 1. Calcul interne (Appel à ta fonction robuste)
+  # On s'assure que le système augmenté tourne sur la simulation fournie
+  res <- blv_augmented_1param(sim, kappa = kappa)
+
+  if (!res$converged) {
+    stop("Le système augmenté n'a pas convergé.
+          Vérifiez que sim est proche d'une bifurcation.")
+  }
+
+  # 2. Préparation des données pour ggplot (Tidying)
+  df_phi <- data.frame(
+    dest   = names(res$phi),
+    phi    = as.numeric(res$phi),
+    type   = res$direction,
+    Z_c    = as.numeric(res$Z_c)
+  ) %>%
+    mutate(dest = reorder(dest, phi)) # Tri pour le graphique
+
+  # 3. Construction du graphique
+  ggplot(df_phi, aes(x = dest, y = phi, fill = type)) +
+    geom_col(alpha = 0.8) +
+    coord_flip() +
+    scale_fill_manual(values = c("emerging" = "#E41A1C", "retracting" = "#377EB8")) +
+    labs(
+      title = "Signature spectrale de la bifurcation",
+      subtitle = paste("Localisation critique : beta_c^-1 =", round(res$beta_c_inv, 2)),
+      x = "Destinations",
+      y = "Amplitude du mode propre (phi)",
+      fill = "Dynamique"
+    ) +
+    theme_minimal()
+}
+
+
+## ---------------------------------------------------------------------------
+## 8. FONCTION CONTINUATION BIFURCATION
+## ---------------------------------------------------------------------------
+## =============================================================================
+## blv_continue_bifurcation_v2 — version corrigée
+##
+## Correction :
+##   À chaque alpha, on RECONSTRUIT le warm-start propre :
+##     (a) Cold-start Z=1 à un beta sous-critique (last_beta * 0.95)
+##         pour ressortir sur la branche DISPERSÉE stable.
+##     (b) Approche fine du seuil par scan local de lambda_max(H) sur Z*(beta).
+##     (c) Newton (blv_augmented_1param) à partir de ce point bien placé.
+##
+## =============================================================================
+
+library(blvim)
+library(nleqslv)
+
+## --- Helper : trouve le dernier beta_inv pour lequel lambda_max(H) < 0
+## sur l'équilibre cold-start Z=1, en partant d'un beta_inv_ref donné.
+## Renvoie le sim_blvim correspondant (point juste sous-critique).
+.find_subcritical_sim <- function(C, X, alpha, kappa,
+                                  beta_inv_ref,
+                                  search_window = c(0.7, 1.05),
+                                  n_grid = 25) {
+
+  K <- ncol(C)
+
+  ## Grille de beta_inv autour du beta_inv_ref (en majorité inférieurs)
+  bi_grid <- seq(beta_inv_ref * search_window[1],
+                 beta_inv_ref * search_window[2],
+                 length.out = n_grid)
+
+  ## Cold-start Z=1 partout (grid_blvim fait ça en une passe)
+  sims <- grid_blvim(
+    costs   = C,
+    X       = X,
+    alphas  = alpha,
+    betas   = 1 / bi_grid,
+    Z       = rep(1, K),
+    bipartite = FALSE,
+    epsilon = 0.05,
+    iter_max = 80000,
+    precision = 1e-8
+  )
+
+  ## Calcul lmax(H) et n_active à chaque beta
+  lmax_vec <- numeric(length(bi_grid))
+  nact_vec <- integer(length(bi_grid))
+  for (i in seq_along(bi_grid)) {
+    s        <- sims[[i]]
+    Z_i      <- unname(attractiveness(s))
+    nact_vec[i] <- sum(Z_i > 1e-3)
+    H        <- blv_hessian(s, kappa)
+    lmax_vec[i] <- max(eigen(H, symmetric = TRUE, only.values = TRUE)$values)
+  }
+
+  ## Sélection : dernier point AVEC n_active == K ET lmax < 0
+  ## (recette warm-start de blv_augmented_1param, mais alpha-adaptative)
+  ok <- which(nact_vec == K & lmax_vec < 0)
+
+  if (length(ok) == 0L) {
+    ## Le seuil est au-delà de notre fenêtre : on retourne le plus grand bi sous K-actif
+    stop(sprintf("Pas de point sous-critique trouvé dans la fenêtre [%.1f, %.1f]",
+                 bi_grid[1], bi_grid[length(bi_grid)]))
+  }
+
+  best_i <- max(ok)
+  list(
+    sim       = sims[[best_i]],
+    beta_inv  = bi_grid[best_i],
+    lmax      = lmax_vec[best_i],
+    n_active  = nact_vec[best_i]
+  )
+}
+
+
+## ---------------------------------------------------------------------------
+## blv_continue_bifurcation_v2
+##   alpha_range : grille d'alpha à parcourir (monotone, croissant ou décroissant)
+##   beta_inv_init : guess initial pour beta_c^-1 (utilisé pour cadrer le 1er scan)
+##   kappa : vecteur de poids (défaut 1)
+##   verbose : trace
+## ---------------------------------------------------------------------------
+blv_continue_bifurcation <- function(C, X,
+                                        alpha_range,
+                                        beta_inv_init = 100,
+                                        kappa = NULL,
+                                        verbose = TRUE) {
+
+  K <- ncol(C)
+  if (is.null(kappa)) kappa <- rep(1, K)
+
+  results   <- list()
+  beta_inv_guess <- beta_inv_init
+
+  for (i in seq_along(alpha_range)) {
+    a <- alpha_range[i]
+
+    ## (1) Trouve un point sous-critique propre via cold-start scan
+    sub <- tryCatch(
+      .find_subcritical_sim(C, X, a, kappa, beta_inv_ref = beta_inv_guess),
+      error = function(e) NULL
+    )
+
+    if (is.null(sub)) {
+      ## La fenêtre était trop étroite : on l'élargit
+      sub <- .find_subcritical_sim(C, X, a, kappa,
+                                   beta_inv_ref = beta_inv_guess,
+                                   search_window = c(0.4, 1.2),
+                                   n_grid = 40)
+    }
+
+    ## (2) Newton sur le système augmenté avec ce sim bien placé
+    res <- tryCatch(
+      blv_augmented_1param(sub$sim, kappa = kappa),
+      error = function(e) NULL
+    )
+
+    if (is.null(res) || !res$converged) {
+      warning(sprintf("Echec a alpha = %.3f", a))
+      next
+    }
+
+    ## (3) Sanity check : on doit avoir lambda_max(H) ~ 0 sur Z_c.
+    ##     On reconstruit le sim au point critique et on vérifie.
+    sim_at_bc <- static_blvim(
+      costs = C, X = X, alpha = a, beta = res$beta_c,
+      Z = res$Z_c, bipartite = FALSE
+    )
+    H_check   <- blv_hessian(sim_at_bc, kappa)
+    lmax_chk  <- max(eigen(H_check, symmetric = TRUE, only.values = TRUE)$values)
+
+    if (abs(lmax_chk) > 1e-3) {
+      warning(sprintf(
+        "alpha = %.3f : Newton converge mais lambda_max(H) = %.3e != 0. Resultat suspect.",
+        a, lmax_chk
+      ))
+      next
+    }
+
+    results[[i]] <- data.frame(
+      alpha         = a,
+      beta_c_inv    = res$beta_c_inv,
+      lmax_at_bc    = lmax_chk,
+      emerging_city = names(res$phi)[which.max(res$phi)],
+      stringsAsFactors = FALSE
+    )
+
+    if (verbose) {
+      cat(sprintf("  [OK] alpha = %.3f | beta_c^-1 = %.3f | lmax=%.1e | %s\n",
+                  a, res$beta_c_inv, lmax_chk, results[[i]]$emerging_city))
+    }
+
+    ## (4) Mise à jour du guess pour le prochain alpha
+    beta_inv_guess <- res$beta_c_inv
+  }
+
+  do.call(rbind, results)
+}
+
