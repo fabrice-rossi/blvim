@@ -335,78 +335,62 @@ $f$, although the two are closely related at equilibrium.
 
 ### Hessian of the potential function
 
-We first record the derivative of the softmax share $P_{ij}$ with respect to $Z_k$:
-
+We introduce the softmax share $P_{ij} = Z_j^\alpha w_{ij}/S_i$ with
+$S_i = \sum_k Z_k^\alpha w_{ik}$, and record its derivative with respect
+to $Z_k$:
 $$
 \frac{\partial P_{ij}}{\partial Z_k}
-  = \frac{\alpha\,\delta_{jk}\,S_i\,Z_j^{\alpha-1}w_{ij}
-         - \alpha\,Z_k^{\alpha-1}w_{ik}\,Z_j^{\alpha}w_{ij}}{S_i^2}
   = \frac{\alpha}{Z_k}\,P_{ik}\bigl(\delta_{jk} - P_{ij}\bigr),
 $$
-
 where $\delta_{jk}$ is the Kronecker symbol.
 
-#### Off-diagonal entries ($j \neq k$)
+#### The general Hessian
 
-Starting from $\partial f/\partial Z_j = D_j/Z_j - \kappa_j$ and differentiating
-with respect to $Z_k \neq Z_j$:
-
-$$
-\frac{\partial^2 f}{\partial Z_j\,\partial Z_k}
-  = \frac{1}{Z_j}\frac{\partial D_j}{\partial Z_k}
-  = \frac{1}{Z_j}\sum_{i=1}^n X_i\,\frac{\partial P_{ij}}{\partial Z_k}
-  = \frac{1}{Z_j}\sum_{i=1}^n X_i\,\frac{\alpha}{Z_k}\,P_{ik}(0 - P_{ij}),
-$$
-which gives
-
-$$
-H_{jk} = -\frac{\alpha}{Z_j Z_k}\sum_{i=1}^n X_i\,P_{ij}\,P_{ik}
-        = -\alpha\,Z_j^{\alpha-1}Z_k^{\alpha-1}
-          \sum_{i=1}^n X_i\,\frac{w_{ij}\,w_{ik}}{S_i^2},
-\qquad j \neq k.
-$$
-
-#### Diagonal entries ($j = k$)
-
-Differentiating $\partial f/\partial Z_j = D_j/Z_j - \kappa_j$ with respect to $Z_j$:
-
-$$
-\frac{\partial^2 f}{\partial Z_j^2}
-  = -\frac{D_j}{Z_j^2} + \frac{1}{Z_j}\frac{\partial D_j}{\partial Z_j}.
-$$
-Using $\partial D_j/\partial Z_j = \sum_i X_i (\alpha/Z_j) P_{ij}(1-P_{ij})$:
-
-$$
-\frac{\partial^2 f}{\partial Z_j^2}
-  = -\frac{D_j}{Z_j^2}
-    + \frac{\alpha}{Z_j^2}\sum_{i=1}^n X_i\,P_{ij}(1-P_{ij}).
-$$
-
-At an **interior equilibrium** where $G_j = 0$, that is $D_j = \kappa_j Z_j$:
-
-$$
-H_{jj} = \frac{\alpha - 1}{Z_j^2}\sum_{i=1}^n X_i\,P_{ij}
-         - \frac{\alpha}{Z_j^2}\sum_{i=1}^n X_i\,P_{ij}^2.
-$$
-
-#### Summary: the full Hessian
-
-Collecting both cases, the Hessian matrix $H = (H_{jk})_{1 \leq j,k \leq p}$
-evaluated at an interior equilibrium is
+Recall that $\partial f/\partial Z_j = G_j/Z_j$, where
+$G_j = D_j - \kappa_j Z_j$ is the disequilibrium gap.
+Differentiating once more with respect to $Z_k$ yields the full Hessian
+$H = \bigl(\partial^2 f/\partial Z_j\,\partial Z_k\bigr)$
+at any interior point $\mathbf{Z} \gg 0$:
 
 $$
 H_{jk} =
 \begin{cases}
 \displaystyle
-  (\alpha-1)\,Z_j^{\alpha-2}\sum_i X_i\,\dfrac{w_{ij}}{S_i}
-  - \alpha\,Z_j^{2(\alpha-1)}\sum_i X_i\,\dfrac{w_{ij}^2}{S_i^2},
-  & j = k, \\[12pt]
+  -\frac{G_j}{Z_j^2}
+  +(\alpha-1)\,Z_j^{\alpha-2}\sum_i X_i\,\frac{w_{ij}}{S_i}
+  -\alpha\,Z_j^{2(\alpha-1)}\sum_i X_i\,\frac{w_{ij}^2}{S_i^2},
+  & j = k,\\[10pt]
 \displaystyle
   -\alpha\,Z_j^{\alpha-1}Z_k^{\alpha-1}
-  \sum_i X_i\,\dfrac{w_{ij}\,w_{ik}}{S_i^2},
+  \sum_i X_i\,\frac{w_{ij}\,w_{ik}}{S_i^2},
   & j \neq k.
 \end{cases}
 $$
+
+#### Simplification at an interior equilibrium
+
+At a Harris--Wilson equilibrium $G_j = 0$ for every active destination,
+the term $-G_j/Z_j^2$ vanishes on the diagonal and the Hessian reduces to
+
+$$
+H_{jk}\big|_{G=0} =
+\begin{cases}
+\displaystyle
+  (\alpha-1)\,Z_j^{\alpha-2}\sum_i X_i\,\frac{w_{ij}}{S_i}
+  -\alpha\,Z_j^{2(\alpha-1)}\sum_i X_i\,\frac{w_{ij}^2}{S_i^2},
+  & j = k,\\[10pt]
+\displaystyle
+  -\alpha\,Z_j^{\alpha-1}Z_k^{\alpha-1}
+  \sum_i X_i\,\frac{w_{ij}\,w_{ik}}{S_i^2},
+  & j \neq k.
+\end{cases}
+$$
+
+
+The equilibrium is a strict local maximum of $f$ if and only if $H$ is
+negative definite, i.e. $\lambda_{\max}(H) < 0$. The bifurcation threshold
+corresponds to $\lambda_{\max}(H) = 0$.
+
 
 ### KKT Conditions and Equilibrium Structure
 
@@ -439,384 +423,6 @@ Therefore:
 Hence every KKT point of the constrained problem is a Harris--Wilson equilibrium
 (possibly with inactive destinations), and conversely.
 
-## Stability Analysis and Bifurcation
-
-### Local Stability via the Jacobian of $G$
-
-The BLV dynamic model takes the form $\dot{Z}_j = \varepsilon\, G_j(\mathbf{Z},\alpha,\beta)$.
-The local stability of an equilibrium $\mathbf{Z}^*$ is governed by the
-Jacobian of $G$,
-
-$$
-J_G(\mathbf{Z}^*,\alpha,\beta)
-= \left(\frac{\partial G_j}{\partial Z_k}\right)_{j,k}.
-$$
-
-The equilibrium $\mathbf{Z}^*$ is locally asymptotically stable if and only if
-all eigenvalues of $J_G$ have strictly negative real part:
-
-$$
-\mathbf{Z}^* \text{ is locally stable}
-\quad\Longleftrightarrow\quad
-\lambda_{\max}\!\bigl(J_G(\mathbf{Z}^*,\alpha,\beta)\bigr) < 0.
-$$
-
-Using $\partial P_{ij}/\partial Z_k = (\alpha/Z_k)\,P_{ik}(\delta_{jk} - P_{ij})$,
-the entries of $J_G$ are explicit. For $j \neq k$:
-
-$$
-\frac{\partial G_j}{\partial Z_k}
-= -\frac{\alpha}{Z_k}\sum_{i=1}^n X_i\,P_{ij}\,P_{ik} \leq 0,
-$$
-
-and for the diagonal, using $D_j = \kappa_j Z_j^*$ at equilibrium:
-
-$$
-\frac{\partial G_j}{\partial Z_j}\bigg|_{\mathbf{Z}^*}
-= \frac{\alpha}{Z_j^*}\!\left[D_j - \sum_{i=1}^n X_i P_{ij}^2\right] - \kappa_j
-= (\alpha-2)\kappa_j - \frac{\alpha}{Z_j^*}\sum_{i=1}^n X_i P_{ij}^2.
-$$
-
-A primary bifurcation occurs at the critical value $\beta_c$ where
-$\lambda_{\max}(J_G)$ first reaches zero along the dispersed branch.
-
-### Behaviour of Collapsed Destinations
-
-The iterative BLV scheme preserves positivity: if $Z_j^t > 0$ and
-$\varepsilon < 1/\kappa_j$, then $Z_j^{t+1} = (1-\varepsilon\kappa_j)Z_j^t +
-\varepsilon D_j^t > 0$. So $Z_j^* > 0$ at any finite iterate. However, for a
-destination that has effectively collapsed, $Z_j^* \ll 1$ and
-$P_{ij} \propto (Z_j^*)^\alpha \to 0$.
-
-Examining the diagonal entry of $J_G$ for such a destination:
-
-$$
-\frac{\partial G_j}{\partial Z_j}\bigg|_{\mathbf{Z}^*}
-= (\alpha-2)\kappa_j - \frac{\alpha}{Z_j^*}\sum_{i=1}^n X_i P_{ij}^2
-\sim (\alpha-2)\kappa_j - \alpha\kappa_j (Z_j^*)^{\alpha-1}
-\xrightarrow{Z_j^*\to 0}
-(\alpha-2)\kappa_j,
-$$
-
-which remains bounded. The off-diagonal entries in the column and row of $j$,
-of the form $-(\alpha/Z_k)\sum_i X_i P_{ij} P_{ik}$, vanish as $P_{ij} \to 0$.
-Collapsed destinations therefore decouple cleanly in $J_G$: their rows and
-columns both tend to zero, and $\lambda_{\max}(J_G)$ is determined entirely by
-the remaining active destinations.
-
-### Bifurcation Direction and the Dominant Eigenvector of $H$
-
-When the primary bifurcation is approached, the loss of stability is not uniform
-across destinations. The direction in which the system tips is encoded in the
-eigenvector $\boldsymbol{\phi} \in \mathbb{R}^p$ associated with
-$\lambda_{\max}(H)$, the dominant eigenvalue of the Hessian of $f$:
-
-$$
-H\,\boldsymbol{\phi} = \lambda_{\max}(H)\,\boldsymbol{\phi}.
-$$
-
-The sign of each component $\phi_j$ predicts the fate of destination $j$ at the
-bifurcation:
-
-- $\phi_j > 0$: destination $j$ **agglomerates** — its attractiveness grows
-  above the current equilibrium as $\beta$ crosses the critical value.
-- $\phi_j < 0$: destination $j$ **retracts** — its attractiveness falls below
-  the current equilibrium, eventually collapsing toward zero.
-
-The magnitude $|\phi_j|$ measures the intensity of the movement. This
-eigenvector is computed in practice by `blv_split_direction()`, which restricts
-the computation to the active subspace $\mathcal{A}^*$ (see below) to avoid
-numerical issues near collapsed destinations.
-
-**Remark on the diagonal approximation.** The diagonal $H_{jj}$ provides a
-first-order approximation of $|\phi_j|$: destinations with the least-negative
-$H_{jj}$ tend to have the largest $|\phi_j|$. However, the off-diagonal
-structure of $H$ can reverse this ranking for destinations with strong spatial
-interaction (e.g., a city may rank high by diagonal yet act as a retractor
-because it shares its catchment with a dominant emerging city). The full
-eigenvector is therefore always preferable to the diagonal alone.
-
-#### Structural analogy with Rose (1998)
-
-The BLV bifurcation structure bears a formal resemblance to the phase transitions
-in the deterministic annealing framework of Rose (1998), developed independently
-for vector quantisation and clustering. The formal correspondence at the level of
-free energies is exact: setting $T=1$ in Rose's Lagrangian $F = D - TH$ and
-using the effective distortion $d(i,j) = \beta t_{ji} - \alpha \log x_i$, one
-recovers exactly the Harris--Wilson flows and the potential $f$ of Osawa et al.
-(2025):
-
-$$
-f(\mathbf{x}) = -\frac{Q}{\alpha} F^*(\mathbf{x}) - \sum_i \kappa_i x_i,
-$$
-
-where $F^*$ is Rose's optimal Lagrangian value. Maximising $f$ (BLV) is
-therefore equivalent to minimising $F^*$ (Rose) under the budget constraint.
-Under this correspondence $\beta$ plays the structural role of the annealing
-parameter ($\beta \to 0$: uniform dispersion; $\beta \to \infty$: full
-agglomeration), while $T$ is held fixed at $1$.
-
-Where the analogy stops. Rose's Theorem 1 — which states that a cluster
-splits along the principal axis of its posterior covariance $C_{\mathbf{x}|y}$
-when $T < 2\lambda_{\max}(C_{\mathbf{x}|y})$ — is proved specifically for the
-Euclidean distortion $d = \|\mathbf{x}-\mathbf{y}\|^2$. The BLV distortion
-$d(i,j) = \beta t_{ji} - \alpha \log x_i$ is non-Euclidean and endogenous
-(it depends on the state $x_i$ through $\alpha \log x_i$). The phase-transition
-condition must therefore be re-derived from the second-order optimality condition
-of $F^*$ for this specific distortion, yielding:
-
-$$
-\sum_j \frac{Q_j}{Q}
-\left[
-  \alpha(\alpha-1)\sum_k p(k|j)\frac{\phi_k^2}{x_k^2}
-  - \alpha^2 \left(\sum_k p(k|j)\frac{\phi_k}{x_k}\right)^{\!2}
-\right] = 0,
-$$
-
-where $p(k|j) = x_k^\alpha e^{-\beta t_{jk}} / Z_j(x)$ is the Gibbs
-distribution. This is the BLV analogue of Rose's condition
-$\det(I - \frac{2}{T}C_{\mathbf{x}|y}) = 0$. Its spectral structure is
-governed by the Hessian $H$ of $f$: the bifurcation direction $\boldsymbol{\phi}$
-solving the above equation is precisely the dominant eigenvector of
-$H_{\mathcal{A}^*}$. The posterior covariance $C_{\mathbf{x}|y}$ of Rose has
-no direct counterpart in the BLV model — it is replaced by $H$ — and the two
-objects are not formally equal.
-
-## The Active Subspace
-
-### Definition and Motivation
-
-Even though $J_G$ itself remains well-behaved for collapsed destinations, the
-augmented system used to locate bifurcation points exactly (see next section)
-involves solving a linear system with $J_G$ as its principal block. For a
-near-collapsed destination $j$, the diagonal entry
-$(\alpha-2)\kappa_j - (\alpha/Z_j^*)\sum_i X_i P_{ij}^2$ contains a term
-$\alpha/Z_j^* \to +\infty$ multiplied by $\sum_i X_i P_{ij}^2 \sim
-(Z_j^*)^{2\alpha} \to 0$; their product $\sim (Z_j^*)^{2\alpha-1}$ may vanish,
-but it does so through a near-cancellation that makes $J_G$ ill-conditioned near
-collapsed destinations. To avoid this ill-conditioning, all subsequent analysis
-— augmented systems, bifurcation direction, and type classification — is
-restricted to the active subspace $\mathcal{A}^*$.
-
-Two natural criteria define the active subspace, corresponding to the two
-central objects of the BLV model. They lead to different algorithms with
-different numerical properties.
-
-Via the Jacobian of $G$. The active subspace is the
-largest subset of destinations on which the restricted dynamics remain stable:
-
-$$
-\mathcal{A}^*_{J} = \underset{|\mathcal{A}|}{\arg\max}\,
-\bigl\{
-  \mathcal{A} \subseteq \{1, \ldots, p\}
-  :
-  \lambda_{\max}\!\bigl(J_{G_{\mathcal{A}}}\bigr) \leq 0
-\bigr\}.
-$$
-
-In practice, $\mathcal{A}^*_J$ is identified by a threshold on $Z_j^*$: a
-destination is considered active if and only if $Z_j^* > \tau$ for some small
-threshold $\tau > 0$. This is justified by the decoupling property established
-above — collapsed destinations ($Z_j^* \ll 1$) decouple from the active block
-in $J_G$ — and is implemented in `blv_active()`.
-
-Via the Hessian of $f$. An interior maximum of $f$
-requires $H$ to be negative semi-definite. The active subspace is the largest
-subset on which the restricted Hessian remains concave:
-
-$$
-\mathcal{A}^*_{H} = \underset{|\mathcal{A}|}{\arg\max}\,
-\bigl\{
-  \mathcal{A} \subseteq \{1, \ldots, p\}
-  :
-  \lambda_{\max}(H_{\mathcal{A}}) \leq 0
-\bigr\}.
-$$
-
-This criterion is implemented via a greedy spectral algorithm on $H$,
-described in the next section (`blv_greedy()`).
-
-Relationship between the two criteria. At a true interior equilibrium,
-$H$ and $J_G$ are related by $H = \frac{1}{2}[\mathrm{diag}(1/Z)\,J_G +
-J_G^\top\,\mathrm{diag}(1/Z)]$, so they share the same sign structure on the
-active subspace and both criteria identify the same destinations as active. In
-practice, they differ near collapsed destinations where $Z_j^* \approx 0$: the
-threshold criterion on $Z_j^*$ is a direct proxy for $\mathcal{A}^*_J$, while
-the greedy algorithm on $H$ constructs $\mathcal{A}^*_H$ by iterative spectral
-elimination.
-
-### Construction by Successive Elimination
-
-#### Algorithm J: threshold on $Z_j^*$ (for $\mathcal{A}^*_J$)
-
-The simplest approach to identifying $\mathcal{A}^*_J$ exploits the decoupling
-property of $J_G$: because collapsed destinations have $P_{ij} \to 0$ and their
-rows and columns in $J_G$ both vanish, $\lambda_{\max}(J_G)$ is driven entirely
-by destinations with $Z_j^*$ bounded away from zero. The active subspace is
-therefore approximated by:
-
-$$
-\mathcal{A}^*_J \approx \{j : Z_j^* > \tau\},
-$$
-
-for a small threshold $\tau > 0$ (default $\tau = 10^{-3}$ in `blv_active()`).
-This approach is fast (no eigenvalue computation required) and numerically robust,
-but it relies on a user-chosen threshold and does not provide a spectral
-certificate on $J_{G_{\mathcal{A}^*}}$.
-
-#### Algorithm H: greedy spectral elimination on $H$ (for $\mathcal{A}^*_H$)
-
-The Hessian $H$ is symmetric and its eigenvalues are real, enabling a clean
-spectral stopping criterion. Starting from the full index set
-$\mathcal{A} = \{1, \ldots, p\}$:
-
-1. Compute $\lambda_{\max}(H_{\mathcal{A}})$.
-2. If $\lambda_{\max} \leq 0$, stop: $\mathcal{A}^* = \mathcal{A}$.
-3. Otherwise, remove the index with the **largest diagonal entry** of $H$:
-$$
-j^* = \underset{j \in \mathcal{A}}{\arg\max}\; H_{jj}\big|_{\mathbf{Z}^*},
-\qquad
-\mathcal{A} \leftarrow \mathcal{A} \setminus \{j^*\},
-$$
-and return to step 1.
-
-The algorithm terminates in at most $p - 1$ steps and is implemented in
-`blv_greedy()`.
-
-Why the diagonal of $H$ as the elimination criterion? At equilibrium:
-
-$$
-H_{jj} = \frac{\alpha - 1}{Z_j^{*2}}\sum_i X_i P_{ij}
-         - \frac{\alpha}{Z_j^{*2}}\sum_i X_i P_{ij}^2.
-$$
-
-For a collapsed destination, $P_{ij} \sim (Z_j^*)^\alpha \to 0$, so $H_{jj}
-\to 0^-$ — small and negative, making such destinations natural last candidates
-for removal. For an emerging destination, the agglomeration term
-$(\alpha-1)\sum_i X_i P_{ij}$ dominates the saturation term, giving $H_{jj} > 0$
-— these are removed first, until the remaining submatrix is negative
-semi-definite. Algorithm H is valid for all $\alpha > 1$.
-
-Why not use the diagonal of $J_G$? For $1 < \alpha < 2$, the diagonal
-entry of $J_G$ at a collapsed destination satisfies:
-
-$$
-\frac{\partial G_j}{\partial Z_j}\bigg|_{\mathbf{Z}^*}
-\approx (\alpha - 2)\kappa_j < 0,
-$$
-
-so collapsed destinations have a negative diagonal entry in $J_G$ and would
-never be selected for removal. Algorithm J via $J_G$ diagonal therefore fails
-to construct $\mathcal{A}^*_J$ correctly for $\alpha < 2$, which covers the
-empirically relevant range. The threshold approach avoids this issue entirely.
-
-### The Reduced Stability Signal
-
-On the active subspace $\mathcal{A}^*$, the restricted spectral radius
-$\lambda_{\max}(H_{\mathcal{A}^*})$ remains bounded and interpretable
-throughout the parameter range. Its evolution along a warm-start continuation
-in $\beta$ reveals two types of events:
-
-- **Primary bifurcation**: $\lambda_{\max}(H_{\mathcal{A}^*})$ reaches zero
-  from below just before the first destination collapses, signalling the loss
-  of stability of the fully dispersed equilibrium
-  ($\mathcal{A}^* = \{1,\ldots,p\}$).
-- **Secondary bifurcations**: each successive reduction of $|\mathcal{A}^*|$
-  marks the collapse of one or more previously active destinations. Just before
-  each event, $\lambda_{\max}(H_{\mathcal{A}^*})$ again approaches zero.
-
-The same information is carried by $\lambda_{\max}(J_{G_{\mathcal{A}^*}})$ on
-the active subspace, but $\lambda_{\max}(H_{\mathcal{A}^*})$ is preferred for
-numerical stability and because $H$ is symmetric.
-
-## Augmented Systems for Exact Bifurcation Location
-
-All augmented systems below are formulated on the active subspace $\mathcal{A}^*$
-of size $q = |\mathcal{A}^*|$, using the restricted Jacobian
-$J_{G_{\mathcal{A}^*}} \in \mathbb{R}^{q \times q}$ and the restricted unknown
-vector $\mathbf{Z}^*_{\mathcal{A}^*} \in \mathbb{R}^q$. This avoids the
-ill-conditioning introduced by near-collapsed destinations.
-
-### One Free Parameter: Locating $\beta_c$ Exactly
-
-To locate the bifurcation point without relying on grid resolution, we apply the
-standard augmented system of Kuznetsov (1995, Ch. 10). At a codimension-1
-bifurcation, $H_{\mathcal{A}^*}(\mathbf{Z}^*,\beta_c)$ has a one-dimensional
-kernel spanned by $\boldsymbol{\phi} \in \mathbb{R}^q$. The triple
-$(\mathbf{Z}^*_{\mathcal{A}^*}, \beta_c, \boldsymbol{\phi})$ satisfies the
-$(2q+1)$-dimensional square system:
-
-$$
-\begin{cases}
-G_{\mathcal{A}^*}(\mathbf{Z}^*_{\mathcal{A}^*},\, \beta_c) = \mathbf{0},
-  & (q \text{ equations})\\[6pt]
-H_{\mathcal{A}^*}(\mathbf{Z}^*_{\mathcal{A}^*},\, \beta_c)\,
-  \boldsymbol{\phi} = \mathbf{0},
-  & (q \text{ equations})\\[6pt]
-\boldsymbol{\phi}^\top \boldsymbol{\phi}_0 = 1,
-  & (1 \text{ equation})
-\end{cases}
-$$
-
-where $\boldsymbol{\phi}_0 \in \mathbb{R}^q$ is the dominant eigenvector of
-$H$ at the warm-start point, providing phase and sign normalisation. Kuznetsov
-(1995, Ch. 10) proves that this Jacobian is non-singular at a generic
-codimension-1 point, ensuring local quadratic convergence of Newton's method.
-
-Note on the choice of $H$ vs $J_G$. The classical formulation of Kuznetsov
-uses the Jacobian of $G$ in the second block. Here we use the Hessian $H$ of
-the potential $f$ instead, for two reasons. First, $H$ is symmetric, which
-makes the augmented system better conditioned and its Jacobian easier to compute
-analytically. Second, at the primary bifurcation where all destinations remain
-active ($\mathcal{A}^* = \{1,\ldots,p\}$ and $Z_j^* \approx 1$), $H$ and
-$J_G$ share the same null space — so both formulations locate the same
-$\beta_c$.
-
-The equilibrium condition $G = \mathbf{0}$ is written equivalently as
-$\kappa_j D_j / Z_j - 1 = 0$ at an interior equilibrium (with $\kappa_j = 1$),
-matching the gradient condition $\nabla f = 0$. The bifurcation direction
-$\boldsymbol{\phi}$ encodes the fate of each destination: $\phi_j > 0$
-agglomerates; $\phi_j < 0$ retracts.
-
-Warm-start strategy. Newton converges only when the initial point is
-sufficiently close to $\beta_c$. The recommended procedure is a cold-start
-scan: run `blvim()` with $Z = \mathbf{1}$ at each $\beta$ on a coarse grid
-(forcing the dispersed branch at every step), compute
-$\lambda_{\max}(H)$ at each point via `blv_hessian()`, and select the last
-point where all destinations remain active and $\lambda_{\max}(H) < 0$ — i.e.,
-the closest stable dispersed equilibrium to the bifurcation.
-
-This is implemented in `blv_augmented_1param()`, which takes as input a `sim`
-object at the warm-start point and returns $\beta_c$, the equilibrium
-$\mathbf{Z}^*_c$, and the bifurcation direction $\boldsymbol{\phi}$.
-
-The output confirms that Brussels ranks first in $\boldsymbol{\phi}$ (dominant
-agglomerator), while Hook of Holland, Calais and Cologne are the primary
-retractors that feed Brussels's growth — consistent with the Hessian-based
-analysis of `blv_split_direction()`.
-
-### Two Free Parameters: The Bifurcation Curve in $(\alpha,\beta)$-Space
-
-Allowing both $\alpha$ and $\beta$ to vary, the augmented system becomes the
-$(2q+1)$-dimensional system in the $(2q+2)$ unknowns
-$(\mathbf{Z}^*_{\mathcal{A}^*}, \alpha, \beta, \boldsymbol{\psi})$:
-
-$$
-\begin{cases}
-G_{\mathcal{A}^*}(\mathbf{Z}^*_{\mathcal{A}^*},\, \alpha,\, \beta) = \mathbf{0},\\[6pt]
-J_{G_{\mathcal{A}^*}}(\mathbf{Z}^*_{\mathcal{A}^*},\, \alpha,\, \beta)\,
-  \boldsymbol{\psi} = \mathbf{0},\\[6pt]
-\boldsymbol{\psi}^\top \boldsymbol{\psi}_0 = 1.
-\end{cases}
-$$
-
-This under-determined system (one free degree) defines a smooth curve in the
-solution space. It is traced by pseudo-arclength continuation (Keller, 1977):
-at each step a predictor advances along the tangent to the curve, and a corrector
-Newton solve enforces the system augmented by one arclength constraint. The
-projection onto the $(\alpha, \beta^{-1})$-plane gives the complete **phase
-boundary** of the BLV model, extending the single-point analysis of Osawa et al.
-(2025) to a full bifurcation portrait in two-parameter space.
 
 ## References
 
@@ -844,19 +450,8 @@ Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
 Soc. Interface.5865-871 <https://dx.doi.org/10.1098/rsif.2007.1288>
 
-Kuznetsov, Y. A. (1995). *Elements of Applied Bifurcation Theory*. Springer.
-
-Keller, H. B. (1977). "Numerical solution of bifurcation and nonlinear
-eigenvalue problems", in *Applications of Bifurcation Theory*,
-P. H. Rabinowitz (ed.), Academic Press, 359-384.
-
 Osawa, M., Akamatsu, T., & Kogure, Y. (2025). Retail location as a
 potential game: the Harris--Wilson model revisited. *Working paper*.
-
-Rose, K. (1998). "Deterministic annealing for clustering, compression,
-classification, regression, and related optimization problems",
-Proceedings of the IEEE, 86(11), 2210-2239.
-<https://dx.doi.org/10.1109/5.726788>
 
 Sandholm, W. H. (2010). *Population Games and Evolutionary Dynamics*.
 MIT Press.
