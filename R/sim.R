@@ -413,3 +413,82 @@ sim_conversion <- function(sim, ...) {
 sim_conversion.sim <- function(sim, ...) {
   NA
 }
+
+
+#' Compute the potential function of a spatial interaction model
+#'
+#' @param sim a spatial interaction model, an object of class `sim_wpc`
+#' @param kappa a positive weight vector of length equal to the number of
+#'   destinations (default: all ones)
+#' @param ... additional parameters
+#'
+#' @returns the scalar value of the potential
+#' @export
+sim_potential <- function(sim, ...) {
+  UseMethod("sim_potential")
+}
+
+#' @export
+sim_potential.sim <- function(sim, ...) {
+  NA
+}
+
+
+#' Compute the gradient of the potential with respect to attractivenesses
+#'
+#' @param sim a spatial interaction model, an object of class `sim_wpc`
+#' @param kappa a positive weight vector of length equal to the number of
+#'   destinations (default: all ones)
+#' @param ... additional parameters
+#'
+#' @returns a named numeric vector of length p (number of destinations)
+#' @export
+sim_gradient <- function(sim, ...) {
+  UseMethod("sim_gradient")
+}
+
+#' @export
+sim_gradient.sim <- function(sim, ...) {
+  NA
+}
+
+
+#' Compute the Jacobian of the fixed-point map G
+#'
+#' @param sim a spatial interaction model, an object of class `sim_wpc`
+#' @param kappa a positive weight vector of length equal to the number of
+#'   destinations (default: all ones)
+#' @param ... additional parameters
+#'
+#' @returns a named p x p matrix
+#' @export
+sim_jacobian_G <- function(sim, ...) {
+  UseMethod("sim_jacobian_G")
+}
+
+#' @export
+sim_jacobian_G.sim <- function(sim, ...) {
+  NA
+}
+
+
+#' Compute the Hessian of the potential with respect to attractivenesses
+#'
+#' @param sim a spatial interaction model, an object of class `sim_wpc`
+#' @param kappa a positive weight vector of length equal to the number of
+#'   destinations (default: all ones)
+#' @param z_min minimum value for attractivenesses to avoid division by zero
+#' @param ... additional parameters
+#'
+#' @returns a named symmetric p x p matrix
+#' @export
+sim_hessian <- function(sim, ...) {
+  UseMethod("sim_hessian")
+}
+
+#' @export
+sim_hessian.sim <- function(sim, ...) {
+  NA
+}
+
+
