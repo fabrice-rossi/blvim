@@ -75,31 +75,39 @@ sim_jacobian_G.sim_wpc <- function(sim, kappa = rep(1, ncol(costs(sim))), ...) {
 ## ---------------------------------------------------------------------------
 
 #' @export
-sim_hessian.sim_wpc <- function(sim, kappa = rep(1, ncol(costs(sim))), z_min = 1e-6, ...) {
+sim_hessian.sim_wpc <- function(sim,
+                                kappa       = rep(1, ncol(costs(sim))),
+                                z_min       = 1e-6,
+                                active_only = FALSE,
+                                threshold   = 1e-3,
+                                ...) {
   Z     <- pmax(unname(attractiveness(sim)), z_min)
   alpha <- return_to_scale(sim)
   X     <- unname(production(sim))
-  P     <- .sim_P(sim)              # n x p shares P_ij = Y_ij / X_i
+  P     <- .sim_P(sim)
   p     <- length(Z)
 
   H <- matrix(0.0, p, p)
 
   for (j in seq_len(p)) {
     Pj  <- P[, j]
-    Dj  <- sum(X * Pj)              # = destination_flow[j]
-    sat <- sum(X * Pj^2)            # saturation term
-
+    Dj  <- sum(X * Pj)
+    sat <- sum(X * Pj^2)
     H[j, j] <- kappa[j] / Z[j]^2 * ((alpha - 1) * Dj - alpha * sat)
-
     for (m in seq_len(p)[-j])
       H[j, m] <- -kappa[j] * alpha / (Z[j] * Z[m]) * sum(X * Pj * P[, m])
   }
 
-  ## Symmetrise (should already be symmetric by construction)
   H <- (H + t(H)) / 2
 
   dnames <- destination_names(sim)
   dimnames(H) <- list(dnames, dnames)
+
+  ## Restriction aux villes actives si demandé
+  if (active_only) {
+    actifs <- which(unname(attractiveness(sim)) > threshold)
+    H <- H[actifs, actifs, drop = FALSE]
+  }
+
   H
 }
-

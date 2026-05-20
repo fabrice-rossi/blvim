@@ -478,9 +478,13 @@ sim_jacobian_G.sim <- function(sim, ...) {
 #' @param kappa a positive weight vector of length equal to the number of
 #'   destinations (default: all ones)
 #' @param z_min minimum value for attractivenesses to avoid division by zero
+#' @param active_only if TRUE, restrict the Hessian to active destinations
+#'   only (those with attractiveness > threshold)
+#' @param threshold minimum attractiveness to be considered active
+#'   (default: 1e-3), used only when active_only = TRUE
 #' @param ... additional parameters
 #'
-#' @returns a named symmetric p x p matrix
+#' @returns a named symmetric p x p matrix (or submatrix if active_only = TRUE)
 #' @export
 sim_hessian <- function(sim, ...) {
   UseMethod("sim_hessian")
