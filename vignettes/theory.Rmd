@@ -22,33 +22,33 @@ library(blvim)
 
 ### Spatial Interaction Models
 
-Spatial interaction models aim to estimate flows between locations, for instance, 
+Spatial interaction models aim to estimate flows between locations, for instance,
 workers commuting from residential zones to employment zones. Models are built from:
 
--   A collection of $n$ origin locations described by some characteristics 
+-   A collection of $n$ origin locations described by some characteristics
 $(X_i)_{1\leq i\leq n}$
--   A collection of $p$ destination locations described by some characteristics 
+-   A collection of $p$ destination locations described by some characteristics
 $(Z_j)_{1\leq j\leq p}$
--   A collection of $n\times p$ characteristics of the difficulty of travelling 
+-   A collection of $n\times p$ characteristics of the difficulty of travelling
 (in a broad sense) from origin $i$ to destination $j$, $c_{ij}$
 
-The goal is to estimate flows $(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}$ from 
-origin locations to destination locations. A typical hypothesis is for the flows 
+The goal is to estimate flows $(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}$ from
+origin locations to destination locations. A typical hypothesis is for the flows
 to depend on characteristics as follows:
 
 $$
 Y_{ij}=f(X_i, Z_j, c_{ij}),
 $$
 
-for a well-chosen function $f$. The most well-known spatial interaction model is 
+for a well-chosen function $f$. The most well-known spatial interaction model is
 the so-called *gravity model*, which takes the form:
 
 $$
 Y_{ij}\propto \frac{X_iZ_j}{c_{ij}^2},
 $$
 
-where $\propto$ means proportional to, $c_{ij}$ is supposed to be the distance 
-between origin $i$ and destination $j$, and the characteristics $X_i$ and $Z_j$ 
+where $\propto$ means proportional to, $c_{ij}$ is supposed to be the distance
+between origin $i$ and destination $j$, and the characteristics $X_i$ and $Z_j$
 are assumed to be numerical.
 
 ### Constraints
@@ -57,15 +57,15 @@ Spatial interaction models can be instantiated with different constraints:
 
 -   On production: the $(X_i)$ are interpreted as production values. Then the
 model is *production-constrained* if $\sum_{j=1}^pY_{ij}=X_i$ for all $i$;
--   On capacity: the $(Z_j)$ are interpreted as destination capacities. Then the 
+-   On capacity: the $(Z_j)$ are interpreted as destination capacities. Then the
 model is *capacity-constrained* if $\sum_{i=1}^pY_{ij}=Z_j$ for all $j$;
--   On both: the *doubly-constrained* models are both production- and 
-capacity-constrained. One of the most common models used in practice is the 
+-   On both: the *doubly-constrained* models are both production- and
+capacity-constrained. One of the most common models used in practice is the
 doubly-constrained gravity model.
 
 ### Maximum Entropy Models
 
-In the late 1960s, Alan Wilson developed a collection of spatial interaction 
+In the late 1960s, Alan Wilson developed a collection of spatial interaction
 models based on a maximum entropy principle. In those models, the flow is given by:
 
 $$
@@ -74,13 +74,13 @@ $$
 
 where $\alpha$ and $\beta$ are two parameters interpreted as follows:
 
--   $\alpha$ is a *return to scale* parameter: if $Z_j$ grows above $1$, its 
-actual attractiveness can increase in a super-linear way ($\alpha>1$) or in a 
+-   $\alpha$ is a *return to scale* parameter: if $Z_j$ grows above $1$, its
+actual attractiveness can increase in a super-linear way ($\alpha>1$) or in a
 sub-linear way ($\alpha<1$);
--   $\beta$ acts as the *inverse of the scale of the costs* $c_{ij}$. If those 
+-   $\beta$ acts as the *inverse of the scale of the costs* $c_{ij}$. If those
 costs are distances, for instance, $\frac{1}{\beta}$ can be seen as a cut-off distance.
 
-As with other spatial interaction models, maximum entropy models are constrained. 
+As with other spatial interaction models, maximum entropy models are constrained.
 In `blvim`, we focus on production-constrained models and thus we have:
 
 $$
@@ -97,35 +97,35 @@ This model is implemented in `blvim` by the `static_blvim()` function.
 
 ## Dynamic Models
 
-The models described above are *static*: they correspond to a frozen view of the 
-exchanges with no retroaction of the flow received at one destination location 
+The models described above are *static*: they correspond to a frozen view of the
+exchanges with no retroaction of the flow received at one destination location
 on its attractiveness, for instance.
 
-In the 1960s and 1970s, Harris and Wilson developed dynamic models that assume a form of 
-etroaction, initially in terms of an equilibrium state.
+In the 1960s and 1970s, Harris and Wilson developed dynamic models that assume a form of
+retroaction, initially in terms of an equilibrium state.
 
 ### Harris and Wilson Equilibrium Values
 
-The main idea from Harris (1964) is that if we interpret incoming flows as 
-revenues, then the capacity/attractiveness of a destination location should be 
-adapted to those revenues (for production-constrained models). Essentially, this 
+The main idea from Harris (1964) is that if we interpret incoming flows as
+revenues, then the capacity/attractiveness of a destination location should be
+adapted to those revenues (for production-constrained models). Essentially, this
 could be written as:
 
 $$
 \forall j,\ \kappa_j Z_j= D_j,
 $$
 
-where the $\kappa_j$ are destination specific conversion factors between capacities 
+where the $\kappa_j$ are destination specific conversion factors between capacities
 and costs, and where $D_j$ is the total flow incoming in $Z_j$, i.e.:
 
 $$
 \forall j,\  D_j=\sum_{i=1}^nY_{ij}.
 $$
 
-Applied to the maximum entropy production-constrained model, this leads to a 
-spatial interaction model defined implicitly as follows. We assume given the 
-production constraints $(X_i)_{1\leq i\leq n}$ and the cost matrix 
-$(c_{ij})_{1\leq i\leq n, 1\leq j\leq p}$, then the attractiveness $(Z_j)_{1\leq j\leq p}$ 
+Applied to the maximum entropy production-constrained model, this leads to a
+spatial interaction model defined implicitly as follows. We assume given the
+production constraints $(X_i)_{1\leq i\leq n}$ and the cost matrix
+$(c_{ij})_{1\leq i\leq n, 1\leq j\leq p}$, then the attractiveness $(Z_j)_{1\leq j\leq p}$
 is a solution of the following collection of fixed-point equations:
 
 $$
@@ -134,14 +134,14 @@ $$
 
 where $\alpha$, $\beta$, and $(\kappa_j)_{1\leq j\leq p}$ are fixed parameters.
 
-From the $(Z_j)_{1\leq j\leq p}$, the flows are computed using the standard 
+From the $(Z_j)_{1\leq j\leq p}$, the flows are computed using the standard
 production-constrained maximum entropy model.
 
-### A Dynamic Model: The Boltzmann–Lotka–Volterra Model
+### A Dynamic Model: The Boltzmann-Lotka-Volterra Model
 
-The collection of fixed-point equations can be solved using different techniques, 
-for instance, Newton's method. The simplest solution is probably to perform fixed-point 
-iterations, as discussed in Harris & Wilson (1978). We start with some initial 
+The collection of fixed-point equations can be solved using different techniques,
+for instance, Newton's method. The simplest solution is probably to perform fixed-point
+iterations, as discussed in Harris & Wilson (1978). We start with some initial
 values of the $Z$s, denoted $(Z^{0}_j)_{1\leq j\leq p}$, and then iterate:
 
 $$
@@ -150,9 +150,9 @@ $$
 
 until convergence.
 
-This iterative scheme can also be interpreted as a dynamic model in which the 
-attractiveness of a location is updated to match its incoming flow. The update 
-is not instantaneous, and thus an update parameter is introduced, $\epsilon$. 
+This iterative scheme can also be interpreted as a dynamic model in which the
+attractiveness of a location is updated to match its incoming flow. The update
+is not instantaneous, and thus an update parameter is introduced, $\epsilon$.
 Then we start again with some initial values of the $Z$s and then iterate:
 
 $$
@@ -162,10 +162,10 @@ $$
 \end{align*}
 $$
 
-Using $\epsilon<1$, typically a small value of $0.01$, gives a full trajectory 
+Using $\epsilon<1$, typically a small value of $0.01$, gives a full trajectory
 for the $Z$s with the added value of preventing oscillation behaviour.
 
-A variant of the dynamic model has been proposed by Wilson in 2008, replacing 
+A variant of the dynamic model has been proposed by Wilson in 2008, replacing
 the second update by a quadratic version:
 
 $$
@@ -253,9 +253,180 @@ locations which is very sparse (it has $p-t$ edges, where $p$ is the number of
 locations and $t$ the number of terminals). The function `nd_graph()` computes
 this graph according to both terminal definitions.
 
+## Potential function from Osawa et al (2025)
+
+Before going further we introduce simplified notation for the HW model :
+
+$$
+w_{ij}=w_{ij}(\beta)=\exp(-\beta c_{ij})
+\qquad
+S_i=S_i(\mathbf{Z},\alpha,\beta)=\sum_{k=1}^pZ_k^{\alpha}w_{ik}
+\qquad
+P_{ij}=\frac{Z_j^{\alpha}w_{ij}}{S_i}
+$$
+so that $P_{ij}$ is the share of origin $i$'s demand attracted to destination $j$.
+The total flow received by destination $j$ is
+
+$$
+D_j(\mathbf{Z},\alpha,\beta) = \sum_{i=1}^n X_i P_{ij},
+$$
+and the Harris--Wilson fixed-point residual is
+
+$$
+G_j(\mathbf{Z},\alpha,\beta) = D_j(\mathbf{Z},\alpha,\beta) - \kappa_j Z_j,
+$$
+where $\kappa_j > 0$ is the capacity cost at destination $j$.
+A **Harris--Wilson equilibrium** is a vector $\mathbf{Z}^* \geq 0$ satisfying
+$G(\mathbf{Z}^*) = \mathbf{0}$.
+
+### The potential function
+
+In 2025 the team of researcher composed by Osawa, Akamatsu and Kogure introduced
+a new concept: the HW model can be seen as a large population potential game.
+This concept, which comes from game theory, allows us to see the HW model as a
+single maximisation problem characterised by a potential function defined as:
+
+$$
+f(\mathbf{Z},\alpha,\beta)=A(\mathbf{Z},\alpha,\beta)-\sum_{j=1}^p\kappa_jZ_j
+$$
+$$
+A(\mathbf{Z},\alpha,\beta)=\frac{1}{\alpha}\sum_{i=1}^nX_i\log S_i=\frac{1}{\alpha}\sum_{i=1}^n X_i
+    \log\!\left(\sum_{j=1}^p Z_j^{\alpha}\,\exp(-\beta c_{ij})\right)
+$$
+
+The authors look for vectors $\mathbf{Z}$ that maximise $f$ subject to the budget
+constraint $\sum_j \kappa_j Z_j = \sum_i X_i$ and the non-negativity constraint
+$Z_j \geq 0$ for all $j$. By the stochastic-stability result of Sandholm (2010,
+§12.2), the global maximiser(s) of $f$ correspond to the most likely spatial
+patterns when small random perturbations can occur.
+
+### Gradient of the potential function
+
+Differentiating $A$ with respect to $Z_j$ gives
+
+$$
+\frac{\partial A}{\partial Z_j}
+  = \frac{1}{\alpha}\sum_{i=1}^n X_i \cdot \frac{\alpha Z_j^{\alpha-1}\,w_{ij}}{S_i}
+  = \sum_{i=1}^n X_i\,\frac{Z_j^{\alpha-1}\,w_{ij}}{S_i}.
+$$
+
+Recognising that $Z_j^{\alpha-1} w_{ij} / S_i = P_{ij} / Z_j$, this becomes
+
+$$
+\frac{\partial A}{\partial Z_j} = \frac{1}{Z_j}\sum_{i=1}^n X_i P_{ij} = \frac{D_j}{Z_j}
+$$
+Adding the derivative of the linear term $-\kappa_j Z_j$, we obtain
+
+$$
+\frac{\partial f}{\partial Z_j}(\mathbf{Z},\alpha,\beta)
+  = \frac{D_j - \kappa_j Z_j}{Z_j}
+  = \frac{G_j(\mathbf{Z},\alpha,\beta)}{Z_j}
+$$
+The gradient $\nabla f$ vanishes at an interior point ($Z_j > 0$ for all $j$) if
+and only if $G(\mathbf{Z}) = \mathbf{0}$, i.e. at a Harris--Wilson equilibrium.
+Conversely, if $Z_j = 0$, the gradient is not directly defined, but the KKT
+analysis below shows that boundary points can also be critical points of the
+constrained problem.
+
+Every interior maximum of $f$ is a Harris--Wilson equilibrium; the converse is
+false in general. $G$ is not the gradient of $f$: $\partial f/\partial Z_j =
+G_j/Z_j \neq G_j$. It follows that the Jacobian of $G$ is not the Hessian of
+$f$, although the two are closely related at equilibrium.
+
+### Hessian of the potential function
+
+We introduce the softmax share $P_{ij} = Z_j^\alpha w_{ij}/S_i$ with
+$S_i = \sum_k Z_k^\alpha w_{ik}$, and record its derivative with respect
+to $Z_k$:
+$$
+\frac{\partial P_{ij}}{\partial Z_k}
+  = \frac{\alpha}{Z_k}\,P_{ik}\bigl(\delta_{jk} - P_{ij}\bigr),
+$$
+where $\delta_{jk}$ is the Kronecker symbol.
+
+#### The general Hessian
+
+Recall that $\partial f/\partial Z_j = G_j/Z_j$, where
+$G_j = D_j - \kappa_j Z_j$ is the disequilibrium gap.
+Differentiating once more with respect to $Z_k$ yields the full Hessian
+$H = \bigl(\partial^2 f/\partial Z_j\,\partial Z_k\bigr)$
+at any interior point $\mathbf{Z} \gg 0$:
+
+$$
+H_{jk} =
+\begin{cases}
+\displaystyle
+  -\frac{G_j}{Z_j^2}
+  +(\alpha-1)\,Z_j^{\alpha-2}\sum_i X_i\,\frac{w_{ij}}{S_i}
+  -\alpha\,Z_j^{2(\alpha-1)}\sum_i X_i\,\frac{w_{ij}^2}{S_i^2},
+  & j = k,\\[10pt]
+\displaystyle
+  -\alpha\,Z_j^{\alpha-1}Z_k^{\alpha-1}
+  \sum_i X_i\,\frac{w_{ij}\,w_{ik}}{S_i^2},
+  & j \neq k.
+\end{cases}
+$$
+
+#### Simplification at an interior equilibrium
+
+At a Harris--Wilson equilibrium $G_j = 0$ for every active destination,
+the term $-G_j/Z_j^2$ vanishes on the diagonal and the Hessian reduces to
+
+$$
+H_{jk}\big|_{G=0} =
+\begin{cases}
+\displaystyle
+  (\alpha-1)\,Z_j^{\alpha-2}\sum_i X_i\,\frac{w_{ij}}{S_i}
+  -\alpha\,Z_j^{2(\alpha-1)}\sum_i X_i\,\frac{w_{ij}^2}{S_i^2},
+  & j = k,\\[10pt]
+\displaystyle
+  -\alpha\,Z_j^{\alpha-1}Z_k^{\alpha-1}
+  \sum_i X_i\,\frac{w_{ij}\,w_{ik}}{S_i^2},
+  & j \neq k.
+\end{cases}
+$$
+
+
+The equilibrium is a strict local maximum of $f$ if and only if $H$ is
+negative definite, i.e. $\lambda_{\max}(H) < 0$. The bifurcation threshold
+corresponds to $\lambda_{\max}(H) = 0$.
+
+
+### KKT Conditions and Equilibrium Structure
+
+The Lagrangian of the constrained maximisation problem ($\max f$ subject to
+$\sum_j \kappa_j Z_j = \sum_i X_i$, $Z_j \geq 0$) is
+
+$$
+\mathcal{L}(\mathbf{Z},\mu,\boldsymbol{\lambda})
+  = -f(\mathbf{Z},\alpha,\beta)
+    - \sum_{j=1}^p \lambda_j Z_j
+    + \mu\!\left(\sum_{i=1}^n X_i - \sum_{j=1}^p \kappa_j Z_j\right).
+$$
+
+The first-order KKT conditions give, for each $j$:
+
+$$
+\frac{\partial \mathcal{L}}{\partial Z_j}
+  = -\frac{D_j}{Z_j} + \kappa_j - \lambda_j - \mu\kappa_j = 0,
+  \qquad \lambda_j \geq 0, \quad \lambda_j Z_j = 0.
+$$
+Multiplying by $Z_j$ and summing over $j$, and using
+$\sum_j D_j = \sum_i X_i = \sum_j \kappa_j Z_j$, one finds $\mu = -2$.
+Therefore:
+
+- If $Z_j > 0$: complementary slackness forces $\lambda_j = 0$, and the
+  condition reduces to $D_j = \kappa_j Z_j$, i.e. $G_j = 0$.
+- If $Z_j = 0$: $\lambda_j$ absorbs the residual and the condition is
+  automatically satisfied.
+
+Hence every KKT point of the constrained problem is a Harris--Wilson equilibrium
+(possibly with inactive destinations), and conversely.
+
+
 ## References
 
-Harris, B. (1964). "A model of locational equilibrium for retail trade", 
+Harris, B. (1964). "A model of locational equilibrium for retail trade",
 Penn-Jersey Transportation Study, Philadelphia, Pennsylvania (mimeo).
 
 Harris, B., & Wilson, A. G. (1978). "Equilibrium Values and
@@ -268,16 +439,19 @@ Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 
 Nystuen, J.D. and Dacey, M.F. (1961), "A graph theory
 interpretation of nodal regions", Papers and Proceedings of the Regional
-Science Association 7: 29–42. <https://dx.doi.org/10.1007/bf01969070>
+Science Association 7: 29-42. <https://dx.doi.org/10.1007/bf01969070>
 
 Rihll, T., and Wilson, A. (1991), "Modelling settlement structures in
 ancient Greece: new approaches to the polis", In City and Country in the
-Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
+Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58-95.
 London: Routledge.
 
 Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems", J. R.
-Soc. Interface.5865–871 <https://dx.doi.org/10.1098/rsif.2007.1288>
+Soc. Interface.5865-871 <https://dx.doi.org/10.1098/rsif.2007.1288>
 
+Osawa, M., Akamatsu, T., & Kogure, Y. (2025). Retail location as a
+potential game: the Harris--Wilson model revisited. *Working paper*.
 
-
+Sandholm, W. H. (2010). *Population Games and Evolutionary Dynamics*.
+MIT Press.
