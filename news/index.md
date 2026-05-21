@@ -9,6 +9,11 @@
   flows, together with the new function
   [`sim_conversion()`](https://fabrice-rossi.github.io/blvim/reference/sim_conversion.md).
 
+### Documentation
+
+- the theoretical vignette has been expanded with new content based on a
+  recent paper by Osawa et al.
+
 ### Minor improvements and bug fixes
 
 - improved test compatibility between different platforms

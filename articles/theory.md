@@ -276,11 +276,11 @@ destination \\j\\. A **Harris–Wilson equilibrium** is a vector
 
 ### The potential function
 
-In 2025 the team of researcher composed by Osawa, Akamatsu and Kogure
-introduced a new concept: the HW model can be seen as a large population
-potential game. This concept, which comes from game theory, allows us to
-see the HW model as a single maximisation problem characterised by a
-potential function defined as:
+Osawa, Akamatsu and Kogure introduced in 2025 a new interpretation of
+the HW model. It can be seen as a large population potential game. This
+concept, which comes from game theory, allows us to see the HW model as
+a single maximisation problem characterised by a potential function
+defined as:
 
 \\
 f(\mathbf{Z},\alpha,\beta)=A(\mathbf{Z},\alpha,\beta)-\sum\_{j=1}^p\kappa_jZ_j
@@ -368,7 +368,7 @@ threshold corresponds to \\\lambda\_{\max}(H) = 0\\.
 The Lagrangian of the constrained maximisation problem (\\\max f\\
 subject to \\\sum_j \kappa_j Z_j = \sum_i X_i\\, \\Z_j \geq 0\\) is
 
-\\ \mathcal{L}(\mathbf{Z},\mu,\boldsymbol{\lambda}) =
+\\ \mathcal{L}(\mathbf{Z},\mu,\pmb{\lambda}) =
 -f(\mathbf{Z},\alpha,\beta) - \sum\_{j=1}^p \lambda_j Z_j +
 \mu\\\left(\sum\_{i=1}^n X_i - \sum\_{j=1}^p \kappa_j Z_j\right). \\
 
@@ -414,8 +414,9 @@ Wilson, A. (2008), “Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems”, J. R.
 Soc. Interface.5865–871 <https://dx.doi.org/10.1098/rsif.2007.1288>
 
-Osawa, M., Akamatsu, T., & Kogure, Y. (2025). Retail location as a
-potential game: the Harris–Wilson model revisited. *Working paper*.
+Osawa, M., Akamatsu, T., & Kogure, Y. (2025). “Most likely retail
+agglomeration patterns: Potential maximization and stochastic stability
+of spatial equilibria”. <https://arxiv.org/abs/2011.06778v2>
 
-Sandholm, W. H. (2010). *Population Games and Evolutionary Dynamics*.
+Sandholm, W. H. (2010). “Population Games and Evolutionary Dynamics”.
 MIT Press.

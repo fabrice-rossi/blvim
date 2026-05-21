@@ -4,7 +4,7 @@ Some spatial interaction models use conversion factors between
 attractivenesses and incoming flows to check whether they are at
 equilibrium (see for instance
 [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)).
-This function retuns the conversion factors used to build this sim is
+This function returns the conversion factors used to build this sim is
 applicable, and `NA` when not applicable.
 
 ## Usage
