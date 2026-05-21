@@ -398,7 +398,7 @@ The Lagrangian of the constrained maximisation problem ($\max f$ subject to
 $\sum_j \kappa_j Z_j = \sum_i X_i$, $Z_j \geq 0$) is
 
 $$
-\mathcal{L}(\mathbf{Z},\mu,\boldsymbol{\lambda})
+\mathcal{L}(\mathbf{Z},\mu,\pmb{\lambda})
   = -f(\mathbf{Z},\alpha,\beta)
     - \sum_{j=1}^p \lambda_j Z_j
     + \mu\!\left(\sum_{i=1}^n X_i - \sum_{j=1}^p \kappa_j Z_j\right).
