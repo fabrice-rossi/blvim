@@ -17,7 +17,7 @@ NA or a vector of conversion factors, see above.
 \description{
 Some spatial interaction models use conversion factors between attractivenesses
 and incoming flows to check whether they are at equilibrium (see for instance
-\code{\link[=blvim]{blvim()}}). This function retuns the conversion factors used to build this
+\code{\link[=blvim]{blvim()}}). This function returns the conversion factors used to build this
 sim is applicable, and \code{NA} when not applicable.
 }
 \examples{

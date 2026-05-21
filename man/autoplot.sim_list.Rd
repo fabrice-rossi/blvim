@@ -93,7 +93,7 @@ to the represented value.
 \item \code{"destination"}: the function displays the quantiles over the collection
 of models of the incoming flows for each destination location (using
 \code{\link[=destination_flow]{destination_flow()}}). Quantiles are represented using
-\code{\link[ggplot2:geom_linerange]{ggplot2::geom_crossbar()}}: each location is represented by a rectangle that
+\code{\link[ggplot2:geom_crossbar]{ggplot2::geom_crossbar()}}: each location is represented by a rectangle that
 spans from its lower quantile to its upper quantile. An intermediate thicker
 bar represents the median quantile.
 \item \code{"attractiveness"}: the function displays the quantiles over the
@@ -128,7 +128,7 @@ circles.
 When both \code{with_positions} and \code{with_names} are \code{TRUE}, the names of the
 destinations are added to the graphical representation. If \code{with_labels} is
 \code{TRUE} the names are represented as labels instead of plain texts (see
-\code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed, its
+\code{\link[ggplot2:geom_label]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed, its
 functions are used instead of \code{ggplot2} native functions.
 }
 \examples{

@@ -138,7 +138,7 @@ with an attractiveness above  the \code{cut_off} value are included.
 For the position based representations and when \code{with_names} is \code{TRUE}, the
 names of the destinations are added to the graphical representation . If
 \code{with_labels} is \code{TRUE} the names are represented as labels instead of plain
-texts (see \code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed,
+texts (see \code{\link[ggplot2:geom_label]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed,
 its functions are used instead of \code{ggplot2} native functions. When disks are
 used to show aggregated flows, the names match the chosen locations: for
 destination flow and attractiveness, destination locations are named, while
