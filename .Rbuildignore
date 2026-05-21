@@ -15,3 +15,5 @@ vignettes/grid_cache
 .lintr
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^\.positai$
+^\.claude$
