@@ -5,6 +5,10 @@
 * `blvim()` now supports conversion factors between attractivenesses and 
   incoming flows, together with the new function `sim_conversion()`.
 
+## Documentation
+* the theoretical vignette has been expanded with new content based on a
+  recent paper by Osawa et al.
+
 ## Minor improvements and bug fixes
 
 * improved test compatibility between different platforms
