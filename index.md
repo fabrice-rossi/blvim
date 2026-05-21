@@ -20,6 +20,7 @@ for details on this aspect).
 You can install `blvim` from CRAN with:
 
 ``` r
+
 install.packages('blvim')
 ```
 
@@ -27,6 +28,7 @@ You can install the development version from
 [R-universe](https://r-universe.dev/) with:
 
 ``` r
+
 install.packages('blvim', repos = c('https://fabrice-rossi.r-universe.dev'))
 ```
 
@@ -53,6 +55,7 @@ between origin \\i\\ and destination \\j\\.
 The package is loaded in a standard way.
 
 ``` r
+
 library(blvim)
 ```
 
@@ -65,6 +68,7 @@ the 20 smallest ones as destination locations. The cost matrix is the
 distance between the cities (in meters).
 
 ``` r
+
 ## 30 largest cities
 origins <- french_cities[1:30, c("th_longitude", "th_latitude")]
 ## 20 smallest cities
@@ -89,6 +93,7 @@ positive values \\(X_i)\_{1\leq i\leq n}\\). Here, we assume a common
 unitary production.
 
 ``` r
+
 X <- rep(1, nrow(origins))
 ```
 
@@ -98,6 +103,7 @@ for each destination location, a vector of positive values
 attractiveness.
 
 ``` r
+
 Z <- rep(1, nrow(destinations))
 ```
 
@@ -124,6 +130,7 @@ The model is obtained using the
 function:
 
 ``` r
+
 a_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 500000, Z)
 a_model
 #> Spatial interaction model with 30 origin locations and 20 destination locations
@@ -138,6 +145,7 @@ particular
 returns the flow matrix \\Y\\.
 
 ``` r
+
 a_model_flows <- flows(a_model)
 ```
 
@@ -145,6 +153,7 @@ which can be displayed using, for instance, the
 [`image()`](https://rdrr.io/r/graphics/image.html) function.
 
 ``` r
+
 par(mar = rep(0.1, 4))
 image(t(a_model_flows)[, 30:1],
   col = gray.colors(20, start = 1, end = 0),
@@ -163,6 +172,7 @@ location to all destination locations. The package also provides a
 function, which can be used as follows:
 
 ``` r
+
 library(ggplot2)
 autoplot(a_model, "full") +
   scale_fill_gradient(low = "white", high = "black") +
@@ -176,6 +186,7 @@ shows that there are additional important
 flows.](reference/figures/README-a_flow_ggplot2-1.png)
 
 ``` r
+
 b_model <- static_blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 100000, Z)
 b_model
 #> Spatial interaction model with 30 origin locations and 20 destination locations
@@ -185,6 +196,7 @@ b_model
 ```
 
 ``` r
+
 autoplot(b_model) +
   scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
@@ -216,6 +228,7 @@ using the
 function as follows.
 
 ``` r
+
 a_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 500000, Z)
 a_blv_model
 #> Spatial interaction model with 30 origin locations and 20 destination locations
@@ -232,6 +245,7 @@ the
 function (and visualised here using a bar plot).
 
 ``` r
+
 par(mar = c(0.1, 4, 1, 0))
 a_final_Z <- attractiveness(a_blv_model)
 barplot(a_final_Z)
@@ -244,6 +258,7 @@ particular example, one destination location acts as a global attractor
 of all the flows. This pattern is also visible in the final flow matrix.
 
 ``` r
+
 autoplot(a_blv_model) +
   scale_fill_gradient(low = "white", high = "black")
 ```
@@ -258,6 +273,7 @@ function can also be used to show the destination flows or the
 attractivenesses values:
 
 ``` r
+
 autoplot(a_blv_model, "attractiveness", with_names = TRUE) +
   coord_flip()
 ```
@@ -270,6 +286,7 @@ Naturally, the results are strongly influenced by the parameters, as
 shown in this second example.
 
 ``` r
+
 b_blv_model <- blvim(cost_matrix, X, alpha = 1.1, beta = 1 / 50000, Z)
 b_blv_model
 #> Spatial interaction model with 30 origin locations and 20 destination locations
@@ -280,6 +297,7 @@ b_blv_model
 ```
 
 ``` r
+
 autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
   coord_flip()
 ```
@@ -295,6 +313,7 @@ are Albi, Cagnes-sur-Mer, Vannes and
 Bayonne.](reference/figures/README-b_blv_Z-1.png)
 
 ``` r
+
 autoplot(b_blv_model, with_names = TRUE) +
   scale_fill_gradient(low = "white", high = "black") +
   theme(axis.text.x = element_text(angle = 90))
@@ -312,6 +331,7 @@ For instance, we can display the full flows using geographical
 coordinates of the cities.
 
 ``` r
+
 origin_positions(b_blv_model) <- as.matrix(origins)
 destination_positions(b_blv_model) <- as.matrix(destinations)
 autoplot(b_blv_model,

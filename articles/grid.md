@@ -1,6 +1,7 @@
 # Systematic exploration of the BLV solution space
 
 ``` r
+
 library(blvim)
 ## we use ggplot2 for graphical representations
 library(ggplot2)
@@ -17,6 +18,7 @@ We shall work with a regular grid of locations, in a symmetric
 (non-bipartite) case.
 
 ``` r
+
 locations <- expand.grid(x = 1:5, y = 1:5)
 locations$name <- LETTERS[1:25]
 ggplot(locations, aes(x, y, label = name)) +
@@ -31,6 +33,7 @@ We use the Euclidean distance between the points as the interaction
 costs.
 
 ``` r
+
 costs <- as.matrix(dist(locations[c("x", "y")]))
 ```
 
@@ -38,6 +41,7 @@ And finally, we consider unitary productions and initial
 attractivenesses.
 
 ``` r
+
 location_prod <- rep(1, nrow(locations))
 location_att <- rep(1, nrow(locations))
 ```
@@ -67,6 +71,7 @@ resulting
 [`sim_list()`](https://fabrice-rossi.github.io/blvim/reference/sim_list.md).
 
 ``` r
+
 models <- grid_blvim(costs,
   location_prod,
   alphas = seq(1.05, 2, length.out = 25),
@@ -82,6 +87,7 @@ models <- grid_blvim(costs,
 We specify now the location data.
 
 ``` r
+
 destination_names(models) <- locations$name
 destination_positions(models) <- as.matrix(locations[c("x", "y")])
 ```
@@ -107,6 +113,7 @@ demonstrated below for the first model, using both the standard matrix
 display and the position-based one.
 
 ``` r
+
 autoplot(models[[1]]) +
   scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
@@ -118,6 +125,7 @@ diagonal bands. These bands show that most of the flows are
 local.](grid_files/figure-html/regular_grid_model_1_matrix-1.png)
 
 ``` r
+
 autoplot(models[[10]],
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.01, "npc"))
@@ -143,6 +151,7 @@ models in the list. The default representation focuses on individual
 flows as shown below.
 
 ``` r
+
 autoplot(models, with_names = TRUE) +
   theme_light()
 ```
@@ -172,6 +181,7 @@ The position-based figure shows only the destination flows, using
 circles to display statistics of those flows.
 
 ``` r
+
 autoplot(models, flows = "destination", with_positions = TRUE) +
   scale_size_continuous(range = c(0, 7)) +
   coord_fixed()
@@ -208,6 +218,7 @@ frame-like model. This is done with the
 function.
 
 ``` r
+
 models_df <- sim_df(models)
 ```
 
@@ -222,6 +233,7 @@ runs, and the Shannon
 of the models.
 
 ``` r
+
 knitr::kable(head(models_df))
 ```
 
@@ -241,6 +253,7 @@ object has a
 function which shows by default the diversities of the models.
 
 ``` r
+
 autoplot(models_df) +
   scale_fill_viridis_c()
 ```
@@ -265,6 +278,7 @@ value for the corresponding model. One can display any column of the
 `sim_df` object, for instance the convergence status.
 
 ``` r
+
 autoplot(models_df, converged)
 ```
 
@@ -284,6 +298,7 @@ the number of terminals per model, according to the Nystuen and Dacey
 definition.
 
 ``` r
+
 autoplot(models_df, diversity(sim, "ND")) +
   scale_fill_viridis_c()
 ```
@@ -314,12 +329,14 @@ distances between the destination flows of the models in a
 [`sim_list()`](https://fabrice-rossi.github.io/blvim/reference/sim_list.md).
 
 ``` r
+
 models_dist <- sim_distance(models, "destination")
 ```
 
 This can then be used as the input of a hierarchical clustering.
 
 ``` r
+
 models_hc <- hclust(models_dist, method = "ward.D2")
 ```
 
@@ -329,6 +346,7 @@ flow sent to the central location. This is partly visible in the
 dendrogram of the clustering, with the large cluster on the left.
 
 ``` r
+
 plot(models_hc, hang = -1, labels = FALSE)
 ```
 
@@ -354,6 +372,7 @@ to add a new column to the
 giving the class membership, as follows for instance:
 
 ``` r
+
 models_df$cluster <- as.factor(cutree(models_hc, k = 16))
 ```
 
@@ -362,6 +381,7 @@ This can be immediately used in the standard
 visualisation.
 
 ``` r
+
 autoplot(models_df, cluster)
 ```
 
@@ -394,6 +414,7 @@ object.
 Using the clustering obtained above, we simply execute:
 
 ``` r
+
 grid_var_autoplot(models_df, cluster)
 ```
 
@@ -426,6 +447,7 @@ We can gain further insight into the different behaviours using the
 location positions, provided we focus on the destination flows.
 
 ``` r
+
 grid_var_autoplot(models_df, cluster,
   flows = "destination",
   with_positions = TRUE
@@ -473,6 +495,7 @@ and a
 [`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md).
 
 ``` r
+
 models_centre <- sim_list(tapply(models, models_df$cluster,
   median,
   flows = "destination"
@@ -492,6 +515,7 @@ for each of the models in a `sim_df`. For instance, one can get the
 flows of all medoids as follows.
 
 ``` r
+
 grid_autoplot(models_centre_df) +
   scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
@@ -511,6 +535,7 @@ The function supports all the individual representations, for instance
 flows with positions.
 
 ``` r
+
 grid_autoplot(models_centre_df,
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.015, "npc"))
@@ -527,6 +552,7 @@ figure.](grid_files/figure-html/regular_grid_model_centres_flows_positions-1.png
 Destination flows with positions are also supported.
 
 ``` r
+
 grid_autoplot(models_centre_df, flows = "destination", with_positions = TRUE) +
   scale_size_continuous(range = c(0, 6)) +
   coord_fixed()
@@ -552,6 +578,7 @@ between 21 cities in Europe. We use approximate coordinates of those
 cities obtained from [OpenStreetMap](https://www.openstreetmap.org/).
 
 ``` r
+
 data("eurodist")
 eurodist_names <- labels(eurodist)
 eurodist_names[match("Lyons", eurodist_names)] <- "Lyon"
@@ -581,6 +608,7 @@ eurodist_coord <- data.frame(
 This yields the following map.
 
 ``` r
+
 ggplot(eurodist_coord, aes(longitude, latitude, label = name)) +
   geom_point() +
   ggrepel::geom_label_repel() +
@@ -599,6 +627,7 @@ We fit a collection of SIMs with a wide range of values for both
 parameters.
 
 ``` r
+
 euro_models <- grid_blvim(eurodist_mat,
   rep(1, 21),
   alphas = seq(1.05, 1.75, length.out = 30),
@@ -612,6 +641,7 @@ euro_models <- grid_blvim(eurodist_mat,
 ```
 
 ``` r
+
 destination_positions(euro_models) <- as.matrix(eurodist_coord[1:2])
 euro_models_df <- sim_df(euro_models)
 ```
@@ -620,6 +650,7 @@ Most parameter pairs lead to relatively fast convergence, with the
 exception of a few values.
 
 ``` r
+
 autoplot(euro_models_df, iterations) +
   scale_fill_viridis_c()
 ```
@@ -640,6 +671,7 @@ unlikely uncover SIMs that differ significantly from those obtained with
 the chosen range.
 
 ``` r
+
 autoplot(euro_models_df, diversity) +
   scale_fill_viridis_c()
 ```
@@ -670,6 +702,7 @@ configurations. Athens and Stockholm are frequently the sole recipients
 of their own flow, probably owing to their isolated positions.
 
 ``` r
+
 autoplot(euro_models, with_names = TRUE) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
@@ -691,6 +724,7 @@ and Hook of Holland stand out (in addition to the four cities mentioned
 above).
 
 ``` r
+
 autoplot(euro_models, flows = "destination", with_names = TRUE) +
   coord_flip()
 ```
@@ -705,6 +739,7 @@ zero median flow and a maximal incoming flow of
 one.](grid_files/figure-html/euro_cities_dest_var-1.png)
 
 ``` r
+
 autoplot(euro_models,
   flows = "destination", with_positions = TRUE,
   with_names = TRUE
@@ -731,6 +766,7 @@ We apply the same clustering strategy as with the artificial data: 16
 clusters obtained with hierarchical clustering using the Ward criterion.
 
 ``` r
+
 euro_models_dist <- sim_distance(euro_models, "destination")
 euro_models_hc <- hclust(euro_models_dist, method = "ward.D2")
 ```
@@ -740,6 +776,7 @@ above, the role of clustering is to facilitate exploration of the result
 spaces rather than to identify distinct clusters.
 
 ``` r
+
 plot(euro_models_hc, hang = -1, labels = FALSE)
 ```
 
@@ -754,6 +791,7 @@ classes.](grid_files/figure-html/euro_cities_dendrogram-1.png)
 The clusters are well organised on the parameter set.
 
 ``` r
+
 euro_models_df$cluster <- as.factor(cutree(euro_models_hc, k = 16))
 autoplot(euro_models_df, cluster) +
   theme(legend.position = "bottom") +
@@ -774,6 +812,7 @@ terms of destination flows, and thus median flows will give a good idea
 of typical behaviours.
 
 ``` r
+
 grid_var_autoplot(euro_models_df, cluster,
   flows = "destination",
   with_positions = TRUE
@@ -812,6 +851,7 @@ and at the flow level (below):
   16, Lyon shares its incoming flow with Hook of Holland.
 
 ``` r
+
 grid_var_autoplot(euro_models_df, cluster)
 ```
 
@@ -828,6 +868,7 @@ Holland.](grid_files/figure-html/euro_cities_cluster_var_flow-1.png)
 Finally, we look at medoids.
 
 ``` r
+
 euro_models_centre <- sim_list(tapply(euro_models, euro_models_df$cluster,
   median,
   flows = "destination"
@@ -838,6 +879,7 @@ euro_models_centre_df <- sim_df(euro_models_centre)
 The medoids confirm the analysis given above.
 
 ``` r
+
 grid_autoplot(euro_models_centre_df) +
   scale_fill_gradient(low = "white", high = "black") +
   coord_fixed()
@@ -852,6 +894,7 @@ few dominant destination 'hubs'. This is consistent with previous
 analyses.](grid_files/figure-html/euro_cities_cluster_medoid_flow-1.png)
 
 ``` r
+
 grid_autoplot(euro_models_centre_df,
   flows = "destination",
   with_positions = TRUE
@@ -866,6 +909,7 @@ variability plots of the clusters confirming previous
 analyses.](grid_files/figure-html/euro_cities_cluster_medoid_inflow_pos-1.png)
 
 ``` r
+
 grid_autoplot(euro_models_centre_df,
   with_positions = TRUE, arrow = arrow(length = unit(0.015, "npc"))
 ) +
@@ -887,6 +931,7 @@ To further the analysis, one can focus on a particular medoid, for
 instance cluster 1:
 
 ``` r
+
 autoplot(euro_models_centre[[1]],
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.015, "npc"))
@@ -906,6 +951,7 @@ figure.](grid_files/figure-html/euro_cities_cluster_one_medoid-1.png)
 Or cluster 5:
 
 ``` r
+
 autoplot(euro_models_centre[[5]],
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.015, "npc"))
@@ -931,6 +977,7 @@ differences exist, such as the flows to Hamburg and Copenhagen, whose
 level varies across the configurations (compare 6 to 7, for instance).
 
 ``` r
+
 set.seed(0)
 euro_models_idx <- sample(which(euro_models_df$cluster == 4), 16)
 euro_models_cl4_sample <- euro_models[euro_models_idx]
@@ -955,6 +1002,7 @@ ones. As shown below, the distribution of the smallest cities is not all
 uniform as they cluster around large ones, especially around Paris.
 
 ``` r
+
 big_cities <- french_cities[1:20, ]
 small_cities <- french_cities[102:121, ]
 fr_cities <- rbind(big_cities, small_cities)
@@ -977,6 +1025,7 @@ of a large city.](grid_files/figure-html/french_cities-1.png)
 #### Production effects
 
 ``` r
+
 frcosts <- french_cities_distances[1:20, 102:121] / 1000
 fr_prod <- french_cities$population[1:20]
 fr_attr <- rep(1, 20)
@@ -1014,6 +1063,7 @@ We use first the logarithm of the population as the production
 constraint.
 
 ``` r
+
 fr_models <- grid_blvim(frcosts,
   log(fr_prod),
   alphas = seq(1.05, 1.75, length.out = 30),
@@ -1039,6 +1089,7 @@ diversity of 8.44 while in a non-bipartite case, we would expect a
 maximum around 20 (for 20 cities).
 
 ``` r
+
 autoplot(fr_models_df) +
   labs(title = "Log population") +
   scale_fill_viridis_c()
@@ -1064,6 +1115,7 @@ position in France. However, its incoming flow is much more variable
 than in non bipartite settings with a central location.
 
 ``` r
+
 autoplot(fr_models, with_names = TRUE) +
   theme_light() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
@@ -1085,6 +1137,7 @@ all the destination “regions” are represented, but in each local zone,
 only some cities receive a significant incoming flow.
 
 ``` r
+
 autoplot(fr_models,
   flows = "destination", with_names = TRUE,
   with_positions = TRUE
@@ -1102,6 +1155,7 @@ cities.](grid_files/figure-html/french_cities_log_pop_dest_vars_geo-1.png)
 We then use the population size directly.
 
 ``` r
+
 fr_models_direct <- grid_blvim(frcosts,
   fr_prod,
   alphas = seq(1.05, 1.75, length.out = 30),
@@ -1122,6 +1176,7 @@ multiple receivers and to concentrate the flows on a smaller number of
 cities.
 
 ``` r
+
 autoplot(fr_models_direct_df) +
   labs(title = "Population") +
   scale_fill_viridis_c()
@@ -1141,6 +1196,7 @@ receiving flows. This is revealed in the graphical representation thanks
 to the origin based normalisation.
 
 ``` r
+
 autoplot(fr_models_direct, with_names = TRUE, normalisation = "origin") +
   theme_light() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
@@ -1161,6 +1217,7 @@ This can also be seen on the destination flow variability plots,
 especially by comparing both graphical representations.
 
 ``` r
+
 autoplot(fr_models, with_names = TRUE, flow = "destination") +
   labs(title = "Log population") +
   coord_flip()
@@ -1175,6 +1232,7 @@ a zero maximum incoming
 flow.](grid_files/figure-html/french_cities_log_pop_bar_dest-1.png)
 
 ``` r
+
 autoplot(fr_models_direct, with_names = TRUE, flow = "destination") +
   labs(title = "Population") +
   coord_flip()
@@ -1192,6 +1250,7 @@ Finally, the geographical representation shows the emergence of these
 smaller cities.
 
 ``` r
+
 options("ggrepel.max.overlaps" = 20)
 autoplot(fr_models_direct,
   flows = "destination", with_names = TRUE,
@@ -1216,6 +1275,7 @@ shows similar patterns for Marseille with Arles and to a lesser extent
 for Lyon with Vaulx-en-Velin, and Toulouse with Arles and Albi.
 
 ``` r
+
 autoplot(fr_models_direct, with_names = TRUE, normalisation = "full") +
   theme_light() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
@@ -1241,11 +1301,13 @@ constraints. As in the previous analyses, we use 16 clusters in a quite
 arbitrary way.
 
 ``` r
+
 fr_models_dist <- sim_distance(fr_models, "destination")
 fr_models_hc <- hclust(fr_models_dist, method = "ward.D2")
 ```
 
 ``` r
+
 plot(fr_models_hc, hang = -1, labels = FALSE)
 ```
 
@@ -1257,6 +1319,7 @@ at least 3
 sub-clusters.](grid_files/figure-html/french_cities_log_pop_dendro-1.png)
 
 ``` r
+
 fr_models_df$cluster <- as.factor(cutree(fr_models_hc, k = 16))
 autoplot(fr_models_df, cluster) +
   theme(legend.position = "bottom") +
@@ -1271,11 +1334,13 @@ organised), showing that the chosen number of clusters is probably too
 high.](grid_files/figure-html/french_cities_log_pop_cluster-1.png)
 
 ``` r
+
 fr_models_direct_dist <- sim_distance(fr_models_direct, "destination")
 fr_models_direct_hc <- hclust(fr_models_direct_dist, method = "ward.D2")
 ```
 
 ``` r
+
 plot(fr_models_direct_hc, hang = -1, labels = FALSE)
 ```
 
@@ -1287,6 +1352,7 @@ clear sub-structure made of 2 sub-clusters that appear quite
 homogeneous.](grid_files/figure-html/french_cities_pop_dendro-1.png)
 
 ``` r
+
 fr_models_direct_df$cluster <- as.factor(cutree(fr_models_direct_hc, k = 16))
 autoplot(fr_models_direct_df, cluster) +
   theme(legend.position = "bottom") +
@@ -1318,6 +1384,7 @@ aligns with the minimal value of the diversity,
 `r round(min(fr_models_direct_df$diversity), 2)`).
 
 ``` r
+
 grid_var_autoplot(fr_models_df, cluster,
   flows = "destination",
   with_positions = TRUE
@@ -1338,6 +1405,7 @@ cities on the border of the
 map.](grid_files/figure-html/french_cities_log_pop_cluster_var_geo-1.png)
 
 ``` r
+
 grid_var_autoplot(fr_models_direct_df, cluster,
   flows = "destination",
   with_positions = TRUE
