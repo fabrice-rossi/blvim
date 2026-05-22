@@ -2,11 +2,15 @@ Package: blvim
 Title: Boltzmann–Lotka–Volterra Interaction Model
 Version: 0.1.1.9000
 Authors@R: 
-    person(given = "Fabrice", 
+    c(person(given = "Fabrice", 
            family = "Rossi", 
            role = c("aut", "cre", "cph"),
            email = "Fabrice.Rossi@apiacoa.org", 
-           comment = c(ORCID = "0000-0003-4638-1286"))
+           comment = c(ORCID = "0000-0003-4638-1286")),
+      person(given = "Cyprien",
+             family = "Gout",
+             role = "ctb",
+             email = "cyprien.gout@gmail.com"))
 Description: Estimates Boltzmann–Lotka–Volterra (BLV) interaction model 
     efficiently. Enables programmatic and graphical exploration of the solution
     space of BLV models when parameters are varied. See Wilson, A. (2008) 

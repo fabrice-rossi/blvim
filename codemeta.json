@@ -30,6 +30,14 @@
       "@id": "https://orcid.org/0000-0003-4638-1286"
     }
   ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Cyprien",
+      "familyName": "Gout",
+      "email": "cyprien.gout@gmail.com"
+    }
+  ],
   "copyrightHolder": [
     {
       "@type": "Person",
