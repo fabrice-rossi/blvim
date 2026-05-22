@@ -4,6 +4,8 @@
 
 * `blvim()` now supports conversion factors between attractivenesses and 
   incoming flows, together with the new function `sim_conversion()`.
+* `sim_potential()` computes the potential of spatial interaction model using 
+  the definition proposed by Osawa, Akamatsu, and Kogure.
 
 ## Minor improvements and bug fixes
 

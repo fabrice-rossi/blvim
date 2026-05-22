@@ -290,7 +290,6 @@ destination_flow.sim <- function(sim, ...) {
   colSums(flows(sim))
 }
 
-
 #' Returns the number of iterations used to produce this spatial interaction model
 #'
 #' @param sim a spatial interaction model object (an object of class `sim`) or a
@@ -413,3 +412,48 @@ sim_conversion <- function(sim, ...) {
 sim_conversion.sim <- function(sim, ...) {
   NA
 }
+
+#' Compute the potential of a spatial interaction model
+#'
+#' The potential is a measure of stability introduced by Osawa, Akamatsu, and
+#' Kogure. It is only defined for spatial interaction models produced by
+#' BLV framework. The function returns `NA` when applied to spatial interaction
+#' models for which a potential cannot be computed.
+#'
+#' The potential of a spatial interaction model is given by
+#'
+#' \deqn{\frac{1}{\alpha}\sum_{i=1}^n X_i \log\left(\sum_{j=1}^p Z_j^{\alpha}\,
+#' \exp(-\beta c_{ij})\right)-\sum_{j=1}^p\kappa_jZ_j,}
+#'
+#' where:
+#' * \eqn{c} is the cost matrix [costs()]
+#' * \eqn{X} is the production constraint vector ([production()])
+#' * \eqn{\alpha} is the return to scale parameter ([return_to_scale()])
+#' * \eqn{\beta} is the inverse of a cost scale parameter ([inverse_cost()])
+#' * \eqn{Z} is the attractiveness vector ([attractiveness()])
+#' * \eqn{\kappa} is the conversion factor vector ([sim_conversion()])
+#'
+#'
+#' @param sim a spatial interaction model, an object of class `sim`
+#' @param ... additional parameters
+#'
+#' @references Osawa, M., Akamatsu, T., & Kogure, Y. (2025). "Most likely retail
+#'   agglomeration patterns: Potential maximization and stochastic stability of
+#'   spatial equilibria". <https://arxiv.org/abs/2011.06778v2>
+#' @returns the scalar value of the potential
+#' @export
+#' @examples
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+#' sim_conversion(model) ## must NA
+sim_potential <- function(sim, ...) {
+  UseMethod("sim_potential")
+}
+
+#' @export
+sim_potential.sim <- function(sim, ...) {
+  NA
+}
+
