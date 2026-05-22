@@ -27,6 +27,7 @@ reference:
   - production
   - sim_converged
   - sim_iterations
+  - sim_potential
 - title: "Non bipartite models"
   desc: "Functions that apply only to non bipartite models."
   contents:
