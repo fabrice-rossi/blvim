@@ -27,6 +27,8 @@ reference:
   - production
   - sim_converged
   - sim_iterations
+  - sim_potential
+  - sim_fp_jacobian
 - title: "Non bipartite models"
   desc: "Functions that apply only to non bipartite models."
   contents:
