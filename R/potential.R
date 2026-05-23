@@ -1,9 +1,5 @@
 ## helper functions
 
-.sim_P <- function(sim) {
-  flows(sim) / production(sim) # n x p, P_ij = Y_ij / X_i
-}
-
 .sim_S <- function(sim) {
   Z <- attractiveness(sim)
   C <- costs(sim)
@@ -31,30 +27,24 @@ sim_potential.sim_blvim <- function(sim, ...) {
 #' @export
 sim_fp_jacobian.sim_blvim <- function(sim, ...) {
   kappa <- sim_conversion(sim)
-
-  P <- .sim_P(sim) # n x p
-  Z <- attractiveness(sim)
   alpha <- return_to_scale(sim)
+  beta <- inverse_cost(sim)
+  Z <- attractiveness(sim)
   X <- production(sim)
-  p <- length(Z)
+  C <- costs(sim)
+  W <- exp(-beta * C)
 
-  XP <- X * P # n x p  (broadcast X on rows)
+  Z_alpha <- Z^alpha
+  Z_alpha_1 <- Z^(alpha - 1)
 
-  ## --- off diagonal terms: JG_{jk} = -alpha/kappa_j * (1/Z_k) * sum_i X_i P_ij P_ik
-  ## t(P) %*% XP [j,k] = sum_i P_ij * X_i P_ik  (p x p)
-  JG <- -alpha * (t(P) %*% XP) # p x p
-
-  ## column "normalisation"
-  JG <- sweep(JG, 1, Z, "/")
-
-  ## Row "normalisation"
-  JG <- sweep(JG, 2, kappa, "/")
-
-  ## --- diagonal terms: JG_{jj} = alpha/kappa_j * (D_j - S_jj) / Z_j - 1
-  Dj <- colSums(XP) # = destination_flow (p)
-  Sjj <- colSums(XP * P) # = sum_i X_i P_ij^2  (p)
-
-  diag(JG) <- alpha * (Dj - Sjj) / (kappa * Z) - 1
+  ZkZj <- outer(Z_alpha, Z_alpha_1)
+  WZalpha <- W %*% Z_alpha
+  WZalpha_sq <- (WZalpha)^2
+  Wnorm <- sweep(W, 1, WZalpha, "/")
+  XWnorm <- sweep(Wnorm, 1, X, "*")
+  coreval <- crossprod(XWnorm, Wnorm)
+  JG <- -alpha * ZkZj * coreval
+  diag(JG) <- diag(JG) - kappa + alpha * Z_alpha_1 * colSums(XWnorm)
 
   dnames <- destination_names(sim)
   dimnames(JG) <- list(dnames, dnames)
