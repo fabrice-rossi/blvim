@@ -6,6 +6,8 @@
   incoming flows, together with the new function `sim_conversion()`.
 * `sim_potential()` computes the potential of spatial interaction model using 
   the definition proposed by Osawa, Akamatsu, and Kogure.
+* `sim_fp_jacobian()` computes the Jacobian of the fixed point map with respect
+  to the attractivenesses.
 
 ## Documentation
 * the theoretical vignette has been expanded with new content based on a
