@@ -68,6 +68,10 @@ Functions for getting properties of spatial interaction models.
 - [`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)
   : Returns the number of iterations used to produce this spatial
   interaction model
+- [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
+  : Compute the potential of a spatial interaction model
+- [`sim_fp_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_fp_jacobian.md)
+  : Compute the Jacobian of the fixed-point map G
 
 ## Non bipartite models
 

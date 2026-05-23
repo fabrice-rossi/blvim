@@ -8,6 +8,12 @@
   now supports conversion factors between attractivenesses and incoming
   flows, together with the new function
   [`sim_conversion()`](https://fabrice-rossi.github.io/blvim/reference/sim_conversion.md).
+- [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
+  computes the potential of spatial interaction model using the
+  definition proposed by Osawa, Akamatsu, and Kogure.
+- [`sim_fp_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_fp_jacobian.md)
+  computes the Jacobian of the fixed point map with respect to the
+  attractivenesses.
 
 ### Documentation
 

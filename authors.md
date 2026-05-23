@@ -5,6 +5,8 @@
 - **Fabrice Rossi**. Author, maintainer, copyright holder.
   [](https://orcid.org/0000-0003-4638-1286)
 
+- **Cyprien Gout**. Contributor.
+
 ## Citation
 
 Source:
