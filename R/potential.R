@@ -6,7 +6,7 @@
   beta <- inverse_cost(sim)
   alpha <- return_to_scale(sim)
   W <- exp(-beta * C)
-  rowSums(W * outer(rep(1, nrow(C)), Z^alpha)) # length n
+  W %*% (Z^alpha)
 }
 
 ## potential
