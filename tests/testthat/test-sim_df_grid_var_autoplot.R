@@ -12,6 +12,7 @@ test_that("grid_var_autoplot works as expected", {
     iter_max = 750,
     precision = .Machine$double.eps^0.5,
   )
+  withr::local_seed(42)
   destination_positions(models) <- config$pd
   models_df <- sim_df(models)
   models_df$group <- as.factor(sample(c(0, 1, 2), nrow(models_df),
@@ -46,6 +47,7 @@ test_that("grid_var_autoplot works as expected", {
       normalisation = "origin"
     ))
   )
+  withr::local_seed(42)
   destination_names(models_df$sim) <- sample(letters, 15)
   vdiffr::expect_doppelganger(
     "Default flow matrices conv null names",
@@ -129,6 +131,7 @@ test_that("grid_var_autoplot works as expected with names (ggrepel)", {
     iter_max = 750,
     precision = .Machine$double.eps^0.5,
   )
+  withr::local_seed(42)
   destination_positions(models) <- config$pd
   destination_names(models) <- sample(letters, 15)
   models_df <- sim_df(models)
@@ -176,6 +179,7 @@ test_that("grid_var_autoplot works as expected with names (base ggplot)", {
     iter_max = 750,
     precision = .Machine$double.eps^0.5,
   )
+  withr::local_seed(42)
   destination_positions(models) <- config$pd
   destination_names(models) <- sample(letters, 15)
   models_df <- sim_df(models)

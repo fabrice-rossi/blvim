@@ -3,6 +3,7 @@ test_that("autoplot.sim_list works as expected (destination without names)", {
   alphas <- seq(1.25, 2.25, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 5)
   ## introducing names
+  withr::local_seed(42)
   on <- paste(sample(letters, 20, replace = TRUE), 1:20, sep = "_")
   dn <- paste(sample(LETTERS, 30, replace = TRUE), 1:30, sep = "_")
   rownames(config$costs) <- on
@@ -50,6 +51,7 @@ test_that("autoplot.sim_list works as expected (destination with names)", {
   alphas <- seq(1.25, 2.25, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 5)
   ## introducing names
+  withr::local_seed(42)
   on <- paste(sample(letters, 25, replace = TRUE), 1:25, sep = "_")
   dn <- paste(sample(LETTERS, 15, replace = TRUE), 1:15, sep = "_")
   rownames(config$costs) <- on
@@ -261,6 +263,7 @@ test_that("autoplot.sim_list works as expected (destination with positions and n
     epsilon = 0.1,
     precision = .Machine$double.eps^0.5
   )
+  withr::local_seed(42)
   origin_positions(models) <- config$pp
   destination_positions(models) <- config$pd
   destination_names(models) <- sample(letters, 15, replace = TRUE)
@@ -317,6 +320,7 @@ test_that("autoplot.sim_list works as expected (destination with positions and n
     epsilon = 0.1,
     precision = .Machine$double.eps^0.5
   )
+  withr::local_seed(42)
   origin_positions(models) <- config$pp
   destination_positions(models) <- config$pd
   destination_names(models) <- sample(letters, 15, replace = TRUE)
@@ -366,6 +370,7 @@ test_that("autoplot.sim_list works as expected (full flows no names)", {
   alphas <- seq(1.25, 2.25, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 5)
   ## introducing names
+  withr::local_seed(42)
   on <- paste(sample(letters, 20, replace = TRUE), 1:20, sep = "_")
   dn <- paste(sample(LETTERS, 18, replace = TRUE), 1:18, sep = "_")
   rownames(config$costs) <- on
@@ -416,6 +421,7 @@ test_that("autoplot.sim_list works as expected (full flows with names)", {
   alphas <- seq(1.25, 2.25, by = 0.25)
   betas <- 1 / seq(0.1, 0.5, length.out = 5)
   ## introducing names
+  withr::local_seed(42)
   on <- paste(sample(letters, 20, replace = TRUE), 1:20, sep = "_")
   dn <- paste(sample(LETTERS, 18, replace = TRUE), 1:18, sep = "_")
   rownames(config$costs) <- on
@@ -548,6 +554,7 @@ test_that("autoplot.sim_list tolerates duplicate names", {
     epsilon = 0.1,
     precision = .Machine$double.eps^0.5
   )
+  withr::local_seed(42)
   destination_names(models) <- sample(letters[1:10], 18, replace = TRUE)
   origin_names(models) <- sample(LETTERS[1:10], 20, replace = TRUE)
   expect_no_error(ggplot2::autoplot(models, with_names = TRUE))

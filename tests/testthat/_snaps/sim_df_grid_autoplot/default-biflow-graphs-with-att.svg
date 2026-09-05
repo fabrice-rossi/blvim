@@ -1263,27 +1263,27 @@
 <polyline points='28.09,443.59 30.83,443.59 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
 <text x='327.78' y='568.24' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='5.50px' lengthAdjust='spacingAndGlyphs'>x</text>
 <text transform='translate(13.05,283.62) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='5.50px' lengthAdjust='spacingAndGlyphs'>y</text>
-<rect x='635.68' y='200.01' width='45.95' height='78.13' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<text x='641.16' y='214.20' style='font-size: 11.00px; font-family: sans;' textLength='19.56px' lengthAdjust='spacingAndGlyphs'>flow</text>
+<rect x='635.68' y='200.01' width='78.84' height='78.13' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<text x='641.16' y='214.20' style='font-size: 11.00px; font-family: sans;' textLength='67.88px' lengthAdjust='spacingAndGlyphs'>attractiveness</text>
 <rect x='641.16' y='220.82' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #EBEBEB;' />
-<line x1='642.89' y1='229.46' x2='656.71' y2='229.46' style='stroke-width: 1.14; stroke: #000000; stroke-opacity: 0.75;' />
+<circle cx='649.80' cy='229.46' r='4.13' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.75; fill: #000000; fill-opacity: 0.75;' />
 <rect x='641.16' y='238.10' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #EBEBEB;' />
-<line x1='642.89' y1='246.74' x2='656.71' y2='246.74' style='stroke-width: 2.29; stroke: #000000; stroke-opacity: 0.75;' />
+<circle cx='649.80' cy='246.74' r='5.30' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.75; fill: #000000; fill-opacity: 0.75;' />
 <rect x='641.16' y='255.38' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #EBEBEB;' />
-<line x1='642.89' y1='264.02' x2='656.71' y2='264.02' style='stroke-width: 3.43; stroke: #000000; stroke-opacity: 0.75;' />
-<text x='663.92' y='232.49' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.5</text>
-<text x='663.92' y='249.77' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>1.0</text>
-<text x='663.92' y='267.05' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>1.5</text>
-<rect x='635.68' y='289.10' width='78.84' height='78.13' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<text x='641.16' y='303.29' style='font-size: 11.00px; font-family: sans;' textLength='67.88px' lengthAdjust='spacingAndGlyphs'>attractiveness</text>
+<circle cx='649.80' cy='264.02' r='6.19' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.75; fill: #000000; fill-opacity: 0.75;' />
+<text x='663.92' y='232.49' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>3</text>
+<text x='663.92' y='249.77' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>6</text>
+<text x='663.92' y='267.05' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>9</text>
+<rect x='635.68' y='289.10' width='45.95' height='78.13' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<text x='641.16' y='303.29' style='font-size: 11.00px; font-family: sans;' textLength='19.56px' lengthAdjust='spacingAndGlyphs'>flow</text>
 <rect x='641.16' y='309.91' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #EBEBEB;' />
-<circle cx='649.80' cy='318.55' r='4.13' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.75; fill: #000000; fill-opacity: 0.75;' />
+<line x1='642.89' y1='318.55' x2='656.71' y2='318.55' style='stroke-width: 1.14; stroke: #000000; stroke-opacity: 0.75;' />
 <rect x='641.16' y='327.19' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #EBEBEB;' />
-<circle cx='649.80' cy='335.83' r='5.30' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.75; fill: #000000; fill-opacity: 0.75;' />
+<line x1='642.89' y1='335.83' x2='656.71' y2='335.83' style='stroke-width: 2.29; stroke: #000000; stroke-opacity: 0.75;' />
 <rect x='641.16' y='344.47' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #EBEBEB;' />
-<circle cx='649.80' cy='353.11' r='6.19' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.75; fill: #000000; fill-opacity: 0.75;' />
-<text x='663.92' y='321.58' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>3</text>
-<text x='663.92' y='338.86' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>6</text>
-<text x='663.92' y='356.14' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>9</text>
+<line x1='642.89' y1='353.11' x2='656.71' y2='353.11' style='stroke-width: 3.43; stroke: #000000; stroke-opacity: 0.75;' />
+<text x='663.92' y='321.58' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.5</text>
+<text x='663.92' y='338.86' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>1.0</text>
+<text x='663.92' y='356.14' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>1.5</text>
 </g>
 </svg>

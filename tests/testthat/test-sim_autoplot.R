@@ -212,6 +212,7 @@ test_that("autoplot.sim works as expected (with positions, non bipartite)", {
 test_that("autoplot.sim tolerates duplicate names", {
   config <- create_locations(20, 15, seed = 12)
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
+  withr::local_seed(42)
   destination_names(model) <- sample(letters[1:10], 15, replace = TRUE)
   origin_names(model) <- sample(LETTERS[1:10], 20, replace = TRUE)
   expect_no_error(ggplot2::autoplot(model, with_names = TRUE))
@@ -246,6 +247,7 @@ test_that("autoplot.sim works as expected (with positions and names) ggrepel", {
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
   origin_positions(model) <- config$pp
   destination_positions(model) <- config$pd
+  withr::local_seed(42)
   destination_names(model) <- sample(letters, 15, replace = FALSE)
   origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
   vdiffr::expect_doppelganger(
@@ -309,6 +311,7 @@ test_that("autoplot.sim works as expected (with positions and names) base ggplot
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
   origin_positions(model) <- config$pp
   destination_positions(model) <- config$pd
+  withr::local_seed(120)
   destination_names(model) <- sample(letters, 15, replace = FALSE)
   origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
   local_mocked_bindings(has_ggrepel = function() FALSE)
@@ -363,6 +366,7 @@ test_that("autoplot.sim works as expected (with positions and mixed graphs)", {
   model <- blvim(config$costs, config$X, 1.2, 5, config$Z)
   origin_positions(model) <- config$pp
   destination_positions(model) <- config$pd
+  withr::local_seed(120)
   destination_names(model) <- sample(letters, 15, replace = FALSE)
   origin_names(model) <- sample(LETTERS, 20, replace = FALSE)
   ## first without legend
