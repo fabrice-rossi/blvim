@@ -25,7 +25,7 @@ Rcpp::List blv(const arma::mat& costs,
     arma::vec Z_alpha = arma::pow(Z, alpha);
     arma::vec A = exp_beta_costs * Z_alpha;
     // one step of the output constrained model
-    Y = ((X / (exp_beta_costs * Z_alpha)) * Z_alpha.t()) % exp_beta_costs;
+    Y = ((X / A) * Z_alpha.t()) % exp_beta_costs;
     // dynamic part
     arma::vec D = (arma::sum(Y, 0)).t();
     if (use_kappa) {
