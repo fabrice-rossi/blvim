@@ -14,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.6.0 (2026-04-24)",
+  "runtimePlatform": "R version 4.6.1 (2026-06-24)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -289,7 +289,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "20358.45KB",
+  "fileSize": "25917.006KB",
   "releaseNotes": "https://github.com/fabrice-rossi/blvim/blob/main/NEWS.md",
   "readme": "https://github.com/fabrice-rossi/blvim/blob/main/README.md",
   "contIntegration": ["https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/fabrice-rossi/blvim"],

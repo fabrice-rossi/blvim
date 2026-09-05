@@ -132,6 +132,8 @@ export(static_blvim)
 export(terminals)
 importFrom(Rcpp,sourceCpp)
 importFrom(rlang,.data)
-importFrom(stats,median)
-importFrom(stats,quantile)
+importFrom(stats,
+  median,
+  quantile
+)
 useDynLib(blvim, .registration = TRUE)
