@@ -5,6 +5,10 @@ blv <- function(costs, X, alpha, beta, Z_init, kappa, epsilon, iter_max, conv_ch
     .Call(`_blvim_blv`, costs, X, alpha, beta, Z_init, kappa, epsilon, iter_max, conv_check, precision, quadratic, use_kappa)
 }
 
+project_weighted_simplex <- function(Y, kappa, C, tol, max_iter) {
+    .Call(`_blvim_project_weighted_simplex`, Y, kappa, C, tol, max_iter)
+}
+
 we_oc <- function(costs, X, alpha, beta, Z) {
     .Call(`_blvim_we_oc`, costs, X, alpha, beta, Z)
 }
