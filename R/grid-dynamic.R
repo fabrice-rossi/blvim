@@ -34,7 +34,7 @@ grid_blvim <- function(costs, X, alphas, betas, Z,
                        iter_max = 50000,
                        conv_check = 100,
                        precision = 1e-6,
-                       quadratic = FALSE,
+                       algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
                        progress = FALSE) {
   params <- expand.grid(alpha = alphas, beta = betas)
   all_models <- vector(mode = "list", length = nrow(params))
@@ -55,7 +55,7 @@ grid_blvim <- function(costs, X, alphas, betas, Z,
       iter_max = iter_max,
       conv_check = conv_check,
       precision = precision,
-      quadratic = quadratic
+      algorithm = algorithm
     )
     if (progress) { # nocov start
       cli::cli_progress_update()

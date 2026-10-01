@@ -1,10 +1,17 @@
 # blvim (development version)
 
+## Breaking changes
+
+* the `quadratic` parameter of `blvim()` and `grid_blvim()` has been replaced
+  by the more flexible `algorithm` parameter.
+
 ## New features
 
 * `blvim()` and `grid_blvim()` now support conversion factors between 
   attractivenesses and incoming flows, together with the new function 
   `sim_conversion()`.
+* `blvim()` and `grid_blvim()` now support two new algorithms to find an 
+  equilibrium. Both are instance of a projected gradient ascent approach. 
 * `sim_potential()` computes the potential of spatial interaction model using 
   the definition proposed by Osawa, Akamatsu, and Kogure.
 * `sim_fp_jacobian()` computes the Jacobian of the fixed point map with respect

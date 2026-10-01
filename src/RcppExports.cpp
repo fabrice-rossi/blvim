@@ -33,6 +33,51 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// blv_gradient
+Rcpp::List blv_gradient(const arma::mat& costs, const arma::vec& X, double alpha, double beta, const arma::vec& Z_init, const arma::vec& kappa, double rho_init, double shrink, double c, int iter_max, int ls_iter_max, double precision);
+RcppExport SEXP _blvim_blv_gradient(SEXP costsSEXP, SEXP XSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP Z_initSEXP, SEXP kappaSEXP, SEXP rho_initSEXP, SEXP shrinkSEXP, SEXP cSEXP, SEXP iter_maxSEXP, SEXP ls_iter_maxSEXP, SEXP precisionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type costs(costsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type Z_init(Z_initSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< double >::type rho_init(rho_initSEXP);
+    Rcpp::traits::input_parameter< double >::type shrink(shrinkSEXP);
+    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    Rcpp::traits::input_parameter< int >::type iter_max(iter_maxSEXP);
+    Rcpp::traits::input_parameter< int >::type ls_iter_max(ls_iter_maxSEXP);
+    Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
+    rcpp_result_gen = Rcpp::wrap(blv_gradient(costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision));
+    return rcpp_result_gen;
+END_RCPP
+}
+// blv_gradient_unit
+Rcpp::List blv_gradient_unit(const arma::mat& costs, const arma::vec& X, double alpha, double beta, const arma::vec& Z_init, const arma::vec& kappa, double rho_init, double shrink, double c, int iter_max, int ls_iter_max, double precision, bool trace);
+RcppExport SEXP _blvim_blv_gradient_unit(SEXP costsSEXP, SEXP XSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP Z_initSEXP, SEXP kappaSEXP, SEXP rho_initSEXP, SEXP shrinkSEXP, SEXP cSEXP, SEXP iter_maxSEXP, SEXP ls_iter_maxSEXP, SEXP precisionSEXP, SEXP traceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type costs(costsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type Z_init(Z_initSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< double >::type rho_init(rho_initSEXP);
+    Rcpp::traits::input_parameter< double >::type shrink(shrinkSEXP);
+    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    Rcpp::traits::input_parameter< int >::type iter_max(iter_maxSEXP);
+    Rcpp::traits::input_parameter< int >::type ls_iter_max(ls_iter_maxSEXP);
+    Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< bool >::type trace(traceSEXP);
+    rcpp_result_gen = Rcpp::wrap(blv_gradient_unit(costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision, trace));
+    return rcpp_result_gen;
+END_RCPP
+}
 // project_weighted_simplex
 arma::vec project_weighted_simplex(const arma::vec& y, const arma::vec& kappa, double sum_kappa_sq, double C, double tol, int max_iter);
 RcppExport SEXP _blvim_project_weighted_simplex(SEXP ySEXP, SEXP kappaSEXP, SEXP sum_kappa_sqSEXP, SEXP CSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
@@ -80,6 +125,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_blvim_blv", (DL_FUNC) &_blvim_blv, 12},
+    {"_blvim_blv_gradient", (DL_FUNC) &_blvim_blv_gradient, 12},
+    {"_blvim_blv_gradient_unit", (DL_FUNC) &_blvim_blv_gradient_unit, 13},
     {"_blvim_project_weighted_simplex", (DL_FUNC) &_blvim_project_weighted_simplex, 6},
     {"_blvim_project_simplex", (DL_FUNC) &_blvim_project_simplex, 3},
     {"_blvim_we_oc", (DL_FUNC) &_blvim_we_oc, 5},

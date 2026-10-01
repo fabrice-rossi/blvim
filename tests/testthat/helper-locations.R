@@ -21,6 +21,8 @@ create_locations <- function(nprod, ndest, seed = 0, symmetric = FALSE) {
   d_scale <- median(distances[distances > 0])
   production <- runif(nrow(pos_prod), min = 0.1, max = 2)
   attractiveness <- runif(nrow(pos_dest), min = 1, max = 2)
+  ## make sure attractivenesses and productions align
+  attractiveness <- attractiveness / sum(attractiveness) * sum(production)
   list(
     costs = distances, X = production, Z = attractiveness, pp = pos_prod,
     pd = pos_dest, scale = d_scale

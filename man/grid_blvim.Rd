@@ -18,7 +18,7 @@ grid_blvim(
   iter_max = 50000,
   conv_check = 100,
   precision = 1e-06,
-  quadratic = FALSE,
+  algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
   progress = FALSE
 )
 }
@@ -31,7 +31,7 @@ grid_blvim(
 
 \item{betas}{a vector of cost inverse scale parameters}
 
-\item{Z}{a vector of initial destination attractivenesses}
+\item{Z}{A vector of initial destination attractivenesses.}
 
 \item{kappa}{A vector of conversion factors between attractivenesses and
 incoming flows. Values must be positive. Defaults to 1 for all
@@ -48,15 +48,19 @@ locations (see details)}
 \item{destination_data}{\code{NULL} or a list of additional data about the
 destination locations (see details)}
 
-\item{epsilon}{the update intensity}
+\item{epsilon}{Update intensity used by the \code{"linear"} and \code{"quadratic"}
+algorithms.}
 
-\item{iter_max}{the maximal number of steps of the BLV dynamic}
+\item{iter_max}{Maximum number of iterations.}
 
-\item{conv_check}{number of iterations between to convergence test}
+\item{conv_check}{Number of iterations between convergence checks for the
+\code{"linear"} and \code{"quadratic"} algorithms.}
 
-\item{precision}{convergence threshold}
+\item{precision}{Convergence threshold.}
 
-\item{quadratic}{selects the update rule, see details.}
+\item{algorithm}{Character string selecting the algorithm used to compute
+the equilibrium. One of \code{"linear"}, \code{"quadratic"}, \code{"gradient"} or
+\code{"gradient_unit"}. Defaults to \code{"linear"}. Partial matching is supported.}
 
 \item{progress}{if TRUE, a progress bar is shown during the calculation
 (defaults to FALSE)}
