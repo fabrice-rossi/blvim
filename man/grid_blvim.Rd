@@ -33,8 +33,9 @@ grid_blvim(
 
 \item{Z}{a vector of initial destination attractivenesses}
 
-\item{kappa}{a vector of conversion factors between attractivenesses and
-incoming flows (positive values). Defaults to 1 for all destinations.}
+\item{kappa}{A vector of conversion factors between attractivenesses and
+incoming flows. Values must be positive. Defaults to 1 for all
+destinations.}
 
 \item{bipartite}{when \code{TRUE} (default value), the origin and destination
 locations are considered to be distinct. When \code{FALSE}, a single set of
