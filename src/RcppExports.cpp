@@ -34,17 +34,31 @@ BEGIN_RCPP
 END_RCPP
 }
 // project_weighted_simplex
-arma::vec project_weighted_simplex(const arma::vec& Y, const arma::vec& kappa, double C, double tol, int max_iter);
-RcppExport SEXP _blvim_project_weighted_simplex(SEXP YSEXP, SEXP kappaSEXP, SEXP CSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
+arma::vec project_weighted_simplex(const arma::vec& y, const arma::vec& kappa, double sum_kappa_sq, double C, double tol, int max_iter);
+RcppExport SEXP _blvim_project_weighted_simplex(SEXP ySEXP, SEXP kappaSEXP, SEXP sum_kappa_sqSEXP, SEXP CSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::vec& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< double >::type sum_kappa_sq(sum_kappa_sqSEXP);
     Rcpp::traits::input_parameter< double >::type C(CSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
-    rcpp_result_gen = Rcpp::wrap(project_weighted_simplex(Y, kappa, C, tol, max_iter));
+    rcpp_result_gen = Rcpp::wrap(project_weighted_simplex(y, kappa, sum_kappa_sq, C, tol, max_iter));
+    return rcpp_result_gen;
+END_RCPP
+}
+// project_simplex
+arma::vec project_simplex(const arma::vec& y, double tol, int max_iter);
+RcppExport SEXP _blvim_project_simplex(SEXP ySEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(project_simplex(y, tol, max_iter));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -66,7 +80,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_blvim_blv", (DL_FUNC) &_blvim_blv, 12},
-    {"_blvim_project_weighted_simplex", (DL_FUNC) &_blvim_project_weighted_simplex, 5},
+    {"_blvim_project_weighted_simplex", (DL_FUNC) &_blvim_project_weighted_simplex, 6},
+    {"_blvim_project_simplex", (DL_FUNC) &_blvim_project_simplex, 3},
     {"_blvim_we_oc", (DL_FUNC) &_blvim_we_oc, 5},
     {NULL, NULL, 0}
 };

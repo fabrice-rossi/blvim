@@ -1,19 +1,18 @@
 test_that("Simplex projection returns a point in the specified simplex", {
   withr::local_seed(121)
-  ## sample in the unit square and then project on the simplex
+  ## sample in [-1;1]^20 and then project on the unit simplex
   for (k in 1:20) {
-    kappas <- rep(1, 20)
-    y <- stats::runif(20)
-    yp <- project(y, kappas, 1)
+    y <- stats::runif(20, min = -1, max = 1)
+    yp <- R_project_simplex(y)
     expect_all_true(yp >= 0)
     expect_equal(sum(yp), 1)
   }
   ## more general case
   for (k in 1:20) {
     kappas <- stats::runif(20, min = 0.5, max = 1.5)
-    y <- stats::runif(20)
+    y <- stats::runif(20, min = -1, max = 1)
     C_tot <- sum(kappas)
-    yp <- project(y, kappas, C_tot)
+    yp <- R_project_weighted_simplex(y, kappas, C_tot)
     expect_all_true(yp >= 0)
     expect_equal(sum(yp * kappas), C_tot)
   }
@@ -23,25 +22,64 @@ test_that("Simplex projection returns the expect projection (central)", {
   withr::local_seed(122)
   for (k in 1:30) {
     ## sample in the simplex
+    y <- sample_simplex(rep(1, 20), 1)
+    ## move away
+    repeat {
+      y_ext <- y + sample(c(1, -1), 1) * runif(1, 10 * .Machine$double.eps^0.5, 10)
+      ## this should not be necessary
+      if (abs(sum(y_ext) - 1) > 10 * .Machine$double.eps^0.5) {
+        break
+      }
+    }
+    ## and come back ;-)
+    yp <- R_project_simplex(y_ext)
+    expect_equal(yp, y)
+  }
+  ## weighted case
+  for (k in 1:30) {
+    ## sample in the simplex
     kappas <- stats::runif(20, min = 0.5, max = 1.5)
     C_tot <- sum(kappas)
     y <- sample_simplex(kappas, C_tot)
     ## move away
     repeat {
-      y_ext <- y + runif(1, 0, 10) * kappas
+      y_ext <- y + sample(c(1, -1), 1) * runif(1, 10 * .Machine$double.eps^0.5, 10) * kappas
       ## this should not be necessary
-      if (abs(sum(y_ext * kappas) - C_tot) > .Machine$double.eps^0.5) {
+      if (abs(sum(y_ext * kappas) - C_tot) > 10 * .Machine$double.eps^0.5) {
         break
       }
     }
     ## and come back ;-)
-    yp <- project(y_ext, kappas, C_tot)
+    yp <- R_project_weighted_simplex(y_ext, kappas, C_tot)
     expect_equal(yp, y)
   }
 })
 
 test_that("Simplex projection returns the expect projection (faces)", {
   withr::local_seed(123)
+  for (k in 1:30) {
+    ## sample in the faces of the simplex
+    repeat {
+      active <- sample(c(TRUE, FALSE), 20, replace = TRUE)
+      sa <- sum(active)
+      if (sa > 0 && sa < 20) {
+        break
+      }
+    }
+    y <- sample_simplex(rep(1, 20), 1, which(active))
+    ## move away
+    repeat {
+      y_ext <- y + sample(c(1, -1), 1) * runif(1, 0, 10)
+      ## this should not be necessary
+      if (abs(sum(y_ext) - 1) > 10 * .Machine$double.eps^0.5) {
+        break
+      }
+    }
+    ## and come back ;-)
+    yp <- R_project_simplex(y_ext)
+    expect_equal(yp, y)
+  }
+  ## weighted
   for (k in 1:30) {
     ## sample in the faces of the simplex
     kappas <- stats::runif(20, min = 0.5, max = 1.5)
@@ -56,14 +94,14 @@ test_that("Simplex projection returns the expect projection (faces)", {
     y <- sample_simplex(kappas, C_tot, which(active))
     ## move away
     repeat {
-      y_ext <- y + runif(1, 0, 10) * kappas
+      y_ext <- y + sample(c(1, -1), 1) * runif(1, 0, 10) * kappas
       ## this should not be necessary
-      if (abs(sum(y_ext * kappas) - C_tot) > .Machine$double.eps^0.5) {
+      if (abs(sum(y_ext * kappas) - C_tot) > 10 * .Machine$double.eps^0.5) {
         break
       }
     }
     ## and come back ;-)
-    yp <- project(y_ext, kappas, C_tot)
+    yp <- R_project_weighted_simplex(y_ext, kappas, C_tot)
     expect_equal(yp, y)
   }
 })

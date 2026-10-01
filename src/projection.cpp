@@ -1,58 +1,127 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 
-// Helper function to evaluate the root-finding constraint g(lambda)
-double eval_g(double lambda,
-              const arma::vec& Y,
-              const arma::vec& kappa,
-              double C) {
-  double sum = 0.0;
-  for(size_t i = 0; i < Y.n_elem; ++i) {
-    double val = Y[i] + lambda * kappa[i];
-    if(val > 0)
-      sum += kappa[i] * val;
+inline void eval_g_and_gprime(double lambda,
+                              const arma::vec& y,
+                              const arma::vec& kappa,
+                              double C,
+                              double& g,
+                              double& g_prime) {
+  g = -C;
+  g_prime = 0.0;
+  size_t p = y.n_elem;
+  for(size_t i = 0; i < p; ++i) {
+    double val = y[i] - lambda * kappa[i];
+    if(val > 0.0) {
+      g += kappa[i] * val;
+      g_prime -= kappa[i] * kappa[i];
+    }
   }
-  return sum - C;
 }
 
 // Projection onto the weighted simplex
 // [[Rcpp::export]]
-arma::vec project_weighted_simplex(const arma::vec& Y,
+arma::vec project_weighted_simplex(const arma::vec& y,
                                    const arma::vec& kappa,
+                                   double sum_kappa_sq,
                                    double C,
                                    double tol,
                                    int max_iter) {
-  // 1. Bracket the root for lambda
-  double lambda_low = -1.0;
-  while(eval_g(lambda_low, Y, kappa, C) > 0) {
-    lambda_low *= 2.0;
+  size_t p = y.n_elem;
+
+  // 1. Analytical bounds calculation in O(p)
+  double sum_kappa_y = arma::dot(kappa, y);
+  double max_ratio = y[0] / kappa[0];
+  for(size_t i = 1; i < p; ++i) {
+    double ratio = y[i] / kappa[i];
+    if(ratio > max_ratio)
+      max_ratio = ratio;
   }
 
-  double lambda_high = 1.0;
-  while(eval_g(lambda_high, Y, kappa, C) < 0) {
-    lambda_high *= 2.0;
-  }
+  double lambda_low = (sum_kappa_y - C) / sum_kappa_sq;
+  double lambda_high = max_ratio - (C / sum_kappa_sq);
 
-  // 2. Bisection search to find exact lambda
-  double lambda_mid = 0.0;
+  // Initial guess at the midpoint of analytical bounds
+  double lambda = 0.5 * (lambda_low + lambda_high);
 
   for(int iter = 0; iter < max_iter; ++iter) {
-    lambda_mid = (lambda_low + lambda_high) / 2.0;
-    if(eval_g(lambda_mid, Y, kappa, C) > 0) {
-      lambda_high = lambda_mid;
+    double g, g_prime;
+    eval_g_and_gprime(lambda, y, kappa, C, g, g_prime);
+
+    // Tighten active bracket
+    if(g > 0.0) {
+      lambda_low = lambda;
     } else {
-      lambda_low = lambda_mid;
+      lambda_high = lambda;
     }
-    if((lambda_high - lambda_low) < tol)
+
+    // Convergence check on function value or interval width
+    if(std::abs(g) < tol || (lambda_high - lambda_low) < tol)
       break;
+
+    // 2. Proposed Newton-Raphson Step
+    double lambda_next;
+    if(g_prime < -1e-12) {
+      lambda_next = lambda - (g / g_prime);
+      if(lambda_next <= lambda_low || lambda_next >= lambda_high) {
+        lambda_next = 0.5 * (lambda_low + lambda_high);
+      }
+    } else {
+      lambda_next = 0.5 * (lambda_low + lambda_high);  // Force safeguard
+    }
+
+    lambda = lambda_next;
   }
 
-  // 3. Compute final Z based on lambda*
-  arma::vec Z = arma::zeros(Y.n_elem);
-  for(size_t i = 0; i < Y.n_elem; ++i) {
-    double val = Y[i] + lambda_mid * kappa[i];
-    if(val > 0)
-      Z[i] = val;
+  // Construct final Z
+  // No memory allocation
+  arma::vec z(p);
+  for(size_t i = 0; i < p; ++i) {
+    z[i] = std::max(y[i] - lambda * kappa[i], 0.0);
   }
-  return Z;
+  return z;
+}
+
+// Projection onto the simplex
+// [[Rcpp::export]]
+arma::vec project_simplex(const arma::vec& y, double tol, int max_iter) {
+  arma::uword p = y.n_elem;
+  if(p == 0)
+    return arma::vec();
+  if(p == 1)
+    return arma::vec({1.0});
+
+  // 1. Initialize lambda using Armadillo's fast reduction
+  double max_y = y.max();
+  double lambda = max_y - 1.0 / static_cast<double>(p);
+
+  // 2. Newton Iterations
+  for(int iter = 0; iter < max_iter; ++iter) {
+    double sum_active = 0.0;
+    arma::uword count_active = 0;
+
+    // Scalar loop avoids intermediate memory allocation
+    for(arma::uword j = 0; j < p; ++j) {
+      if(y[j] > lambda) {
+        sum_active += y[j];
+        count_active++;
+      }
+    }
+
+    double lambda_new = (sum_active - 1.0) / static_cast<double>(count_active);
+
+    if(std::abs(lambda - lambda_new) < tol) {
+      lambda = lambda_new;
+      break;
+    }
+    lambda = lambda_new;
+  }
+
+  // Construct final Z
+  // no memory allocation
+  arma::vec z(p);
+  for(size_t i = 0; i < p; ++i) {
+    z[i] = std::max(y[i] - lambda, 0.0);
+  }
+  return z;
 }
