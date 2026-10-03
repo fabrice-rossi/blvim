@@ -2,6 +2,20 @@
 #include <RcppArmadillo.h>
 #include "projection.h"
 
+inline void weighted_gap(const arma::vec& grad,
+                         const arma::vec& Z,
+                         const arma::vec& kappa,
+                         double X_tot,
+                         double& gap,
+                         double& scale) {
+  arma::vec scaled_grad = grad / kappa;
+  double lambda = arma::dot(grad, Z) / X_tot;
+
+  gap = arma::max(scaled_grad - lambda);
+
+  scale = std::max({1.0, std::abs(lambda), arma::max(arma::abs(scaled_grad))});
+}
+
 // [[Rcpp::export]]
 Rcpp::List blv_gradient(const arma::mat& costs,
                         const arma::vec& X,
@@ -15,39 +29,45 @@ Rcpp::List blv_gradient(const arma::mat& costs,
                         int iter_max = 1000,
                         int ls_iter_max = 50,  // Max line search steps
                         double precision = 1e-7) {
-  double sum_kappa_sq = arma::dot(kappa, kappa);
-  double X_tot = arma::sum(X);
   double precision_projection = std::max(precision * 1e-7, 1e-14);
   int iter_max_projection = 50;
   std::string status = "maximum iteration reached";
   bool converged = false;
+  double gap_atol = precision;
+  double gap_rtol = precision;
+  // pre-computation for the projection
+  double sum_kappa_sq = arma::dot(kappa, kappa);
+  double X_tot = arma::sum(X);
   // make sure Z is in the simplex
   arma::vec Z =
       project_weighted_simplex(Z_init, kappa, sum_kappa_sq, X_tot,
                                precision_projection, iter_max_projection);
+
   arma::mat W = arma::exp(-beta * costs);
-  arma::mat YdivZ;
-  int iter = 0;
-  int feval = 1;
   // rescale rho_init to adapt to X_tot
   rho_init *= X_tot * X_tot;
   double rho;
+  double rho_max = rho_init;
+  double rho_trial = rho_init;
   bool ls_success;
+  // sum_{k=1}^p Z_k^alpha W_{ik}
   arma::vec A = W * arma::pow(Z, alpha);
   arma::vec grad;
   double gap;
+  int iter = 0;
+  int feval = 1;  // number of evaluations of the potential
   for(; iter < iter_max; ++iter) {
     // gradient
     grad = arma::pow(Z, alpha - 1.0) % (W.t() * (X / A));
     // duality gap
-    gap = X_tot * arma::max(grad / kappa) - arma::dot(grad, Z);
-    if(gap < precision) {
-      // converged
-      converged = TRUE;
+    double gap_scale;
+    weighted_gap(grad, Z, kappa, X_tot, gap, gap_scale);
+    if(gap <= gap_atol + gap_rtol * gap_scale) {
+      converged = true;
       status = "converged";
       break;
     }
-    rho = rho_init;
+    rho = rho_trial;
     arma::vec Z_new = Z;
 
     // Armijo Backtracking Line Search
@@ -74,12 +94,17 @@ Rcpp::List blv_gradient(const arma::mat& costs,
       actual_increase = arma::sum(X % arma::log1p(rel_A_change)) / alpha;
 
       // Armijo condition for maximization
-      double expected_increase = c * arma::dot(reduced_grad, Z_new - Z);
+      double expected_increase = c * arma::dot(grad, Z_new - Z);
+      if(expected_increase <= 0) {
+        rho *= shrink;
+        continue;
+      }
 
       if(actual_increase >= expected_increase) {
         ls_success = true;
         // prepare for next step
-        A = A_new;
+        A = std::move(A_new);
+        rho_trial = std::min(rho_max, rho / shrink);
         break;  // Step size accepted
       }
 
@@ -110,12 +135,33 @@ Rcpp::List blv_gradient(const arma::mat& costs,
     }
     Z = Z_new;
   }
+  if(!converged) {
+    arma::vec grad_final = arma::pow(Z, alpha - 1.0) % (W.t() * (X / A));
+    double gap_final, gap_scale_final;
+    weighted_gap(grad_final, Z, kappa, X_tot, gap_final, gap_scale_final);
+    if(gap_final <= gap_atol + gap_rtol * gap_scale_final) {
+      converged = true;
+      status = "converged";
+    }
+    gap = gap_final;
+  }
   return Rcpp::List::create(
       Rcpp::Named("Z") = Z,
       Rcpp::Named("Y") = ((X / A) * arma::pow(Z, alpha).t()) % W,
       Rcpp::Named("iter") = iter, Rcpp::Named("eval") = feval,
       Rcpp::Named("gap") = gap, Rcpp::Named("status") = status,
       Rcpp::Named("converged") = converged);
+}
+
+inline void simplex_gap(const arma::vec& grad,
+                        const arma::vec& U,
+                        double& gap,
+                        double& scale) {
+  double lambda = arma::dot(grad, U);
+
+  gap = arma::max(grad - lambda);
+
+  scale = std::max({1.0, std::abs(lambda), arma::max(arma::abs(grad))});
 }
 
 // [[Rcpp::export]]
@@ -145,29 +191,30 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
   U = project_simplex(U, precision_projection, iter_max_projection);
 
   arma::mat preW = arma::exp(-beta * costs);
+  // cost rescaling (transformed problem)
   arma::mat W = preW.each_row() / arma::pow(kappa, alpha).t();
-  int iter = 0;
-  int feval = 1;
   double rho;
-  // sum_{k=1}^p U_p^alpha W_{ik}
+  double rho_max = rho_init;
+  double rho_trial = rho_init;
+  // sum_{k=1}^p U_k^alpha W_{ik}
   arma::vec A = W * arma::pow(U, alpha);
   arma::vec grad;
   double gap;
+  int iter = 0;
+  int feval = 1;  // number of evaluations of the potential
   for(; iter < iter_max; ++iter) {
     grad = arma::pow(U, alpha - 1.0) % (W.t() * (X / A));
     // duality gap
-    double grad_mean = arma::dot(grad, U);
-    arma::vec reduced_grad = grad - grad_mean;
-    gap = arma::max(reduced_grad);
-    double gap_scale = std::max(1.0, arma::max(arma::abs(reduced_grad)));
-
+    double gap_scale;
+    simplex_gap(grad, U, gap, gap_scale);
     if(gap <= gap_atol + gap_rtol * gap_scale) {
       // converged
-      converged = TRUE;
+      converged = true;
       status = "converged";
       break;
     }
-    rho = rho_init;
+    arma::vec reduced_grad = grad - arma::dot(grad, U);
+    rho = rho_trial;
     arma::vec U_new = U;
 
     // Armijo Backtracking Line Search
@@ -191,12 +238,17 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
       actual_increase = arma::sum(X % arma::log1p(rel_A_change)) / alpha;
 
       // Armijo condition for maximisation
-      double expected_increase = c * arma::dot(reduced_grad, U_new - U);
+      double expected_increase = c * arma::dot(grad, U_new - U);
+      if(expected_increase <= 0) {
+        rho *= shrink;
+        continue;
+      }
 
       if(actual_increase >= expected_increase) {
         ls_success = true;
         // prepare for next step
-        A = A_new;
+        A = std::move(A_new);
+        rho_trial = std::min(rho_max, rho / shrink);
         break;  // Step size accepted
       }
 
@@ -228,13 +280,9 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
     U = U_new;
   }
   if(!converged) {
-    arma::vec A_unit = W * arma::pow(U, alpha);
-    arma::vec grad_final = arma::pow(U, alpha - 1.0) % (W.t() * (X / A_unit));
-    double grad_mean_final = arma::dot(grad_final, U);
-    arma::vec reduced_grad_final = grad_final - grad_mean_final;
-    double gap_final = arma::max(reduced_grad_final);
-    double gap_scale_final =
-        std::max(1.0, arma::max(arma::abs(reduced_grad_final)));
+    arma::vec grad_final = arma::pow(U, alpha - 1.0) % (W.t() * (X / A));
+    double gap_final, gap_scale_final;
+    simplex_gap(grad_final, U, gap_final, gap_scale_final);
     if(gap_final <= gap_atol + gap_rtol * gap_scale_final) {
       converged = true;
       status = "converged";

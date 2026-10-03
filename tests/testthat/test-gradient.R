@@ -163,12 +163,7 @@ test_that("blvim fulfills its contracts with kappas", {
     ## production constraints
     expect_equal(rowSums(flows(model)), config$X)
     expect_equal(production(model), config$X)
-    ## attractiveness times kappas should equal to the destination flows
-    ## as testthat comparison model is different from ours, we set at relatively
-    ## high value of tolerance
-    expect_equal(destination_flow(model), attractiveness(model) * kappas,
-      tolerance = 10 * (.Machine$double.eps^0.5)
-    )
+    expect_equal(destination_flow(model), attractiveness(model) * kappas)
     expect_equal(kappas, sim_conversion(model))
   }
 })
@@ -185,9 +180,7 @@ test_that("blvim computes the BLV model", {
   )
   expect_equal(flows(g_model), flows(u_model))
   expect_equal(production(g_model), production(u_model))
-  expect_equal(attractiveness(g_model), attractiveness(u_model),
-    tolerance = 10 * (.Machine$double.eps^0.5)
-  )
+  expect_equal(attractiveness(g_model), attractiveness(u_model))
 })
 
 test_that("blvim obeys to iteration control", {
