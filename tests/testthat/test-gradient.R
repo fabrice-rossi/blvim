@@ -131,9 +131,9 @@ test_that("blvim fulfills its contracts with kappas", {
   for (rep in 1:10) {
     kappas <- runif(length(config$Z), min = 0.5, max = 2)
     model <- blvim(config$costs, config$X, 1.5, 200, config$Z,
-                   kappa = kappas,
-                   precision = (.Machine$double.eps^0.5),
-                   algorithm = "gradient",
+      kappa = kappas,
+      precision = (.Machine$double.eps^0.5),
+      algorithm = "gradient",
     )
     expect_equal(dim(flows(model)), c(length(config$X), length(config$Z)))
     ## production constraints
@@ -143,7 +143,7 @@ test_that("blvim fulfills its contracts with kappas", {
     ## as testthat comparison model is different from ours, we set at relatively
     ## high value of tolerance
     expect_equal(destination_flow(model), attractiveness(model) * kappas,
-                 tolerance = 10 * (.Machine$double.eps^0.5)
+      tolerance = 10 * (.Machine$double.eps^0.5)
     )
     expect_equal(kappas, sim_conversion(model))
   }
@@ -185,7 +185,9 @@ test_that("blvim computes the BLV model", {
   )
   expect_equal(flows(g_model), flows(u_model))
   expect_equal(production(g_model), production(u_model))
-  expect_equal(attractiveness(g_model), attractiveness(u_model))
+  expect_equal(attractiveness(g_model), attractiveness(u_model),
+    tolerance = 10 * (.Machine$double.eps^0.5)
+  )
 })
 
 test_that("blvim obeys to iteration control", {

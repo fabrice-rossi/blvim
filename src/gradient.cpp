@@ -9,7 +9,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
                         double beta,
                         const arma::vec& Z_init,
                         const arma::vec& kappa,
-                        double rho_init = 1.0,
+                        double rho_init = 0.75,
                         double shrink = 0.5,  // Shrinkage factor
                         double c = 1e-4,      // Sufficient increase param
                         int iter_max = 1000,
@@ -40,7 +40,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
     // gradient
     grad = arma::pow(Z, alpha - 1.0) % (W.t() * (X / A));
     // duality gap
-    gap = X_tot * arma::max(grad/kappa) - arma::dot(grad, Z);
+    gap = X_tot * arma::max(grad / kappa) - arma::dot(grad, Z);
     if(gap < precision) {
       // converged
       converged = TRUE;
@@ -125,13 +125,12 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
                              double beta,
                              const arma::vec& Z_init,
                              const arma::vec& kappa,
-                             double rho_init = 1.0,
+                             double rho_init = 0.75,
                              double shrink = 0.5,  // Shrinkage factor
                              double c = 1e-4,      // Sufficient increase param
                              int iter_max = 1000,
                              int ls_iter_max = 50,  // Max line search steps
-                             double precision = 1e-7,
-                             bool trace = false) {
+                             double precision = 1e-7) {
   double precision_projection = std::max(precision * 1e-7, 1e-14);
   int iter_max_projection = 50;
   std::string status = "maximum iteration reached";
@@ -144,10 +143,6 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
   U /= X_tot;
   // make sure U is in the simplex !
   U = project_simplex(U, precision_projection, iter_max_projection);
-  //  U = exact_project_simplex(U);
-  if(trace) {
-    U.t().brief_print();
-  }
 
   arma::mat preW = arma::exp(-beta * costs);
   arma::mat W = preW.each_row() / arma::pow(kappa, alpha).t();
@@ -231,9 +226,6 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
       }
     }
     U = U_new;
-    if(trace) {
-      U.t().brief_print();
-    }
   }
   if(!converged) {
     arma::vec A_unit = W * arma::pow(U, alpha);

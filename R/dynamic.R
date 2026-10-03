@@ -1,3 +1,35 @@
+#' Control parameters for the blvim gradient algorithms
+#'
+#' This function returns a list with parameters used to tweak the gradient
+#' algorithms used in [blvim()]. These parameters control the line search
+#' algorithm which is a standard backtracking method with Armijo stopping
+#' criterion.
+#'
+#' @param rho_init Initial value of the gradient step in the line search.
+#' @param shrink Shrink factor for the gradient step in the line search.
+#' @param sufficient_increase Relative sufficient increase in the line search.
+#' @param ls_iter_max  Maximum number of iterations of the line search.
+#' @returns a list containing the values of the parameters
+#' @seealso [blvim()]
+#' @references Armijo, Larry (1966), "Minimization of functions having Lipschitz
+#'   continuous first partial derivatives", Pacific J. Math. 16 (1): 1–3
+#'   \doi{doi:10.2140/pjm.1966.16.1}
+#' @export
+#' @examples
+#' blvim_gradient_control(0.5, 0.7, 1e-4, 25)
+blvim_gradient_control <- function(rho_init = 0.75,
+                                   shrink = 0.5,
+                                   sufficient_increase = 1e-5,
+                                   ls_iter_max = 50) {
+  list(
+    rho_init = rho_init,
+    shrink = shrink,
+    sufficient_increase = sufficient_increase,
+    ls_iter_max = ls_iter_max
+  )
+}
+
+
 #' Compute an equilibrium solution of the Harris and Wilson model
 #'
 #' This function computes flows between origin locations and destination
@@ -7,8 +39,8 @@
 #' locations. At convergence, attractivenesses fulfil the balance equations
 #' \deqn{\forall j,\quad \kappa_j Z_j=\sum_{i=1}^{n}Y_{ij},} where the flows are
 #' computed according to Wilson's  production constrained entropy maximising
-#' model. The function implements several algorithms that all aim to reach an
-#' equilibrium.
+#' model ([static_blvim()]). The function implements several algorithms that all
+#' aim to reach an equilibrium.
 #'
 #' All algorithms are initialised with user supplied attractivenesses and
 #' proceed iteratively by updating them until convergence. Two algorithms are
@@ -54,8 +86,8 @@
 #'      \right) Z_j^t.
 #'    }
 #'
-#' For these algoritms(`"linear"` and `"quadratic"`), \eqn{\epsilon} is given by
-#' the `epsilon` parameter and should generally be smaller than 1.
+#' For these algorithms(`"linear"` and `"quadratic"`), \eqn{\epsilon} is given
+#' by the `epsilon` parameter and should generally be smaller than 1.
 #'
 #' Updates are performed until convergence or for a maximum of `iter_max`
 #' iterations. Convergence is checked every `conv_check` iterations. The
@@ -72,31 +104,36 @@
 #'
 #' Finding an equilibrium with the BLV  approach is equivalent to looking for a
 #' maximum of the potential function (see [sim_potential()]). The gradient
-#' descent algorithms use a direct approach of optimising the potential via a
-#' projected gradient ascent. The `"gradient"` algorithm is optimises directly
-#' the potential while `"gradient_unit"` rescales the problem in to work with
-#' \eqn{U_j} instead of \eqn{Z_j} in such a way that \eqn{sum_{j=1}^p U_j=1}.
-#' This can accelerate convergence in some settings. Results should be identical
-#' from both gradient approaches, but they can be different from solutions
-#' obtained by the `"linear"` and `"quadratic"` algorithms.
+#' algorithms use a direct approach of optimising the potential via a projected
+#' gradient ascent. The `"gradient"` algorithm optimises directly the potential
+#' while `"gradient_unit"` rescales the problem in order to work with \eqn{U_j}
+#' instead of \eqn{Z_j} in such a way that \eqn{\sum_{j=1}^p U_j=1}. This can
+#' accelerate convergence in some settings. Results should be identical from
+#' both gradient approaches, but they can be different from solutions obtained
+#' by the `"linear"` and `"quadratic"` algorithms.
 #'
 #' The `epsilon` and `conv_check` parameters are not used by the `"gradient"`
-#' algorithm.
+#' algorithm. Convergence is assessed using the duality gap and the `precision`
+#' parameter. The gradient ascent runs for a maximum of `iter_max` iterations.
+#' Both algorithms use a standard backtracking line search with Armijo stopping
+#' criterion. Its parameters can be modified using the `control` parameter and
+#' the associated  [blvim_gradient_control()] function.
 #'
 #' @param Z A vector of initial destination attractivenesses.
 #' @param kappa A vector of conversion factors between attractivenesses and
 #'   incoming flows. Values must be positive. Defaults to 1 for all
 #'   destinations.
-#' @param epsilon Update intensity used by the `"linear"` and `"quadratic"`
-#'   algorithms.
-#' @param iter_max Maximum number of iterations.
-#' @param conv_check Number of iterations between convergence checks for the
-#'   `"linear"` and `"quadratic"` algorithms.
-#' @param precision Convergence threshold.
 #' @param algorithm Character string selecting the algorithm used to compute
 #'   the equilibrium. One of `"linear"`, `"quadratic"`, `"gradient"` or
 #'   `"gradient_unit"`. Defaults to `"linear"`. Partial matching is supported.
-#'
+#' @param precision Convergence threshold.
+#' @param iter_max Maximum number of iterations.
+#' @param epsilon Update intensity used by the `"linear"` and `"quadratic"`
+#'   algorithms.
+#' @param conv_check Number of iterations between convergence checks for the
+#'   `"linear"` and `"quadratic"` algorithms.
+#' @param control List of internal parameters for the gradient algorithms as
+#'   produced by [blvim_gradient_control()].
 #' @inheritParams static_blvim
 #' @returns an object of class `sim`(and `sim_blvim`) for spatial interaction
 #'   model that contains the matrix of flows between the origin and the
@@ -163,7 +200,7 @@ blvim <- function(costs, X, alpha, beta, Z,
                   conv_check = 100,
                   precision = 1e-6,
                   algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
-                  trace = FALSE) {
+                  control = blvim_gradient_control()) {
   algorithm <- match.arg(algorithm)
   check_configuration(costs, X, alpha, beta, Z, kappa, bipartite)
   all_kappa <- rep(1, length(Z))
@@ -175,20 +212,27 @@ blvim <- function(costs, X, alpha, beta, Z,
     all_kappa[1:length(Z)] <- kappa
   }
   if (algorithm == "gradient") {
-    pre <- blv_gradient(costs, X, alpha, beta, Z, all_kappa, precision = precision,
-                        iter_max = iter_max,
-                        c = min(10e-4, 10e-4 * precision/(.Machine$double.eps)^0.5))
+    pre <- blv_gradient(costs, X, alpha, beta, Z, all_kappa,
+      rho_init = control$rho_init,
+      shrink = control$shrink,
+      c = control$sufficient_increase,
+      iter_max = iter_max,
+      ls_iter_max = control$ls_iter_max,
+      precision = precision
+    )
   } else if (algorithm == "gradient_unit") {
     pre <- blv_gradient_unit(costs, X, alpha, beta, Z, all_kappa,
-      precision = precision,
+      rho_init = control$rho_init,
+      shrink = control$shrink,
+      c = control$sufficient_increase,
       iter_max = iter_max,
-      rho_init = 0.5,
-      c = min(10e-4, 10e-4 * precision/(.Machine$double.eps)^0.5),
-      trace = trace
+      ls_iter_max = control$ls_iter_max,
+      precision = precision
     )
   } else {
     pre <- blv(
-      costs, X, alpha, beta, Z, all_kappa, epsilon, iter_max, conv_check, precision,
+      costs, X, alpha, beta, Z, all_kappa, epsilon, iter_max,
+      conv_check, precision,
       quadratic = algorithm == "quadratic", with_kappa
     )
   }

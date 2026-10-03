@@ -19,7 +19,7 @@ blvim(
   conv_check = 100,
   precision = 1e-06,
   algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
-  trace = FALSE
+  control = blvim_gradient_control()
 )
 }
 \arguments{
@@ -61,6 +61,9 @@ algorithms.}
 \item{algorithm}{Character string selecting the algorithm used to compute
 the equilibrium. One of \code{"linear"}, \code{"quadratic"}, \code{"gradient"} or
 \code{"gradient_unit"}. Defaults to \code{"linear"}. Partial matching is supported.}
+
+\item{control}{List of internal parameters for the gradient algorithms as
+produced by \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}.}
 }
 \value{
 an object of class \code{sim}(and \code{sim_blvim}) for spatial interaction
@@ -76,8 +79,8 @@ locations and the initial values of the the attractivenesses of destination
 locations. At convergence, attractivenesses fulfil the balance equations
 \deqn{\forall j,\quad \kappa_j Z_j=\sum_{i=1}^{n}Y_{ij},} where the flows are
 computed according to Wilson's  production constrained entropy maximising
-model. The function implements several algorithms that all aim to reach an
-equilibrium.
+model (\code{\link[=static_blvim]{static_blvim()}}). The function implements several algorithms that all
+aim to reach an equilibrium.
 }
 \details{
 All algorithms are initialised with user supplied attractivenesses and
@@ -123,8 +126,8 @@ Two algorithms of this family are available through the \code{algorithm} paramet
    }
 }
 
-For these algoritms(\code{"linear"} and \code{"quadratic"}), \eqn{\epsilon} is given by
-the \code{epsilon} parameter and should generally be smaller than 1.
+For these algorithms(\code{"linear"} and \code{"quadratic"}), \eqn{\epsilon} is given
+by the \code{epsilon} parameter and should generally be smaller than 1.
 
 Updates are performed until convergence or for a maximum of \code{iter_max}
 iterations. Convergence is checked every \code{conv_check} iterations. The
@@ -142,16 +145,20 @@ where \eqn{\delta} is given by the \code{precision} parameter.
 
 Finding an equilibrium with the BLV  approach is equivalent to looking for a
 maximum of the potential function (see \code{\link[=sim_potential]{sim_potential()}}). The gradient
-descent algorithms use a direct approach of optimising the potential via a
-projected gradient ascent. The \code{"gradient"} algorithm is optimises directly
-the potential while \code{"gradient_unit"} rescales the problem in to work with
-\eqn{U_j} instead of \eqn{Z_j} in such a way that \eqn{sum_{j=1}^p U_j=1}.
-This can accelerate convergence in some settings. Results should be identical
-from both gradient approaches, but they can be different from solutions
-obtained by the \code{"linear"} and \code{"quadratic"} algorithms.
+algorithms use a direct approach of optimising the potential via a projected
+gradient ascent. The \code{"gradient"} algorithm optimises directly the potential
+while \code{"gradient_unit"} rescales the problem in order to work with \eqn{U_j}
+instead of \eqn{Z_j} in such a way that \eqn{\sum_{j=1}^p U_j=1}. This can
+accelerate convergence in some settings. Results should be identical from
+both gradient approaches, but they can be different from solutions obtained
+by the \code{"linear"} and \code{"quadratic"} algorithms.
 
 The \code{epsilon} and \code{conv_check} parameters are not used by the \code{"gradient"}
-algorithm.
+algorithm. Convergence is assessed using the duality gap and the \code{precision}
+parameter. The gradient ascent runs for a maximum of \code{iter_max} iterations.
+Both algorithms use a standard backtracking line search with Armijo stopping
+criterion. Its parameters can be modified using the \code{control} parameter and
+the associated  \code{\link[=blvim_gradient_control]{blvim_gradient_control()}} function.
 }
 }
 \section{Location data}{

@@ -19,6 +19,7 @@ grid_blvim(
   conv_check = 100,
   precision = 1e-06,
   algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
+  control = blvim_gradient_control(),
   progress = FALSE
 )
 }
@@ -61,6 +62,9 @@ algorithms.}
 \item{algorithm}{Character string selecting the algorithm used to compute
 the equilibrium. One of \code{"linear"}, \code{"quadratic"}, \code{"gradient"} or
 \code{"gradient_unit"}. Defaults to \code{"linear"}. Partial matching is supported.}
+
+\item{control}{List of internal parameters for the gradient algorithms as
+produced by \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}.}
 
 \item{progress}{if TRUE, a progress bar is shown during the calculation
 (defaults to FALSE)}

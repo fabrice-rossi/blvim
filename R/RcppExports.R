@@ -5,12 +5,12 @@ blv <- function(costs, X, alpha, beta, Z_init, kappa, epsilon, iter_max, conv_ch
     .Call(`_blvim_blv`, costs, X, alpha, beta, Z_init, kappa, epsilon, iter_max, conv_check, precision, quadratic, use_kappa)
 }
 
-blv_gradient <- function(costs, X, alpha, beta, Z_init, kappa, rho_init = 1.0, shrink = 0.5, c = 1e-4, iter_max = 1000L, ls_iter_max = 50L, precision = 1e-7) {
+blv_gradient <- function(costs, X, alpha, beta, Z_init, kappa, rho_init = 0.75, shrink = 0.5, c = 1e-4, iter_max = 1000L, ls_iter_max = 50L, precision = 1e-7) {
     .Call(`_blvim_blv_gradient`, costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision)
 }
 
-blv_gradient_unit <- function(costs, X, alpha, beta, Z_init, kappa, rho_init = 1.0, shrink = 0.5, c = 1e-4, iter_max = 1000L, ls_iter_max = 50L, precision = 1e-7, trace = FALSE) {
-    .Call(`_blvim_blv_gradient_unit`, costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision, trace)
+blv_gradient_unit <- function(costs, X, alpha, beta, Z_init, kappa, rho_init = 0.75, shrink = 0.5, c = 1e-4, iter_max = 1000L, ls_iter_max = 50L, precision = 1e-7) {
+    .Call(`_blvim_blv_gradient_unit`, costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision)
 }
 
 project_weighted_simplex <- function(y, kappa, sum_kappa_sq, C, tol, max_iter) {

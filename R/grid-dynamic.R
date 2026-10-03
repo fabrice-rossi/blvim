@@ -35,6 +35,7 @@ grid_blvim <- function(costs, X, alphas, betas, Z,
                        conv_check = 100,
                        precision = 1e-6,
                        algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
+                       control = blvim_gradient_control(),
                        progress = FALSE) {
   params <- expand.grid(alpha = alphas, beta = betas)
   all_models <- vector(mode = "list", length = nrow(params))

@@ -56,8 +56,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // blv_gradient_unit
-Rcpp::List blv_gradient_unit(const arma::mat& costs, const arma::vec& X, double alpha, double beta, const arma::vec& Z_init, const arma::vec& kappa, double rho_init, double shrink, double c, int iter_max, int ls_iter_max, double precision, bool trace);
-RcppExport SEXP _blvim_blv_gradient_unit(SEXP costsSEXP, SEXP XSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP Z_initSEXP, SEXP kappaSEXP, SEXP rho_initSEXP, SEXP shrinkSEXP, SEXP cSEXP, SEXP iter_maxSEXP, SEXP ls_iter_maxSEXP, SEXP precisionSEXP, SEXP traceSEXP) {
+Rcpp::List blv_gradient_unit(const arma::mat& costs, const arma::vec& X, double alpha, double beta, const arma::vec& Z_init, const arma::vec& kappa, double rho_init, double shrink, double c, int iter_max, int ls_iter_max, double precision);
+RcppExport SEXP _blvim_blv_gradient_unit(SEXP costsSEXP, SEXP XSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP Z_initSEXP, SEXP kappaSEXP, SEXP rho_initSEXP, SEXP shrinkSEXP, SEXP cSEXP, SEXP iter_maxSEXP, SEXP ls_iter_maxSEXP, SEXP precisionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -73,8 +73,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type iter_max(iter_maxSEXP);
     Rcpp::traits::input_parameter< int >::type ls_iter_max(ls_iter_maxSEXP);
     Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
-    Rcpp::traits::input_parameter< bool >::type trace(traceSEXP);
-    rcpp_result_gen = Rcpp::wrap(blv_gradient_unit(costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision, trace));
+    rcpp_result_gen = Rcpp::wrap(blv_gradient_unit(costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -126,7 +125,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_blvim_blv", (DL_FUNC) &_blvim_blv, 12},
     {"_blvim_blv_gradient", (DL_FUNC) &_blvim_blv_gradient, 12},
-    {"_blvim_blv_gradient_unit", (DL_FUNC) &_blvim_blv_gradient_unit, 13},
+    {"_blvim_blv_gradient_unit", (DL_FUNC) &_blvim_blv_gradient_unit, 12},
     {"_blvim_project_weighted_simplex", (DL_FUNC) &_blvim_project_weighted_simplex, 6},
     {"_blvim_project_simplex", (DL_FUNC) &_blvim_project_simplex, 3},
     {"_blvim_we_oc", (DL_FUNC) &_blvim_we_oc, 5},
