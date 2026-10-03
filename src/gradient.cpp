@@ -29,7 +29,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
                         int iter_max = 1000,
                         int ls_iter_max = 50,  // Max line search steps
                         double precision = 1e-7) {
-  double precision_projection = std::max(precision * 1e-7, 1e-14);
+  double precision_projection = std::max(precision * 1e-3, 1e-10);
   int iter_max_projection = 50;
   std::string status = "maximum iteration reached";
   bool converged = false;
@@ -51,7 +51,8 @@ Rcpp::List blv_gradient(const arma::mat& costs,
   double rho_trial = rho_init;
   bool ls_success;
   // sum_{k=1}^p Z_k^alpha W_{ik}
-  arma::vec A = W * arma::pow(Z, alpha);
+  arma::vec Z_alpha = arma::pow(Z, alpha);
+  arma::vec A = W * Z_alpha;
   arma::vec grad;
   double gap;
   int iter = 0;
@@ -69,6 +70,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
     }
     rho = rho_trial;
     arma::vec Z_new = Z;
+    arma::vec Z_new_alpha = Z_alpha;
 
     // Armijo Backtracking Line Search
     ls_success = false;
@@ -83,7 +85,8 @@ Rcpp::List blv_gradient(const arma::mat& costs,
                                    precision_projection, iter_max_projection);
 
       // Evaluate new objective value
-      arma::vec A_new = W * arma::pow(Z_new, alpha);
+      Z_new_alpha = arma::pow(Z_new, alpha);
+      arma::vec A_new = W * Z_new_alpha;
       feval++;
       arma::vec rel_A_change = (A_new - A) / A;
       if(!rel_A_change.is_finite() || arma::any(rel_A_change <= -1.0)) {
@@ -129,11 +132,13 @@ Rcpp::List blv_gradient(const arma::mat& costs,
       double f_scale = std::max(1.0, std::abs(f_val));
       if(abs(actual_increase) <= f_atol + f_rtol * f_scale) {
         status = "stalled";
-        Z = Z_new;
+        Z = std::move(Z_new);
+        Z_alpha = std::move(Z_new_alpha);
         break;
       }
     }
-    Z = Z_new;
+    Z = std::move(Z_new);
+    Z_alpha = std::move(Z_new_alpha);
   }
   if(!converged) {
     arma::vec grad_final = arma::pow(Z, alpha - 1.0) % (W.t() * (X / A));
@@ -147,7 +152,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
   }
   return Rcpp::List::create(
       Rcpp::Named("Z") = Z,
-      Rcpp::Named("Y") = ((X / A) * arma::pow(Z, alpha).t()) % W,
+      Rcpp::Named("Y") = ((X / A) * Z_alpha.t()) % W,
       Rcpp::Named("iter") = iter, Rcpp::Named("eval") = feval,
       Rcpp::Named("gap") = gap, Rcpp::Named("status") = status,
       Rcpp::Named("converged") = converged);
@@ -177,7 +182,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
                              int iter_max = 1000,
                              int ls_iter_max = 50,  // Max line search steps
                              double precision = 1e-7) {
-  double precision_projection = std::max(precision * 1e-7, 1e-14);
+  double precision_projection = std::max(precision * 1e-3, 1e-10);
   int iter_max_projection = 50;
   std::string status = "maximum iteration reached";
   bool converged = false;
@@ -197,7 +202,8 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
   double rho_max = rho_init;
   double rho_trial = rho_init;
   // sum_{k=1}^p U_k^alpha W_{ik}
-  arma::vec A = W * arma::pow(U, alpha);
+  arma::vec U_alpha = arma::pow(U, alpha);
+  arma::vec A = W * U_alpha;
   arma::vec grad;
   double gap;
   int iter = 0;
@@ -216,6 +222,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
     arma::vec reduced_grad = grad - arma::dot(grad, U);
     rho = rho_trial;
     arma::vec U_new = U;
+    arma::vec U_new_alpha = U_alpha;
 
     // Armijo Backtracking Line Search
     bool ls_success = false;
@@ -224,9 +231,10 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
       // Gradient Ascent Step & Projection
       arma::vec Y = U + rho * reduced_grad;
       U_new = project_simplex(Y, precision_projection, iter_max_projection);
+      U_new_alpha = arma::pow(U_new, alpha);
 
       // Evaluate new A which is sufficient for testing objective improvement
-      arma::vec A_new = W * arma::pow(U_new, alpha);
+      arma::vec A_new = W * U_new_alpha;
       feval++;
 
       arma::vec rel_A_change = (A_new - A) / A;
@@ -273,11 +281,13 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
       double f_scale = std::max(1.0, std::abs(f_val));
       if(abs(actual_increase) <= f_atol + f_rtol * f_scale) {
         status = "stalled";
-        U = U_new;
+        U = std::move(U_new);
+        U_alpha = std::move(U_new_alpha);
         break;
       }
     }
-    U = U_new;
+    U = std::move(U_new);
+    U_alpha = std::move(U_new_alpha);
   }
   if(!converged) {
     arma::vec grad_final = arma::pow(U, alpha - 1.0) % (W.t() * (X / A));
