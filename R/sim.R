@@ -350,6 +350,35 @@ sim_converged.sim <- function(sim, ...) {
   NA
 }
 
+#' Returns a full diagnostic of the algorithm used to build a spatial
+#' interaction model
+#'
+#' Some spatial interaction models are the result of an iterative calculation,
+#' see for instance [blvim()]. This function returns a diagnostic object that
+#' gives details about the behaviour of the iterative algorithm.
+#'
+#' @param sim a spatial interaction model object (an object of class `sim`)
+#' @param ... additional parameters
+#'
+#' @returns a diagnostic object of class deriving from `sim_diagnostic`
+#' @export
+#' @seealso [sim_iterations()], [sim_converged()], [blvim()], [grid_blvim()]
+#' @examples
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+#' sim_diagnostic(model)
+sim_diagnostic <- function(sim, ...) {
+  UseMethod("sim_diagnostic")
+}
+
+#' @export
+sim_diagnostic.sim <- function(sim, ...) {
+  new_sim_diagnostic(...)
+}
+
+
 #' Reports whether the spatial interaction model is bipartite
 #'
 #' The function returns `TRUE` is the spatial interaction model (SIM) is

@@ -11,7 +11,11 @@
   attractivenesses and incoming flows, together with the new function 
   `sim_conversion()`.
 * `blvim()` and `grid_blvim()` now support two new algorithms to find an 
-  equilibrium. Both are instance of a projected gradient ascent approach. 
+  equilibrium. Both are instance of a projected gradient ascent approach.
+* `sim_diagnostic()` gives details about the behaviour of the iterative
+  algorithms for `blvim()` while `blvim_gradient_control()` can be used to set 
+  the parameters of the line search used in the projected gradient ascent
+  methods.
 * `sim_potential()` computes the potential of spatial interaction model using 
   the definition proposed by Osawa, Akamatsu, and Kogure.
 * `sim_fp_jacobian()` computes the Jacobian of the fixed point map with respect

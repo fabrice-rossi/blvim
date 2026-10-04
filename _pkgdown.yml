@@ -8,6 +8,7 @@ reference:
   contents:
   - static_blvim
   - blvim
+  - blvim_gradient_control
   - costs
   - inverse_cost
   - return_to_scale
@@ -27,6 +28,7 @@ reference:
   - production
   - sim_converged
   - sim_iterations
+  - sim_diagnostic
   - sim_potential
   - sim_fp_jacobian
 - title: "Non bipartite models"
