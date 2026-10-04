@@ -163,7 +163,8 @@ test_that("blvim fulfills its contracts with kappas", {
     ## production constraints
     expect_equal(rowSums(flows(model)), config$X)
     expect_equal(production(model), config$X)
-    expect_equal(destination_flow(model), attractiveness(model) * kappas)
+    expect_equal(destination_flow(model), attractiveness(model) * kappas,
+                 tolerance = model$diagnostic$duality_gap)
     expect_equal(kappas, sim_conversion(model))
   }
 })

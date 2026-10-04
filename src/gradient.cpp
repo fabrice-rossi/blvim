@@ -11,7 +11,7 @@ inline void weighted_gap(const arma::vec& grad,
   arma::vec scaled_grad = grad / kappa;
   double lambda = arma::dot(grad, Z) / X_tot;
 
-  gap = arma::max(scaled_grad - lambda);
+  gap = arma::max(scaled_grad) - lambda;
 
   scale = std::max({1.0, std::abs(lambda), arma::max(arma::abs(scaled_grad))});
 }
@@ -29,7 +29,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
                         int iter_max = 1000,
                         int ls_iter_max = 50,  // Max line search steps
                         double precision = 1e-7) {
-  double precision_projection = std::max(precision * 1e-3, 1e-10);
+  double precision_projection = 10 * std::numeric_limits<double>::epsilon();
   int iter_max_projection = 50;
   std::string status = "maximum iteration reached";
   bool converged = false;
@@ -55,7 +55,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
   double rho;
   double rho_max = rho_init;
   double rho_trial = rho_init;
-  bool ls_success;
+  const double rho_growth = 1.25;
   // A_i=sum_{k=1}^p Z_k^alpha W_{ik}
   arma::vec Z_alpha = arma::pow(Z, alpha);
   arma::vec A = W * Z_alpha;
@@ -79,7 +79,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
     arma::vec Z_new_alpha = Z_alpha;
 
     // Armijo Backtracking Line Search
-    ls_success = false;
+    bool ls_success = false;
     double actual_increase;
     double normal_coefficient = arma::dot(grad, kappa) / sum_kappa_sq;
     arma::vec reduced_grad = grad - normal_coefficient * kappa;
@@ -104,7 +104,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
 
       // Armijo condition for maximization
       double expected_increase = c * arma::dot(grad, Z_new - Z);
-      if(expected_increase <= 0) {
+      if(expected_increase < 0) {
         rho *= shrink;
         continue;
       }
@@ -113,7 +113,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
         ls_success = true;
         // prepare for next step
         A = std::move(A_new);
-        rho_trial = std::min(rho_max, rho / shrink);
+        rho_trial = std::min(rho_max, rho * rho_growth);
         break;  // Step size accepted
       }
 
@@ -128,10 +128,10 @@ Rcpp::List blv_gradient(const arma::mat& costs,
     }
     // checking for a stalled process
     const double eps = std::numeric_limits<double>::epsilon();
+    double z_scale = std::max(1.0, arma::norm(Z, 2));
     const double x_atol = 10.0 * eps;
     const double x_rtol = 100.0 * eps;
     double step_norm = arma::norm(Z_new - Z, 2);
-    double z_scale = std::max(1.0, arma::norm(Z, 2));
     bool small_step = step_norm <= x_atol + x_rtol * z_scale;
     if(small_step) {
       status = "stalled";
@@ -165,7 +165,7 @@ inline void simplex_gap(const arma::vec& grad,
                         double& scale) {
   double lambda = arma::dot(grad, U);
 
-  gap = arma::max(grad - lambda);
+  gap = arma::max(grad) - lambda;
 
   scale = std::max({1.0, std::abs(lambda), arma::max(arma::abs(grad))});
 }
@@ -183,7 +183,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
                              int iter_max = 1000,
                              int ls_iter_max = 50,  // Max line search steps
                              double precision = 1e-7) {
-  double precision_projection = std::max(precision * 1e-3, 1e-10);
+  double precision_projection = 10 * std::numeric_limits<double>::epsilon();
   int iter_max_projection = 50;
   std::string status = "maximum iteration reached";
   bool converged = false;
@@ -210,6 +210,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
   double rho;
   double rho_max = rho_init;
   double rho_trial = rho_init;
+  const double rho_growth = 1.25;
   // A_i=sum_{k=1}^p U_k^alpha W_{ik}
   arma::vec U_alpha = arma::pow(U, alpha);
   arma::vec A = W * U_alpha;
@@ -256,7 +257,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
 
       // Armijo condition for maximisation
       double expected_increase = c * arma::dot(grad, U_new - U);
-      if(expected_increase <= 0) {
+      if(expected_increase < 0) {
         rho *= shrink;
         continue;
       }
@@ -265,7 +266,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
         ls_success = true;
         // prepare for next step
         A = std::move(A_new);
-        rho_trial = std::min(rho_max, rho / shrink);
+        rho_trial = std::min(rho_max, rho * rho_growth);
         break;  // Step size accepted
       }
 
