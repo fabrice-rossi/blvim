@@ -8,8 +8,9 @@ parameters.
 - [`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
   : Compute flows between origin and destination locations
 - [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
-  : Compute an equilibrium solution of the Boltzmann-Lotka-Volterra
-  model
+  : Compute an equilibrium solution of the Harris and Wilson model
+- [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
+  : Control parameters for the blvim gradient algorithms
 - [`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md)
   : Extract the cost matrix used to compute this model
 - [`inverse_cost()`](https://fabrice-rossi.github.io/blvim/reference/inverse_cost.md)
@@ -67,6 +68,9 @@ Functions for getting properties of spatial interaction models.
   : Reports whether the spatial interaction model construction converged
 - [`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)
   : Returns the number of iterations used to produce this spatial
+  interaction model
+- [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
+  : Returns a full diagnostic of the algorithm used to build a spatial
   interaction model
 - [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
   : Compute the potential of a spatial interaction model

@@ -84,7 +84,8 @@ returns an object of class <code>sim_list</code> which contains the resulting fl
 <span>  iter_max <span class="op">=</span> <span class="fl">50000</span>,</span>
 <span>  conv_check <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  precision <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>  quadratic <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  algorithm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"linear"</span>, <span class="st">"quadratic"</span>, <span class="st">"gradient"</span>, <span class="st">"gradient_unit"</span><span class="op">)</span>,</span>
+<span>  control <span class="op">=</span> <span class="fu"><a href="blvim_gradient_control.html">blvim_gradient_control</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -110,12 +111,13 @@ returns an object of class <code>sim_list</code> which contains the resulting fl
 
 
 <dt id="arg-z">Z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
-<dd><p>a vector of initial destination attractivenesses</p></dd>
+<dd><p>A vector of initial destination attractivenesses.</p></dd>
 
 
 <dt id="arg-kappa">kappa<a class="anchor" aria-label="anchor" href="#arg-kappa"></a></dt>
-<dd><p>a vector of conversion factors between attractivenesses and
-incoming flows (positive values). Defaults to 1 for all destinations.</p></dd>
+<dd><p>A vector of conversion factors between attractivenesses and
+incoming flows. Values must be positive. Defaults to 1 for all
+destinations.</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
@@ -136,23 +138,32 @@ destination locations (see details)</p></dd>
 
 
 <dt id="arg-epsilon">epsilon<a class="anchor" aria-label="anchor" href="#arg-epsilon"></a></dt>
-<dd><p>the update intensity</p></dd>
+<dd><p>Update intensity used by the <code>"linear"</code> and <code>"quadratic"</code>
+algorithms.</p></dd>
 
 
 <dt id="arg-iter-max">iter_max<a class="anchor" aria-label="anchor" href="#arg-iter-max"></a></dt>
-<dd><p>the maximal number of steps of the BLV dynamic</p></dd>
+<dd><p>Maximum number of iterations.</p></dd>
 
 
 <dt id="arg-conv-check">conv_check<a class="anchor" aria-label="anchor" href="#arg-conv-check"></a></dt>
-<dd><p>number of iterations between to convergence test</p></dd>
+<dd><p>Number of iterations between convergence checks for the
+<code>"linear"</code> and <code>"quadratic"</code> algorithms.</p></dd>
 
 
 <dt id="arg-precision">precision<a class="anchor" aria-label="anchor" href="#arg-precision"></a></dt>
-<dd><p>convergence threshold</p></dd>
+<dd><p>Convergence threshold.</p></dd>
 
 
-<dt id="arg-quadratic">quadratic<a class="anchor" aria-label="anchor" href="#arg-quadratic"></a></dt>
-<dd><p>selects the update rule, see details.</p></dd>
+<dt id="arg-algorithm">algorithm<a class="anchor" aria-label="anchor" href="#arg-algorithm"></a></dt>
+<dd><p>Character string selecting the algorithm used to compute
+the equilibrium. One of <code>"linear"</code>, <code>"quadratic"</code>, <code>"gradient"</code> or
+<code>"gradient_unit"</code>. Defaults to <code>"linear"</code>. Partial matching is supported.</p></dd>
+
+
+<dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
+<dd><p>List of internal parameters for the gradient algorithms as
+produced by <code><a href="blvim_gradient_control.html">blvim_gradient_control()</a></code>.</p></dd>
 
 
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>

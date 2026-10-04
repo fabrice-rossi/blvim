@@ -26,7 +26,8 @@ grid_blvim(
   iter_max = 50000,
   conv_check = 100,
   precision = 1e-06,
-  quadratic = FALSE,
+  algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
+  control = blvim_gradient_control(),
   progress = FALSE
 )
 ```
@@ -51,12 +52,12 @@ grid_blvim(
 
 - Z:
 
-  a vector of initial destination attractivenesses
+  A vector of initial destination attractivenesses.
 
 - kappa:
 
-  a vector of conversion factors between attractivenesses and incoming
-  flows (positive values). Defaults to 1 for all destinations.
+  A vector of conversion factors between attractivenesses and incoming
+  flows. Values must be positive. Defaults to 1 for all destinations.
 
 - bipartite:
 
@@ -78,23 +79,32 @@ grid_blvim(
 
 - epsilon:
 
-  the update intensity
+  Update intensity used by the `"linear"` and `"quadratic"` algorithms.
 
 - iter_max:
 
-  the maximal number of steps of the BLV dynamic
+  Maximum number of iterations.
 
 - conv_check:
 
-  number of iterations between to convergence test
+  Number of iterations between convergence checks for the `"linear"` and
+  `"quadratic"` algorithms.
 
 - precision:
 
-  convergence threshold
+  Convergence threshold.
 
-- quadratic:
+- algorithm:
 
-  selects the update rule, see details.
+  Character string selecting the algorithm used to compute the
+  equilibrium. One of `"linear"`, `"quadratic"`, `"gradient"` or
+  `"gradient_unit"`. Defaults to `"linear"`. Partial matching is
+  supported.
+
+- control:
+
+  List of internal parameters for the gradient algorithms as produced by
+  [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md).
 
 - progress:
 

@@ -2,12 +2,34 @@
 
 ## blvim (development version)
 
+### Breaking changes
+
+- the `quadratic` parameter of
+  [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+  and
+  [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
+  has been replaced by the more flexible `algorithm` parameter.
+
 ### New features
 
 - [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
-  now supports conversion factors between attractivenesses and incoming
+  and
+  [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
+  now support conversion factors between attractivenesses and incoming
   flows, together with the new function
   [`sim_conversion()`](https://fabrice-rossi.github.io/blvim/reference/sim_conversion.md).
+- [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+  and
+  [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
+  now support two new algorithms to find an equilibrium. Both are
+  instance of a projected gradient ascent approach.
+- [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
+  gives details about the behaviour of the iterative algorithms for
+  [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+  while
+  [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
+  can be used to set the parameters of the line search used in the
+  projected gradient ascent methods.
 - [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
   computes the potential of spatial interaction model using the
   definition proposed by Osawa, Akamatsu, and Kogure.

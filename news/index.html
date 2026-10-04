@@ -51,9 +51,17 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="blvim-development-version">blvim (development version)<a class="anchor" aria-label="anchor" href="#blvim-development-version"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>the <code>quadratic</code> parameter of <code><a href="../reference/blvim.html">blvim()</a></code> and <code><a href="../reference/grid_blvim.html">grid_blvim()</a></code> has been replaced by the more flexible <code>algorithm</code> parameter.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li>
-<code><a href="../reference/blvim.html">blvim()</a></code> now supports conversion factors between attractivenesses and incoming flows, together with the new function <code><a href="../reference/sim_conversion.html">sim_conversion()</a></code>.</li>
+<code><a href="../reference/blvim.html">blvim()</a></code> and <code><a href="../reference/grid_blvim.html">grid_blvim()</a></code> now support conversion factors between attractivenesses and incoming flows, together with the new function <code><a href="../reference/sim_conversion.html">sim_conversion()</a></code>.</li>
+<li>
+<code><a href="../reference/blvim.html">blvim()</a></code> and <code><a href="../reference/grid_blvim.html">grid_blvim()</a></code> now support two new algorithms to find an equilibrium. Both are instance of a projected gradient ascent approach.</li>
+<li>
+<code><a href="../reference/sim_diagnostic.html">sim_diagnostic()</a></code> gives details about the behaviour of the iterative algorithms for <code><a href="../reference/blvim.html">blvim()</a></code> while <code><a href="../reference/blvim_gradient_control.html">blvim_gradient_control()</a></code> can be used to set the parameters of the line search used in the projected gradient ascent methods.</li>
 <li>
 <code><a href="../reference/sim_potential.html">sim_potential()</a></code> computes the potential of spatial interaction model using the definition proposed by Osawa, Akamatsu, and Kogure.</li>
 <li>

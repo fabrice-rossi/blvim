@@ -1,12 +1,16 @@
-# Compute an equilibrium solution of the Boltzmann-Lotka-Volterra model
+# Compute an equilibrium solution of the Harris and Wilson model
 
 This function computes flows between origin locations and destination
-locations at an equilibrium solution of A. Wilson's
-Boltzmann-Lotka-Volterra (BLV) interaction model. The BLV dynamic model
-is initialised with the production constraints at the origin locations
-and the initial values of the the attractiveness of destination
-locations. Iterations update the attractivenesses according the received
-flows.
+locations at an equilibrium solution of Harris and Wilson interaction
+model. The model is initialised with the production constraints at the
+origin locations and the initial values of the the attractivenesses of
+destination locations. At convergence, attractivenesses fulfil the
+balance equations \$\$\forall j,\quad \kappa_j
+Z_j=\sum\_{i=1}^{n}Y\_{ij},\$\$ where the flows are computed according
+to Wilson's production constrained entropy maximising model
+([`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)).
+The function implements several algorithms that all aim to reach an
+equilibrium.
 
 ## Usage
 
@@ -25,7 +29,8 @@ blvim(
   iter_max = 50000,
   conv_check = 100,
   precision = 1e-06,
-  quadratic = FALSE
+  algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
+  control = blvim_gradient_control()
 )
 ```
 
@@ -49,12 +54,12 @@ blvim(
 
 - Z:
 
-  a vector of initial destination attractivenesses
+  A vector of initial destination attractivenesses.
 
 - kappa:
 
-  a vector of conversion factors between attractivenesses and incoming
-  flows (positive values). Defaults to 1 for all destinations.
+  A vector of conversion factors between attractivenesses and incoming
+  flows. Values must be positive. Defaults to 1 for all destinations.
 
 - bipartite:
 
@@ -76,23 +81,32 @@ blvim(
 
 - epsilon:
 
-  the update intensity
+  Update intensity used by the `"linear"` and `"quadratic"` algorithms.
 
 - iter_max:
 
-  the maximal number of steps of the BLV dynamic
+  Maximum number of iterations.
 
 - conv_check:
 
-  number of iterations between to convergence test
+  Number of iterations between convergence checks for the `"linear"` and
+  `"quadratic"` algorithms.
 
 - precision:
 
-  convergence threshold
+  Convergence threshold.
 
-- quadratic:
+- algorithm:
 
-  selects the update rule, see details.
+  Character string selecting the algorithm used to compute the
+  equilibrium. One of `"linear"`, `"quadratic"`, `"gradient"` or
+  `"gradient_unit"`. Defaults to `"linear"`. Partial matching is
+  supported.
+
+- control:
+
+  List of internal parameters for the gradient algorithms as produced by
+  [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md).
 
 ## Value
 
@@ -102,6 +116,13 @@ locations as well as the final attractivenesses computed by the model.
 
 ## Details
 
+All algorithms are initialised with user supplied attractivenesses and
+proceed iteratively by updating them until convergence. Two algorithms
+are instances of A. Wilson's Boltzmann-Lotka-Volterra (BLV) interaction
+model, while the other two algorithms are based on gradient ascent.
+
+### Boltzmann-Lotka-Volterra (BLV) iterations
+
 In a step of the BLV model, flows are computed according to the
 production constrained entropy maximising model proposed by A. Wilson
 and implemented in
@@ -110,30 +131,58 @@ Then the flows received at a destination are computed as follows
 
 \$\$\forall j,\quad D_j=\sum\_{i=1}^{n}Y\_{ij},\$\$
 
-for destination \\j\\. This enables updating the attractivenesses by
-making them closer to the received flows, i.e. trying to reduce
+for destination \\j\\. This enables the attractivenesses to be updated
+by making them closer to the received flows, i.e. by trying to reduce
 \\\|D_j-\kappa_j Z_j\|\\, where \\\kappa_j\\ is a conversion factor
 between the attractiveness and the destination flow.
 
-A. Wilson and co-authors proposed two different update strategies:
+Two algorithms of this family are available through the `algorithm`
+parameter:
 
-1.  The original model proposed in Harris & Wilson (1978) updates the
-    \\Z_j\\ as follows \$\$Z_j^{t+1} = Z_j^{t} + \epsilon
-    \left(\frac{D^{t}\_j}{\kappa_j}-Z^{t}\_j\right)\$\$
+1.  `"linear"` uses the original update rule proposed in Harris & Wilson
+    (1978):
 
-2.  In Wilson (2008), the update is given by \$\$Z_j^{t+1} = Z_j^{t} +
-    \epsilon \left(\frac{D^{t}\_j}{\kappa_j}-Z^{t}\_j\right)Z^{t}\_j\$\$
+    \$\$ Z_j^{t+1} = Z_j^t + \epsilon \left( \frac{D_j^t}{\kappa_j} -
+    Z_j^t \right). \$\$
 
-In both cases, \\\epsilon\\ is given by the `epsilon` parameter. It
-should be smaller than 1. The first update is used when the `quadratic`
-parameter is `FALSE` which is the default value. The second update is
-used when `quadratic` is `TRUE`.
+2.  `"quadratic"` uses the update rule proposed in Wilson (2008):
+
+    \$\$ Z_j^{t+1} = Z_j^t + \epsilon \left( \frac{D_j^t}{\kappa_j} -
+    Z_j^t \right) Z_j^t. \$\$
+
+For these algorithms(`"linear"` and `"quadratic"`), \\\epsilon\\ is
+given by the `epsilon` parameter and should generally be smaller than 1.
 
 Updates are performed until convergence or for a maximum of `iter_max`
 iterations. Convergence is checked every `conv_check` iterations. The
-algorithm is considered to have converged if \$\$\\Z^{t+1}-Z^t\\\<\delta
-(\\Z^{t+1}\\+\delta),\$\$ where \\\delta\\ is given by the `precision`
-parameter.
+algorithm is considered to have converged if
+
+\$\$ \\Z^{t+1}-Z^t\\ \< \delta \left(\\Z^{t+1}\\+\delta\right), \$\$
+
+where \\\delta\\ is given by the `precision` parameter.
+
+### Gradient algorithms
+
+Finding an equilibrium with the BLV approach is equivalent to looking
+for a maximum of the potential function (see
+[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)).
+The gradient algorithms use a direct approach of optimising the
+potential via a projected gradient ascent. The `"gradient"` algorithm
+optimises directly the potential while `"gradient_unit"` rescales the
+problem in order to work with \\U_j\\ instead of \\Z_j\\ in such a way
+that \\\sum\_{j=1}^p U_j=1\\. This can accelerate convergence in some
+settings. Results should be identical from both gradient approaches, but
+they can be different from solutions obtained by the `"linear"` and
+`"quadratic"` algorithms.
+
+The `epsilon` and `conv_check` parameters are not used by the
+`"gradient"` algorithm. Convergence is assessed using the duality gap
+and the `precision` parameter. The gradient ascent runs for a maximum of
+`iter_max` iterations. Both algorithms use a standard backtracking line
+search with Armijo stopping criterion. Its parameters can be modified
+using the `control` parameter and the associated
+[`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
+function.
 
 ## Location data
 
@@ -196,21 +245,53 @@ Soc. Interface.5865-871
 [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 for systematic exploration of parameter influence,
 [`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
-for the static model.
+for the static model,
+[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
+for the potential function.
 
 ## Examples
 
 ``` r
-distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+distances <- french_cities_distances[1:10, 1:10] / 1000
 production <- rep(1, 10)
 attractiveness <- log(french_cities$area[1:10])
-## rescale to production
+
+# Rescale attractivenesses to total production
 attractiveness <- attractiveness / sum(attractiveness) * sum(production)
-flows <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
+
+# Original Harris-Wilson update rule
+flows <- blvim(
+  distances,
+  production,
+  1.5,
+  1 / 250,
+  attractiveness,
+  algorithm = "linear"
+)
 flows
 #> Spatial interaction model with 10 origin locations and 10 destination locations
 #> • Model: Wilson's production constrained
 #> • Parameters: return to scale (alpha) = 1.5 and inverse cost scale (beta) =
 #> 0.004
 #> ℹ The BLV model converged after 3500 iterations.
+
+# Wilson's quadratic update rule
+quadratic_flows <- blvim(
+  distances,
+  production,
+  1.5,
+  1 / 250,
+  attractiveness,
+  algorithm = "quadratic"
+)
+
+# Gradient-based algorithm
+gradient_flows <- blvim(
+  distances,
+  production,
+  1.5,
+  1 / 250,
+  attractiveness,
+  algorithm = "gradient"
+)
 ```
