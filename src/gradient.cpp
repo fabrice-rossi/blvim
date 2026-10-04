@@ -127,21 +127,17 @@ Rcpp::List blv_gradient(const arma::mat& costs,
       break;
     }
     // checking for a stalled process
-    double x_atol = 1e-15;
-    double f_atol = 1e-15;
-    double f_rtol = 1e-13;
+    const double eps = std::numeric_limits<double>::epsilon();
+    const double x_atol = 10.0 * eps;
+    const double x_rtol = 100.0 * eps;
     double step_norm = arma::norm(Z_new - Z, 2);
-    bool small_step = step_norm <= x_atol;
+    double z_scale = std::max(1.0, arma::norm(Z, 2));
+    bool small_step = step_norm <= x_atol + x_rtol * z_scale;
     if(small_step) {
-      // A has been updated
-      double f_val = arma::sum(X % log(A)) / alpha;
-      double f_scale = std::max(1.0, std::abs(f_val));
-      if(abs(actual_increase) <= f_atol + f_rtol * f_scale) {
-        status = "stalled";
-        Z = std::move(Z_new);
-        Z_alpha = std::move(Z_new_alpha);
-        break;
-      }
+      status = "stalled";
+      Z = std::move(Z_new);
+      Z_alpha = std::move(Z_new_alpha);
+      break;
     }
     Z = std::move(Z_new);
     Z_alpha = std::move(Z_new_alpha);
@@ -283,21 +279,17 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
       break;
     }
     // checking for a stalled process
-    double x_atol = 1e-15;
-    double f_atol = 1e-15;
-    double f_rtol = 1e-13;
+    const double eps = std::numeric_limits<double>::epsilon();
+    const double x_atol = 10.0 * eps;
+    const double x_rtol = 100.0 * eps;
     double step_norm = arma::norm(U_new - U, 2);
-    bool small_step = step_norm <= x_atol;
+    double u_scale = std::max(1.0, arma::norm(U, 2));
+    bool small_step = step_norm <= x_atol + x_rtol * u_scale;
     if(small_step) {
-      // A has been updated
-      double f_val = arma::sum(X % log(A)) / alpha;
-      double f_scale = std::max(1.0, std::abs(f_val));
-      if(abs(actual_increase) <= f_atol + f_rtol * f_scale) {
-        status = "stalled";
-        U = std::move(U_new);
-        U_alpha = std::move(U_new_alpha);
-        break;
-      }
+      status = "stalled";
+      U = std::move(U_new);
+      U_alpha = std::move(U_new_alpha);
+      break;
     }
     U = std::move(U_new);
     U_alpha = std::move(U_new_alpha);
