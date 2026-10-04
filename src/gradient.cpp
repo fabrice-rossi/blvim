@@ -56,6 +56,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
   double rho;
   double rho_max = rho_init;
   double rho_trial = rho_init;
+  int accepted_ls_iter = -1;
   const double rho_growth = 1.25;
   // A_i=sum_{k=1}^p Z_k^alpha W_{ik}
   arma::vec Z_alpha = arma::pow(Z, alpha);
@@ -84,7 +85,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
     bool projected_stall = false;
     double z_scale = std::max(1.0, arma::norm(Z, 2));
     const double step_tol =
-        std::max(100.0 * eps * z_scale, precision_projection);
+        std::max(10.0 * eps * z_scale, precision_projection);
     double actual_increase;
     double normal_coefficient = arma::dot(grad, kappa) / sum_kappa_sq;
     arma::vec reduced_grad = grad - normal_coefficient * kappa;
@@ -122,9 +123,9 @@ Rcpp::List blv_gradient(const arma::mat& costs,
       // Armijo condition for maximization
       if(actual_increase >= expected_increase) {
         ls_success = true;
+        accepted_ls_iter = ls_iter;
         // prepare for next step
         A = std::move(A_new);
-        rho_trial = std::min(rho_max, rho * rho_growth);
         break;  // Step size accepted
       }
 
@@ -139,6 +140,11 @@ Rcpp::List blv_gradient(const arma::mat& costs,
       // we keep the current Z
       status = "line search failed";
       break;
+    }
+    if(accepted_ls_iter == 0) {
+      rho_trial = std::min(rho_max, rho_growth * rho);
+    } else {
+      rho_trial = rho;
     }
     Z = std::move(Z_new);
     Z_alpha = std::move(Z_new_alpha);
@@ -212,6 +218,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
   double rho;
   double rho_max = rho_init;
   double rho_trial = rho_init;
+  int accepted_ls_iter = -1;
   const double rho_growth = 1.25;
   // A_i=sum_{k=1}^p U_k^alpha W_{ik}
   arma::vec U_alpha = arma::pow(U, alpha);
@@ -242,7 +249,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
     double actual_increase;
     double u_scale = std::max(1.0, arma::norm(U, 2));
     const double step_tol =
-        std::max(100.0 * eps * u_scale, precision_projection);
+        std::max(10.0 * eps * u_scale, precision_projection);
     for(int ls_iter = 0; ls_iter < ls_iter_max; ++ls_iter) {
       // Gradient Ascent Step & Projection
       arma::vec Y = U + rho * reduced_grad;
@@ -277,7 +284,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
         ls_success = true;
         // prepare for next step
         A = std::move(A_new);
-        rho_trial = std::min(rho_max, rho * rho_growth);
+        accepted_ls_iter = ls_iter;
         break;  // Step size accepted
       }
 
@@ -293,6 +300,11 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
       // we keep the current U
       status = "line search failed";
       break;
+    }
+    if(accepted_ls_iter == 0) {
+      rho_trial = std::min(rho_max, rho_growth * rho);
+    } else {
+      rho_trial = rho;
     }
     U = std::move(U_new);
     U_alpha = std::move(U_new_alpha);

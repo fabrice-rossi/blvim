@@ -151,7 +151,7 @@ test_that("blvim fulfills its contracts with kappas", {
     kappas <- runif(length(config$Z), min = 0.5, max = 2)
     model <- blvim(config$costs, config$X, 1.5, 200, config$Z,
       kappa = kappas,
-      precision = (.Machine$double.eps^0.5),
+      precision = 1e-7,
       algorithm = "gradient",
     )
     expect_equal(dim(flows(model)), c(length(config$X), length(config$Z)))
@@ -175,7 +175,7 @@ test_that("blvim fulfills its contracts with kappas", {
     kappas <- runif(length(config$Z), min = 0.5, max = 2)
     model <- blvim(config$costs, config$X, 1.5, 200, config$Z,
       kappa = kappas,
-      precision = (.Machine$double.eps^0.5),
+      precision = 1e-7,
       algorithm = "gradient_unit",
     )
     expect_equal(dim(flows(model)), c(length(config$X), length(config$Z)))

@@ -237,7 +237,7 @@ blvim <- function(costs, X, alpha, beta, Z,
       quadratic = algorithm == "quadratic", with_kappa
     )
   }
-  if(algorithm %in% c("gradient", "gradient_unit")) {
+  if (algorithm %in% c("gradient", "gradient_unit")) {
     convergence_diagnostic$status <- pre$status
     convergence_diagnostic$duality_gap <- pre$gap
     convergence_diagnostic$eval <- pre$eval
