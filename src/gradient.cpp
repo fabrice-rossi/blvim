@@ -42,21 +42,27 @@ Rcpp::List blv_gradient(const arma::mat& costs,
   arma::vec Z =
       project_weighted_simplex(Z_init, kappa, sum_kappa_sq, X_tot,
                                precision_projection, iter_max_projection);
-
-  arma::mat W = arma::exp(-beta * costs);
+  // we stabilize the cost calculation to avoid underflows
+  // multiplying each row of W by a constant value cancels out because
+  // of the normalisation in most quantities associated to the production
+  // constraints
+  arma::vec row_min = arma::min(costs, 1);
+  arma::mat shifted_costs = costs;
+  shifted_costs.each_col() -= row_min;
+  arma::mat W = arma::exp(-beta * shifted_costs);
   // rescale rho_init to adapt to X_tot
   rho_init *= X_tot * X_tot;
   double rho;
   double rho_max = rho_init;
   double rho_trial = rho_init;
   bool ls_success;
-  // sum_{k=1}^p Z_k^alpha W_{ik}
+  // A_i=sum_{k=1}^p Z_k^alpha W_{ik}
   arma::vec Z_alpha = arma::pow(Z, alpha);
   arma::vec A = W * Z_alpha;
   arma::vec grad;
   double gap;
   int iter = 0;
-  int feval = 1;  // number of evaluations of the potential
+  int feval = 1;  // number of evaluations of A
   for(; iter < iter_max; ++iter) {
     // gradient
     grad = arma::pow(Z, alpha - 1.0) % (W.t() * (X / A));
@@ -151,8 +157,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
     gap = gap_final;
   }
   return Rcpp::List::create(
-      Rcpp::Named("Z") = Z,
-      Rcpp::Named("Y") = ((X / A) * Z_alpha.t()) % W,
+      Rcpp::Named("Z") = Z, Rcpp::Named("Y") = ((X / A) * Z_alpha.t()) % W,
       Rcpp::Named("iter") = iter, Rcpp::Named("eval") = feval,
       Rcpp::Named("gap") = gap, Rcpp::Named("status") = status,
       Rcpp::Named("converged") = converged);
@@ -195,19 +200,27 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
   // make sure U is in the simplex !
   U = project_simplex(U, precision_projection, iter_max_projection);
 
-  arma::mat preW = arma::exp(-beta * costs);
   // cost rescaling (transformed problem)
-  arma::mat W = preW.each_row() / arma::pow(kappa, alpha).t();
+  // we stabilize the cost calculation to avoid underflows
+  // multiplying each row of W by a constant value cancels out because
+  // of the normalisation in most quantities associated to the production
+  // constraints
+  arma::mat logW = -beta * costs;
+  logW.each_row() -= (alpha * arma::log(kappa)).t();
+  arma::vec row_max = arma::max(logW, 1);
+  logW.each_col() -= row_max;
+  arma::mat W = arma::exp(logW);
+
   double rho;
   double rho_max = rho_init;
   double rho_trial = rho_init;
-  // sum_{k=1}^p U_k^alpha W_{ik}
+  // A_i=sum_{k=1}^p U_k^alpha W_{ik}
   arma::vec U_alpha = arma::pow(U, alpha);
   arma::vec A = W * U_alpha;
   arma::vec grad;
   double gap;
   int iter = 0;
-  int feval = 1;  // number of evaluations of the potential
+  int feval = 1;  // number of evaluations of A
   for(; iter < iter_max; ++iter) {
     grad = arma::pow(U, alpha - 1.0) % (W.t() * (X / A));
     // duality gap
@@ -302,10 +315,14 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
   // convert back
   arma::vec Z = U / kappa;
   Z *= X_tot;
-  A = preW * arma::pow(Z, alpha);
+  arma::vec row_min = arma::min(costs, 1);
+  arma::mat shifted_costs = costs;
+  shifted_costs.each_col() -= row_min;
+  arma::mat preW = arma::exp(-beta * shifted_costs);
+  arma::vec Z_alpha = arma::pow(Z, alpha);
+  A = preW * Z_alpha;
   return Rcpp::List::create(
-      Rcpp::Named("Z") = Z,
-      Rcpp::Named("Y") = ((X / A) * arma::pow(Z, alpha).t()) % preW,
+      Rcpp::Named("Z") = Z, Rcpp::Named("Y") = ((X / A) * Z_alpha.t()) % preW,
       Rcpp::Named("iter") = iter, Rcpp::Named("eval") = feval,
       Rcpp::Named("gap") = gap, Rcpp::Named("status") = status,
       Rcpp::Named("converged") = converged);
