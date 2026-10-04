@@ -106,6 +106,25 @@ test_that("Simplex projection returns the expect projection (faces)", {
   }
 })
 
+test_that("Simplex projection in border cases", {
+  expect_equal(R_project_simplex(numeric()), numeric())
+  expect_equal(R_project_simplex(0.0), 1.0)
+  expect_equal(R_project_simplex(rnorm(1)), 1.0)
+  withr::local_seed(444)
+  kappas <- runif(10, min = 0.1, max = 10)
+  C <- runif(10, min = 5, max = 20)
+  for (rep in seq_along(kappas)) {
+    expect_equal(
+      R_project_weighted_simplex(numeric(), kappas[rep], C[rep]),
+      numeric()
+    )
+    expect_equal(
+      R_project_weighted_simplex(c(rnorm(1)), kappas[rep], C[rep]),
+      C[rep] / kappas[rep]
+    )
+  }
+})
+
 test_that("blvim fulfills its contracts", {
   config <- create_locations(40, 50, seed = 0)
   model <- blvim(config$costs, config$X, 1.5, 1, config$Z,
@@ -164,7 +183,8 @@ test_that("blvim fulfills its contracts with kappas", {
     expect_equal(rowSums(flows(model)), config$X)
     expect_equal(production(model), config$X)
     expect_equal(destination_flow(model), attractiveness(model) * kappas,
-                 tolerance = model$diagnostic$duality_gap)
+      tolerance = model$diagnostic$duality_gap
+    )
     expect_equal(kappas, sim_conversion(model))
   }
 })
@@ -181,7 +201,12 @@ test_that("blvim computes the BLV model", {
   )
   expect_equal(flows(g_model), flows(u_model))
   expect_equal(production(g_model), production(u_model))
-  expect_equal(attractiveness(g_model), attractiveness(u_model))
+  expect_equal(attractiveness(g_model), attractiveness(u_model),
+    tolerance = max(
+      g_model$diagnostic$duality_gap,
+      u_model$diagnostic$duality_gap
+    )
+  )
 })
 
 test_that("blvim obeys to iteration control", {

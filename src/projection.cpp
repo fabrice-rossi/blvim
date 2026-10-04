@@ -9,8 +9,8 @@ inline void eval_g_and_gprime(double lambda,
                               double& g_prime) {
   g = -C;
   g_prime = 0.0;
-  size_t p = y.n_elem;
-  for(size_t i = 0; i < p; ++i) {
+  arma::uword p = y.n_elem;
+  for(arma::uword i = 0; i < p; ++i) {
     double val = y[i] - lambda * kappa[i];
     if(val > 0.0) {
       g += kappa[i] * val;
@@ -27,12 +27,16 @@ arma::vec project_weighted_simplex(const arma::vec& y,
                                    double C,
                                    double tol,
                                    int max_iter) {
-  size_t p = y.n_elem;
+  arma::uword p = y.n_elem;
+  if(p == 0)
+    return arma::vec();
+  if(p == 1)
+    return arma::vec({C/kappa[0]});
 
   // 1. Analytical bounds calculation in O(p)
   double sum_kappa_y = arma::dot(kappa, y);
   double max_ratio = y[0] / kappa[0];
-  for(size_t i = 1; i < p; ++i) {
+  for(arma::uword i = 1; i < p; ++i) {
     double ratio = y[i] / kappa[i];
     if(ratio > max_ratio)
       max_ratio = ratio;
@@ -76,7 +80,7 @@ arma::vec project_weighted_simplex(const arma::vec& y,
   // Construct final Z
   // No memory allocation
   arma::vec z(p);
-  for(size_t i = 0; i < p; ++i) {
+  for(arma::uword i = 0; i < p; ++i) {
     z[i] = std::max(y[i] - lambda * kappa[i], 0.0);
   }
   return z;
