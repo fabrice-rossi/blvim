@@ -29,7 +29,8 @@ Rcpp::List blv_gradient(const arma::mat& costs,
                         int iter_max = 1000,
                         int ls_iter_max = 50,  // Max line search steps
                         double precision = 1e-7) {
-  double precision_projection = 10 * std::numeric_limits<double>::epsilon();
+  const double eps = std::numeric_limits<double>::epsilon();
+  double precision_projection = 10 * eps;
   int iter_max_projection = 50;
   std::string status = "maximum iteration reached";
   bool converged = false;
@@ -80,6 +81,10 @@ Rcpp::List blv_gradient(const arma::mat& costs,
 
     // Armijo Backtracking Line Search
     bool ls_success = false;
+    bool projected_stall = false;
+    double z_scale = std::max(1.0, arma::norm(Z, 2));
+    const double step_tol =
+        std::max(100.0 * eps * z_scale, precision_projection);
     double actual_increase;
     double normal_coefficient = arma::dot(grad, kappa) / sum_kappa_sq;
     arma::vec reduced_grad = grad - normal_coefficient * kappa;
@@ -89,7 +94,19 @@ Rcpp::List blv_gradient(const arma::mat& costs,
       Z_new =
           project_weighted_simplex(Y, kappa, sum_kappa_sq, X_tot,
                                    precision_projection, iter_max_projection);
-
+      // check for stalled process
+      arma::vec step = Z_new - Z;
+      double step_norm = arma::norm(step, 2);
+      if(step_norm <= step_tol) {
+        projected_stall = true;
+        break;
+      }
+      // check for possible increase
+      double expected_increase = c * arma::dot(grad, step);
+      if(expected_increase <= 0) {
+        rho *= shrink;
+        continue;
+      }
       // Evaluate new objective value
       Z_new_alpha = arma::pow(Z_new, alpha);
       arma::vec A_new = W * Z_new_alpha;
@@ -103,12 +120,6 @@ Rcpp::List blv_gradient(const arma::mat& costs,
       actual_increase = arma::sum(X % arma::log1p(rel_A_change)) / alpha;
 
       // Armijo condition for maximization
-      double expected_increase = c * arma::dot(grad, Z_new - Z);
-      if(expected_increase < 0) {
-        rho *= shrink;
-        continue;
-      }
-
       if(actual_increase >= expected_increase) {
         ls_success = true;
         // prepare for next step
@@ -120,23 +131,13 @@ Rcpp::List blv_gradient(const arma::mat& costs,
       // Backtrack
       rho *= shrink;
     }
-
+    if(projected_stall) {
+      status = "stalled";
+      break;
+    }
     if(!ls_success) {
       // we keep the current Z
       status = "line search failed";
-      break;
-    }
-    // checking for a stalled process
-    const double eps = std::numeric_limits<double>::epsilon();
-    double z_scale = std::max(1.0, arma::norm(Z, 2));
-    const double x_atol = 10.0 * eps;
-    const double x_rtol = 100.0 * eps;
-    double step_norm = arma::norm(Z_new - Z, 2);
-    bool small_step = step_norm <= x_atol + x_rtol * z_scale;
-    if(small_step) {
-      status = "stalled";
-      Z = std::move(Z_new);
-      Z_alpha = std::move(Z_new_alpha);
       break;
     }
     Z = std::move(Z_new);
@@ -183,7 +184,8 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
                              int iter_max = 1000,
                              int ls_iter_max = 50,  // Max line search steps
                              double precision = 1e-7) {
-  double precision_projection = 10 * std::numeric_limits<double>::epsilon();
+  const double eps = std::numeric_limits<double>::epsilon();
+  double precision_projection = 10 * eps;
   int iter_max_projection = 50;
   std::string status = "maximum iteration reached";
   bool converged = false;
@@ -236,17 +238,32 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
 
     // Armijo Backtracking Line Search
     bool ls_success = false;
+    bool projected_stall = false;
     double actual_increase;
+    double u_scale = std::max(1.0, arma::norm(U, 2));
+    const double step_tol =
+        std::max(100.0 * eps * u_scale, precision_projection);
     for(int ls_iter = 0; ls_iter < ls_iter_max; ++ls_iter) {
       // Gradient Ascent Step & Projection
       arma::vec Y = U + rho * reduced_grad;
       U_new = project_simplex(Y, precision_projection, iter_max_projection);
+      // check for stalled process
+      arma::vec step = U_new - U;
+      double step_norm = arma::norm(step, 2);
+      if(step_norm <= step_tol) {
+        projected_stall = true;
+        break;
+      }
+      // check for possible increase
+      double expected_increase = c * arma::dot(grad, step);
+      if(expected_increase <= 0) {
+        rho *= shrink;
+        continue;
+      }
       U_new_alpha = arma::pow(U_new, alpha);
-
       // Evaluate new A which is sufficient for testing objective improvement
       arma::vec A_new = W * U_new_alpha;
       feval++;
-
       arma::vec rel_A_change = (A_new - A) / A;
       if(!rel_A_change.is_finite() || arma::any(rel_A_change <= -1.0)) {
         rho *= shrink;
@@ -256,12 +273,6 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
       actual_increase = arma::sum(X % arma::log1p(rel_A_change)) / alpha;
 
       // Armijo condition for maximisation
-      double expected_increase = c * arma::dot(grad, U_new - U);
-      if(expected_increase < 0) {
-        rho *= shrink;
-        continue;
-      }
-
       if(actual_increase >= expected_increase) {
         ls_success = true;
         // prepare for next step
@@ -274,22 +285,13 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
       rho *= shrink;
     }
 
+    if(projected_stall) {
+      status = "stalled";
+      break;
+    }
     if(!ls_success) {
       // we keep the current U
       status = "line search failed";
-      break;
-    }
-    // checking for a stalled process
-    const double eps = std::numeric_limits<double>::epsilon();
-    const double x_atol = 10.0 * eps;
-    const double x_rtol = 100.0 * eps;
-    double step_norm = arma::norm(U_new - U, 2);
-    double u_scale = std::max(1.0, arma::norm(U, 2));
-    bool small_step = step_norm <= x_atol + x_rtol * u_scale;
-    if(small_step) {
-      status = "stalled";
-      U = std::move(U_new);
-      U_alpha = std::move(U_new_alpha);
       break;
     }
     U = std::move(U_new);
