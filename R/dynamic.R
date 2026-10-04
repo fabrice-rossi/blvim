@@ -17,7 +17,7 @@
 #' @export
 #' @examples
 #' blvim_gradient_control(0.5, 0.7, 1e-4, 25)
-blvim_gradient_control <- function(rho_init = 0.75,
+blvim_gradient_control <- function(rho_init = 0.5,
                                    shrink = 0.5,
                                    sufficient_increase = 1e-5,
                                    ls_iter_max = 50) {

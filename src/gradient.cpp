@@ -23,7 +23,7 @@ Rcpp::List blv_gradient(const arma::mat& costs,
                         double beta,
                         const arma::vec& Z_init,
                         const arma::vec& kappa,
-                        double rho_init = 0.75,
+                        double rho_init = 0.5,
                         double shrink = 0.5,  // Shrinkage factor
                         double c = 1e-4,      // Sufficient increase param
                         int iter_max = 1000,
@@ -184,7 +184,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
                              double beta,
                              const arma::vec& Z_init,
                              const arma::vec& kappa,
-                             double rho_init = 0.75,
+                             double rho_init = 0.5,
                              double shrink = 0.5,  // Shrinkage factor
                              double c = 1e-4,      // Sufficient increase param
                              int iter_max = 1000,

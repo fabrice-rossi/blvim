@@ -5,7 +5,7 @@
 \title{Control parameters for the blvim gradient algorithms}
 \usage{
 blvim_gradient_control(
-  rho_init = 0.75,
+  rho_init = 0.5,
   shrink = 0.5,
   sufficient_increase = 1e-05,
   ls_iter_max = 50
