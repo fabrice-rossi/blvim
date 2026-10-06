@@ -13,6 +13,9 @@ test_that("blvim detects errors", {
   ## wrong kappa
   expect_error(blvim(config$costs, config$X, 1.5, 1, config$Z, -2))
   expect_error(blvim(config$costs, config$X, 1.5, 1, config$Z, "A"))
+  ## wrong X
+  expect_error(blvim(config$costs, c(1, 2, 3 - 4), 1.5, 1, config$Z))
+  expect_error(blvim(config$costs, c(1, 2, Inf, 1), 1.5, 1, config$Z))
 })
 
 test_that("blvim fulfills its contracts", {

@@ -43,26 +43,34 @@ check_configuration <- function(costs, X, alpha, beta, Z, kappa, bipartite,
       call = call
     )
   }
-  if (!is.numeric(alpha) || length(alpha) != 1 || alpha <= 0) {
+  if (!is.numeric(alpha) || length(alpha) != 1 || is.na(alpha) || !is.finite(alpha) || alpha <= 0) {
     cli::cli_abort(
-      c("{.arg alpha} must be a positive number",
+      c("{.arg alpha} must be a finite positive number",
         "x" = "{.arg alpha} is {.val {head(alpha)}}"
       ),
       call = call
     )
   }
-  if (!is.numeric(beta) || length(beta) != 1 || beta <= 0) {
+  if (!is.numeric(beta) || length(beta) != 1 || is.na(beta) || !is.finite(beta) || beta <= 0) {
     cli::cli_abort(
-      c("{.arg beta} must be a positive number",
+      c("{.arg beta} must be a finite positive number",
         "x" = "{.arg beta} is {.val {head(beta)}}"
       ),
       call = call
     )
   }
-  if (!is.numeric(kappa) || any(kappa <= 0)) {
+  if (!is.numeric(kappa) || anyNA(kappa) || any(!is.finite(kappa)) || any(kappa <= 0)) {
     cli::cli_abort(
-      c("{.arg kappa} must be a vector of positive number",
+      c("{.arg kappa} must be a vector of finite positive numbers",
         "x" = "{.arg kappa} is {.val {head(kappa)}}"
+      ),
+      call = call
+    )
+  }
+  if (!is.numeric(X) || anyNA(X) || any(!is.finite(X)) || any(X <= 0)) {
+    cli::cli_abort(
+      c("{.arg X} must be a vector of finite positive numbers",
+        "x" = "{.arg X} is {.val {head(X)}}"
       ),
       call = call
     )
