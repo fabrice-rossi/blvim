@@ -106,6 +106,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sample_weighted_simplex_low_codim_cpp
+Rcpp::List sample_weighted_simplex_low_codim_cpp(const arma::vec& kappa, double C, int n, int n_face_points, int n_selected_faces, int points_per_face, int max_partial_attempts);
+RcppExport SEXP _blvim_sample_weighted_simplex_low_codim_cpp(SEXP kappaSEXP, SEXP CSEXP, SEXP nSEXP, SEXP n_face_pointsSEXP, SEXP n_selected_facesSEXP, SEXP points_per_faceSEXP, SEXP max_partial_attemptsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< double >::type C(CSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type n_face_points(n_face_pointsSEXP);
+    Rcpp::traits::input_parameter< int >::type n_selected_faces(n_selected_facesSEXP);
+    Rcpp::traits::input_parameter< int >::type points_per_face(points_per_faceSEXP);
+    Rcpp::traits::input_parameter< int >::type max_partial_attempts(max_partial_attemptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sample_weighted_simplex_low_codim_cpp(kappa, C, n, n_face_points, n_selected_faces, points_per_face, max_partial_attempts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // we_oc
 arma::mat we_oc(const arma::mat& costs, const arma::vec& X, double alpha, double beta, const arma::vec& Z);
 RcppExport SEXP _blvim_we_oc(SEXP costsSEXP, SEXP XSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP ZSEXP) {
@@ -128,6 +145,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_blvim_blv_gradient_unit", (DL_FUNC) &_blvim_blv_gradient_unit, 12},
     {"_blvim_project_weighted_simplex", (DL_FUNC) &_blvim_project_weighted_simplex, 6},
     {"_blvim_project_simplex", (DL_FUNC) &_blvim_project_simplex, 3},
+    {"_blvim_sample_weighted_simplex_low_codim_cpp", (DL_FUNC) &_blvim_sample_weighted_simplex_low_codim_cpp, 7},
     {"_blvim_we_oc", (DL_FUNC) &_blvim_we_oc, 5},
     {NULL, NULL, 0}
 };

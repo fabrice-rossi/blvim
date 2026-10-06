@@ -124,3 +124,196 @@ test_that("Simplex projection in border cases", {
     )
   }
 })
+
+test_that("number_of_faces_capped handles zero, exact, and capped cases", {
+  expect_identical(number_of_faces_capped(5L, 0L), 0L)
+  expect_identical(number_of_faces_capped(5L, 100L), 30L)
+  expect_identical(number_of_faces_capped(5L, 12L), 12L)
+  expect_identical(number_of_faces_capped(31L, 100L), 100L)
+})
+
+test_that("number_of_nonvertex_faces_capped handles all branches", {
+  expect_identical(number_of_nonvertex_faces_capped(5L, 0L), 0L)
+  expect_identical(number_of_nonvertex_faces_capped(5L, 100L), 25L)
+  expect_identical(number_of_nonvertex_faces_capped(5L, 12L), 12L)
+  expect_identical(number_of_nonvertex_faces_capped(31L, 100L), 100L)
+})
+
+test_that("argument validation rejects malformed inputs", {
+  expect_error(sample_weighted_simplex(1:3, n = -2))
+  expect_error(sample_weighted_simplex(1:3, n = NA_real_))
+  expect_error(sample_weighted_simplex(1:3, face_fraction = -1))
+})
+
+test_that("zero face fraction produces only interior points", {
+  withr::local_seed(1)
+  x <- sample_weighted_simplex(c(1, 2, 3),
+    C = 2, n = 20L,
+    face_fraction = 0,
+    points_per_face = 0L
+  )
+  check_simplex_sample(x, c(1, 2, 3), 2, 20L, 0L)
+  expect_identical(x$n_interior, 20L)
+  expect_identical(x$n_face_points, 0L)
+  expect_equal(x$selected_face_count, 0)
+  expect_true(is.na(x$partial_codim))
+})
+
+test_that("points_per_face zero maximizes face coverage", {
+  withr::local_seed(2)
+  x <- sample_weighted_simplex(rep(1, 5),
+    n = 100L,
+    face_fraction = 1,
+    points_per_face = 0L
+  )
+  check_simplex_sample(x, rep(1, 5), 1, 100L, 100L)
+  expect_equal(x$selected_face_count, 30)
+  expect_equal(sum(x$faces$count), 100L)
+  expect_equal(sum(x$faces$codim == 4L), 5L)
+  expect_true(all(x$faces$count[x$faces$codim == 4L] == 1L))
+  expect_lte(max(x$faces$count[x$faces$codim < 4L]), 4L)
+})
+
+test_that("positive points_per_face is used when feasible", {
+  withr::local_seed(3)
+  x <- sample_weighted_simplex(rep(1, 5),
+    n = 80L,
+    face_fraction = 0.5,
+    points_per_face = 4L
+  )
+  check_simplex_sample(x, rep(1, 5), 1, 80L, 40L)
+  expect_equal(x$selected_face_count, 10)
+  expect_true(all(x$faces$count <= 4L))
+  expect_equal(x$faces$count, rep(4L, 10L))
+  expect_equal(x$layer_count[1], 5L)
+  expect_equal(x$layer_count[2], 5L)
+  expect_equal(x$partial_codim, 2L)
+})
+
+test_that("too-small points_per_face is increased with a warning", {
+  withr::local_seed(4)
+  expect_warning(
+    x <- sample_weighted_simplex(rep(1, 5),
+      n = 100L,
+      face_fraction = 1,
+      points_per_face = 2L
+    )
+  )
+  check_simplex_sample(x, rep(1, 5), 1, 100L, 100L)
+  expect_identical(x$points_per_face, 4L)
+  expect_equal(x$selected_face_count, 25)
+  expect_true(all(x$faces$codim < 4L))
+  expect_true(all(x$faces$count <= 4L))
+})
+
+test_that("vertex capacity is exactly one", {
+  withr::local_seed(5)
+  # All 14 faces in d=4 are selected. The four codimension-3 faces are vertices.
+  x <- sample_weighted_simplex(rep(1, 4),
+    n = 30L,
+    face_fraction = 1,
+    points_per_face = 0L
+  )
+  check_simplex_sample(x, rep(1, 4), 1, 30L, 30L)
+  vertex <- x$faces$codim == 3L
+  expect_equal(sum(vertex), 4L)
+  expect_equal(x$faces$count[vertex], rep(1L, 4L))
+  for (id in which(vertex)) {
+    rows <- which(x$face_id == id)
+    expect_length(rows, 1L)
+    support <- setdiff(seq_len(4), x$faces$zero[[id]])
+    expect_length(support, 1L)
+    expect_equal(x$Z[rows, support], 1)
+  }
+})
+
+test_that("dimension two rejects more boundary points than its vertices", {
+  expect_error(
+    sample_weighted_simplex(c(1, 1),
+      n = 3L,
+      face_fraction = 1,
+      points_per_face = 0L
+    )
+  )
+})
+
+test_that("dimension two supports both vertices exactly once", {
+  withr::local_seed(6)
+  x <- sample_weighted_simplex(c(2, 4),
+    C = 8, n = 2L,
+    face_fraction = 1,
+    points_per_face = 1L
+  )
+  check_simplex_sample(x, c(2, 4), 8, 2L, 2L)
+  expect_equal(x$selected_face_count, 2)
+  expect_equal(x$faces$count, c(1L, 1L))
+  expect_equal(sort(x$Z[, 1]), c(0, 4))
+  expect_equal(sort(x$Z[, 2]), c(0, 2))
+})
+
+test_that("fraction rounding and unequal fair allocation are correct", {
+  withr::local_seed(7)
+  x <- sample_weighted_simplex(c(1, 2, 3, 4),
+    C = 3, n = 11L,
+    face_fraction = 0.5,
+    points_per_face = 4L
+  )
+  # round(5.5) uses IEC 60559 ties-to-even in R, hence 6.
+  check_simplex_sample(x, c(1, 2, 3, 4), 3, 11L, 6L)
+  expect_equal(x$n_interior, 5L)
+  expect_equal(x$selected_face_count, 2)
+  expect_equal(sort(x$faces$count), c(3L, 3L))
+})
+
+test_that("complete codimension layers are enumerated exactly", {
+  withr::local_seed(8)
+  # d=4: C(4,1)+C(4,2)=10 selected faces.
+  x <- sample_weighted_simplex(rep(1, 4),
+    n = 10L,
+    face_fraction = 1,
+    points_per_face = 1L
+  )
+  expect_equal(x$layer_count, c(4L, 6L, 0L))
+  expect_true(is.na(x$partial_codim))
+  x_table <- table(x$faces$codim)
+  x_table_exp <- c(`1` = 4L, `2` = 6L)
+  expect_equal(names(x_table), names(x_table_exp))
+  expect_equal(as.numeric(x_table), as.numeric(x_table_exp))
+})
+
+test_that("partial layer proposal limit is enforced by C++", {
+  # Direct low-level test intentionally bypasses the wrapper. With one allowed
+  # proposal, selecting two distinct facets must fail deterministically.
+  withr::local_seed(9)
+  expect_error(
+    sample_weighted_simplex_low_codim_cpp(
+      rep(1, 5), 1, 2L, 2L, 2L, 1L, 1L
+    ),
+    "Could not obtain enough unique faces"
+  )
+})
+
+test_that("the low-level function rejects too many selected faces", {
+  expect_error(
+    sample_weighted_simplex_low_codim_cpp(
+      rep(1, 3), 1, 7L, 7L, 7L, 1L, 100L
+    ),
+    "exceeds the number of proper"
+  )
+})
+
+test_that("random results are reproducible from the R seed", {
+  withr::local_seed(10)
+  x <- sample_weighted_simplex(rep(1, 6),
+    n = 50L,
+    face_fraction = 0.6,
+    points_per_face = 3L
+  )
+  withr::local_seed(10)
+  y <- sample_weighted_simplex(rep(1, 6),
+    n = 50L,
+    face_fraction = 0.6,
+    points_per_face = 3L
+  )
+  expect_identical(x, y)
+})

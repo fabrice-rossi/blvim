@@ -21,6 +21,10 @@ project_simplex <- function(y, tol, max_iter) {
     .Call(`_blvim_project_simplex`, y, tol, max_iter)
 }
 
+sample_weighted_simplex_low_codim_cpp <- function(kappa, C, n, n_face_points, n_selected_faces, points_per_face, max_partial_attempts) {
+    .Call(`_blvim_sample_weighted_simplex_low_codim_cpp`, kappa, C, n, n_face_points, n_selected_faces, points_per_face, max_partial_attempts)
+}
+
 we_oc <- function(costs, X, alpha, beta, Z) {
     .Call(`_blvim_we_oc`, costs, X, alpha, beta, Z)
 }
