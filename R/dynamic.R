@@ -29,6 +29,50 @@ blvim_gradient_control <- function(rho_init = 0.5,
   )
 }
 
+one_blvim <- function(costs, X, alpha, beta, Z,
+                      all_kappa,
+                      epsilon,
+                      iter_max,
+                      conv_check,
+                      precision,
+                      algorithm,
+                      control,
+                      with_kappa) {
+  convergence_diagnostic <- list()
+  if (algorithm == "gradient") {
+    pre <- blv_gradient(costs, X, alpha, beta, Z, all_kappa,
+      rho_init = control$rho_init,
+      shrink = control$shrink,
+      c = control$sufficient_increase,
+      iter_max = iter_max,
+      ls_iter_max = control$ls_iter_max,
+      precision = precision
+    )
+  } else if (algorithm == "gradient_unit") {
+    pre <- blv_gradient_unit(costs, X, alpha, beta, Z, all_kappa,
+      rho_init = control$rho_init,
+      shrink = control$shrink,
+      c = control$sufficient_increase,
+      iter_max = iter_max,
+      ls_iter_max = control$ls_iter_max,
+      precision = precision
+    )
+  } else {
+    pre <- blv(
+      costs, X, alpha, beta, Z, all_kappa, epsilon, iter_max,
+      conv_check, precision,
+      quadratic = algorithm == "quadratic", with_kappa
+    )
+  }
+  if (algorithm %in% c("gradient", "gradient_unit")) {
+    convergence_diagnostic$status <- pre$status
+    convergence_diagnostic$duality_gap <- pre$gap
+    convergence_diagnostic$eval <- pre$eval
+  }
+  pre$diagnostic <- convergence_diagnostic
+  pre
+}
+
 
 #' Compute an equilibrium solution of the Harris and Wilson model
 #'
@@ -211,43 +255,16 @@ blvim <- function(costs, X, alpha, beta, Z,
     with_kappa <- TRUE
     all_kappa[1:length(Z)] <- kappa
   }
-  convergence_diagnostic <- list()
-  if (algorithm == "gradient") {
-    pre <- blv_gradient(costs, X, alpha, beta, Z, all_kappa,
-      rho_init = control$rho_init,
-      shrink = control$shrink,
-      c = control$sufficient_increase,
-      iter_max = iter_max,
-      ls_iter_max = control$ls_iter_max,
-      precision = precision
-    )
-  } else if (algorithm == "gradient_unit") {
-    pre <- blv_gradient_unit(costs, X, alpha, beta, Z, all_kappa,
-      rho_init = control$rho_init,
-      shrink = control$shrink,
-      c = control$sufficient_increase,
-      iter_max = iter_max,
-      ls_iter_max = control$ls_iter_max,
-      precision = precision
-    )
-  } else {
-    pre <- blv(
-      costs, X, alpha, beta, Z, all_kappa, epsilon, iter_max,
-      conv_check, precision,
-      quadratic = algorithm == "quadratic", with_kappa
-    )
-  }
-  if (algorithm %in% c("gradient", "gradient_unit")) {
-    convergence_diagnostic$status <- pre$status
-    convergence_diagnostic$duality_gap <- pre$gap
-    convergence_diagnostic$eval <- pre$eval
-  }
+  pre <- one_blvim(
+    costs, X, alpha, beta, Z, all_kappa, epsilon, iter_max,
+    conv_check, precision, algorithm, control, with_kappa
+  )
   new_sim_blvim(pre$Y, pre$Z[, 1], costs, alpha, beta,
     bipartite, origin_data, destination_data,
     iteration = pre$iter + 1L,
     converged = pre$iter < iter_max,
     kappa = all_kappa,
     algorithm = algorithm,
-    diagnostic = convergence_diagnostic
+    diagnostic = pre$diagnostic
   )
 }
