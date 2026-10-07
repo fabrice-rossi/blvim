@@ -11,6 +11,12 @@
 
 ## potential
 
+internal_sim_potential <- function(costs, X, alpha, beta, Z, kappa) {
+  W <- exp(-beta * costs)
+  S <- W %*% (Z^alpha)
+  sum(X * log(S)) / alpha - sum(kappa * Z)
+}
+
 #' @export
 sim_potential.sim_blvim <- function(sim, ...) {
   X <- production(sim)

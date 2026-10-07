@@ -9,7 +9,7 @@ blvim(
   X,
   alpha,
   beta,
-  Z,
+  Z = NULL,
   kappa = 1,
   bipartite = TRUE,
   origin_data = NULL,
@@ -19,7 +19,8 @@ blvim(
   conv_check = 100,
   precision = 1e-06,
   algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
-  control = blvim_gradient_control()
+  control = blvim_gradient_control(),
+  keep_runs = FALSE
 )
 }
 \arguments{
@@ -31,11 +32,24 @@ blvim(
 
 \item{beta}{the inverse cost scale parameter}
 
-\item{Z}{A vector of initial destination attractivenesses.}
+\item{Z}{Initial destination attractivenesses. It can be:
+\itemize{
+\item \code{NULL}, in which case a single starting point is constructed
+automatically;
+\item a numeric vector containing one initial attractiveness value per
+destination; or
+\item a numeric matrix whose rows are initial attractiveness vectors and whose
+columns correspond to destinations.
+}
 
-\item{kappa}{A vector of conversion factors between attractivenesses and
-incoming flows. Values must be positive. Defaults to 1 for all
-destinations.}
+With a matrix, the algorithm is run once per row and the solution with the
+largest final potential is returned.}
+
+\item{kappa}{A numeric vector of conversion factors between destination
+attractivenesses and incoming flows. Values must be strictly positive. A
+scalar value is recycled to all destinations. Defaults to \code{1}, which gives
+the standard balance equations without destination-specific conversion
+factors.}
 
 \item{bipartite}{when \code{TRUE} (default value), the origin and destination
 locations are considered to be distinct. When \code{FALSE}, a single set of
@@ -48,77 +62,153 @@ locations (see details)}
 \item{destination_data}{\code{NULL} or a list of additional data about the
 destination locations (see details)}
 
-\item{epsilon}{Update intensity used by the \code{"linear"} and \code{"quadratic"}
+\item{epsilon}{A positive numeric scalar giving the update intensity for the
+\code{"linear"} and \code{"quadratic"} algorithms. It is not used by the gradient
 algorithms.}
 
-\item{iter_max}{Maximum number of iterations.}
+\item{iter_max}{A positive integer giving the maximum number of iterations
+for each run.}
 
-\item{conv_check}{Number of iterations between convergence checks for the
+\item{conv_check}{A positive integer giving the number of iterations between
+convergence checks for the \code{"linear"} and \code{"quadratic"} algorithms. It is
+not used by the gradient algorithms.}
+
+\item{precision}{A positive numeric scalar giving the convergence threshold.
+For \code{"linear"} and \code{"quadratic"}, it is used in the attractiveness-based
+convergence test. For \code{"gradient"} and \code{"gradient_unit"}, it is used in the
+duality-gap stopping criterion.}
+
+\item{algorithm}{A character string selecting the algorithm used to compute
+the equilibrium. It must be one of \code{"linear"}, \code{"quadratic"}, \code{"gradient"},
+or \code{"gradient_unit"}. The default is \code{"linear"}. Partial matching is
+supported.}
+
+\item{control}{A list of internal parameters for the gradient algorithms,
+normally produced by \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}. It is not used by the
 \code{"linear"} and \code{"quadratic"} algorithms.}
 
-\item{precision}{Convergence threshold.}
-
-\item{algorithm}{Character string selecting the algorithm used to compute
-the equilibrium. One of \code{"linear"}, \code{"quadratic"}, \code{"gradient"} or
-\code{"gradient_unit"}. Defaults to \code{"linear"}. Partial matching is supported.}
-
-\item{control}{List of internal parameters for the gradient algorithms as
-produced by \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}.}
+\item{keep_runs}{A logical scalar controlling whether complete fitted models
+from all runs are retained when \code{Z} is a matrix. If \code{FALSE}, the default,
+only the selected model and the run summaries are retained. If \code{TRUE}, a
+\code{sim_list} containing all fitted models is also stored in the returned
+object. This argument has no effect when \code{Z} is \code{NULL} or a vector.}
 }
 \value{
-an object of class \code{sim}(and \code{sim_blvim}) for spatial interaction
-model that contains the matrix of flows between the origin and the
-destination locations as well as the final attractivenesses computed by the
-model.
+An object of class \code{sim} and \code{sim_blvim} containing the matrix of
+flows between origins and destinations, the final destination
+attractivenesses, and information about the algorithm and its convergence.
+
+When \code{Z} is a matrix, the returned object corresponds to the run with the
+largest final potential. It additionally contains a run-summary data frame
+with one row per starting point and the following columns:
+\itemize{
+\item \code{run}: index of the run from 1 to \code{nrow(Z)};
+\item \code{potential}: final value of the potential;
+\item \code{iterations}: number of iterations reported for the run;
+\item \code{converged}: whether the run stopped before reaching \code{iter_max};
+\item \code{status}: stopping status reported by a gradient algorithm;
+\item \code{gap}: final duality gap reported by a gradient algorithm;
+\item \code{evaluations}: number of evaluations reported by a gradient algorithm.
+}
+
+For \code{"linear"} and \code{"quadratic"}, \code{status}, \code{gap}, and \code{evaluations} are
+\code{NA}, because these diagnostics are specific to the gradient algorithms.
+The data frame can be accessed with the \code{\link[=sim_logs]{sim_logs()}} function.
+
+If \code{Z} is a matrix and \code{keep_runs = TRUE}, the returned object also stores
+a \code{sim_list} containing the fitted models from all runs, in the same order
+as the rows of \code{Z}. The list can be obtained using \code{\link[=sim_runs]{sim_runs()}}.
 }
 \description{
 This function computes flows between origin locations and destination
-locations at an equilibrium solution of Harris and Wilson interaction model.
-The model is initialised with the production constraints at the origin
-locations and the initial values of the the attractivenesses of destination
-locations. At convergence, attractivenesses fulfil the balance equations
-\deqn{\forall j,\quad \kappa_j Z_j=\sum_{i=1}^{n}Y_{ij},} where the flows are
-computed according to Wilson's  production constrained entropy maximising
-model (\code{\link[=static_blvim]{static_blvim()}}). The function implements several algorithms that all
-aim to reach an equilibrium.
+locations at an equilibrium solution of the Harris and Wilson interaction
+model. At equilibrium, destination attractivenesses fulfil the balance
+equations
+\deqn{
+  \forall j,\quad
+  \kappa_j Z_j = \sum_{i=1}^{n} Y_{ij},
+}
+where \eqn{Y_{ij}} is the flow from origin \eqn{i} to destination \eqn{j},
+\eqn{Z_j} is the attractiveness of destination \eqn{j}, and
+\eqn{\kappa_j} is a conversion factor between attractiveness and incoming
+flow. Flows are computed according to Wilson's production-constrained
+entropy-maximising model implemented by \code{\link[=static_blvim]{static_blvim()}}.
 }
 \details{
-All algorithms are initialised with user supplied attractivenesses and
-proceed iteratively by updating them until convergence. Two algorithms are
-instances of A. Wilson's Boltzmann-Lotka-Volterra (BLV) interaction model,
-while the other two algorithms are based on gradient ascent.
-\subsection{Boltzmann-Lotka-Volterra (BLV) iterations}{
+The function implements several iterative algorithms that aim to reach an
+equilibrium. It can run an algorithm from a single initial attractiveness
+vector or from several initial vectors. When several starting points are
+supplied, the result with the largest potential is returned.
+\subsection{Initial attractivenesses}{
 
-In a step of the BLV model, flows are computed according to the production
-constrained entropy maximising model proposed by A. Wilson and implemented in
-\code{\link[=static_blvim]{static_blvim()}}. Then the flows received at a destination are computed as
-follows
+Initial destination attractivenesses are specified through \code{Z}.
 
-\deqn{\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},}
+If \code{Z} is a numeric vector, the selected algorithm is run once from that
+vector.
 
-for destination \eqn{j}. This enables the attractivenesses to be updated by
-making them closer to the received flows, i.e. by trying to reduce
-\eqn{|D_j-\kappa_j Z_j|}, where \eqn{\kappa_j} is a conversion factor between
-the attractiveness and the destination flow.
+If \code{Z} is a numeric matrix, each row is interpreted as one initial
+attractiveness vector. The selected algorithm is run independently from
+each row, and the solution with the largest final potential is returned.
+Consequently, \code{ncol(Z)} must equal \code{ncol(costs)}.
 
-Two algorithms of this family are available through the \code{algorithm} parameter:
+If \code{Z} is \code{NULL}, a single initial attractiveness vector is constructed
+automatically. In the bipartite case, it is the centre of mass of the
+weighted simplex:
+
+\deqn{
+  Z_j^0 =
+  \frac{\sum_i X_i}{p\kappa_j},
+}
+
+where \eqn{p} is the number of destinations. In the non-bipartite case, the
+initial attractivenesses are
+
+\deqn{
+  Z_j^0 = \frac{X_j}{\kappa_j}.
+}
+
+Automatic initialisation with \code{Z = NULL} therefore produces one run. To
+perform several runs, the starting points must be generated beforehand and
+supplied as the rows of a matrix, for instance using the
+\code{\link[=sample_weighted_simplex]{sample_weighted_simplex()}} function.
+}
+
+\subsection{Boltzmann-Lotka-Volterra iterations}{
+
+At each step of a Boltzmann-Lotka-Volterra (BLV) algorithm, flows are
+computed according to the production-constrained entropy-maximising model
+implemented by \code{\link[=static_blvim]{static_blvim()}}. The total flow received by destination
+\eqn{j} is
+
+\deqn{
+  D_j = \sum_{i=1}^{n} Y_{ij}.
+}
+
+Attractivenesses are then updated to bring \eqn{\kappa_j Z_j} closer to
+\eqn{D_j}.
+
+Two BLV algorithms are available through \code{algorithm}:
 \enumerate{
-\item \code{"linear"} uses the original update rule proposed in Harris & Wilson
+\item \code{"linear"} uses the original update rule proposed by Harris and Wilson
 (1978):
 
 \deqn{
-     Z_j^{t+1} =
-     Z_j^t +
+     Z_j^{t+1}
+     =
+     Z_j^t
+     +
      \epsilon
      \left(
        \frac{D_j^t}{\kappa_j} - Z_j^t
      \right).
    }
-\item \code{"quadratic"} uses the update rule proposed in Wilson (2008):
+\item \code{"quadratic"} uses the update rule proposed by Wilson (2008):
 
 \deqn{
-     Z_j^{t+1} =
-     Z_j^t +
+     Z_j^{t+1}
+     =
+     Z_j^t
+     +
      \epsilon
      \left(
        \frac{D_j^t}{\kappa_j} - Z_j^t
@@ -126,39 +216,71 @@ Two algorithms of this family are available through the \code{algorithm} paramet
    }
 }
 
-For these algorithms(\code{"linear"} and \code{"quadratic"}), \eqn{\epsilon} is given
-by the \code{epsilon} parameter and should generally be smaller than 1.
+For these two algorithms, \eqn{\epsilon} is specified by \code{epsilon} and
+should generally be smaller than one.
 
-Updates are performed until convergence or for a maximum of \code{iter_max}
-iterations. Convergence is checked every \code{conv_check} iterations. The
+Updates are performed until convergence or until \code{iter_max} iterations have
+been reached. Convergence is checked every \code{conv_check} iterations. The
 algorithm is considered to have converged if
 
 \deqn{
-  \|Z^{t+1}-Z^t\| <
-  \delta \left(\|Z^{t+1}\|+\delta\right),
+  \lVert Z^{t+1} - Z^t \rVert
+  <
+  \delta
+  \left(
+    \lVert Z^{t+1} \rVert + \delta
+  \right),
 }
 
-where \eqn{\delta} is given by the \code{precision} parameter.
+where \eqn{\delta} is specified by \code{precision}.
 }
 
 \subsection{Gradient algorithms}{
 
-Finding an equilibrium with the BLV  approach is equivalent to looking for a
-maximum of the potential function (see \code{\link[=sim_potential]{sim_potential()}}). The gradient
-algorithms use a direct approach of optimising the potential via a projected
-gradient ascent. The \code{"gradient"} algorithm optimises directly the potential
-while \code{"gradient_unit"} rescales the problem in order to work with \eqn{U_j}
-instead of \eqn{Z_j} in such a way that \eqn{\sum_{j=1}^p U_j=1}. This can
-accelerate convergence in some settings. Results should be identical from
-both gradient approaches, but they can be different from solutions obtained
-by the \code{"linear"} and \code{"quadratic"} algorithms.
+Finding an equilibrium with the BLV approach is equivalent to looking for a
+maximum of the potential function; see \code{\link[=sim_potential]{sim_potential()}}. The gradient
+algorithms optimise this potential directly by projected gradient ascent.
 
-The \code{epsilon} and \code{conv_check} parameters are not used by the \code{"gradient"}
-algorithm. Convergence is assessed using the duality gap and the \code{precision}
-parameter. The gradient ascent runs for a maximum of \code{iter_max} iterations.
-Both algorithms use a standard backtracking line search with Armijo stopping
-criterion. Its parameters can be modified using the \code{control} parameter and
-the associated  \code{\link[=blvim_gradient_control]{blvim_gradient_control()}} function.
+The \code{"gradient"} algorithm works directly with the attractivenesses
+\eqn{Z_j}. The \code{"gradient_unit"} algorithm rescales the problem and works
+with variables \eqn{U_j} satisfying
+
+\deqn{
+  \sum_{j=1}^{p} U_j = 1.
+}
+
+This rescaling can accelerate convergence in some settings. The two
+gradient algorithms optimise equivalent formulations and should yield the
+same solution up to numerical precision. They may, however, reach solutions
+different from those produced by the \code{"linear"} and \code{"quadratic"}
+algorithms.
+
+The \code{epsilon} and \code{conv_check} parameters are not used by either gradient
+algorithm. Gradient convergence is assessed using a duality gap and the
+tolerance specified by \code{precision}. The gradient ascent is limited to
+\code{iter_max} iterations.
+
+Both gradient algorithms use a standard backtracking line search with an
+Armijo sufficient-increase condition. Line-search parameters can be
+modified through \code{control}; see \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}.
+}
+
+\subsection{Multiple starting points}{
+
+When \code{Z} is a matrix, the rows of \code{Z} are used as independent starting
+points. Each run uses the same model parameters, algorithm, convergence
+threshold, iteration limit, and algorithm-specific control parameters.
+
+The final potential of every run is evaluated using the corresponding final
+attractiveness vector. The run with the strictly largest potential is
+selected. If several runs attain the same largest potential, the first such
+run is selected.
+
+The selected run is returned as the main fitted model. A data frame
+summarising all runs is attached to the result and is available through the
+\code{logs} information stored by the fitted object. If \code{keep_runs = TRUE},
+the complete fitted models obtained from all starting points are also
+retained.
 }
 }
 \section{Location data}{
@@ -206,7 +328,7 @@ attractiveness <- log(french_cities$area[1:10])
 # Rescale attractivenesses to total production
 attractiveness <- attractiveness / sum(attractiveness) * sum(production)
 
-# Original Harris-Wilson update rule
+# Original Harris-Wilson update rule from an explicit starting point
 flows <- blvim(
   distances,
   production,
@@ -237,19 +359,61 @@ gradient_flows <- blvim(
   algorithm = "gradient"
 )
 
+# Rescaled gradient-based algorithm
+unit_gradient_flows <- blvim(
+  distances,
+  production,
+  1.5,
+  1 / 250,
+  attractiveness,
+  algorithm = "gradient_unit"
+)
+
+# Automatic initialisation from the centre of the weighted simplex
+automatic_flows <- blvim(
+  distances,
+  production,
+  1.5,
+  1 / 250,
+  algorithm = "gradient"
+)
+
+# Multiple explicitly supplied starting points
+starts <- rbind(
+  attractiveness,
+  c(
+    rep(0, 5),
+    rep(sum(production) / 5, 5)
+  )
+)
+
+multistart_flows <- blvim(
+  distances,
+  production,
+  1.5,
+  1 / 250,
+  Z = starts,
+  algorithm = "gradient",
+  keep_runs = TRUE
+)
+
 }
 \references{
-Harris, B., & Wilson, A. G. (1978). "Equilibrium Values and
-Dynamics of Attractiveness Terms in Production-Constrained
-Spatial-Interaction Models", Environment and Planning A: Economy and Space,
-10(4), 371-388. \doi{10.1068/a100371}
+Harris, B., & Wilson, A. G. (1978). "Equilibrium Values and Dynamics of
+Attractiveness Terms in Production-Constrained Spatial-Interaction Models",
+Environment and Planning A: Economy and Space, 10(4), 371-388.
+\doi{10.1068/a100371}
 
-Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
-evolution: an integrated methodology for some dynamical systems", J. R.
-Soc. Interface.5865-871 \doi{10.1098/rsif.2007.1288}
+Wilson, A. (2008). "Boltzmann, Lotka and Volterra and spatial structural
+evolution: an integrated methodology for some dynamical systems",
+Journal of the Royal Society Interface, 5, 865-871.
+\doi{10.1098/rsif.2007.1288}
 }
 \seealso{
+\code{\link[=blvim_gradient_control]{blvim_gradient_control()}} for gradient and line-search parameters,
 \code{\link[=grid_blvim]{grid_blvim()}} for systematic exploration of parameter influence,
-\code{\link[=static_blvim]{static_blvim()}} for the static model, \code{\link[=sim_potential]{sim_potential()}} for the potential
-function.
+\code{\link[=static_blvim]{static_blvim()}} for the static model, \code{\link[=sim_potential]{sim_potential()}} for the
+potential function and \code{\link[=sample_weighted_simplex]{sample_weighted_simplex()}} for a way to generate
+initial configurations. Diagnostic for multiple runs can be obtained using
+using \code{\link[=sim_runs]{sim_runs()}} and \code{\link[=sim_logs]{sim_logs()}}.
 }

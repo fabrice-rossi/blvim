@@ -21,16 +21,22 @@ reference:
   desc: "Functions for getting properties of spatial interaction models."
   contents:
   - attractiveness
+  - initial_attractiveness
   - destination_flow
   - diversity
   - flows
   - flows_df
   - production
-  - sim_converged
-  - sim_iterations
-  - sim_diagnostic
   - sim_potential
   - sim_fp_jacobian
+- title: "Monitoring the construction of spatial interaction models"
+  desc: "Functions for getting diagnostics of the algorithms used to build the models."
+  contents:
+  - sim_converged
+  - sim_diagnostic
+  - sim_iterations
+  - sim_logs
+  - sim_runs
 - title: "Non bipartite models"
   desc: "Functions that apply only to non bipartite models."
   contents:
@@ -60,6 +66,9 @@ reference:
   - starts_with("fortify")
   - grid_autoplot
   - grid_var_autoplot
+- title: "Helper functions"
+  contents:
+  - sample_weighted_simplex
 - title: "Data sets"
   contents:
   - has_keyword("datasets")

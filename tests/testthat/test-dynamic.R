@@ -85,3 +85,66 @@ test_that("blvim obeys to iteration control", {
     expect_true(sim_converged(model) == (sim_iterations(model) <= k))
   }
 })
+
+test_that("blvim reports consistently the logs and the runs", {
+  config <- create_locations(40, 50, seed = 1)
+  kappas <- runif(length(config$Z), min = 0.5, max = 2)
+  withr::local_seed(12)
+  sample <- sample_weighted_simplex(kappas, C = sum(config$X), n = 75)
+  model <- blvim(config$costs, config$X, 1.5, 20, sample$Z,
+    algorithm = "gradient_unit", keep_runs = TRUE
+  )
+  all_runs <- sim_runs(model)
+  expect_length(all_runs, nrow(sample$Z))
+  ## check consistency with logs
+  expect_equal(sim_logs(model)$run, 1:nrow(sample$Z))
+  expect_equal(sim_potential(all_runs), sim_logs(model)$potential)
+  expect_equal(sim_iterations(all_runs), sim_logs(model)$iteration)
+  expect_equal(sim_converged(all_runs), sim_logs(model)$converged)
+  all_diags <- lapply(all_runs, sim_diagnostic)
+  expect_equal(sapply(all_diags, function(x) x$cd$status), sim_logs(model)$status)
+  expect_equal(sapply(all_diags, function(x) x$cd$duality_gap), sim_logs(model)$gap)
+  expect_equal(sapply(all_diags, function(x) x$cd$eval), sim_logs(model)$evaluation)
+  ## if we do not keep the runs AND have multiple of thems, sim_runs returns NULL
+  model <- blvim(config$costs, config$X, 1.5, 20, sample$Z,
+    algorithm = "gradient_unit", keep_runs = FALSE
+  )
+  expect_null(sim_runs(model))
+})
+
+test_that("blvim selects the best model", {
+  config <- create_locations(40, 50, seed = 12)
+  kappas <- runif(length(config$Z), min = 0.5, max = 2)
+  withr::local_seed(12)
+  sample <- sample_weighted_simplex(kappas, C = sum(config$X), n = 75)
+  model <- blvim(config$costs, config$X, 1.5, 20, sample$Z,
+    algorithm = "gradient_unit", keep_runs = TRUE
+  )
+  all_runs <- sim_runs(model)
+  expect_all_true(sim_potential(all_runs) <= sim_potential(model))
+})
+
+test_that("blvim fills run information with a single starting point", {
+  config <- create_locations(40, 50, seed = 12)
+  kappas <- runif(length(config$Z), min = 0.5, max = 2)
+  withr::local_seed(12)
+  model <- blvim(config$costs, config$X, 1.5, 20, config$Z,
+    algorithm = "gradient_unit"
+  )
+  all_runs <- sim_runs(model)
+  expect_length(all_runs, 1)
+  expect_equal(flows(all_runs[[1]]), flows(model))
+  expect_equal(attractiveness(all_runs[[1]]), attractiveness(model))
+  expect_equal(sim_potential(model), sim_logs(model)$potential)
+  expect_equal(sim_iterations(model), sim_logs(model)$iteration)
+  expect_equal(sim_converged(model), sim_logs(model)$converged)
+  all_diags <- sim_diagnostic(model)
+  expect_equal(all_diags$cd$status, sim_logs(model)$status)
+  expect_equal(all_diags$cd$duality_gap, sim_logs(model)$gap)
+  expect_equal(all_diags$cd$eval, sim_logs(model)$evaluation)
+})
+
+test_that("reporting error cases", {
+  expect_error(sim_runs(list()))
+  expect_error(sim_logs(list()))
+})

@@ -7,17 +7,26 @@
 
 ## New features
 
-* `blvim()` and `grid_blvim()` now support conversion factors between 
-  attractivenesses and incoming flows, together with the new function 
-  `sim_conversion()`.
+Most of the new features are based on the potential introduced by Osawa, 
+Akamatsu, and Kogure in a recent paper (<https://arxiv.org/abs/2011.06778v2>).
+
+* `sim_potential()` computes the potential of spatial interaction model using 
+  the definition proposed by Osawa, Akamatsu, and Kogure.
+* `blvim()` and `grid_blvim()` now support multiple ways to specify the initial
+  values of the attractivenesses of the destination locations. In particular
+  an automated balanced vector of values is used when the initial 
+  attractivenesses are not provided. When multiple initial configurations are
+  provided, the functions select the best one, that is the one with the largest
+  potential. 
 * `blvim()` and `grid_blvim()` now support two new algorithms to find an 
   equilibrium. Both are instance of a projected gradient ascent approach.
 * `sim_diagnostic()` gives details about the behaviour of the iterative
   algorithms for `blvim()` while `blvim_gradient_control()` can be used to set 
   the parameters of the line search used in the projected gradient ascent
   methods.
-* `sim_potential()` computes the potential of spatial interaction model using 
-  the definition proposed by Osawa, Akamatsu, and Kogure.
+* `blvim()` and `grid_blvim()` now support conversion factors between 
+  attractivenesses and incoming flows, together with the new function 
+  `sim_conversion()`.
 * `sim_fp_jacobian()` computes the Jacobian of the fixed point map with respect
   to the attractivenesses.
 

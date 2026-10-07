@@ -264,6 +264,42 @@ attractiveness.sim <- function(sim, ...) {
   pre
 }
 
+#' Extract the initial attractivenesses from a spatial interaction model object
+#'
+#' Extracts the destination attractivenesses used to initialise the construction
+#' of a spatial interaction model. For static models, this is identical to their
+#' [attractiveness()]. For a spatial interaction model produced by an iterative
+#' algorithm, this function returns the attractivenesses used to initialise the
+#' algorithm. [attractiveness()] returns the final attractivenesses.
+#'
+#' @param sim a spatial interaction model object
+#' @param ... additional parameters
+#'
+#' @returns A vector containing the initial destination
+#'   attractivenesses.
+#'
+#' @seealso [attractiveness()], [static_blvim()]
+#'
+#' @export
+#' @examples
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
+#' initial_attractiveness(model)
+#' identical(
+#'   initial_attractiveness(model),
+#'   attractiveness(model)
+#' )
+initial_attractiveness <- function(sim, ...) {
+  UseMethod("initial_attractiveness")
+}
+
+#' @export
+initial_attractiveness.sim <- function(sim, ...) {
+  attractiveness(sim)
+}
+
 #' Compute the flows incoming at each destination location
 #'
 #' @param sim a spatial interaction model object

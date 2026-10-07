@@ -1,7 +1,7 @@
 new_sim_blvim <- function(Y, Z, costs, alpha, beta, bipartite, origin_data,
                           destination_data, iteration, converged, kappa,
                           algorithm,
-                          diagnostic, ...,
+                          diagnostic, logs, runs, initial_Z, ...,
                           class = character()) {
   new_sim_wpc(Y,
     Z,
@@ -16,6 +16,9 @@ new_sim_blvim <- function(Y, Z, costs, alpha, beta, bipartite, origin_data,
     kappa = kappa,
     algorithm = algorithm,
     diagnostic = diagnostic,
+    logs = logs,
+    runs = runs,
+    initial_Z = initial_Z,
     ...,
     class = c(class, "sim_blvim")
   )

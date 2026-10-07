@@ -9,7 +9,7 @@ grid_blvim(
   X,
   alphas,
   betas,
-  Z,
+  Z = NULL,
   kappa = 1,
   bipartite = TRUE,
   origin_data = NULL,
@@ -32,11 +32,24 @@ grid_blvim(
 
 \item{betas}{a vector of cost inverse scale parameters}
 
-\item{Z}{A vector of initial destination attractivenesses.}
+\item{Z}{Initial destination attractivenesses. It can be:
+\itemize{
+\item \code{NULL}, in which case a single starting point is constructed
+automatically;
+\item a numeric vector containing one initial attractiveness value per
+destination; or
+\item a numeric matrix whose rows are initial attractiveness vectors and whose
+columns correspond to destinations.
+}
 
-\item{kappa}{A vector of conversion factors between attractivenesses and
-incoming flows. Values must be positive. Defaults to 1 for all
-destinations.}
+With a matrix, the algorithm is run once per row and the solution with the
+largest final potential is returned.}
+
+\item{kappa}{A numeric vector of conversion factors between destination
+attractivenesses and incoming flows. Values must be strictly positive. A
+scalar value is recycled to all destinations. Defaults to \code{1}, which gives
+the standard balance equations without destination-specific conversion
+factors.}
 
 \item{bipartite}{when \code{TRUE} (default value), the origin and destination
 locations are considered to be distinct. When \code{FALSE}, a single set of
@@ -49,22 +62,30 @@ locations (see details)}
 \item{destination_data}{\code{NULL} or a list of additional data about the
 destination locations (see details)}
 
-\item{epsilon}{Update intensity used by the \code{"linear"} and \code{"quadratic"}
+\item{epsilon}{A positive numeric scalar giving the update intensity for the
+\code{"linear"} and \code{"quadratic"} algorithms. It is not used by the gradient
 algorithms.}
 
-\item{iter_max}{Maximum number of iterations.}
+\item{iter_max}{A positive integer giving the maximum number of iterations
+for each run.}
 
-\item{conv_check}{Number of iterations between convergence checks for the
+\item{conv_check}{A positive integer giving the number of iterations between
+convergence checks for the \code{"linear"} and \code{"quadratic"} algorithms. It is
+not used by the gradient algorithms.}
+
+\item{precision}{A positive numeric scalar giving the convergence threshold.
+For \code{"linear"} and \code{"quadratic"}, it is used in the attractiveness-based
+convergence test. For \code{"gradient"} and \code{"gradient_unit"}, it is used in the
+duality-gap stopping criterion.}
+
+\item{algorithm}{A character string selecting the algorithm used to compute
+the equilibrium. It must be one of \code{"linear"}, \code{"quadratic"}, \code{"gradient"},
+or \code{"gradient_unit"}. The default is \code{"linear"}. Partial matching is
+supported.}
+
+\item{control}{A list of internal parameters for the gradient algorithms,
+normally produced by \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}. It is not used by the
 \code{"linear"} and \code{"quadratic"} algorithms.}
-
-\item{precision}{Convergence threshold.}
-
-\item{algorithm}{Character string selecting the algorithm used to compute
-the equilibrium. One of \code{"linear"}, \code{"quadratic"}, \code{"gradient"} or
-\code{"gradient_unit"}. Defaults to \code{"linear"}. Partial matching is supported.}
-
-\item{control}{List of internal parameters for the gradient algorithms as
-produced by \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}.}
 
 \item{progress}{if TRUE, a progress bar is shown during the calculation
 (defaults to FALSE)}

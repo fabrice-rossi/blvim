@@ -13,11 +13,16 @@
 #' @returns nothing
 check_configuration <- function(costs, X, alpha, beta, Z, kappa, bipartite,
                                 call = rlang::caller_env()) {
+  if (is.matrix(Z)) {
+    len_Z <- ncol(Z)
+  } else {
+    len_Z <- length(Z)
+  }
   ## basic check for bipartite
-  if (!bipartite && length(X) != length(Z)) {
+  if (!bipartite && length(X) != len_Z) {
     cli::cli_abort(
       c("If {.arg bipartite} is {.val FALSE}, origin and location data must be equal.",
-        "x" = "the model has {.val {length(X)}} origin locations and {.val {length(Z)}} destination locations"
+        "x" = "the model has {.val {length(X)}} origin locations and {.val {len_Z}} destination locations"
       ),
       call = call
     )
@@ -35,9 +40,9 @@ check_configuration <- function(costs, X, alpha, beta, Z, kappa, bipartite,
       call = call
     )
   }
-  if (ncol(costs) != length(Z)) {
+  if (ncol(costs) != len_Z) {
     cli::cli_abort(
-      c("{.arg costs} must have {.val {length(Z)}} columns",
+      c("{.arg costs} must have {.val {len_Z}} columns",
         "x" = "{.arg costs} has {.val {ncol(costs)}} columns"
       ),
       call = call
