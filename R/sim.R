@@ -445,9 +445,10 @@ sim_conversion.sim <- function(sim, ...) {
 #' Compute the potential of a spatial interaction model
 #'
 #' The potential is a measure of stability introduced by Osawa, Akamatsu, and
-#' Kogure. It is only defined for spatial interaction models produced by
-#' BLV framework. The function returns `NA` when applied to spatial interaction
-#' models for which a potential cannot be computed.
+#' Kogure. It is only defined for spatial interaction models produced by BLV
+#' framework. The function returns `NA` when applied to spatial interaction
+#' models for which a potential cannot be computed. The function applies also to
+#' a collection of spatial interaction models as represented by a `sim_list`.
 #'
 #' The potential of a spatial interaction model is given by
 #'
@@ -463,13 +464,15 @@ sim_conversion.sim <- function(sim, ...) {
 #' * \eqn{\kappa} is the conversion factor vector ([sim_conversion()])
 #'
 #'
-#' @param sim a spatial interaction model, an object of class `sim`
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction  models (an object of class `sim_list`)
 #' @param ... additional parameters
 #'
 #' @references Osawa, M., Akamatsu, T., & Kogure, Y. (2025). "Most likely retail
 #'   agglomeration patterns: Potential maximization and stochastic stability of
 #'   spatial equilibria". <https://arxiv.org/abs/2011.06778v2>
-#' @returns the scalar value of the potential
+#' @returns the scalar value of the potential. In the case of a `sim_list`
+#' the function returns a numerical vector with one value per model.
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km

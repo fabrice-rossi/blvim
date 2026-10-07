@@ -592,3 +592,42 @@ as.data.frame.sim_list <- function(x, ..., sim_column = "sim") {
   }
   pre_res
 }
+
+#' Returns potential of a collection of spatial interaction models
+#'
+#' The function reports the potentia of each spatial interaction model of its
+#' `sim_list` parameter  (see [sim_potential()])
+#'
+#' Notice that [sim_potential()] is generic and can be applied directly to
+#' `sim_list` objects. The current function is provided to be explicit in R code
+#' about what is a unique model and what is a collection of models (using
+#' function names that start with `"grid_"`)
+#'
+#' @inheritParams sim_potential
+#' @param sim a collection of spatial interaction models, an object of class
+#'   `sim_list`
+#' @returns a vector of numbers of iteration, one per spatial interaction model
+#' @seealso [sim_potential()] and [grid_blvim()]
+#' @export
+#'
+#' @examples
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
+#'   epsilon = 0.1,
+#'   bipartite = FALSE,
+#'   iter_max = 750
+#' )
+#' grid_sim_potential(all_flows)
+grid_sim_potential <- function(sim, ...) {
+  sim_potential(sim, ...)
+}
+
+
+#' @export
+sim_potential.sim_list <- function(sim, ...) {
+  sapply(sim, sim_potential, ...)
+}

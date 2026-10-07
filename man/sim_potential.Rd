@@ -7,18 +7,21 @@
 sim_potential(sim, ...)
 }
 \arguments{
-\item{sim}{a spatial interaction model, an object of class \code{sim}}
+\item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
+collection of spatial interaction  models (an object of class \code{sim_list})}
 
 \item{...}{additional parameters}
 }
 \value{
-the scalar value of the potential
+the scalar value of the potential. In the case of a \code{sim_list}
+the function returns a numerical vector with one value per model.
 }
 \description{
 The potential is a measure of stability introduced by Osawa, Akamatsu, and
-Kogure. It is only defined for spatial interaction models produced by
-BLV framework. The function returns \code{NA} when applied to spatial interaction
-models for which a potential cannot be computed.
+Kogure. It is only defined for spatial interaction models produced by BLV
+framework. The function returns \code{NA} when applied to spatial interaction
+models for which a potential cannot be computed. The function applies also to
+a collection of spatial interaction models as represented by a \code{sim_list}.
 }
 \details{
 The potential of a spatial interaction model is given by

@@ -150,6 +150,7 @@ test_that("sim_list grid_* redundant functions work as expected", {
   )
   expect_equal(grid_sim_converged(models), sim_converged(models))
   expect_equal(grid_sim_iterations(models), sim_iterations(models))
+  expect_equal(grid_sim_potential(models), sim_potential(models))
   expect_equal(grid_diversity(models), diversity(models))
 })
 
