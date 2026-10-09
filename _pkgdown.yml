@@ -9,6 +9,7 @@ reference:
   - static_blvim
   - blvim
   - blvim_gradient_control
+  - blvim_initialise
   - costs
   - inverse_cost
   - return_to_scale
@@ -69,6 +70,7 @@ reference:
 - title: "Helper functions"
   contents:
   - sample_weighted_simplex
+  - blvim_simplex_initialise
 - title: "Data sets"
   contents:
   - has_keyword("datasets")

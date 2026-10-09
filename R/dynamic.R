@@ -75,63 +75,67 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 
 #' Compute an equilibrium solution of the Harris and Wilson model
 #'
-#' This function computes flows between origin locations and destination
-#' locations at an equilibrium solution of the Harris and Wilson interaction
-#' model. At equilibrium, destination attractivenesses fulfil the balance
-#' equations
+#' `blvim()` computes equilibrium flows between origin and destination locations
+#' in the Harris and Wilson spatial interaction model. At equilibrium,
+#' destination attractivenesses satisfy
 #' \deqn{
 #'   \forall j,\quad
 #'   \kappa_j Z_j = \sum_{i=1}^{n} Y_{ij},
 #' }
 #' where \eqn{Y_{ij}} is the flow from origin \eqn{i} to destination \eqn{j},
 #' \eqn{Z_j} is the attractiveness of destination \eqn{j}, and
-#' \eqn{\kappa_j} is a conversion factor between attractiveness and incoming
-#' flow. Flows are computed according to Wilson's production-constrained
-#' entropy-maximising model implemented by [static_blvim()].
+#' \eqn{\kappa_j} converts attractiveness into incoming flow. Flows are
+#' computed using the production-constrained entropy-maximising model
+#' implemented by [static_blvim()].
 #'
-#' The function implements several iterative algorithms that aim to reach an
-#' equilibrium. It can run an algorithm from a single initial attractiveness
-#' vector or from several initial vectors. When several starting points are
-#' supplied, the result with the largest potential is returned.
+#' Several iterative algorithms are available. The model can be run from a
+#' single initial attractiveness vector or from several starting points. In
+#' the latter case, the solution with the largest final potential is returned.
 #'
-#' ## Initial attractivenesses
+#' ## Initialisation and multiple runs
 #'
-#' Initial destination attractivenesses are specified through `Z`.
+#' Initial destination attractivenesses are specified through `Z`:
 #'
-#' If `Z` is a numeric vector, the selected algorithm is run once from that
-#' vector.
+#' * If `Z` is `NULL`, one starting point is constructed automatically.
+#' * If `Z` is a numeric vector, the algorithm is run once from that vector.
+#' * If `Z` is a numeric matrix, each row is used as an independent starting
+#'   point.
+#' * If `Z` is an object created by [blvim_initialise()], its initialiser is
+#'   evaluated using the model context. The resulting vector or matrix is then
+#'   handled in the same way as an explicitly supplied `Z`.
 #'
-#' If `Z` is a numeric matrix, each row is interpreted as one initial
-#' attractiveness vector. The selected algorithm is run independently from
-#' each row, and the solution with the largest final potential is returned.
-#' Consequently, `ncol(Z)` must equal `ncol(costs)`.
-#'
-#' If `Z` is `NULL`, a single initial attractiveness vector is constructed
-#' automatically. In the bipartite case, it is the centre of mass of the
-#' weighted simplex:
+#' In the bipartite case, automatic initialisation uses the centre of mass of
+#' the weighted simplex:
 #'
 #' \deqn{
 #'   Z_j^0 =
 #'   \frac{\sum_i X_i}{p\kappa_j},
 #' }
 #'
-#' where \eqn{p} is the number of destinations. In the non-bipartite case, the
-#' initial attractivenesses are
+#' where \eqn{p} is the number of destinations. In the non-bipartite case, it
+#' uses
 #'
 #' \deqn{
 #'   Z_j^0 = \frac{X_j}{\kappa_j}.
 #' }
 #'
-#' Automatic initialisation with `Z = NULL` therefore produces one run. To
-#' perform several runs, the starting points must be generated beforehand and
-#' supplied as the rows of a matrix, for instance using the
-#' [sample_weighted_simplex()] function.
+#' Automatic initialisation therefore produces a single run. Use a matrix or
+#' [blvim_initialise()] to perform multiple runs.
 #'
-#' ## Boltzmann-Lotka-Volterra iterations
+#' For multiple runs, all starting points use the same model parameters,
+#' algorithm, convergence settings, and algorithm-specific controls. The final
+#' potential is evaluated for each run, and the run with the strictly largest
+#' potential is selected. If several runs have the same largest potential, the
+#' first is selected.
 #'
-#' At each step of a Boltzmann-Lotka-Volterra (BLV) algorithm, flows are
-#' computed according to the production-constrained entropy-maximising model
-#' implemented by [static_blvim()]. The total flow received by destination
+#' Summaries of all runs are stored in the returned model and can be obtained
+#' with [sim_logs()]. If `keep_runs = TRUE`, the complete fitted models are
+#' retained and can be obtained with [sim_runs()].
+#'
+#' ## Boltzmann-Lotka-Volterra algorithms
+#'
+#' At each iteration of a Boltzmann-Lotka-Volterra (BLV) algorithm, flows are
+#' computed with [static_blvim()]. The total flow received by destination
 #' \eqn{j} is
 #'
 #' \deqn{
@@ -139,9 +143,7 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #' }
 #'
 #' Attractivenesses are then updated to bring \eqn{\kappa_j Z_j} closer to
-#' \eqn{D_j}.
-#'
-#' Two BLV algorithms are available through `algorithm`:
+#' \eqn{D_j}. Two BLV algorithms are available:
 #'
 #' 1. `"linear"` uses the original update rule proposed by Harris and Wilson
 #'    (1978):
@@ -170,144 +172,111 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #'      \right) Z_j^t.
 #'    }
 #'
-#' For these two algorithms, \eqn{\epsilon} is specified by `epsilon` and
-#' should generally be smaller than one.
-#'
-#' Updates are performed until convergence or until `iter_max` iterations have
-#' been reached. Convergence is checked every `conv_check` iterations. The
-#' algorithm is considered to have converged if
+#' For both algorithms, \eqn{\epsilon} is specified by `epsilon` and should
+#' generally be smaller than one. Convergence is checked every `conv_check`
+#' iterations and is attained when
 #'
 #' \deqn{
 #'   \lVert Z^{t+1} - Z^t \rVert
-#'   <
+#'   &lt;
 #'   \delta
 #'   \left(
 #'     \lVert Z^{t+1} \rVert + \delta
 #'   \right),
 #' }
 #'
-#' where \eqn{\delta} is specified by `precision`.
+#' where \eqn{\delta} is specified by `precision`. Iteration stops at
+#' convergence or after `iter_max` iterations.
 #'
 #' ## Gradient algorithms
 #'
-#' Finding an equilibrium with the BLV approach is equivalent to looking for a
-#' maximum of the potential function; see [sim_potential()]. The gradient
-#' algorithms optimise this potential directly by projected gradient ascent.
+#' Computing an equilibrium is equivalent to maximising the potential
+#' function; see [sim_potential()]. The gradient algorithms optimise this
+#' potential directly using projected gradient ascent.
 #'
 #' The `"gradient"` algorithm works directly with the attractivenesses
-#' \eqn{Z_j}. The `"gradient_unit"` algorithm rescales the problem and works
-#' with variables \eqn{U_j} satisfying
+#' \eqn{Z_j}. The `"gradient_unit"` algorithm works with rescaled variables
+#' \eqn{U_j} satisfying
 #'
 #' \deqn{
 #'   \sum_{j=1}^{p} U_j = 1.
 #' }
 #'
-#' This rescaling can accelerate convergence in some settings. The two
-#' gradient algorithms optimise equivalent formulations and should yield the
-#' same solution up to numerical precision. They may, however, reach solutions
-#' different from those produced by the `"linear"` and `"quadratic"`
-#' algorithms.
+#' The rescaling can accelerate convergence in some settings. The two
+#' algorithms optimise equivalent formulations and should produce the same
+#' solution up to numerical precision. They can nevertheless converge to
+#' solutions different from those obtained with the `"linear"` and
+#' `"quadratic"` algorithms.
 #'
-#' The `epsilon` and `conv_check` parameters are not used by either gradient
-#' algorithm. Gradient convergence is assessed using a duality gap and the
-#' tolerance specified by `precision`. The gradient ascent is limited to
-#' `iter_max` iterations.
+#' Both gradient algorithms use projected ascent with a backtracking line
+#' search and an Armijo sufficient-increase condition. Convergence is assessed
+#' using a duality gap with tolerance `precision`, and the number of iterations
+#' is limited by `iter_max`. The `epsilon` and `conv_check` arguments are not
+#' used. Line-search and other internal parameters can be modified through
+#' `control`; see [blvim_gradient_control()].
 #'
-#' Both gradient algorithms use a standard backtracking line search with an
-#' Armijo sufficient-increase condition. Line-search parameters can be
-#' modified through `control`; see [blvim_gradient_control()].
+#' @param Z Initial destination attractivenesses. This can be `NULL` for
+#'   automatic single-point initialisation, a numeric vector with one value per
+#'   destination, a numeric matrix with one starting point per row, or an
+#'   object created by [blvim_initialise()]. The number of columns of a matrix
+#'   must equal `ncol(costs)`.
 #'
-#' ## Multiple starting points
+#' @param kappa A strictly positive numeric vector of conversion factors
+#'   between destination attractivenesses and incoming flows. A scalar is
+#'   recycled to all destinations. The default `1` gives the standard balance
+#'   equations without destination-specific conversion factors.
 #'
-#' When `Z` is a matrix, the rows of `Z` are used as independent starting
-#' points. Each run uses the same model parameters, algorithm, convergence
-#' threshold, iteration limit, and algorithm-specific control parameters.
-#'
-#' The final potential of every run is evaluated using the corresponding final
-#' attractiveness vector. The run with the strictly largest potential is
-#' selected. If several runs attain the same largest potential, the first such
-#' run is selected.
-#'
-#' The selected run is returned as the main fitted model. A data frame
-#' summarising all runs is attached to the result and is available through the
-#' `logs` information stored by the fitted object. If `keep_runs = TRUE`,
-#' the complete fitted models obtained from all starting points are also
-#' retained.
-#'
-#' @param Z Initial destination attractivenesses. It can be:
-#'
-#'   * `NULL`, in which case a single starting point is constructed
-#'   automatically;
-#'   * a numeric vector containing one initial attractiveness value per
-#'   destination; or
-#'   * a numeric matrix whose rows are initial attractiveness vectors and whose
-#'   columns correspond to destinations.
-#'
-#'   With a matrix, the algorithm is run once per row and the solution with the
-#'   largest final potential is returned.
-#'
-#' @param kappa A numeric vector of conversion factors between destination
-#'   attractivenesses and incoming flows. Values must be strictly positive. A
-#'   scalar value is recycled to all destinations. Defaults to `1`, which gives
-#'   the standard balance equations without destination-specific conversion
-#'   factors.
-#'
-#' @param algorithm A character string selecting the algorithm used to compute
-#'   the equilibrium. It must be one of `"linear"`, `"quadratic"`, `"gradient"`,
-#'   or `"gradient_unit"`. The default is `"linear"`. Partial matching is
-#'   supported.
-#'
-#' @param precision A positive numeric scalar giving the convergence threshold.
-#'   For `"linear"` and `"quadratic"`, it is used in the attractiveness-based
-#'   convergence test. For `"gradient"` and `"gradient_unit"`, it is used in the
-#'   duality-gap stopping criterion.
+#' @param epsilon A positive numeric scalar giving the update intensity for
+#'   the `"linear"` and `"quadratic"` algorithms. It is not used by the
+#'   gradient algorithms.
 #'
 #' @param iter_max A positive integer giving the maximum number of iterations
 #'   for each run.
-#'
-#' @param epsilon A positive numeric scalar giving the update intensity for the
-#'   `"linear"` and `"quadratic"` algorithms. It is not used by the gradient
-#'   algorithms.
 #'
 #' @param conv_check A positive integer giving the number of iterations between
 #'   convergence checks for the `"linear"` and `"quadratic"` algorithms. It is
 #'   not used by the gradient algorithms.
 #'
-#' @param control A list of internal parameters for the gradient algorithms,
-#'   normally produced by [blvim_gradient_control()]. It is not used by the
-#'   `"linear"` and `"quadratic"` algorithms.
+#' @param precision A positive numeric scalar giving the convergence tolerance.
+#'   It is used in the attractiveness-based convergence test for `"linear"` and
+#'   `"quadratic"`, and in the duality-gap stopping criterion for `"gradient"`
+#'   and `"gradient_unit"`.
+#'
+#' @param algorithm A character string selecting the equilibrium algorithm. It
+#'   must be one of `"linear"`, `"quadratic"`, `"gradient"`, or
+#'   `"gradient_unit"`. Partial matching is supported.
+#'
+#' @param control A list of parameters for the gradient algorithms, normally
+#'   produced by [blvim_gradient_control()]. It is not used by `"linear"` or
+#'   `"quadratic"`.
 #'
 #' @param keep_runs A logical scalar controlling whether complete fitted models
-#'   from all runs are retained when `Z` is a matrix. If `FALSE`, the default,
-#'   only the selected model and the run summaries are retained. If `TRUE`, a
-#'   `sim_list` containing all fitted models is also stored in the returned
-#'   object. This argument has no effect when `Z` is `NULL` or a vector.
+#'   are retained when multiple starting points are used. If `FALSE`, only the
+#'   selected model and the run summaries are retained. If `TRUE`, all fitted
+#'   models are stored in a `sim_list`. This argument has no effect for a
+#'   single starting point.
 #'
 #' @inheritParams static_blvim
 #'
-#' @returns An object of class `sim` and `sim_blvim` containing the matrix of
-#'   flows between origins and destinations, the final destination
-#'   attractivenesses, and information about the algorithm and its convergence.
+#' @returns An object inheriting from `sim` and `sim_blvim`. It contains the
+#'   equilibrium flow matrix, final destination attractivenesses, initial
+#'   attractivenesses of the selected run, and convergence information.
 #'
-#'   When `Z` is a matrix, the returned object corresponds to the run with the
-#'   largest final potential. It additionally contains a run-summary data frame
-#'   with one row per starting point and the following columns:
+#'   When multiple starting points are used, the returned object represents the
+#'   run with the largest final potential. Run summaries are available through
+#'   [sim_logs()] and contain:
 #'
-#'   * `run`: index of the run from 1 to `nrow(Z)`;
-#'   * `potential`: final value of the potential;
-#'   * `iterations`: number of iterations reported for the run;
-#'   * `converged`: whether the run stopped before reaching `iter_max`;
-#'   * `status`: stopping status reported by a gradient algorithm;
-#'   * `gap`: final duality gap reported by a gradient algorithm;
-#'   * `evaluations`: number of evaluations reported by a gradient algorithm.
+#'   * `run`: index of the starting point;
+#'   * `potential`: final potential;
+#'   * `iterations`: number of reported iterations;
+#'   * `converged`: whether the run stopped before `iter_max`;
+#'   * `status`: stopping status for a gradient algorithm;
+#'   * `gap`: final duality gap for a gradient algorithm;
+#'   * `evaluations`: number of evaluations for a gradient algorithm.
 #'
-#'   For `"linear"` and `"quadratic"`, `status`, `gap`, and `evaluations` are
-#'   `NA`, because these diagnostics are specific to the gradient algorithms.
-#'   The data frame can be accessed with the [sim_logs()] function.
-#'
-#'   If `Z` is a matrix and `keep_runs = TRUE`, the returned object also stores
-#'   a `sim_list` containing the fitted models from all runs, in the same order
-#'   as the rows of `Z`. The list can be obtained using [sim_runs()].
+#'   The last three columns are `NA` for `"linear"` and `"quadratic"`. If
+#'   `keep_runs = TRUE`, the complete fitted models are additionally available
+#'   through [sim_runs()], in the same order as the starting points.
 #'
 #' @inheritSection static_blvim Location data
 #'
@@ -319,73 +288,54 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #' # Rescale attractivenesses to total production
 #' attractiveness <- attractiveness / sum(attractiveness) * sum(production)
 #'
-#' # Original Harris-Wilson update rule from an explicit starting point
-#' flows <- blvim(
-#'   distances,
-#'   production,
-#'   1.5,
-#'   1 / 250,
-#'   attractiveness,
+#' # Original Harris-Wilson update rule
+#' linear_flows <- blvim(
+#'   distances, production, 1.5, 1 / 250, attractiveness,
 #'   algorithm = "linear"
 #' )
-#' flows
+#' linear_flows
 #'
 #' # Wilson's quadratic update rule
 #' quadratic_flows <- blvim(
-#'   distances,
-#'   production,
-#'   1.5,
-#'   1 / 250,
-#'   attractiveness,
+#'   distances, production, 1.5, 1 / 250, attractiveness,
 #'   algorithm = "quadratic"
 #' )
 #'
-#' # Gradient-based algorithm
+#' # Gradient ascent on the potential
 #' gradient_flows <- blvim(
-#'   distances,
-#'   production,
-#'   1.5,
-#'   1 / 250,
-#'   attractiveness,
+#'   distances, production, 1.5, 1 / 250, attractiveness,
 #'   algorithm = "gradient"
 #' )
 #'
-#' # Rescaled gradient-based algorithm
+#' # Gradient ascent using unit-simplex variables
 #' unit_gradient_flows <- blvim(
-#'   distances,
-#'   production,
-#'   1.5,
-#'   1 / 250,
-#'   attractiveness,
+#'   distances, production, 1.5, 1 / 250, attractiveness,
 #'   algorithm = "gradient_unit"
 #' )
 #'
-#' # Automatic initialisation from the centre of the weighted simplex
+#' # Automatic single-point initialisation
 #' automatic_flows <- blvim(
-#'   distances,
-#'   production,
-#'   1.5,
-#'   1 / 250,
+#'   distances, production, 1.5, 1 / 250,
 #'   algorithm = "gradient"
 #' )
 #'
 #' # Multiple explicitly supplied starting points
 #' starts <- rbind(
 #'   attractiveness,
-#'   c(
-#'     rep(0, 5),
-#'     rep(sum(production) / 5, 5)
-#'   )
+#'   c(rep(0, 5), rep(sum(production) / 5, 5))
 #' )
-#'
 #' multistart_flows <- blvim(
-#'   distances,
-#'   production,
-#'   1.5,
-#'   1 / 250,
+#'   distances, production, 1.5, 1 / 250,
 #'   Z = starts,
 #'   algorithm = "gradient",
 #'   keep_runs = TRUE
+#' )
+#'
+#' # Generate starting points when the model context is known
+#' generated_flows <- blvim(
+#'   distances, production, 1.5, 1 / 250,
+#'   Z = blvim_initialise(n = 20, face_fraction = 0.5),
+#'   algorithm = "gradient"
 #' )
 #'
 #' @references
@@ -400,12 +350,12 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #' \doi{10.1098/rsif.2007.1288}
 #'
 #' @seealso
+#' [static_blvim()] for the underlying production-constrained interaction
+#' model, [blvim_initialise()] for generated starting points,
 #' [blvim_gradient_control()] for gradient and line-search parameters,
-#' [grid_blvim()] for systematic exploration of parameter influence,
-#' [static_blvim()] for the static model, [sim_potential()] for the
-#' potential function and [sample_weighted_simplex()] for a way to generate
-#' initial configurations. Diagnostic for multiple runs can be obtained using
-#' using [sim_runs()] and [sim_logs()].
+#' [sim_potential()] for the potential function, and [grid_blvim()] for
+#' systematic exploration of parameter values. Multiple-run summaries and
+#' fitted models can be obtained with [sim_logs()] and [sim_runs()].
 #'
 #' @export
 blvim <- function(costs, X, alpha, beta, Z = NULL,
@@ -427,6 +377,18 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
     with_kappa <- TRUE
     all_kappa[seq_len(ncol(costs))] <- kappa
   }
+  context <- list(
+    costs = costs,
+    X = X,
+    alpha = alpha,
+    beta = beta,
+    kappa = all_kappa,
+    C = sum(X),
+    bipartite = bipartite,
+    n_origins = nrow(costs),
+    n_destinations = ncol(costs)
+  )
+
   if (is.null(Z)) {
     ## automatic initialisation
     if (bipartite) {
@@ -434,6 +396,9 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
     } else {
       Z <- X / all_kappa
     }
+  } else {
+    resolved <- resolve_blvim_initialise(Z, context)
+    Z <- resolved$Z
   }
   check_configuration(costs, X, alpha, beta, Z, kappa, bipartite)
   logs <- NULL
