@@ -33,6 +33,7 @@ columns:
 \item \code{alpha}: the return to scale parameter used to build the model
 \item \code{beta}: the cost inverse scale parameter used to build the model
 \item \code{diversity}: model default \code{\link[=diversity]{diversity()}} (Shannon's diversity)
+\item \code{potential}: model potential \code{\link[=sim_potential]{sim_potential()}}
 \item \code{iterations}: the number of iterations used to produce the model (1 for a
 static model)
 \item \code{converged}: \code{TRUE} is the iterative calculation of the model converged
@@ -61,7 +62,7 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
 all_flows_df <- sim_df(all_flows)
 all_flows_df$converged
 ## change the name of the sim column
-names(all_flows_df)[6] <- "models"
+names(all_flows_df)[7] <- "models"
 ## still a sim_df
 class(all_flows_df)
 ## get the models

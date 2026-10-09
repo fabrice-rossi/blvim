@@ -33,7 +33,7 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
 )
 all_flows_df <- sim_df(all_flows)
 names(all_flows_df)
-names(all_flows_df)[6] <- "my_sim"
+names(all_flows_df)[7] <- "my_sim"
 names(all_flows_df)
 ## still a sim_df
 class(all_flows_df)

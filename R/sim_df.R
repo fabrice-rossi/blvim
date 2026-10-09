@@ -2,10 +2,7 @@ new_sim_df <- function(sim_list, sim_column, ..., class = character()) {
   if (!inherits(sim_list, "sim_list")) {
     cli::cli_abort("{.arg sim_list} must be a {.cls sim_list}")
   }
-  if (sim_column %in% c(
-    "alpha", "beta", "diversity", "iterations",
-    "converged"
-  )) {
+  if (sim_column %in% sim_df_reserved_column()) {
     cli::cli_abort("{.arg sim_column} cannot be the reserved column
 name {.str {sim_column}}")
   }
@@ -15,18 +12,23 @@ name {.str {sim_column}}")
     alpha = sapply(sim_list, return_to_scale),
     beta = sapply(sim_list, inverse_cost),
     diversity = grid_diversity(sim_list),
+    potential = grid_sim_potential(sim_list),
     iterations = iterations,
     converged = converged,
     sim = I(sim_list)
   )
-  names(pre_result)[6] <- sim_column
+  names(pre_result)[sim_column_default_position()] <- sim_column
   attr(pre_result, "sim_column") <- sim_column
   class(pre_result) <- c(class, "sim_df", class(pre_result))
   pre_result
 }
 
 sim_df_reserved_column <- function() {
-  c("alpha", "beta", "diversity", "iterations", "converged")
+  c("alpha", "beta", "diversity", "potential", "iterations", "converged")
+}
+
+sim_column_default_position <- function() {
+  length(sim_df_reserved_column()) + 1
 }
 
 recompute_sim_df <- function(sim_df) {
@@ -35,8 +37,9 @@ recompute_sim_df <- function(sim_df) {
   sim_df$alpha <- sapply(sim_list, return_to_scale)
   sim_df$beta <- sapply(sim_list, inverse_cost)
   sim_df$diversity <- grid_diversity(sim_list)
-  sim_df$iterations <- sapply(sim_list, sim_iterations)
-  sim_df$converged <- sapply(sim_list, sim_converged)
+  sim_df$potential <- grid_sim_potential(sim_list)
+  sim_df$iterations <- grid_sim_iterations(sim_list)
+  sim_df$converged <- grid_sim_converged(sim_list)
   class(sim_df) <- c("sim_df", class(sim_df))
   sim_df
 }
@@ -57,6 +60,7 @@ recompute_sim_df <- function(sim_df) {
 #' - `alpha`: the return to scale parameter used to build the model
 #' - `beta`: the cost inverse scale parameter used to build the model
 #' - `diversity`: model default [diversity()] (Shannon's diversity)
+#' - `potential`: model potential [sim_potential()]
 #' - `iterations`: the number of iterations used to produce the model (1 for a
 #' static model)
 #' - `converged`: `TRUE` is the iterative calculation of the model converged
@@ -90,7 +94,7 @@ recompute_sim_df <- function(sim_df) {
 #' all_flows_df <- sim_df(all_flows)
 #' all_flows_df$converged
 #' ## change the name of the sim column
-#' names(all_flows_df)[6] <- "models"
+#' names(all_flows_df)[7] <- "models"
 #' ## still a sim_df
 #' class(all_flows_df)
 #' ## get the models
@@ -196,7 +200,7 @@ sim_column <- function(sim_df) {
 #' ## sub data frame, a sim_df
 #' all_flows_df[1:5, ]
 #' ## sub data frame, not a sim_df (alpha is missing)
-#' all_flows_df[6:10, 2:6]
+#' all_flows_df[6:10, 2:7]
 #' all_flows_2 <- grid_blvim(distances, log(french_cities$population[1:10]),
 #'   seq(1.05, 1.45, by = 0.2),
 #'   seq(1, 3, by = 0.5) / 400,
@@ -362,7 +366,7 @@ NULL
 #' )
 #' all_flows_df <- sim_df(all_flows)
 #' names(all_flows_df)
-#' names(all_flows_df)[6] <- "my_sim"
+#' names(all_flows_df)[7] <- "my_sim"
 #' names(all_flows_df)
 #' ## still a sim_df
 #' class(all_flows_df)

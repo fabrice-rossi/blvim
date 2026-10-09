@@ -87,7 +87,7 @@ all_flows_df[, "sim"]
 ## sub data frame, a sim_df
 all_flows_df[1:5, ]
 ## sub data frame, not a sim_df (alpha is missing)
-all_flows_df[6:10, 2:6]
+all_flows_df[6:10, 2:7]
 all_flows_2 <- grid_blvim(distances, log(french_cities$population[1:10]),
   seq(1.05, 1.45, by = 0.2),
   seq(1, 3, by = 0.5) / 400,

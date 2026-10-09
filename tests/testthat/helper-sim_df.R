@@ -28,10 +28,10 @@ test_sim_df_modifications <- function(models_df, models) {
   expect_s3_class(models_df_nosim, "data.frame")
   expect_false(inherits(models_df_nosim, "sim_df"))
   models_df_nosim <- models_df
-  models_df_nosim[[6]] <- NULL
+  models_df_nosim[[7]] <- NULL
   expect_true(is_df_not_sim_df(models_df_nosim))
   models_df_nosim <- models_df
-  models_df_nosim[[6]] <- grid_diversity(models, "renyi", 1.5)
+  models_df_nosim[[7]] <- grid_diversity(models, "renyi", 1.5)
   expect_true(is_df_not_sim_df(models_df_nosim))
   models_df_noalpha <- models_df
   models_df_noalpha[[1]] <- NULL
@@ -41,26 +41,26 @@ test_sim_df_modifications <- function(models_df, models) {
   models_df_sim$sim <- models
   expect_true(is_sim_df(models_df_sim))
   models_df_sim <- models_df
-  models_df_sim[[6]] <- models
+  models_df_sim[[7]] <- models
   expect_true(is_sim_df(models_df_sim))
   ## internal modifications
   models_df_sim <- models_df
   models_df_sim[2, 3] <- 12
   expect_true(is_sim_df(models_df_sim))
   models_df_sim <- models_df
-  models_df_sim[, 6] <- models[seq_len(nrow(models_df))]
+  models_df_sim[, 7] <- models[seq_len(nrow(models_df))]
   expect_true(is_sim_df(models_df_sim))
   models_df_sim <- models_df
   models_df_sim[, "sim"] <- models[seq_len(nrow(models_df))]
   expect_true(is_sim_df(models_df_sim))
   models_df_sim <- models_df
-  models_df_sim[, 6] <- models_df$alpha
+  models_df_sim[, 7] <- models_df$alpha
   expect_true(is_df_not_sim_df(models_df_sim))
   models_df_sim <- models_df
   models_df_sim[, "sim"] <- models_df$beta
   expect_true(is_df_not_sim_df(models_df_sim))
   models_df_sim <- models_df
-  models_df_sim[, 6] <- NULL
+  models_df_sim[, 7] <- NULL
   expect_true(is_df_not_sim_df(models_df_sim))
   models_df_sim <- models_df
   models_df_sim[, "sim"] <- NULL
@@ -76,15 +76,15 @@ test_sim_df_names <- function(models_df, models) {
   expect_equal(names(models_df), new_names)
   expect_true(is_df_not_sim_df(models_df))
   models_df_nosim <- save_models_df
-  names(models_df_nosim) <- c(names(models_df_nosim)[1:5], NA, "bar")
+  names(models_df_nosim) <- c(names(models_df_nosim)[1:6], NA, "bar")
   expect_true(is_df_not_sim_df(models_df_nosim))
   ## we can only rename truc and the sim column
   models_df <- save_models_df
-  names(models_df)[7] <- "bidule"
+  names(models_df)[8] <- "bidule"
   expect_true(is_sim_df(models_df))
-  expect_equal(names(models_df)[7], "bidule")
-  names(models_df)[6] <- "my_sim_column"
+  expect_equal(names(models_df)[8], "bidule")
+  names(models_df)[7] <- "my_sim_column"
   expect_true(is_sim_df(models_df))
-  expect_equal(names(models_df)[6], "my_sim_column")
+  expect_equal(names(models_df)[7], "my_sim_column")
   expect_equal(sim_column(models_df), models)
 }

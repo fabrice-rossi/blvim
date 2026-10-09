@@ -30,15 +30,15 @@ test_that("sim_df creation obeys to its documentation", {
   models_df <- sim_df(models)
   expect_true(is_sim_df(models_df))
   ## column names
-  expect_named(models_df, c("alpha", "beta", "diversity", "iterations", "converged", "sim"), ignore.order = TRUE)
+  expect_named(models_df, c("alpha", "beta", "diversity", "potential", "iterations", "converged", "sim"), ignore.order = TRUE)
   ## sim is the last one
-  expect_equal(names(models_df)[6], "sim")
+  expect_equal(names(models_df)[7], "sim")
   ## models (low level, maybe implemented in a more abstract way)
   expect_equal(as.list(models_df$sim), as.list(models))
   models_df <- sim_df(models, sim_column = "my_sims")
   expect_true(is_sim_df(models_df))
-  expect_named(models_df, c("alpha", "beta", "diversity", "iterations", "converged", "my_sims"), ignore.order = TRUE)
-  expect_equal(names(models_df)[6], "my_sims")
+  expect_named(models_df, c("alpha", "beta", "diversity", "potential", "iterations", "converged", "my_sims"), ignore.order = TRUE)
+  expect_equal(names(models_df)[7], "my_sims")
   expect_equal(as.list(models_df$my_sims), as.list(models))
   ## parameters
   params <- expand.grid(alpha = alphas, beta = betas)
@@ -115,7 +115,7 @@ test_that("sim_df modifications keep the data frame consistent", {
   models_df_1_to_2[["sim"]] <- models_2
   expect_equal(models_df_2, models_df_1_to_2)
   models_df_1_to_2 <- models_df
-  models_df_1_to_2[, 6] <- models_2
+  models_df_1_to_2[, 7] <- models_2
   expect_equal(models_df_2, models_df_1_to_2)
   models_df_1_to_2 <- models_df
   models_df_1_to_2[, "sim"] <- models_2
@@ -124,7 +124,7 @@ test_that("sim_df modifications keep the data frame consistent", {
   expect_no_condition(models_df$alpha <- models_df$alpha)
   expect_error(models_df$alpha <- models_df_2$alpha)
   for (col in c(
-    "alpha", "beta", "diversity", "iterations",
+    "alpha", "beta", "diversity", "potential", "iterations",
     "converged"
   )) {
     ## ok
