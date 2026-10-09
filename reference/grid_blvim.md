@@ -17,7 +17,7 @@ grid_blvim(
   X,
   alphas,
   betas,
-  Z,
+  Z = NULL,
   kappa = 1,
   bipartite = TRUE,
   origin_data = NULL,
@@ -52,12 +52,19 @@ grid_blvim(
 
 - Z:
 
-  A vector of initial destination attractivenesses.
+  Initial destination attractivenesses. This can be `NULL` for automatic
+  single-point initialisation, a numeric vector with one value per
+  destination, a numeric matrix with one starting point per row, or an
+  object created by
+  [`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md).
+  The number of columns of a matrix must equal `ncol(costs)`.
 
 - kappa:
 
-  A vector of conversion factors between attractivenesses and incoming
-  flows. Values must be positive. Defaults to 1 for all destinations.
+  A strictly positive numeric vector of conversion factors between
+  destination attractivenesses and incoming flows. A scalar is recycled
+  to all destinations. The default `1` gives the standard balance
+  equations without destination-specific conversion factors.
 
 - bipartite:
 
@@ -79,32 +86,39 @@ grid_blvim(
 
 - epsilon:
 
-  Update intensity used by the `"linear"` and `"quadratic"` algorithms.
+  A positive numeric scalar giving the update intensity for the
+  `"linear"` and `"quadratic"` algorithms. It is not used by the
+  gradient algorithms.
 
 - iter_max:
 
-  Maximum number of iterations.
+  A positive integer giving the maximum number of iterations for each
+  run.
 
 - conv_check:
 
-  Number of iterations between convergence checks for the `"linear"` and
-  `"quadratic"` algorithms.
+  A positive integer giving the number of iterations between convergence
+  checks for the `"linear"` and `"quadratic"` algorithms. It is not used
+  by the gradient algorithms.
 
 - precision:
 
-  Convergence threshold.
+  A positive numeric scalar giving the convergence tolerance. It is used
+  in the attractiveness-based convergence test for `"linear"` and
+  `"quadratic"`, and in the duality-gap stopping criterion for
+  `"gradient"` and `"gradient_unit"`.
 
 - algorithm:
 
-  Character string selecting the algorithm used to compute the
-  equilibrium. One of `"linear"`, `"quadratic"`, `"gradient"` or
-  `"gradient_unit"`. Defaults to `"linear"`. Partial matching is
-  supported.
+  A character string selecting the equilibrium algorithm. It must be one
+  of `"linear"`, `"quadratic"`, `"gradient"`, or `"gradient_unit"`.
+  Partial matching is supported.
 
 - control:
 
-  List of internal parameters for the gradient algorithms as produced by
+  A list of parameters for the gradient algorithms, normally produced by
   [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md).
+  It is not used by `"linear"` or `"quadratic"`.
 
 - progress:
 

@@ -34,8 +34,8 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
 )
 all_flows_df <- sim_df(all_flows, sim_colum = "my_col")
 names(all_flows_df)
-#> [1] "alpha"      "beta"       "diversity"  "iterations" "converged" 
-#> [6] "my_col"    
+#> [1] "alpha"      "beta"       "diversity"  "potential"  "iterations"
+#> [6] "converged"  "my_col"    
 sim_column(all_flows_df)
 #> Collection of 15 spatial interaction models with 10 origin locations and 10
 #> destination locations computed on the following grid:

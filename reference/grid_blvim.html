@@ -55,7 +55,7 @@ returns an object of class sim_list which contains the resulting flows."><meta p
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Compute a collection of Boltzmann-Lotka-Volterra model solutions</h1>
-      <small class="dont-index">Source: <a href="https://github.com/fabrice-rossi/blvim/blob/main/R/grid-dynamic.R" class="external-link"><code>R/grid-dynamic.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/fabrice-rossi/blvim/blob/main/R/grid_dynamic.R" class="external-link"><code>R/grid_dynamic.R</code></a></small>
       <div class="d-none name"><code>grid_blvim.Rd</code></div>
     </div>
 
@@ -75,7 +75,7 @@ returns an object of class <code>sim_list</code> which contains the resulting fl
 <span>  <span class="va">X</span>,</span>
 <span>  <span class="va">alphas</span>,</span>
 <span>  <span class="va">betas</span>,</span>
-<span>  <span class="va">Z</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  kappa <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  bipartite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  origin_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -111,13 +111,18 @@ returns an object of class <code>sim_list</code> which contains the resulting fl
 
 
 <dt id="arg-z">Z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
-<dd><p>A vector of initial destination attractivenesses.</p></dd>
+<dd><p>Initial destination attractivenesses. This can be <code>NULL</code> for
+automatic single-point initialisation, a numeric vector with one value per
+destination, a numeric matrix with one starting point per row, or an
+object created by <code><a href="blvim_initialise.html">blvim_initialise()</a></code>. The number of columns of a matrix
+must equal <code>ncol(costs)</code>.</p></dd>
 
 
 <dt id="arg-kappa">kappa<a class="anchor" aria-label="anchor" href="#arg-kappa"></a></dt>
-<dd><p>A vector of conversion factors between attractivenesses and
-incoming flows. Values must be positive. Defaults to 1 for all
-destinations.</p></dd>
+<dd><p>A strictly positive numeric vector of conversion factors
+between destination attractivenesses and incoming flows. A scalar is
+recycled to all destinations. The default <code>1</code> gives the standard balance
+equations without destination-specific conversion factors.</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
@@ -138,32 +143,39 @@ destination locations (see details)</p></dd>
 
 
 <dt id="arg-epsilon">epsilon<a class="anchor" aria-label="anchor" href="#arg-epsilon"></a></dt>
-<dd><p>Update intensity used by the <code>"linear"</code> and <code>"quadratic"</code>
-algorithms.</p></dd>
+<dd><p>A positive numeric scalar giving the update intensity for
+the <code>"linear"</code> and <code>"quadratic"</code> algorithms. It is not used by the
+gradient algorithms.</p></dd>
 
 
 <dt id="arg-iter-max">iter_max<a class="anchor" aria-label="anchor" href="#arg-iter-max"></a></dt>
-<dd><p>Maximum number of iterations.</p></dd>
+<dd><p>A positive integer giving the maximum number of iterations
+for each run.</p></dd>
 
 
 <dt id="arg-conv-check">conv_check<a class="anchor" aria-label="anchor" href="#arg-conv-check"></a></dt>
-<dd><p>Number of iterations between convergence checks for the
-<code>"linear"</code> and <code>"quadratic"</code> algorithms.</p></dd>
+<dd><p>A positive integer giving the number of iterations between
+convergence checks for the <code>"linear"</code> and <code>"quadratic"</code> algorithms. It is
+not used by the gradient algorithms.</p></dd>
 
 
 <dt id="arg-precision">precision<a class="anchor" aria-label="anchor" href="#arg-precision"></a></dt>
-<dd><p>Convergence threshold.</p></dd>
+<dd><p>A positive numeric scalar giving the convergence tolerance.
+It is used in the attractiveness-based convergence test for <code>"linear"</code> and
+<code>"quadratic"</code>, and in the duality-gap stopping criterion for <code>"gradient"</code>
+and <code>"gradient_unit"</code>.</p></dd>
 
 
 <dt id="arg-algorithm">algorithm<a class="anchor" aria-label="anchor" href="#arg-algorithm"></a></dt>
-<dd><p>Character string selecting the algorithm used to compute
-the equilibrium. One of <code>"linear"</code>, <code>"quadratic"</code>, <code>"gradient"</code> or
-<code>"gradient_unit"</code>. Defaults to <code>"linear"</code>. Partial matching is supported.</p></dd>
+<dd><p>A character string selecting the equilibrium algorithm. It
+must be one of <code>"linear"</code>, <code>"quadratic"</code>, <code>"gradient"</code>, or
+<code>"gradient_unit"</code>. Partial matching is supported.</p></dd>
 
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
-<dd><p>List of internal parameters for the gradient algorithms as
-produced by <code><a href="blvim_gradient_control.html">blvim_gradient_control()</a></code>.</p></dd>
+<dd><p>A list of parameters for the gradient algorithms, normally
+produced by <code><a href="blvim_gradient_control.html">blvim_gradient_control()</a></code>. It is not used by <code>"linear"</code> or
+<code>"quadratic"</code>.</p></dd>
 
 
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>

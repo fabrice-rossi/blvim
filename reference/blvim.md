@@ -1,16 +1,14 @@
 # Compute an equilibrium solution of the Harris and Wilson model
 
-This function computes flows between origin locations and destination
-locations at an equilibrium solution of Harris and Wilson interaction
-model. The model is initialised with the production constraints at the
-origin locations and the initial values of the the attractivenesses of
-destination locations. At convergence, attractivenesses fulfil the
-balance equations \$\$\forall j,\quad \kappa_j
-Z_j=\sum\_{i=1}^{n}Y\_{ij},\$\$ where the flows are computed according
-to Wilson's production constrained entropy maximising model
-([`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)).
-The function implements several algorithms that all aim to reach an
-equilibrium.
+`blvim()` computes equilibrium flows between origin and destination
+locations in the Harris and Wilson spatial interaction model. At
+equilibrium, destination attractivenesses satisfy \$\$ \forall j,\quad
+\kappa_j Z_j = \sum\_{i=1}^{n} Y\_{ij}, \$\$ where \\Y\_{ij}\\ is the
+flow from origin \\i\\ to destination \\j\\, \\Z_j\\ is the
+attractiveness of destination \\j\\, and \\\kappa_j\\ converts
+attractiveness into incoming flow. Flows are computed using the
+production-constrained entropy-maximising model implemented by
+[`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md).
 
 ## Usage
 
@@ -20,7 +18,7 @@ blvim(
   X,
   alpha,
   beta,
-  Z,
+  Z = NULL,
   kappa = 1,
   bipartite = TRUE,
   origin_data = NULL,
@@ -30,7 +28,8 @@ blvim(
   conv_check = 100,
   precision = 1e-06,
   algorithm = c("linear", "quadratic", "gradient", "gradient_unit"),
-  control = blvim_gradient_control()
+  control = blvim_gradient_control(),
+  keep_runs = FALSE
 )
 ```
 
@@ -54,12 +53,19 @@ blvim(
 
 - Z:
 
-  A vector of initial destination attractivenesses.
+  Initial destination attractivenesses. This can be `NULL` for automatic
+  single-point initialisation, a numeric vector with one value per
+  destination, a numeric matrix with one starting point per row, or an
+  object created by
+  [`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md).
+  The number of columns of a matrix must equal `ncol(costs)`.
 
 - kappa:
 
-  A vector of conversion factors between attractivenesses and incoming
-  flows. Values must be positive. Defaults to 1 for all destinations.
+  A strictly positive numeric vector of conversion factors between
+  destination attractivenesses and incoming flows. A scalar is recycled
+  to all destinations. The default `1` gives the standard balance
+  equations without destination-specific conversion factors.
 
 - bipartite:
 
@@ -81,108 +87,193 @@ blvim(
 
 - epsilon:
 
-  Update intensity used by the `"linear"` and `"quadratic"` algorithms.
+  A positive numeric scalar giving the update intensity for the
+  `"linear"` and `"quadratic"` algorithms. It is not used by the
+  gradient algorithms.
 
 - iter_max:
 
-  Maximum number of iterations.
+  A positive integer giving the maximum number of iterations for each
+  run.
 
 - conv_check:
 
-  Number of iterations between convergence checks for the `"linear"` and
-  `"quadratic"` algorithms.
+  A positive integer giving the number of iterations between convergence
+  checks for the `"linear"` and `"quadratic"` algorithms. It is not used
+  by the gradient algorithms.
 
 - precision:
 
-  Convergence threshold.
+  A positive numeric scalar giving the convergence tolerance. It is used
+  in the attractiveness-based convergence test for `"linear"` and
+  `"quadratic"`, and in the duality-gap stopping criterion for
+  `"gradient"` and `"gradient_unit"`.
 
 - algorithm:
 
-  Character string selecting the algorithm used to compute the
-  equilibrium. One of `"linear"`, `"quadratic"`, `"gradient"` or
-  `"gradient_unit"`. Defaults to `"linear"`. Partial matching is
-  supported.
+  A character string selecting the equilibrium algorithm. It must be one
+  of `"linear"`, `"quadratic"`, `"gradient"`, or `"gradient_unit"`.
+  Partial matching is supported.
 
 - control:
 
-  List of internal parameters for the gradient algorithms as produced by
+  A list of parameters for the gradient algorithms, normally produced by
   [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md).
+  It is not used by `"linear"` or `"quadratic"`.
+
+- keep_runs:
+
+  A logical scalar controlling whether complete fitted models are
+  retained when multiple starting points are used. If `FALSE`, only the
+  selected model and the run summaries are retained. If `TRUE`, all
+  fitted models are stored in a `sim_list`. This argument has no effect
+  for a single starting point.
 
 ## Value
 
-an object of class `sim`(and `sim_blvim`) for spatial interaction model
-that contains the matrix of flows between the origin and the destination
-locations as well as the final attractivenesses computed by the model.
+An object inheriting from `sim` and `sim_blvim`. It contains the
+equilibrium flow matrix, final destination attractivenesses, initial
+attractivenesses of the selected run, and convergence information.
+
+When multiple starting points are used, the returned object represents
+the run with the largest final potential. Run summaries are available
+through
+[`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md)
+and contain:
+
+- `run`: index of the starting point;
+
+- `potential`: final potential;
+
+- `iterations`: number of reported iterations;
+
+- `converged`: whether the run stopped before `iter_max`;
+
+- `status`: stopping status for a gradient algorithm;
+
+- `gap`: final duality gap for a gradient algorithm;
+
+- `evaluations`: number of evaluations for a gradient algorithm.
+
+The last three columns are `NA` for `"linear"` and `"quadratic"`. If
+`keep_runs = TRUE`, the complete fitted models are additionally
+available through
+[`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md),
+in the same order as the starting points.
 
 ## Details
 
-All algorithms are initialised with user supplied attractivenesses and
-proceed iteratively by updating them until convergence. Two algorithms
-are instances of A. Wilson's Boltzmann-Lotka-Volterra (BLV) interaction
-model, while the other two algorithms are based on gradient ascent.
+Several iterative algorithms are available. The model can be run from a
+single initial attractiveness vector or from several starting points. In
+the latter case, the solution with the largest final potential is
+returned.
 
-### Boltzmann-Lotka-Volterra (BLV) iterations
+### Initialisation and multiple runs
 
-In a step of the BLV model, flows are computed according to the
-production constrained entropy maximising model proposed by A. Wilson
-and implemented in
+Initial destination attractivenesses are specified through `Z`:
+
+- If `Z` is `NULL`, one starting point is constructed automatically.
+
+- If `Z` is a numeric vector, the algorithm is run once from that
+  vector.
+
+- If `Z` is a numeric matrix, each row is used as an independent
+  starting point.
+
+- If `Z` is an object created by
+  [`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md),
+  its initialiser is evaluated using the model context. The resulting
+  vector or matrix is then handled in the same way as an explicitly
+  supplied `Z`.
+
+In the bipartite case, automatic initialisation uses the centre of mass
+of the weighted simplex:
+
+\$\$ Z_j^0 = \frac{\sum_i X_i}{p\kappa_j}, \$\$
+
+where \\p\\ is the number of destinations. In the non-bipartite case, it
+uses
+
+\$\$ Z_j^0 = \frac{X_j}{\kappa_j}. \$\$
+
+Automatic initialisation therefore produces a single run. Use a matrix
+or
+[`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md)
+to perform multiple runs.
+
+For multiple runs, all starting points use the same model parameters,
+algorithm, convergence settings, and algorithm-specific controls. The
+final potential is evaluated for each run, and the run with the strictly
+largest potential is selected. If several runs have the same largest
+potential, the first is selected.
+
+Summaries of all runs are stored in the returned model and can be
+obtained with
+[`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md).
+If `keep_runs = TRUE`, the complete fitted models are retained and can
+be obtained with
+[`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md).
+
+### Boltzmann-Lotka-Volterra algorithms
+
+At each iteration of a Boltzmann-Lotka-Volterra (BLV) algorithm, flows
+are computed with
 [`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md).
-Then the flows received at a destination are computed as follows
+The total flow received by destination \\j\\ is
 
-\$\$\forall j,\quad D_j=\sum\_{i=1}^{n}Y\_{ij},\$\$
+\$\$ D_j = \sum\_{i=1}^{n} Y\_{ij}. \$\$
 
-for destination \\j\\. This enables the attractivenesses to be updated
-by making them closer to the received flows, i.e. by trying to reduce
-\\\|D_j-\kappa_j Z_j\|\\, where \\\kappa_j\\ is a conversion factor
-between the attractiveness and the destination flow.
+Attractivenesses are then updated to bring \\\kappa_j Z_j\\ closer to
+\\D_j\\. Two BLV algorithms are available:
 
-Two algorithms of this family are available through the `algorithm`
-parameter:
-
-1.  `"linear"` uses the original update rule proposed in Harris & Wilson
-    (1978):
+1.  `"linear"` uses the original update rule proposed by Harris and
+    Wilson (1978):
 
     \$\$ Z_j^{t+1} = Z_j^t + \epsilon \left( \frac{D_j^t}{\kappa_j} -
     Z_j^t \right). \$\$
 
-2.  `"quadratic"` uses the update rule proposed in Wilson (2008):
+2.  `"quadratic"` uses the update rule proposed by Wilson (2008):
 
     \$\$ Z_j^{t+1} = Z_j^t + \epsilon \left( \frac{D_j^t}{\kappa_j} -
     Z_j^t \right) Z_j^t. \$\$
 
-For these algorithms(`"linear"` and `"quadratic"`), \\\epsilon\\ is
-given by the `epsilon` parameter and should generally be smaller than 1.
+For both algorithms, \\\epsilon\\ is specified by `epsilon` and should
+generally be smaller than one. Convergence is checked every `conv_check`
+iterations and is attained when
 
-Updates are performed until convergence or for a maximum of `iter_max`
-iterations. Convergence is checked every `conv_check` iterations. The
-algorithm is considered to have converged if
+\$\$ \lVert Z^{t+1} - Z^t \rVert &lt; \delta \left( \lVert Z^{t+1}
+\rVert + \delta \right), \$\$
 
-\$\$ \\Z^{t+1}-Z^t\\ \< \delta \left(\\Z^{t+1}\\+\delta\right), \$\$
-
-where \\\delta\\ is given by the `precision` parameter.
+where \\\delta\\ is specified by `precision`. Iteration stops at
+convergence or after `iter_max` iterations.
 
 ### Gradient algorithms
 
-Finding an equilibrium with the BLV approach is equivalent to looking
-for a maximum of the potential function (see
-[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)).
-The gradient algorithms use a direct approach of optimising the
-potential via a projected gradient ascent. The `"gradient"` algorithm
-optimises directly the potential while `"gradient_unit"` rescales the
-problem in order to work with \\U_j\\ instead of \\Z_j\\ in such a way
-that \\\sum\_{j=1}^p U_j=1\\. This can accelerate convergence in some
-settings. Results should be identical from both gradient approaches, but
-they can be different from solutions obtained by the `"linear"` and
+Computing an equilibrium is equivalent to maximising the potential
+function; see
+[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md).
+The gradient algorithms optimise this potential directly using projected
+gradient ascent.
+
+The `"gradient"` algorithm works directly with the attractivenesses
+\\Z_j\\. The `"gradient_unit"` algorithm works with rescaled variables
+\\U_j\\ satisfying
+
+\$\$ \sum\_{j=1}^{p} U_j = 1. \$\$
+
+The rescaling can accelerate convergence in some settings. The two
+algorithms optimise equivalent formulations and should produce the same
+solution up to numerical precision. They can nevertheless converge to
+solutions different from those obtained with the `"linear"` and
 `"quadratic"` algorithms.
 
-The `epsilon` and `conv_check` parameters are not used by the
-`"gradient"` algorithm. Convergence is assessed using the duality gap
-and the `precision` parameter. The gradient ascent runs for a maximum of
-`iter_max` iterations. Both algorithms use a standard backtracking line
-search with Armijo stopping criterion. Its parameters can be modified
-using the `control` parameter and the associated
-[`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
-function.
+Both gradient algorithms use projected ascent with a backtracking line
+search and an Armijo sufficient-increase condition. Convergence is
+assessed using a duality gap with tolerance `precision`, and the number
+of iterations is limited by `iter_max`. The `epsilon` and `conv_check`
+arguments are not used. Line-search and other internal parameters can be
+modified through `control`; see
+[`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md).
 
 ## Location data
 
@@ -235,19 +326,27 @@ Attractiveness Terms in Production-Constrained Spatial-Interaction
 Models", Environment and Planning A: Economy and Space, 10(4), 371-388.
 [doi:10.1068/a100371](https://doi.org/10.1068/a100371)
 
-Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
-evolution: an integrated methodology for some dynamical systems", J. R.
-Soc. Interface.5865-871
+Wilson, A. (2008). "Boltzmann, Lotka and Volterra and spatial structural
+evolution: an integrated methodology for some dynamical systems",
+Journal of the Royal Society Interface, 5, 865-871.
 [doi:10.1098/rsif.2007.1288](https://doi.org/10.1098/rsif.2007.1288)
 
 ## See also
 
-[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
-for systematic exploration of parameter influence,
 [`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
-for the static model,
+for the underlying production-constrained interaction model,
+[`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md)
+for generated starting points,
+[`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
+for gradient and line-search parameters,
 [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
-for the potential function.
+for the potential function, and
+[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
+for systematic exploration of parameter values. Multiple-run summaries
+and fitted models can be obtained with
+[`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md)
+and
+[`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md).
 
 ## Examples
 
@@ -260,15 +359,11 @@ attractiveness <- log(french_cities$area[1:10])
 attractiveness <- attractiveness / sum(attractiveness) * sum(production)
 
 # Original Harris-Wilson update rule
-flows <- blvim(
-  distances,
-  production,
-  1.5,
-  1 / 250,
-  attractiveness,
+linear_flows <- blvim(
+  distances, production, 1.5, 1 / 250, attractiveness,
   algorithm = "linear"
 )
-flows
+linear_flows
 #> Spatial interaction model with 10 origin locations and 10 destination locations
 #> • Model: Wilson's production constrained
 #> • Parameters: return to scale (alpha) = 1.5 and inverse cost scale (beta) =
@@ -277,21 +372,44 @@ flows
 
 # Wilson's quadratic update rule
 quadratic_flows <- blvim(
-  distances,
-  production,
-  1.5,
-  1 / 250,
-  attractiveness,
+  distances, production, 1.5, 1 / 250, attractiveness,
   algorithm = "quadratic"
 )
 
-# Gradient-based algorithm
+# Gradient ascent on the potential
 gradient_flows <- blvim(
-  distances,
-  production,
-  1.5,
-  1 / 250,
+  distances, production, 1.5, 1 / 250, attractiveness,
+  algorithm = "gradient"
+)
+
+# Gradient ascent using unit-simplex variables
+unit_gradient_flows <- blvim(
+  distances, production, 1.5, 1 / 250, attractiveness,
+  algorithm = "gradient_unit"
+)
+
+# Automatic single-point initialisation
+automatic_flows <- blvim(
+  distances, production, 1.5, 1 / 250,
+  algorithm = "gradient"
+)
+
+# Multiple explicitly supplied starting points
+starts <- rbind(
   attractiveness,
+  c(rep(0, 5), rep(sum(production) / 5, 5))
+)
+multistart_flows <- blvim(
+  distances, production, 1.5, 1 / 250,
+  Z = starts,
+  algorithm = "gradient",
+  keep_runs = TRUE
+)
+
+# Generate starting points when the model context is known
+generated_flows <- blvim(
+  distances, production, 1.5, 1 / 250,
+  Z = blvim_initialise(n = 20, face_fraction = 0.5),
   algorithm = "gradient"
 )
 ```

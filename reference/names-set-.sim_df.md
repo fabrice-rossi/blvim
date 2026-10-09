@@ -40,19 +40,19 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
 )
 all_flows_df <- sim_df(all_flows)
 names(all_flows_df)
-#> [1] "alpha"      "beta"       "diversity"  "iterations" "converged" 
-#> [6] "sim"       
-names(all_flows_df)[6] <- "my_sim"
+#> [1] "alpha"      "beta"       "diversity"  "potential"  "iterations"
+#> [6] "converged"  "sim"       
+names(all_flows_df)[7] <- "my_sim"
 names(all_flows_df)
-#> [1] "alpha"      "beta"       "diversity"  "iterations" "converged" 
-#> [6] "my_sim"    
+#> [1] "alpha"      "beta"       "diversity"  "potential"  "iterations"
+#> [6] "converged"  "my_sim"    
 ## still a sim_df
 class(all_flows_df)
 #> [1] "sim_df"     "data.frame"
 names(all_flows_df)[1] <- "return to scale"
 names(all_flows_df)
-#> [1] "return to scale" "beta"            "diversity"       "iterations"     
-#> [5] "converged"       "my_sim"         
+#> [1] "return to scale" "beta"            "diversity"       "potential"      
+#> [5] "iterations"      "converged"       "my_sim"         
 ## not a sim_df
 class(all_flows_df)
 #> [1] "data.frame"

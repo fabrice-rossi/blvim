@@ -81,6 +81,8 @@ ggplot2::autoplot(all_flows_df, converged)
 
 ggplot2::autoplot(all_flows_df, iterations)
 
+ggplot2::autoplot(all_flows_df, potential)
+
 ## or added ones
 all_flows_df["Nystuen & Dacey"] <- diversity(sim_column(all_flows_df), "ND")
 ggplot2::autoplot(all_flows_df, `Nystuen & Dacey`)

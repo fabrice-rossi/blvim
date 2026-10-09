@@ -97,19 +97,19 @@ this is not possible.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">all_flows_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_df.html">sim_df</a></span><span class="op">(</span><span class="va">all_flows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "alpha"      "beta"       "diversity"  "iterations" "converged" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "sim"       </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span><span class="op">[</span><span class="fl">6</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"my_sim"</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "alpha"      "beta"       "diversity"  "potential"  "iterations"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "converged"  "sim"       </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span><span class="op">[</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"my_sim"</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "alpha"      "beta"       "diversity"  "iterations" "converged" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "my_sim"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "alpha"      "beta"       "diversity"  "potential"  "iterations"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "converged"  "my_sim"    </span>
 <span class="r-in"><span><span class="co">## still a sim_df</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sim_df"     "data.frame"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"return to scale"</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "return to scale" "beta"            "diversity"       "iterations"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "converged"       "my_sim"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "return to scale" "beta"            "diversity"       "potential"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "iterations"      "converged"       "my_sim"         </span>
 <span class="r-in"><span><span class="co">## not a sim_df</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">all_flows_df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data.frame"</span>

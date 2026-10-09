@@ -5,23 +5,29 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Compute an equilibrium solution of the Harris and Wilson model — blvim"><meta name="description" content="This function computes flows between origin locations and destination
-locations at an equilibrium solution of Harris and Wilson interaction model.
-The model is initialised with the production constraints at the origin
-locations and the initial values of the the attractivenesses of destination
-locations. At convergence, attractivenesses fulfil the balance equations
-$$\forall j,\quad \kappa_j Z_j=\sum_{i=1}^{n}Y_{ij},$$ where the flows are
-computed according to Wilson's  production constrained entropy maximising
-model (static_blvim()). The function implements several algorithms that all
-aim to reach an equilibrium."><meta property="og:description" content="This function computes flows between origin locations and destination
-locations at an equilibrium solution of Harris and Wilson interaction model.
-The model is initialised with the production constraints at the origin
-locations and the initial values of the the attractivenesses of destination
-locations. At convergence, attractivenesses fulfil the balance equations
-$$\forall j,\quad \kappa_j Z_j=\sum_{i=1}^{n}Y_{ij},$$ where the flows are
-computed according to Wilson's  production constrained entropy maximising
-model (static_blvim()). The function implements several algorithms that all
-aim to reach an equilibrium."><meta property="og:image" content="https://fabrice-rossi.github.io/blvim/logo.svg"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Compute an equilibrium solution of the Harris and Wilson model — blvim"><meta name="description" content="blvim() computes equilibrium flows between origin and destination locations
+in the Harris and Wilson spatial interaction model. At equilibrium,
+destination attractivenesses satisfy
+$$
+  \forall j,\quad
+  \kappa_j Z_j = \sum_{i=1}^{n} Y_{ij},
+$$
+where \(Y_{ij}\) is the flow from origin \(i\) to destination \(j\),
+\(Z_j\) is the attractiveness of destination \(j\), and
+\(\kappa_j\) converts attractiveness into incoming flow. Flows are
+computed using the production-constrained entropy-maximising model
+implemented by static_blvim()."><meta property="og:description" content="blvim() computes equilibrium flows between origin and destination locations
+in the Harris and Wilson spatial interaction model. At equilibrium,
+destination attractivenesses satisfy
+$$
+  \forall j,\quad
+  \kappa_j Z_j = \sum_{i=1}^{n} Y_{ij},
+$$
+where \(Y_{ij}\) is the flow from origin \(i\) to destination \(j\),
+\(Z_j\) is the attractiveness of destination \(j\), and
+\(\kappa_j\) converts attractiveness into incoming flow. Flows are
+computed using the production-constrained entropy-maximising model
+implemented by static_blvim()."><meta property="og:image" content="https://fabrice-rossi.github.io/blvim/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -66,15 +72,18 @@ aim to reach an equilibrium."><meta property="og:image" content="https://fabrice
     </div>
 
     <div class="ref-description section level2">
-    <p>This function computes flows between origin locations and destination
-locations at an equilibrium solution of Harris and Wilson interaction model.
-The model is initialised with the production constraints at the origin
-locations and the initial values of the the attractivenesses of destination
-locations. At convergence, attractivenesses fulfil the balance equations
-$$\forall j,\quad \kappa_j Z_j=\sum_{i=1}^{n}Y_{ij},$$ where the flows are
-computed according to Wilson's  production constrained entropy maximising
-model (<code><a href="static_blvim.html">static_blvim()</a></code>). The function implements several algorithms that all
-aim to reach an equilibrium.</p>
+    <p><code>blvim()</code> computes equilibrium flows between origin and destination locations
+in the Harris and Wilson spatial interaction model. At equilibrium,
+destination attractivenesses satisfy
+$$
+  \forall j,\quad
+  \kappa_j Z_j = \sum_{i=1}^{n} Y_{ij},
+$$
+where \(Y_{ij}\) is the flow from origin \(i\) to destination \(j\),
+\(Z_j\) is the attractiveness of destination \(j\), and
+\(\kappa_j\) converts attractiveness into incoming flow. Flows are
+computed using the production-constrained entropy-maximising model
+implemented by <code><a href="static_blvim.html">static_blvim()</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -84,7 +93,7 @@ aim to reach an equilibrium.</p>
 <span>  <span class="va">X</span>,</span>
 <span>  <span class="va">alpha</span>,</span>
 <span>  <span class="va">beta</span>,</span>
-<span>  <span class="va">Z</span>,</span>
+<span>  Z <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  kappa <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  bipartite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  origin_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -94,7 +103,8 @@ aim to reach an equilibrium.</p>
 <span>  conv_check <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  precision <span class="op">=</span> <span class="fl">1e-06</span>,</span>
 <span>  algorithm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"linear"</span>, <span class="st">"quadratic"</span>, <span class="st">"gradient"</span>, <span class="st">"gradient_unit"</span><span class="op">)</span>,</span>
-<span>  control <span class="op">=</span> <span class="fu"><a href="blvim_gradient_control.html">blvim_gradient_control</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  control <span class="op">=</span> <span class="fu"><a href="blvim_gradient_control.html">blvim_gradient_control</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  keep_runs <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,13 +129,18 @@ aim to reach an equilibrium.</p>
 
 
 <dt id="arg-z">Z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
-<dd><p>A vector of initial destination attractivenesses.</p></dd>
+<dd><p>Initial destination attractivenesses. This can be <code>NULL</code> for
+automatic single-point initialisation, a numeric vector with one value per
+destination, a numeric matrix with one starting point per row, or an
+object created by <code><a href="blvim_initialise.html">blvim_initialise()</a></code>. The number of columns of a matrix
+must equal <code>ncol(costs)</code>.</p></dd>
 
 
 <dt id="arg-kappa">kappa<a class="anchor" aria-label="anchor" href="#arg-kappa"></a></dt>
-<dd><p>A vector of conversion factors between attractivenesses and
-incoming flows. Values must be positive. Defaults to 1 for all
-destinations.</p></dd>
+<dd><p>A strictly positive numeric vector of conversion factors
+between destination attractivenesses and incoming flows. A scalar is
+recycled to all destinations. The default <code>1</code> gives the standard balance
+equations without destination-specific conversion factors.</p></dd>
 
 
 <dt id="arg-bipartite">bipartite<a class="anchor" aria-label="anchor" href="#arg-bipartite"></a></dt>
@@ -146,109 +161,178 @@ destination locations (see details)</p></dd>
 
 
 <dt id="arg-epsilon">epsilon<a class="anchor" aria-label="anchor" href="#arg-epsilon"></a></dt>
-<dd><p>Update intensity used by the <code>"linear"</code> and <code>"quadratic"</code>
-algorithms.</p></dd>
+<dd><p>A positive numeric scalar giving the update intensity for
+the <code>"linear"</code> and <code>"quadratic"</code> algorithms. It is not used by the
+gradient algorithms.</p></dd>
 
 
 <dt id="arg-iter-max">iter_max<a class="anchor" aria-label="anchor" href="#arg-iter-max"></a></dt>
-<dd><p>Maximum number of iterations.</p></dd>
+<dd><p>A positive integer giving the maximum number of iterations
+for each run.</p></dd>
 
 
 <dt id="arg-conv-check">conv_check<a class="anchor" aria-label="anchor" href="#arg-conv-check"></a></dt>
-<dd><p>Number of iterations between convergence checks for the
-<code>"linear"</code> and <code>"quadratic"</code> algorithms.</p></dd>
+<dd><p>A positive integer giving the number of iterations between
+convergence checks for the <code>"linear"</code> and <code>"quadratic"</code> algorithms. It is
+not used by the gradient algorithms.</p></dd>
 
 
 <dt id="arg-precision">precision<a class="anchor" aria-label="anchor" href="#arg-precision"></a></dt>
-<dd><p>Convergence threshold.</p></dd>
+<dd><p>A positive numeric scalar giving the convergence tolerance.
+It is used in the attractiveness-based convergence test for <code>"linear"</code> and
+<code>"quadratic"</code>, and in the duality-gap stopping criterion for <code>"gradient"</code>
+and <code>"gradient_unit"</code>.</p></dd>
 
 
 <dt id="arg-algorithm">algorithm<a class="anchor" aria-label="anchor" href="#arg-algorithm"></a></dt>
-<dd><p>Character string selecting the algorithm used to compute
-the equilibrium. One of <code>"linear"</code>, <code>"quadratic"</code>, <code>"gradient"</code> or
-<code>"gradient_unit"</code>. Defaults to <code>"linear"</code>. Partial matching is supported.</p></dd>
+<dd><p>A character string selecting the equilibrium algorithm. It
+must be one of <code>"linear"</code>, <code>"quadratic"</code>, <code>"gradient"</code>, or
+<code>"gradient_unit"</code>. Partial matching is supported.</p></dd>
 
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
-<dd><p>List of internal parameters for the gradient algorithms as
-produced by <code><a href="blvim_gradient_control.html">blvim_gradient_control()</a></code>.</p></dd>
+<dd><p>A list of parameters for the gradient algorithms, normally
+produced by <code><a href="blvim_gradient_control.html">blvim_gradient_control()</a></code>. It is not used by <code>"linear"</code> or
+<code>"quadratic"</code>.</p></dd>
+
+
+<dt id="arg-keep-runs">keep_runs<a class="anchor" aria-label="anchor" href="#arg-keep-runs"></a></dt>
+<dd><p>A logical scalar controlling whether complete fitted models
+are retained when multiple starting points are used. If <code>FALSE</code>, only the
+selected model and the run summaries are retained. If <code>TRUE</code>, all fitted
+models are stored in a <code>sim_list</code>. This argument has no effect for a
+single starting point.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>an object of class <code>sim</code>(and <code>sim_blvim</code>) for spatial interaction
-model that contains the matrix of flows between the origin and the
-destination locations as well as the final attractivenesses computed by the
-model.</p>
+    <p>An object inheriting from <code>sim</code> and <code>sim_blvim</code>. It contains the
+equilibrium flow matrix, final destination attractivenesses, initial
+attractivenesses of the selected run, and convergence information.</p>
+<p>When multiple starting points are used, the returned object represents the
+run with the largest final potential. Run summaries are available through
+<code><a href="sim_logs.html">sim_logs()</a></code> and contain:</p><ul><li><p><code>run</code>: index of the starting point;</p></li>
+<li><p><code>potential</code>: final potential;</p></li>
+<li><p><code>iterations</code>: number of reported iterations;</p></li>
+<li><p><code>converged</code>: whether the run stopped before <code>iter_max</code>;</p></li>
+<li><p><code>status</code>: stopping status for a gradient algorithm;</p></li>
+<li><p><code>gap</code>: final duality gap for a gradient algorithm;</p></li>
+<li><p><code>evaluations</code>: number of evaluations for a gradient algorithm.</p></li>
+</ul><p>The last three columns are <code>NA</code> for <code>"linear"</code> and <code>"quadratic"</code>. If
+<code>keep_runs = TRUE</code>, the complete fitted models are additionally available
+through <code><a href="sim_runs.html">sim_runs()</a></code>, in the same order as the starting points.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>All algorithms are initialised with user supplied attractivenesses and
-proceed iteratively by updating them until convergence. Two algorithms are
-instances of A. Wilson's Boltzmann-Lotka-Volterra (BLV) interaction model,
-while the other two algorithms are based on gradient ascent.</p><div class="section">
-<h3 id="boltzmann-lotka-volterra-blv-iterations">Boltzmann-Lotka-Volterra (BLV) iterations<a class="anchor" aria-label="anchor" href="#boltzmann-lotka-volterra-blv-iterations"></a></h3>
+    <p>Several iterative algorithms are available. The model can be run from a
+single initial attractiveness vector or from several starting points. In
+the latter case, the solution with the largest final potential is returned.</p><div class="section">
+<h3 id="initialisation-and-multiple-runs">Initialisation and multiple runs<a class="anchor" aria-label="anchor" href="#initialisation-and-multiple-runs"></a></h3>
 
 
-<p>In a step of the BLV model, flows are computed according to the production
-constrained entropy maximising model proposed by A. Wilson and implemented in
-<code><a href="static_blvim.html">static_blvim()</a></code>. Then the flows received at a destination are computed as
-follows</p>
-<p>$$\forall j,\quad D_j=\sum_{i=1}^{n}Y_{ij},$$</p>
-<p>for destination \(j\). This enables the attractivenesses to be updated by
-making them closer to the received flows, i.e. by trying to reduce
-\(|D_j-\kappa_j Z_j|\), where \(\kappa_j\) is a conversion factor between
-the attractiveness and the destination flow.</p>
-<p>Two algorithms of this family are available through the <code>algorithm</code> parameter:</p><ol><li><p><code>"linear"</code> uses the original update rule proposed in Harris &amp; Wilson
+<p>Initial destination attractivenesses are specified through <code>Z</code>:</p><ul><li><p>If <code>Z</code> is <code>NULL</code>, one starting point is constructed automatically.</p></li>
+<li><p>If <code>Z</code> is a numeric vector, the algorithm is run once from that vector.</p></li>
+<li><p>If <code>Z</code> is a numeric matrix, each row is used as an independent starting
+point.</p></li>
+<li><p>If <code>Z</code> is an object created by <code><a href="blvim_initialise.html">blvim_initialise()</a></code>, its initialiser is
+evaluated using the model context. The resulting vector or matrix is then
+handled in the same way as an explicitly supplied <code>Z</code>.</p></li>
+</ul><p>In the bipartite case, automatic initialisation uses the centre of mass of
+the weighted simplex:</p>
+<p>$$
+  Z_j^0 =
+  \frac{\sum_i X_i}{p\kappa_j},
+$$</p>
+<p>where \(p\) is the number of destinations. In the non-bipartite case, it
+uses</p>
+<p>$$
+  Z_j^0 = \frac{X_j}{\kappa_j}.
+$$</p>
+<p>Automatic initialisation therefore produces a single run. Use a matrix or
+<code><a href="blvim_initialise.html">blvim_initialise()</a></code> to perform multiple runs.</p>
+<p>For multiple runs, all starting points use the same model parameters,
+algorithm, convergence settings, and algorithm-specific controls. The final
+potential is evaluated for each run, and the run with the strictly largest
+potential is selected. If several runs have the same largest potential, the
+first is selected.</p>
+<p>Summaries of all runs are stored in the returned model and can be obtained
+with <code><a href="sim_logs.html">sim_logs()</a></code>. If <code>keep_runs = TRUE</code>, the complete fitted models are
+retained and can be obtained with <code><a href="sim_runs.html">sim_runs()</a></code>.</p>
+</div>
+
+<div class="section">
+<h3 id="boltzmann-lotka-volterra-algorithms">Boltzmann-Lotka-Volterra algorithms<a class="anchor" aria-label="anchor" href="#boltzmann-lotka-volterra-algorithms"></a></h3>
+
+
+<p>At each iteration of a Boltzmann-Lotka-Volterra (BLV) algorithm, flows are
+computed with <code><a href="static_blvim.html">static_blvim()</a></code>. The total flow received by destination
+\(j\) is</p>
+<p>$$
+  D_j = \sum_{i=1}^{n} Y_{ij}.
+$$</p>
+<p>Attractivenesses are then updated to bring \(\kappa_j Z_j\) closer to
+\(D_j\). Two BLV algorithms are available:</p><ol><li><p><code>"linear"</code> uses the original update rule proposed by Harris and Wilson
 (1978):</p>
 <p>$$
-     Z_j^{t+1} =
-     Z_j^t +
+     Z_j^{t+1}
+     =
+     Z_j^t
+     +
      \epsilon
      \left(
        \frac{D_j^t}{\kappa_j} - Z_j^t
      \right).
    $$</p></li>
-<li><p><code>"quadratic"</code> uses the update rule proposed in Wilson (2008):</p>
+<li><p><code>"quadratic"</code> uses the update rule proposed by Wilson (2008):</p>
 <p>$$
-     Z_j^{t+1} =
-     Z_j^t +
+     Z_j^{t+1}
+     =
+     Z_j^t
+     +
      \epsilon
      \left(
        \frac{D_j^t}{\kappa_j} - Z_j^t
      \right) Z_j^t.
    $$</p></li>
-</ol><p>For these algorithms(<code>"linear"</code> and <code>"quadratic"</code>), \(\epsilon\) is given
-by the <code>epsilon</code> parameter and should generally be smaller than 1.</p>
-<p>Updates are performed until convergence or for a maximum of <code>iter_max</code>
-iterations. Convergence is checked every <code>conv_check</code> iterations. The
-algorithm is considered to have converged if</p>
+</ol><p>For both algorithms, \(\epsilon\) is specified by <code>epsilon</code> and should
+generally be smaller than one. Convergence is checked every <code>conv_check</code>
+iterations and is attained when</p>
 <p>$$
-  \|Z^{t+1}-Z^t\| &lt;
-  \delta \left(\|Z^{t+1}\|+\delta\right),
+  \lVert Z^{t+1} - Z^t \rVert
+  &amp;lt;
+  \delta
+  \left(
+    \lVert Z^{t+1} \rVert + \delta
+  \right),
 $$</p>
-<p>where \(\delta\) is given by the <code>precision</code> parameter.</p>
+<p>where \(\delta\) is specified by <code>precision</code>. Iteration stops at
+convergence or after <code>iter_max</code> iterations.</p>
 </div>
 
 <div class="section">
 <h3 id="gradient-algorithms">Gradient algorithms<a class="anchor" aria-label="anchor" href="#gradient-algorithms"></a></h3>
 
 
-<p>Finding an equilibrium with the BLV  approach is equivalent to looking for a
-maximum of the potential function (see <code><a href="sim_potential.html">sim_potential()</a></code>). The gradient
-algorithms use a direct approach of optimising the potential via a projected
-gradient ascent. The <code>"gradient"</code> algorithm optimises directly the potential
-while <code>"gradient_unit"</code> rescales the problem in order to work with \(U_j\)
-instead of \(Z_j\) in such a way that \(\sum_{j=1}^p U_j=1\). This can
-accelerate convergence in some settings. Results should be identical from
-both gradient approaches, but they can be different from solutions obtained
-by the <code>"linear"</code> and <code>"quadratic"</code> algorithms.</p>
-<p>The <code>epsilon</code> and <code>conv_check</code> parameters are not used by the <code>"gradient"</code>
-algorithm. Convergence is assessed using the duality gap and the <code>precision</code>
-parameter. The gradient ascent runs for a maximum of <code>iter_max</code> iterations.
-Both algorithms use a standard backtracking line search with Armijo stopping
-criterion. Its parameters can be modified using the <code>control</code> parameter and
-the associated  <code><a href="blvim_gradient_control.html">blvim_gradient_control()</a></code> function.</p>
+<p>Computing an equilibrium is equivalent to maximising the potential
+function; see <code><a href="sim_potential.html">sim_potential()</a></code>. The gradient algorithms optimise this
+potential directly using projected gradient ascent.</p>
+<p>The <code>"gradient"</code> algorithm works directly with the attractivenesses
+\(Z_j\). The <code>"gradient_unit"</code> algorithm works with rescaled variables
+\(U_j\) satisfying</p>
+<p>$$
+  \sum_{j=1}^{p} U_j = 1.
+$$</p>
+<p>The rescaling can accelerate convergence in some settings. The two
+algorithms optimise equivalent formulations and should produce the same
+solution up to numerical precision. They can nevertheless converge to
+solutions different from those obtained with the <code>"linear"</code> and
+<code>"quadratic"</code> algorithms.</p>
+<p>Both gradient algorithms use projected ascent with a backtracking line
+search and an Armijo sufficient-increase condition. Convergence is assessed
+using a duality gap with tolerance <code>precision</code>, and the number of iterations
+is limited by <code>iter_max</code>. The <code>epsilon</code> and <code>conv_check</code> arguments are not
+used. Line-search and other internal parameters can be modified through
+<code>control</code>; see <code><a href="blvim_gradient_control.html">blvim_gradient_control()</a></code>.</p>
 </div>
 
     </div>
@@ -294,19 +378,23 @@ to follow the restrictions documented in <code><a href="origin_positions.html">o
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Harris, B., &amp; Wilson, A. G. (1978). "Equilibrium Values and
-Dynamics of Attractiveness Terms in Production-Constrained
-Spatial-Interaction Models", Environment and Planning A: Economy and Space,
-10(4), 371-388. <a href="https://doi.org/10.1068/a100371" class="external-link">doi:10.1068/a100371</a></p>
-<p>Wilson, A. (2008), "Boltzmann, Lotka and Volterra and spatial structural
-evolution: an integrated methodology for some dynamical systems", J. R.
-Soc. Interface.5865-871 <a href="https://doi.org/10.1098/rsif.2007.1288" class="external-link">doi:10.1098/rsif.2007.1288</a></p>
+    <p>Harris, B., &amp; Wilson, A. G. (1978). "Equilibrium Values and Dynamics of
+Attractiveness Terms in Production-Constrained Spatial-Interaction Models",
+Environment and Planning A: Economy and Space, 10(4), 371-388.
+<a href="https://doi.org/10.1068/a100371" class="external-link">doi:10.1068/a100371</a></p>
+<p>Wilson, A. (2008). "Boltzmann, Lotka and Volterra and spatial structural
+evolution: an integrated methodology for some dynamical systems",
+Journal of the Royal Society Interface, 5, 865-871.
+<a href="https://doi.org/10.1098/rsif.2007.1288" class="external-link">doi:10.1098/rsif.2007.1288</a></p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="grid_blvim.html">grid_blvim()</a></code> for systematic exploration of parameter influence,
-<code><a href="static_blvim.html">static_blvim()</a></code> for the static model, <code><a href="sim_potential.html">sim_potential()</a></code> for the potential
-function.</p></div>
+    <div class="dont-index"><p><code><a href="static_blvim.html">static_blvim()</a></code> for the underlying production-constrained interaction
+model, <code><a href="blvim_initialise.html">blvim_initialise()</a></code> for generated starting points,
+<code><a href="blvim_gradient_control.html">blvim_gradient_control()</a></code> for gradient and line-search parameters,
+<code><a href="sim_potential.html">sim_potential()</a></code> for the potential function, and <code><a href="grid_blvim.html">grid_blvim()</a></code> for
+systematic exploration of parameter values. Multiple-run summaries and
+fitted models can be obtained with <code><a href="sim_logs.html">sim_logs()</a></code> and <code><a href="sim_runs.html">sim_runs()</a></code>.</p></div>
     </div>
 
     <div class="section level2">
@@ -319,15 +407,11 @@ function.</p></div>
 <span class="r-in"><span><span class="va">attractiveness</span> <span class="op">&lt;-</span> <span class="va">attractiveness</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">attractiveness</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">production</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Original Harris-Wilson update rule</span></span></span>
-<span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">distances</span>,</span></span>
-<span class="r-in"><span>  <span class="va">production</span>,</span></span>
-<span class="r-in"><span>  <span class="fl">1.5</span>,</span></span>
-<span class="r-in"><span>  <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>,</span></span>
-<span class="r-in"><span>  <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span><span class="va">linear_flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>, <span class="va">attractiveness</span>,</span></span>
 <span class="r-in"><span>  algorithm <span class="op">=</span> <span class="st">"linear"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">flows</span></span></span>
+<span class="r-in"><span><span class="va">linear_flows</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spatial interaction model with <span style="color: #0000BB;">10</span> origin locations and <span style="color: #0000BB;">10</span> destination locations</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Model: Wilson's production constrained</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • Parameters: return to scale (alpha) = <span style="color: #0000BB;">1.5</span> and inverse cost scale (beta) =</span>
@@ -336,21 +420,44 @@ function.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Wilson's quadratic update rule</span></span></span>
 <span class="r-in"><span><span class="va">quadratic_flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">distances</span>,</span></span>
-<span class="r-in"><span>  <span class="va">production</span>,</span></span>
-<span class="r-in"><span>  <span class="fl">1.5</span>,</span></span>
-<span class="r-in"><span>  <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>,</span></span>
-<span class="r-in"><span>  <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  <span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>, <span class="va">attractiveness</span>,</span></span>
 <span class="r-in"><span>  algorithm <span class="op">=</span> <span class="st">"quadratic"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Gradient-based algorithm</span></span></span>
+<span class="r-in"><span><span class="co"># Gradient ascent on the potential</span></span></span>
 <span class="r-in"><span><span class="va">gradient_flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">distances</span>,</span></span>
-<span class="r-in"><span>  <span class="va">production</span>,</span></span>
-<span class="r-in"><span>  <span class="fl">1.5</span>,</span></span>
-<span class="r-in"><span>  <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>,</span></span>
+<span class="r-in"><span>  <span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>, <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  algorithm <span class="op">=</span> <span class="st">"gradient"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Gradient ascent using unit-simplex variables</span></span></span>
+<span class="r-in"><span><span class="va">unit_gradient_flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>, <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  algorithm <span class="op">=</span> <span class="st">"gradient_unit"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Automatic single-point initialisation</span></span></span>
+<span class="r-in"><span><span class="va">automatic_flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>,</span></span>
+<span class="r-in"><span>  algorithm <span class="op">=</span> <span class="st">"gradient"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Multiple explicitly supplied starting points</span></span></span>
+<span class="r-in"><span><span class="va">starts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">attractiveness</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">production</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">multistart_flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>,</span></span>
+<span class="r-in"><span>  Z <span class="op">=</span> <span class="va">starts</span>,</span></span>
+<span class="r-in"><span>  algorithm <span class="op">=</span> <span class="st">"gradient"</span>,</span></span>
+<span class="r-in"><span>  keep_runs <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Generate starting points when the model context is known</span></span></span>
+<span class="r-in"><span><span class="va">generated_flows</span> <span class="op">&lt;-</span> <span class="fu">blvim</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">distances</span>, <span class="va">production</span>, <span class="fl">1.5</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">250</span>,</span></span>
+<span class="r-in"><span>  Z <span class="op">=</span> <span class="fu"><a href="blvim_initialise.html">blvim_initialise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">20</span>, face_fraction <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  algorithm <span class="op">=</span> <span class="st">"gradient"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

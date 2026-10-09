@@ -3,7 +3,9 @@
 The potential is a measure of stability introduced by Osawa, Akamatsu,
 and Kogure. It is only defined for spatial interaction models produced
 by BLV framework. The function returns `NA` when applied to spatial
-interaction models for which a potential cannot be computed.
+interaction models for which a potential cannot be computed. The
+function applies also to a collection of spatial interaction models as
+represented by a `sim_list`.
 
 ## Usage
 
@@ -15,7 +17,9 @@ sim_potential(sim, ...)
 
 - sim:
 
-  a spatial interaction model, an object of class `sim`
+  a spatial interaction model object (an object of class `sim`) or a
+  collection of spatial interaction models (an object of class
+  `sim_list`)
 
 - ...:
 
@@ -23,7 +27,8 @@ sim_potential(sim, ...)
 
 ## Value
 
-the scalar value of the potential
+the scalar value of the potential. In the case of a `sim_list` the
+function returns a numerical vector with one value per model.
 
 ## Details
 

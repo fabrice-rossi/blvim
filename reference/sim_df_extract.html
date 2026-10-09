@@ -161,20 +161,20 @@ columns.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> • beta: <span style="color: #0000BB;">0.0025</span>, <span style="color: #0000BB;">0.00375</span>, <span style="color: #0000BB;">0.005</span>, <span style="color: #0000BB;">0.00625</span>, and <span style="color: #0000BB;">0.0075</span></span>
 <span class="r-in"><span><span class="co">## sub data frame, a sim_df</span></span></span>
 <span class="r-in"><span><span class="va">all_flows_df</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   alpha    beta diversity iterations converged          sim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1.05 0.00250  1.967999       1000      TRUE c(0.8172....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.25 0.00250  1.999659        800      TRUE c(0.8687....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.45 0.00250  1.990039       1001     FALSE c(0.8383....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.05 0.00375  2.672869       1001     FALSE c(0.8971....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.25 0.00375  1.999562        500      TRUE c(0.9454....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   alpha    beta diversity  potential iterations converged          sim</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1.05 0.00250  1.967999  2.6558277       1000      TRUE c(0.8172....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.25 0.00250  1.999659  2.8865532        800      TRUE c(0.8687....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.45 0.00250  1.990039  3.3304103       1001     FALSE c(0.8383....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.05 0.00375  2.672869 -1.2996429       1001     FALSE c(0.8971....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.25 0.00375  1.999562 -0.5530286        500      TRUE c(0.9454....</span>
 <span class="r-in"><span><span class="co">## sub data frame, not a sim_df (alpha is missing)</span></span></span>
-<span class="r-in"><span><span class="va">all_flows_df</span><span class="op">[</span><span class="fl">6</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       beta diversity iterations converged          sim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.00375  1.999209        500      TRUE c(0.9438....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.00500  6.385427       1001     FALSE c(0.7890....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.00500  3.195527       1000      TRUE c(0.9488....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.00500  1.999114        400      TRUE c(0.9778....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.00625  9.691171       1001     FALSE c(0.7243....</span>
+<span class="r-in"><span><span class="va">all_flows_df</span><span class="op">[</span><span class="fl">6</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       beta diversity potential iterations converged          sim</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.00375  1.999209  0.364261        500      TRUE c(0.9438....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.00500  6.385427 -4.260122       1001     FALSE c(0.7890....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.00500  3.195527 -3.593181       1000      TRUE c(0.9488....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.00500  1.999114 -2.356379        400      TRUE c(0.9778....</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.00625  9.691171 -6.043453       1001     FALSE c(0.7243....</span>
 <span class="r-in"><span><span class="va">all_flows_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="grid_blvim.html">grid_blvim</a></span><span class="op">(</span><span class="va">distances</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">french_cities</span><span class="op">$</span><span class="va">population</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1.05</span>, <span class="fl">1.45</span>, by <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, by <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">400</span>,</span></span>

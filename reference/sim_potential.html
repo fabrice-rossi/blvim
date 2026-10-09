@@ -6,12 +6,14 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Compute the potential of a spatial interaction model — sim_potential"><meta name="description" content="The potential is a measure of stability introduced by Osawa, Akamatsu, and
-Kogure. It is only defined for spatial interaction models produced by
-BLV framework. The function returns NA when applied to spatial interaction
-models for which a potential cannot be computed."><meta property="og:description" content="The potential is a measure of stability introduced by Osawa, Akamatsu, and
-Kogure. It is only defined for spatial interaction models produced by
-BLV framework. The function returns NA when applied to spatial interaction
-models for which a potential cannot be computed."><meta property="og:image" content="https://fabrice-rossi.github.io/blvim/logo.svg"></head><body>
+Kogure. It is only defined for spatial interaction models produced by BLV
+framework. The function returns NA when applied to spatial interaction
+models for which a potential cannot be computed. The function applies also to
+a collection of spatial interaction models as represented by a sim_list."><meta property="og:description" content="The potential is a measure of stability introduced by Osawa, Akamatsu, and
+Kogure. It is only defined for spatial interaction models produced by BLV
+framework. The function returns NA when applied to spatial interaction
+models for which a potential cannot be computed. The function applies also to
+a collection of spatial interaction models as represented by a sim_list."><meta property="og:image" content="https://fabrice-rossi.github.io/blvim/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -57,9 +59,10 @@ models for which a potential cannot be computed."><meta property="og:image" cont
 
     <div class="ref-description section level2">
     <p>The potential is a measure of stability introduced by Osawa, Akamatsu, and
-Kogure. It is only defined for spatial interaction models produced by
-BLV framework. The function returns <code>NA</code> when applied to spatial interaction
-models for which a potential cannot be computed.</p>
+Kogure. It is only defined for spatial interaction models produced by BLV
+framework. The function returns <code>NA</code> when applied to spatial interaction
+models for which a potential cannot be computed. The function applies also to
+a collection of spatial interaction models as represented by a <code>sim_list</code>.</p>
     </div>
 
     <div class="section level2">
@@ -72,7 +75,8 @@ models for which a potential cannot be computed.</p>
 
 
 <dl><dt id="arg-sim">sim<a class="anchor" aria-label="anchor" href="#arg-sim"></a></dt>
-<dd><p>a spatial interaction model, an object of class <code>sim</code></p></dd>
+<dd><p>a spatial interaction model object (an object of class <code>sim</code>) or a
+collection of spatial interaction  models (an object of class <code>sim_list</code>)</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -81,7 +85,8 @@ models for which a potential cannot be computed.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>the scalar value of the potential</p>
+    <p>the scalar value of the potential. In the case of a <code>sim_list</code>
+the function returns a numerical vector with one value per model.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

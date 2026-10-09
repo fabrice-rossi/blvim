@@ -11,6 +11,8 @@ parameters.
   : Compute an equilibrium solution of the Harris and Wilson model
 - [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
   : Control parameters for the blvim gradient algorithms
+- [`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md)
+  : Specify how initial attractivenesses are generated
 - [`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md)
   : Extract the cost matrix used to compute this model
 - [`inverse_cost()`](https://fabrice-rossi.github.io/blvim/reference/inverse_cost.md)
@@ -51,6 +53,9 @@ Functions for getting properties of spatial interaction models.
 
 - [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)
   : Extract the attractivenesses from a spatial interaction model object
+- [`initial_attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/initial_attractiveness.md)
+  : Extract the initial attractivenesses from a spatial interaction
+  model object
 - [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
   : Compute the flows incoming at each destination location
 - [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
@@ -64,18 +69,28 @@ Functions for getting properties of spatial interaction models.
 - [`production()`](https://fabrice-rossi.github.io/blvim/reference/production.md)
   : Extract the production constraints from a spatial interaction model
   object
-- [`sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/sim_converged.md)
-  : Reports whether the spatial interaction model construction converged
-- [`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)
-  : Returns the number of iterations used to produce this spatial
-  interaction model
-- [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
-  : Returns a full diagnostic of the algorithm used to build a spatial
-  interaction model
 - [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
   : Compute the potential of a spatial interaction model
 - [`sim_fp_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_fp_jacobian.md)
   : Compute the Jacobian of the fixed-point map G
+
+## Monitoring the construction of spatial interaction models
+
+Functions for getting diagnostics of the algorithms used to build the
+models.
+
+- [`sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/sim_converged.md)
+  : Reports whether the spatial interaction model construction converged
+- [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
+  : Returns a full diagnostic of the algorithm used to build a spatial
+  interaction model
+- [`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)
+  : Returns the number of iterations used to produce this spatial
+  interaction model
+- [`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md)
+  : Extract summaries of individual algorithm runs
+- [`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md)
+  : Extract spatial interaction models produced by individual runs
 
 ## Non bipartite models
 
@@ -118,6 +133,8 @@ grid of parameters.
 - [`grid_sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_iterations.md)
   : Returns the number of iterations used to produce of a collection of
   spatial interaction models
+- [`grid_sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_potential.md)
+  : Returns potential of a collection of spatial interaction models
 - [`grid_var_autoplot()`](https://fabrice-rossi.github.io/blvim/reference/grid_var_autoplot.md)
   : Create a complete variability plot for spatial interaction models in
   a data frame
@@ -174,6 +191,13 @@ models.
 - [`grid_var_autoplot()`](https://fabrice-rossi.github.io/blvim/reference/grid_var_autoplot.md)
   : Create a complete variability plot for spatial interaction models in
   a data frame
+
+## Helper functions
+
+- [`sample_weighted_simplex()`](https://fabrice-rossi.github.io/blvim/reference/sample_weighted_simplex.md)
+  : Sample points from a weighted simplex
+- [`blvim_simplex_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_simplex_initialise.md)
+  : Generate initial attractivenesses from the weighted simplex
 
 ## Data sets
 

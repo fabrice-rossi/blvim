@@ -44,6 +44,9 @@ following columns:
   [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
   (Shannon's diversity)
 
+- `potential`: model potential
+  [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
+
 - `iterations`: the number of iterations used to produce the model (1
   for a static model)
 
@@ -82,7 +85,7 @@ all_flows_df$converged
 #>  [1]  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE
 #> [13]  TRUE  TRUE FALSE
 ## change the name of the sim column
-names(all_flows_df)[6] <- "models"
+names(all_flows_df)[7] <- "models"
 ## still a sim_df
 class(all_flows_df)
 #> [1] "sim_df"     "data.frame"

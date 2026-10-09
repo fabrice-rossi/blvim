@@ -14,6 +14,8 @@
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/blvim.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/blvim_simplex_initialise.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/c.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/costs.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/costs.sim_list.html</loc></url>
@@ -37,8 +39,10 @@
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_is_terminal.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_sim_converged.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_sim_iterations.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_sim_potential.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/grid_var_autoplot.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/index.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/initial_attractiveness.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/inverse_cost.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/is_terminal.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/location_names.html</loc></url>
@@ -51,6 +55,7 @@
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/production.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/quantile.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/return_to_scale.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/sample_weighted_simplex.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_column.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_converged.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_conversion.html</loc></url>
@@ -62,7 +67,9 @@
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_iterations.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_list.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_logs.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_potential.html</loc></url>
+<url><loc>https://fabrice-rossi.github.io/blvim/reference/sim_runs.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/static_blvim.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.html</loc></url>
 <url><loc>https://fabrice-rossi.github.io/blvim/reference/terminals.html</loc></url>
