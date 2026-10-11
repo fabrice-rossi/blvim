@@ -124,6 +124,19 @@ test_that("blvim selects the best model", {
   expect_all_true(sim_potential(all_runs) <= sim_potential(model))
 })
 
+test_that("blvim selects the best model with the standard linear algorithm", {
+  config <- create_locations(40, 50, seed = 12)
+  kappas <- runif(length(config$Z), min = 0.5, max = 2)
+  withr::local_seed(12)
+  sample <- sample_weighted_simplex(kappas, C = sum(config$X), n = 75)
+  model <- blvim(config$costs, config$X, 1.5, 20, sample$Z,
+    algorithm = "linear", keep_runs = TRUE
+  )
+  all_runs <- sim_runs(model)
+  expect_all_true(sim_potential(all_runs) <= sim_potential(model))
+})
+
+
 test_that("blvim fills run information with a single starting point", {
   config <- create_locations(40, 50, seed = 12)
   kappas <- runif(length(config$Z), min = 0.5, max = 2)

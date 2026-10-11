@@ -430,7 +430,7 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
       logs$iterations[k] <- pre$iter + 1L
       logs$converged[k] <- pre$iter < iter_max
       pre_diag <- pre$diagnostic
-      if (!is.null(pre_diag)) {
+      if (length(pre_diag) > 0) {
         logs$status[k] <- pre_diag$status
         logs$gap[k] <- pre_diag$duality_gap
         logs$evaluations[k] <- pre_diag$eval
