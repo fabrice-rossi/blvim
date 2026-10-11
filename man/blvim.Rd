@@ -212,7 +212,7 @@ iterations and is attained when
 
 \deqn{
   \lVert Z^{t+1} - Z^t \rVert
-  &lt;
+  <
   \delta
   \left(
     \lVert Z^{t+1} \rVert + \delta
