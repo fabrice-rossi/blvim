@@ -199,9 +199,13 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
   double gap_rtol = precision;
   // we work on a transformed problem
   double X_tot = arma::sum(X);
-  arma::vec U = (Z_init % kappa);
+  // make sure Z is in the simplex
+  arma::vec Z =
+    project_weighted_simplex(Z_init, kappa, arma::dot(kappa, kappa), X_tot,
+                             precision_projection, iter_max_projection);
+  arma::vec U = (Z % kappa);
   U /= X_tot;
-  // make sure U is in the simplex !
+  // make sure U is in the simplex (should be useless)
   U = project_simplex(U, precision_projection, iter_max_projection);
 
   // cost rescaling (transformed problem)
@@ -320,7 +324,7 @@ Rcpp::List blv_gradient_unit(const arma::mat& costs,
     gap = gap_final;
   }
   // convert back
-  arma::vec Z = U / kappa;
+  Z = U / kappa;
   Z *= X_tot;
   arma::vec row_min = arma::min(costs, 1);
   arma::mat shifted_costs = costs;
