@@ -1,5 +1,7 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
+#include <iomanip>
+#include <sstream>
 
 inline void eval_g_and_gprime(double lambda,
                               const arma::vec& y,
@@ -31,7 +33,7 @@ arma::vec project_weighted_simplex(const arma::vec& y,
   if(p == 0)
     return arma::vec();
   if(p == 1)
-    return arma::vec({C/kappa[0]});
+    return arma::vec({C / kappa[0]});
 
   // 1. Analytical bounds calculation in O(p)
   double sum_kappa_y = arma::dot(kappa, y);
@@ -124,8 +126,40 @@ arma::vec project_simplex(const arma::vec& y, double tol, int max_iter) {
   // Construct final Z
   // no memory allocation
   arma::vec z(p);
+  arma::uword count_active;
   for(size_t i = 0; i < p; ++i) {
-    z[i] = std::max(y[i] - lambda, 0.0);
+    if(y[i] > lambda) {
+      z[i] = y[i] - lambda;
+      count_active++;
+    } else {
+      z[i] = 0.0;
+    }
+  }
+  const double correction =
+      (1.0 - arma::accu(z)) / static_cast<double>(count_active);
+
+  if(abs(correction) < std::numeric_limits<double>::epsilon()) {
+    // apply only to the largest value
+    const arma::uword pivot = z.index_max();
+    z[pivot] += static_cast<double>(count_active) * correction;
+  } else {
+    // spread the correction
+    for(arma::uword j = 0; j < p; ++j) {
+      if(z(j) > 0.0) {
+        z(j) += correction;
+      }
+    }
+  }
+  // final check of the returned point. z>=0 is guaranteed by the construction
+  // above we just need to test the sum
+  double mass_error = std::abs(arma::accu(z) - 1.0);
+  if(mass_error > tol) {
+    std::ostringstream message;
+    message << std::scientific
+            << "Cannot project within the specified precision: "
+            << "mass error = " << mass_error << ", tolerance = " << tol
+            << ", correction = " << correction;
+    Rcpp::stop(message.str());
   }
   return z;
 }
