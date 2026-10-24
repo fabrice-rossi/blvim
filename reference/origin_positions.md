@@ -1,7 +1,8 @@
 # Positions of origin locations in a spatial interaction model
 
 Functions to get or set the positions of the origin locations in a
-spatial interaction model.
+spatial interaction model (or in a collection of spatial interaction
+models).
 
 ## Usage
 
@@ -15,7 +16,9 @@ origin_positions(sim) <- value
 
 - sim:
 
-  a spatial interaction model object
+  a spatial interaction model object (an object of class `sim`) or a
+  collection of spatial interaction models (an object of class
+  `sim_list`)
 
 - value:
 
@@ -24,23 +27,25 @@ origin_positions(sim) <- value
 
 ## Value
 
-for `origin_positions` `NULL` or the coordinate matrix for the origin
-locations. for `origin_positions<-` the modified `sim` object
+for `origin_positions`, `NULL` or the coordinate matrix for the origin
+locations. For `origin_positions<-`, the modified `sim` object or
+`sim_list` object.
 
 ## Positions
 
 Location positions are given by numeric matrices with 2 or 3 columns.
 The first two columns are assumed to be geographical coordinates while
-the 3rd column can be used for instance to store altitude. Coordinates
-are interpreted as is in graphical representations (see
+the third column can be used, for instance, to store altitude.
+Coordinates are interpreted as is in graphical representations (see
 [`autoplot.sim()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim.md)).
 They are not matched to the costs as those can be derived from complex
-movement models and other non purely geographic considerations.
+movement models and other not purely geographical considerations.
 
 ## See also
 
 [`location_positions()`](https://fabrice-rossi.github.io/blvim/reference/location_positions.md),
-[`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
+[`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md),
+[`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
 
 ## Examples
 

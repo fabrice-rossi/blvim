@@ -1,7 +1,7 @@
-# Returns the number of iterations used to produce this spatial interaction model
+# Return the number of iterations used to produce a spatial interaction model
 
-Returns the number of iterations used to produce this spatial
-interaction model
+Return the number of iterations used to produce a spatial interaction
+model
 
 ## Usage
 
@@ -23,15 +23,17 @@ sim_iterations(sim, ...)
 
 ## Value
 
-a number of iterations that may be one if the spatial interaction model
-has been obtained using a static model (see
+the number of iterations, which is one for a static model (see
 [`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)).
-In the case of a `sim_list` the function returns a vector with iteration
-number per model.
+In the case of a `sim_list` the function returns a vector with one
+number of iterations per model.
 
 ## See also
 
-[`sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/sim_converged.md)
+[`sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/sim_converged.md),
+[`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md),
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md),
+[`grid_sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_iterations.md)
 
 ## Examples
 
@@ -40,11 +42,9 @@ distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-destination_flow(model)
-#>     75056     13055     69123     31555     06088     44109     34172     67482 
-#> 16.732020 19.146917 11.465220 14.885136 11.003105 11.776545 12.625408 11.752380 
-#>     33063     59350 
-#> 10.985307  9.743067 
 sim_iterations(model) ## must be one
 #> [1] 1
+dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
+sim_iterations(dyn_model)
+#> [1] 3600
 ```

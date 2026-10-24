@@ -1,7 +1,7 @@
 # Compute flows between origin and destination locations
 
 This function computes flows between origin locations and destination
-locations according to the production constrained entropy maximising
+locations according to the production-constrained entropy-maximising
 model proposed by A. Wilson.
 
 ## Usage
@@ -45,8 +45,8 @@ static_blvim(
 
   when `TRUE` (default value), the origin and destination locations are
   considered to be distinct. When `FALSE`, a single set of locations
-  plays the both roles. This has only consequences in functions specific
-  to this latter case such as
+  plays both roles. This only affects functions specific to this latter
+  case, such as
   [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md).
 
 - origin_data:
@@ -61,7 +61,7 @@ static_blvim(
 
 ## Value
 
-an object of class `sim` (and `sim_wpc`) for spatial interaction model
+an object of class `sim` (and `sim_wpc`) for spatial interaction models
 that contains the matrix of flows from the origin locations to the
 destination locations (see \\(Y\_{ij})\_{1\leq i\leq n, 1\leq j\leq p}\\
 above) and the attractivenesses of the destination locations.
@@ -70,15 +70,15 @@ above) and the attractivenesses of the destination locations.
 
 The model computes flows using the following parameters:
 
-- `costs` (\\c\\) is a \\n\times p\\ matrix whose \\(i,j )\\ entry is
+- `costs` (\\c\\) is an \\n\times p\\ matrix whose \\(i,j)\\ entry is
   the cost of having a "unitary" flow from origin location \\i\\ to
   destination location \\j\\
 
-- `X` (\\X\\) is a vector of size \\n\\ containing non negative
+- `X` (\\X\\) is a vector of size \\n\\ containing non-negative
   production constraints for the \\n\\ origin locations
 
-- `alpha` (\\\alpha\\) is a return to scale parameter that enhance (or
-  reduce if smaller that 1) the attractivenesses of destination
+- `alpha` (\\\alpha\\) is a return to scale parameter that enhances (or
+  reduces if smaller than 1) the attractivenesses of destination
   locations when they are larger than 1
 
 - `beta` (\\\beta\\) is the inverse of a cost scale parameter, i.e.,
@@ -97,7 +97,7 @@ The model is production constrained because
 
 \$\$\forall i,\quad X_i=\sum\_{j=1}^{p}Y\_{ij},\$\$
 
-that is the origin location \\i\\ sends a total flow of exactly \\X_i\\.
+that is, origin location \\i\\ sends a total flow of exactly \\X_i\\.
 
 ## Location data
 
@@ -112,8 +112,8 @@ locations, using
 [`origin_names<-()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
 and
 [`destination_names<-()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md).
-Names are taken by default from names of the cost matrix `costs`. More
-precisely, `rownames(costs)` is used for origin location names and
+Names are taken by default from the names of the cost matrix `costs`.
+More precisely, `rownames(costs)` is used for origin location names and
 `colnames(costs)` for destination location names.
 
 ### Origin and destination location positions
@@ -129,7 +129,7 @@ and
 In addition to the functions mentioned above, location data can be
 specified directly using the `origin_data` and `destination_data`
 parameters. Data are given by a list whose components are not
-interpreted excepted the following ones:
+interpreted except for the following ones:
 
 - `names` is used to specify location names and its content has to
   follow the restrictions documented in
@@ -151,10 +151,18 @@ associated developments", Environment and Planning A: Economy and Space,
 
 ## See also
 
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+for the dynamic model,
+[`flows()`](https://fabrice-rossi.github.io/blvim/reference/flows.md),
+[`production()`](https://fabrice-rossi.github.io/blvim/reference/production.md)
+and
+[`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)
+for extracting the results, and
 [`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md),
 [`destination_names()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md),
 [`origin_positions()`](https://fabrice-rossi.github.io/blvim/reference/origin_positions.md),
 [`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
+for location data.
 
 ## Examples
 

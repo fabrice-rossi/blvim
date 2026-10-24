@@ -26,7 +26,7 @@ A `data.frame` with 101 rows and 3 columns
 
 - region:
 
-  The code of the region of the city in the OGC (see
+  The code of the region of the department in the OGC (see
   [french_regions](https://fabrice-rossi.github.io/blvim/reference/french_regions.md))
 
 - name:

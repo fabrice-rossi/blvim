@@ -1,4 +1,4 @@
-# Report whether locations are terminal sites or not
+# Report whether locations are terminals
 
 This function returns a logical vector whose length equals the number of
 locations. The value in position `i` is `TRUE` if location number `i` is
@@ -16,7 +16,7 @@ is_terminal(sim, definition = c("ND", "RW"), ...)
 
 - sim:
 
-  a spatial interaction model object
+  a non-bipartite spatial interaction model object
 
 - definition:
 
@@ -34,7 +34,9 @@ terminals and `FALSE` for other locations.
 
 ## See also
 
-[`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
+[`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md),
+[`grid_is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/grid_is_terminal.md),
+[`nd_graph()`](https://fabrice-rossi.github.io/blvim/reference/nd_graph.md)
 
 ## Examples
 

@@ -27,7 +27,10 @@ a matrix of flows between origin locations and destination locations
 [`flows_df()`](https://fabrice-rossi.github.io/blvim/reference/flows_df.md)
 for a data frame version of the flows,
 [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
-for destination flows.
+for destination flows,
+[`production()`](https://fabrice-rossi.github.io/blvim/reference/production.md)
+and
+[`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md).
 
 ## Examples
 

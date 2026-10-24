@@ -14,16 +14,16 @@ parameters.
 - [`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md)
   : Specify how initial attractivenesses are generated
 - [`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md)
-  : Extract the cost matrix used to compute this model
+  : Extract the cost matrix used to compute a model
 - [`inverse_cost()`](https://fabrice-rossi.github.io/blvim/reference/inverse_cost.md)
-  : Extract the inverse cost scale parameter used to compute this model
+  : Extract the inverse cost scale parameter used to compute a model
 - [`return_to_scale()`](https://fabrice-rossi.github.io/blvim/reference/return_to_scale.md)
-  : Extract the return to scale parameter used to compute this model
+  : Extract the return to scale parameter used to compute a model
 - [`sim_conversion()`](https://fabrice-rossi.github.io/blvim/reference/sim_conversion.md)
-  : Returns the conversion factors between attractivenesses and incoming
+  : Return the conversion factors between attractivenesses and incoming
   flows
 - [`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)
-  : Reports whether the spatial interaction model is bipartite
+  : Report whether a spatial interaction model is bipartite
 - [`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md)
   [`` `location_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/location_names.md)
   : Names of origin and destination locations in a spatial interaction
@@ -33,13 +33,13 @@ parameters.
   : Positions of origin and destination locations in a spatial
   interaction model
 - [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
-  : Compute the flows incoming at each destination location
+  : Compute the incoming flow at each destination location
 - [`destination_names()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
   [`` `destination_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
   : Names of destination locations in a spatial interaction model
 - [`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
   [`` `destination_positions<-`() ``](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
-  : positions of destination locations in a spatial interaction model
+  : Positions of destination locations in a spatial interaction model
 - [`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
   [`` `origin_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
   : Names of origin locations in a spatial interaction model
@@ -57,7 +57,7 @@ Functions for getting properties of spatial interaction models.
   : Extract the initial attractivenesses from a spatial interaction
   model object
 - [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
-  : Compute the flows incoming at each destination location
+  : Compute the incoming flow at each destination location
 - [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
   : Compute the diversity of the destination locations in a spatial
   interaction model
@@ -71,8 +71,8 @@ Functions for getting properties of spatial interaction models.
   object
 - [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
   : Compute the potential of a spatial interaction model
-- [`sim_fp_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_fp_jacobian.md)
-  : Compute the Jacobian of the fixed-point map G
+- [`sim_residual_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_residual_jacobian.md)
+  : Compute the Jacobian of the residual map G
 
 ## Monitoring the construction of spatial interaction models
 
@@ -80,24 +80,25 @@ Functions for getting diagnostics of the algorithms used to build the
 models.
 
 - [`sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/sim_converged.md)
-  : Reports whether the spatial interaction model construction converged
+  : Report whether the construction of a spatial interaction model
+  converged
 - [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
-  : Returns a full diagnostic of the algorithm used to build a spatial
+  : Return a full diagnostic of the algorithm used to build a spatial
   interaction model
 - [`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)
-  : Returns the number of iterations used to produce this spatial
+  : Return the number of iterations used to produce a spatial
   interaction model
 - [`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md)
   : Extract summaries of individual algorithm runs
 - [`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md)
   : Extract spatial interaction models produced by individual runs
 
-## Non bipartite models
+## Non-bipartite models
 
-Functions that apply only to non bipartite models.
+Functions that apply only to non-bipartite models.
 
 - [`is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/is_terminal.md)
-  : Report whether locations are terminal sites or not
+  : Report whether locations are terminals
 - [`nd_graph()`](https://fabrice-rossi.github.io/blvim/reference/nd_graph.md)
   : Compute the Nystuen and Dacey graph for a spatial interaction model
 - [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
@@ -125,16 +126,16 @@ grid of parameters.
 - [`grid_diversity()`](https://fabrice-rossi.github.io/blvim/reference/grid_diversity.md)
   : Compute diversities for a collection of spatial interaction models
 - [`grid_is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/grid_is_terminal.md)
-  : Extract all terminal status from a collection of spatial interaction
-  models
+  : Extract all terminal statuses from a collection of spatial
+  interaction models
 - [`grid_sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_converged.md)
-  : Reports the convergence statuses of a collection of spatial
+  : Report the convergence statuses of a collection of spatial
   interaction models
 - [`grid_sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_iterations.md)
-  : Returns the number of iterations used to produce of a collection of
+  : Return the numbers of iterations used to produce a collection of
   spatial interaction models
 - [`grid_sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_potential.md)
-  : Returns potential of a collection of spatial interaction models
+  : Compute the potentials of a collection of spatial interaction models
 - [`grid_var_autoplot()`](https://fabrice-rossi.github.io/blvim/reference/grid_var_autoplot.md)
   : Create a complete variability plot for spatial interaction models in
   a data frame
@@ -160,11 +161,11 @@ grid of parameters.
   : Compute all pairwise distances between the spatial interaction
   models in a collection
 - [`sim_list()`](https://fabrice-rossi.github.io/blvim/reference/sim_list.md)
-  : Create a sim_list object from a list of spatial interaction objects
+  : Create a sim_list object from a list of spatial interaction models
 - [`c(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/c.sim_list.md)
   : Combine multiple sim_list objects into a single one
 - [`as.data.frame(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/as.data.frame.sim_list.md)
-  : Coerce to a Data Frame
+  : Coerce a collection of spatial interaction models to a data frame
 - [`summary(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md)
   [`print(`*`<summary_sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md)
   : Summary of a collection of spatial interaction models
@@ -179,7 +180,7 @@ models.
 - [`autoplot(`*`<sim_df>`*`)`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_df.md)
   : Create a complete ggplot for a spatial interaction models data frame
 - [`autoplot(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md)
-  : Create a complete variability for a collection of spatial
+  : Create a complete variability plot for a collection of spatial
   interaction models
 - [`fortify(`*`<sim>`*`)`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim.md)
   : Turn a spatial interaction model into a data frame
@@ -205,7 +206,7 @@ models.
   : French cities
 - [`french_cities_distances`](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
   [`french_cities_times`](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
-  : French cities distances
+  : Distances and travel times between French cities
 - [`french_departments`](https://fabrice-rossi.github.io/blvim/reference/french_departments.md)
   : French departments
 - [`french_regions`](https://fabrice-rossi.github.io/blvim/reference/french_regions.md)

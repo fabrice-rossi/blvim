@@ -61,7 +61,7 @@ the convergence of the fixed-point algorithm used in the BLV model). For
 \\\beta\\, we aim to cover local models (with a large \\\beta\\) and
 long-range ones (with a small \\\beta\\). Here, distances between
 positions range from 1 to approximately 7, so a typical range for
-\\\frac{1}{\beta}\\ could be \\\[0.5 ; 4\]\\.
+\\\frac{1}{\beta}\\ could be \\\[0.5, 4\]\\.
 
 The collection of models is computed by
 [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
@@ -84,7 +84,7 @@ models <- grid_blvim(costs,
 )
 ```
 
-We specify now the location data.
+We now specify the location data.
 
 ``` r
 
@@ -145,7 +145,7 @@ subgrid.](grid_files/figure-html/regular_grid_model_10_position_flows-1.png)
 
 The `sim_list` object has a
 [`ggplot2::autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-function that provides a variability plot. The aim is to display
+method that provides a variability plot. The aim is to display
 statistics of the flows over the collection of spatial interaction
 models in the list. The default representation focuses on individual
 flows as shown below.
@@ -204,7 +204,7 @@ models.](grid_files/figure-html/regular_grid_variability_position-1.png)
 The figure confirms that the external locations receive no flow. The
 median flow received by M, the central location, is significantly larger
 than other flows. The tiny internal circle for this location shows the
-0.05 quartile: this indicates that for a few models in the list, the
+0.05 quantile: this indicates that for a few models in the list, the
 central location does not receive any flow. This is illustrated for the
 first model of the list in the figure above.
 
@@ -213,7 +213,7 @@ first model of the list in the figure above.
 In addition to the variability of the flows, we can display a numerical
 value for each spatial interaction model on a single plot. To facilitate
 this, the collection of models first has to be integrated into a data
-frame-like model. This is done with the
+frame-like object. This is done with the
 [`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md)
 function.
 
@@ -250,7 +250,7 @@ The
 [`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md)
 object has a
 [`ggplot2::autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-function which shows by default the diversities of the models.
+method which shows by default the diversities of the models.
 
 ``` r
 
@@ -484,9 +484,10 @@ function provides a solution based on the concept of generalised median
 spatial interaction models in a
 [`sim_list()`](https://fabrice-rossi.github.io/blvim/reference/sim_list.md),
 the one that is on average the closest to all the other models. The
-distance used is one of the distances provided by `grid_distance()`. It
-is recommended to use the same distance for clustering, but this is not
-enforced by the function (as it applies to any
+distance used is one of the distances provided by
+[`sim_distance()`](https://fabrice-rossi.github.io/blvim/reference/sim_distance.md).
+It is recommended to use the same distance for clustering, but this is
+not enforced by the function (as it applies to any
 [`sim_list()`](https://fabrice-rossi.github.io/blvim/reference/sim_list.md)).
 In practice, we use [`tapply()`](https://rdrr.io/r/base/tapply.html) to
 compute a list of medoids, and then build a
@@ -666,9 +667,9 @@ to low values of the return to scale parameter and medium to low values
 of the cost scale.](grid_files/figure-html/euro_cities_iterations-1.png)
 
 The full range of diversity possible with 21 cities is covered in the
-parameter space, which indicates that extending the parameter range will
-unlikely uncover SIMs that differ significantly from those obtained with
-the chosen range.
+parameter space, which indicates that extending the parameter range is
+unlikely to uncover SIMs that differ significantly from those obtained
+with the chosen range.
 
 ``` r
 
@@ -718,7 +719,7 @@ models.](grid_files/figure-html/euro_cities_variability-1.png)
 Destination flows tell the same story. Notably, most of the cities have
 a null median incoming flow, apart from Athens, Gibraltar, Lyon and
 Stockholm. In addition, most of the cities have a 0.95 quantile of 1,
-which corresponds to local configurations, that is situations when
+which corresponds to local configurations, that is situations in which
 \\\beta\\ is large enough to prevent any external flows. Only Brussels
 and Hook of Holland stand out (in addition to the four cities mentioned
 above).
@@ -773,7 +774,7 @@ euro_models_hc <- hclust(euro_models_dist, method = "ward.D2")
 
 The dendrogram clearly shows three main clusters, but as explained
 above, the role of clustering is to facilitate exploration of the result
-spaces rather than to identify distinct clusters.
+space rather than to identify distinct clusters.
 
 ``` r
 
@@ -998,8 +999,8 @@ homogeneous.](grid_files/figure-html/euro_cities_cluster_four_content-1.png)
 We use the `french_cities` data set to illustrate the bipartite case
 when origin and destination locations differ. Here we consider flows
 from the largest French cities (in terms of population) to the smallest
-ones. As shown below, the distribution of the smallest cities is not all
-uniform as they cluster around large ones, especially around Paris.
+ones. As shown below, the distribution of the smallest cities is not at
+all uniform as they cluster around large ones, especially around Paris.
 
 ``` r
 
@@ -1059,7 +1060,7 @@ analysis permitted by
 [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 and associated functions.
 
-We use first the logarithm of the population as the production
+We first use the logarithm of the population as the production
 constraint.
 
 ``` r
@@ -1104,15 +1105,15 @@ indicates maximal diversity (around 8.5). The plot shows a similar
 pattern as previous similar figures: decreasing the cost scale or the
 return to scale both increase the diversity, with more cities receiving
 some flow. However, the diversities themselves are significantly smaller
-than in the non bipartite
+than in the non-bipartite
 case.](grid_files/figure-html/french_cities_log_pop_diversity-1.png)
 
 With the `log` transform, small cities around Paris do not receive much
-flow, apart for Saint-Ouen-Sur-Seine, Fontenay-sous-Bois and
-Sartrouville. Notice the absence of diagonal patterns. Vaulx-en-Velin
+flow, apart from Saint-Ouen-sur-Seine, Fontenay-sous-Bois and
+Sartrouville. Note the absence of diagonal patterns. Vaulx-en-Velin
 receives flows from all origin locations owing to its relatively central
 position in France. However, its incoming flow is much more variable
-than in non bipartite settings with a central location.
+than in non-bipartite settings with a central location.
 
 ``` r
 
@@ -1131,7 +1132,7 @@ matrix shows also large empty zones corresponding to cities that never
 receive any significant flows, for instance Vannes, Bondy and
 Gennevilliers.](grid_files/figure-html/french_cities_log_pop_flow_vars-1.png)
 
-The geographic representation emphasizes the fact that the bipartite
+The geographic representation emphasises the fact that the bipartite
 case induces a form of local selection rather than a global one. Indeed
 all the destination “regions” are represented, but in each local zone,
 only some cities receive a significant incoming flow.
@@ -1190,10 +1191,10 @@ around
 2.](grid_files/figure-html/french_cities_direct_pop_diversity-1.png)
 
 In this case the flow from Paris becomes dominant and more small cities
-around Paris receive flow. This makes Vaulx-en-Vellin less attractive to
-the benefit of Saint-Ouen-sur-Seine and Arles. Globally, less cities are
-receiving flows. This is revealed in the graphical representation thanks
-to the origin based normalisation.
+around Paris receive flow. This makes Vaulx-en-Velin less attractive to
+the benefit of Saint-Ouen-sur-Seine and Arles. Overall, fewer cities
+receive flows. This is revealed in the graphical representation thanks
+to the origin-based normalisation.
 
 ``` r
 
@@ -1218,7 +1219,7 @@ especially by comparing both graphical representations.
 
 ``` r
 
-autoplot(fr_models, with_names = TRUE, flow = "destination") +
+autoplot(fr_models, with_names = TRUE, flows = "destination") +
   labs(title = "Log population") +
   coord_flip()
 ```
@@ -1233,7 +1234,7 @@ flow.](grid_files/figure-html/french_cities_log_pop_bar_dest-1.png)
 
 ``` r
 
-autoplot(fr_models_direct, with_names = TRUE, flow = "destination") +
+autoplot(fr_models_direct, with_names = TRUE, flows = "destination") +
   labs(title = "Population") +
   coord_flip()
 ```
@@ -1378,7 +1379,7 @@ population model with cluster 16 for the direct population model. With
 the log population model, there are configurations with a single
 dominating site, cluster 13 (this aligns with the minimal value of the
 diversity which is `r min(fr_models_df$diversity)`). On the contrary,
-the direct population model does not lead to such as situation, we
+the direct population model does not lead to such a situation, as we
 always have at least two important sites, as in cluster 16 (again, this
 aligns with the minimal value of the diversity,
 `r round(min(fr_models_direct_df$diversity), 2)`).
@@ -1424,6 +1425,6 @@ log population model is the presence of a collection of active cities
 near Paris despite the constant local (and global) domination of
 Saint-Ouen-sur-Seine whose circle is always the
 largest.](grid_files/figure-html/french_cities_pop_cluster_var_geo-1.png)
-One could prolong the analysis by investigating individual clusters, for
+One could extend the analysis by investigating individual clusters, for
 instance by displaying the median models or a selection of diverse
 models.

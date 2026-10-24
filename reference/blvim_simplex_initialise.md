@@ -57,13 +57,19 @@ blvim_simplex_initialise(
 
 ## Value
 
-A list containing:
+a list containing:
 
 - `Z`: the matrix of initial attractivenesses;
 
 - `sampling`: diagnostics returned by
   [`sample_weighted_simplex()`](https://fabrice-rossi.github.io/blvim/reference/sample_weighted_simplex.md),
   or `NULL` when no random point is requested.
+
+## See also
+
+[`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md),
+[`sample_weighted_simplex()`](https://fabrice-rossi.github.io/blvim/reference/sample_weighted_simplex.md),
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
 
 ## Examples
 

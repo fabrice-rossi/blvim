@@ -1,8 +1,8 @@
-# Returns the number of iterations used to produce of a collection of spatial interaction models
+# Return the numbers of iterations used to produce a collection of spatial interaction models
 
 The function reports for each spatial interaction model of its
 `sim_list` parameter the number of iterations used to produce it (see
-[`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md))
+[`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)).
 
 ## Usage
 
@@ -23,16 +23,16 @@ grid_sim_iterations(sim, ...)
 
 ## Value
 
-a vector of numbers of iteration, one per spatial interaction model
+a vector of numbers of iterations, one per spatial interaction model
 
 ## Details
 
-Notice that
+Note that
 [`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)
 is generic and can be applied directly to `sim_list` objects. The
 current function is provided to be explicit in R code about what is a
-unique model and what is a collection of models (using function names
-that start with `"grid_"`)
+single model and what is a collection of models (using function names
+that start with `"grid_"`).
 
 ## See also
 

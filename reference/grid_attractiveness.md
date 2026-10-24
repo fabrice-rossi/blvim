@@ -1,6 +1,6 @@
 # Extract all the attractivenesses from a collection of spatial interaction models
 
-The function extract attractivenesses from all the spatial interaction
+The function extracts attractivenesses from all the spatial interaction
 models of the collection and returns them in a matrix in which each row
 corresponds to a model and each column to a destination location.
 
@@ -25,11 +25,13 @@ grid_attractiveness(sim_list, ...)
 
 ## Value
 
-a matrix of attractivenesses at the destination locations
+a matrix of attractivenesses at the destination locations, with one row
+per model
 
 ## See also
 
-[`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)
+[`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md),
+[`grid_destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/grid_destination_flow.md)
 and
 [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 

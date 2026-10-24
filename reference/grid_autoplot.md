@@ -6,7 +6,7 @@ to the ones produced by
 into a single ggplot. It provides an alternative graphical
 representation to the one produced by
 [`autoplot.sim_df()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_df.md)
-for collection of spatial interaction models in a `sim_df` object.
+for collections of spatial interaction models in a `sim_df` object.
 
 ## Usage
 
@@ -58,38 +58,38 @@ grid_autoplot(
 
 - show_destination:
 
-  specifies whether the position based `"full"` flow figure includes a
+  specifies whether the position-based `"full"` flow figure includes a
   representation of the destination flows (`FALSE` by default)
 
 - show_attractiveness:
 
-  specifies whether the position based `"full"` flow figure includes a
+  specifies whether the position-based `"full"` flow figure includes a
   representation of the attractivenesses (`FALSE` by default)
 
 - show_production:
 
-  specifies whether the position based `"full"` flow figure includes a
+  specifies whether the position-based `"full"` flow figure includes a
   representation of the productions (`FALSE` by default)
 
 - cut_off:
 
-  cut off limit for inclusion of a graphical primitive when
+  cut-off limit for inclusion of a graphical primitive when
   `with_positions = TRUE`. In the full flow matrix representation,
-  segments are removed when their flow is smaller than the cut off. In
+  segments are removed when their flow is smaller than the cut-off. In
   the attractiveness or destination representation, disks are removed
-  when the corresponding value is below the cut off.
+  when the corresponding value is below the cut-off.
 
 - adjust_limits:
 
-  if `FALSE` (default value), the limits of the position based graph are
+  if `FALSE` (default value), the limits of the position-based graph are
   not adjusted after removing graphical primitives. This eases
-  comparison between graphical representations with different cut off
-  value. If `TRUE`, limits are adjusted to the data using the standard
+  comparison between graphical representations with different cut-off
+  values. If `TRUE`, limits are adjusted to the data using the standard
   ggplot2 behaviour.
 
 - with_labels:
 
-  if `FALSE` (default value) names are displayed using plain texts. If
+  if `FALSE` (default value) names are displayed using plain text. If
   `TRUE`, names are shown using labels.
 
 - max_sims:
@@ -100,8 +100,8 @@ grid_autoplot(
 - fw_params:
 
   parameters for the
-  [ggplot2::facet_wrap](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
-  call (if non `NULL`)
+  [`ggplot2::facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
+  call (if non-`NULL`)
 
 - ...:
 
@@ -119,25 +119,32 @@ The rationale of
 is to display a single value for each spatial interaction model (SIM) in
 the `sim_df` data frame. On the contrary, this function produces a full
 graphical representation of each SIM. It is therefore limited to small
-collection of SIMs (as specified by the `max_sims` parameter which
-default to 25).
+collections of SIMs (as specified by the `max_sims` parameter, which
+defaults to 25).
 
 Under the hood, the function uses
 [`fortify.sim()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim.md)
 and shares code with
 [`autoplot.sim()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim.md)
-to have identical representations. It is simply based on facet wrapping
-facility of ggplot2. In particular the `key` parameter is used as the
-wrapping variable in the call to
+to have identical representations. It is simply based on the facet
+wrapping facility of ggplot2. In particular, the `key` parameter is used
+as the wrapping variable in the call to
 [`ggplot2::facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html).
 If not specified, the function generates an `id` variable which ranges
 from 1 to the number of SIMs in the `sim_df` data frame. If specified,
 it is evaluated in the context of the data frame and used for wrapping.
-Notice that if the expression evaluates to identical values for
-different SIMs, they will be drawn on the same panel of the final
-figure, which may end up with meaningless representations. Parameters of
+Note that if the expression evaluates to identical values for different
+SIMs, they will be drawn on the same panel of the final figure, which
+may produce meaningless representations. Parameters of
 [`ggplot2::facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html)
 can be set using the `fw_params` parameter (in a list).
+
+## See also
+
+[`autoplot.sim()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim.md),
+[`autoplot.sim_df()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_df.md),
+[`grid_var_autoplot()`](https://fabrice-rossi.github.io/blvim/reference/grid_var_autoplot.md),
+[`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md)
 
 ## Examples
 

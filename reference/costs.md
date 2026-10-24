@@ -1,6 +1,6 @@
-# Extract the cost matrix used to compute this model
+# Extract the cost matrix used to compute a model
 
-Extract the cost matrix used to compute this model
+Extract the cost matrix used to compute a model
 
 ## Usage
 
@@ -21,6 +21,13 @@ costs(sim, ...)
 ## Value
 
 the cost matrix
+
+## See also
+
+[`return_to_scale()`](https://fabrice-rossi.github.io/blvim/reference/return_to_scale.md),
+[`inverse_cost()`](https://fabrice-rossi.github.io/blvim/reference/inverse_cost.md),
+[`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md),
+[`costs.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/costs.sim_list.md)
 
 ## Examples
 

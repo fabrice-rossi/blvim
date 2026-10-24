@@ -17,17 +17,25 @@ Akamatsu, and Kogure in a recent paper
 (<https://arxiv.org/abs/2011.06778v2>).
 
 - [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
-  computes the potential of spatial interaction model using the
-  definition proposed by Osawa, Akamatsu, and Kogure.
+  computes the potential of a spatial interaction model using the
+  definition proposed by Osawa, Akamatsu, and Kogure. The potential is
+  also included in the data frames produced by
+  [`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md).
 - [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
   and
   [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
   now support multiple ways to specify the initial values of the
-  attractivenesses of the destination locations. In particular an
-  automated balanced vector of values is used when the initial
+  attractivenesses of the destination locations. In particular, an
+  automatically balanced vector of values is used when the initial
   attractivenesses are not provided. When multiple initial
-  configurations are provided, the functions select the best one, that
-  is the one with the largest potential.
+  configurations are provided, the functions select the best solution,
+  that is the one with the largest potential. Summaries of the
+  individual runs are available with
+  [`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md),
+  the corresponding models with
+  [`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md)
+  (when they are kept) and the initial attractivenesses with
+  [`initial_attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/initial_attractiveness.md).
 - Initial values for
   [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
   and
@@ -38,13 +46,13 @@ Akamatsu, and Kogure in a recent paper
   [`blvim_simplex_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_simplex_initialise.md)
   uses the new function
   [`sample_weighted_simplex()`](https://fabrice-rossi.github.io/blvim/reference/sample_weighted_simplex.md)
-  to sample in a structured way the simplex associated to the spatial
-  interaction model.
+  to sample, in a structured way, the simplex associated with the
+  spatial interaction model.
 - [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
   and
   [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
   now support two new algorithms to find an equilibrium. Both are
-  instance of a projected gradient ascent approach.
+  instances of a projected gradient ascent approach.
 - [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
   gives details about the behaviour of the iterative algorithms for
   [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
@@ -58,14 +66,16 @@ Akamatsu, and Kogure in a recent paper
   now support conversion factors between attractivenesses and incoming
   flows, together with the new function
   [`sim_conversion()`](https://fabrice-rossi.github.io/blvim/reference/sim_conversion.md).
-- [`sim_fp_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_fp_jacobian.md)
-  computes the Jacobian of the fixed point map with respect to the
+- [`sim_residual_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_residual_jacobian.md)
+  computes the Jacobian of the residual map with respect to the
   attractivenesses.
 
 ### Documentation
 
 - the theoretical vignette has been expanded with new content based on a
   recent paper by Osawa et al.
+- the documentation has been proofread, with more cross-references
+  between related functions and corrections of several inaccuracies.
 
 ### Minor improvements and bug fixes
 

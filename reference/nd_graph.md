@@ -2,16 +2,16 @@
 
 This function computes the most important flows in a spatial interaction
 model according to the approach outlined by J. D. Nystuen and M. F.
-Dacey (Nystuen & Dacey, 1961. In this work, a *nodal flow* is the
-largest flow sent from a non terminal location (based on the definition
+Dacey (Nystuen & Dacey, 1961). In this work, a *nodal flow* is the
+largest flow sent from a non-terminal location (based on the definition
 of terminals recalled in
 [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)).
-The *nodal structure* is the collection of those flows. They form an
-oriented graph that has interesting properties. In particular each
+The *nodal structure* is the collection of those flows. They form a
+directed graph that has interesting properties. In particular, each
 weakly connected component contains a single terminal location which can
-be seen as the dominant location of the component. Notice that because
+be seen as the dominant location of the component. Note that because
 nodal flows are based on terminals, this function applies only to the
-non bipartite setting.
+non-bipartite setting.
 
 ## Usage
 
@@ -26,7 +26,7 @@ nd_graph(sim, definition = c("ND", "RW"), ...)
 
 - sim:
 
-  a spatial interaction model object
+  a non-bipartite spatial interaction model object
 
 - definition:
 
@@ -44,21 +44,22 @@ structure of a spatial interaction model
 
 ## Details
 
-In practice, the function computes first the terminals and non terminals
+In practice, the function first computes the terminals and non-terminals
 according to either Nystuen & Dacey (1961) or Rihll and Wilson (1991).
 Then it extracts the nodal flows. The result of the analysis is returned
 as a data frame with three columns:
 
-- `from`: the index of the non terminal origin location
+- `from`: the index of the non-terminal origin location
 
-- `to`: the index of destination location of the nodal flow of `from`
+- `to`: the index of the destination location of the nodal flow of
+  `from`
 
 - `flow`: the value of the nodal flow
 
-An important aspect of the node structure is that is does not contain
-isolated terminals. If a location is a terminal but is never the
-receiver of a nodal flow it will not appear in the collection of nodal
-flows. It constitutes a a trivial connected component in itself.
+An important aspect of the nodal structure is that it does not contain
+isolated terminals. If a location is a terminal but never receives a
+nodal flow, it does not appear in the collection of nodal flows. It
+constitutes a trivial connected component in itself.
 
 ## References
 
@@ -74,9 +75,10 @@ London: Routledge.
 
 ## See also
 
-[`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md),
+[`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md),
 [`is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/is_terminal.md),
-[`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
+[`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md),
+[`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)
 
 ## Examples
 

@@ -22,7 +22,7 @@ sim_logs(sim)
 
 A data frame with one row per starting point and the following columns:
 
-- `run`: index of the run from 1 to number of initial point;
+- `run`: index of the run, from 1 to the number of starting points;
 
 - `potential`: final value of the potential;
 

@@ -36,7 +36,7 @@ The resulting data frame has at least three columns:
 - `destination_idx`: identifies the destination location by its index
   from 1 to the number of destination locations
 
-- `flow`: the flow between the corresponding location
+- `flow`: the flow between the corresponding locations
 
 In addition, if location information is available, it will be included
 in the data frame as follows:
@@ -46,9 +46,9 @@ in the data frame as follows:
 
 - positions are included using 2 or 3 columns (per location type, origin
   or destination) depending on the number of dimensions used for the
-  location. The names of the columns are by default `origin_x`,
-  `origin_y` and `origin_z` ( and equivalent names for destination
-  location) unless coordinate names are specified in the location
+  locations. The names of the columns are by default `origin_x`,
+  `origin_y` and `origin_z` (and equivalent names for destination
+  locations) unless coordinate names are specified in the location
   positions. In this latter case, the names are prefixed by `origin_` or
   `destination_`. For instance, if the destination location position
   coordinates are named `"longitude"` and `"latitude"`, the resulting
@@ -56,9 +56,10 @@ in the data frame as follows:
 
 ## See also
 
+[`flows()`](https://fabrice-rossi.github.io/blvim/reference/flows.md),
 [`location_positions()`](https://fabrice-rossi.github.io/blvim/reference/location_positions.md),
 [`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md),
-[`flows()`](https://fabrice-rossi.github.io/blvim/reference/flows.md)
+[`fortify.sim()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim.md)
 
 ## Examples
 

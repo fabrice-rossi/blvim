@@ -54,16 +54,17 @@ a vector of diversities, one per spatial interaction model
 
 See
 [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
-for the definition of the diversities. Notice that
+for the definition of the diversities. Note that
 [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
 is generic and can be applied directly to `sim_list` objects. The
 current function is provided to be explicit in R code about what is a
-unique model and what is a collection of models (using function names
-that start with `"grid_"`)
+single model and what is a collection of models (using function names
+that start with `"grid_"`).
 
 ## See also
 
-[`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
+[`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md),
+[`grid_is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/grid_is_terminal.md)
 and
 [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 

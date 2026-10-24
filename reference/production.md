@@ -26,7 +26,8 @@ a vector of production constraints at the origin locations
 ## See also
 
 [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md),
-[`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
+[`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md),
+[`flows()`](https://fabrice-rossi.github.io/blvim/reference/flows.md)
 
 ## Examples
 

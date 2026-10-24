@@ -15,7 +15,8 @@ names(x) <- value
 
 - x:
 
-  data frame of spatial interaction models, an object of class `sim_df`
+  a data frame of spatial interaction models, an object of class
+  `sim_df`
 
 - value:
 
@@ -25,6 +26,12 @@ names(x) <- value
 
 a `sim_df` data frame if possible, a standard `data.frame` when this is
 not possible.
+
+## See also
+
+[`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md),
+[sim_df_extract](https://fabrice-rossi.github.io/blvim/reference/sim_df_extract.md),
+[`sim_column()`](https://fabrice-rossi.github.io/blvim/reference/sim_column.md)
 
 ## Examples
 
@@ -36,7 +43,7 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
 all_flows_df <- sim_df(all_flows)
 names(all_flows_df)

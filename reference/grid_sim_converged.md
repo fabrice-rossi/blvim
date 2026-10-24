@@ -1,4 +1,4 @@
-# Reports the convergence statuses of a collection of spatial interaction models
+# Report the convergence statuses of a collection of spatial interaction models
 
 The function reports for each spatial interaction model of its
 `sim_list` parameter its convergence status, as defined in
@@ -23,16 +23,17 @@ grid_sim_converged(sim, ...)
 
 ## Value
 
-a vector of convergence status, one per spatial interaction model
+a logical vector of convergence statuses, one per spatial interaction
+model
 
 ## Details
 
-Notice that
+Note that
 [`sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/sim_converged.md)
 is generic and can be applied directly to `sim_list` objects. The
 current function is provided to be explicit in R code about what is a
-unique model and what is a collection of models (using function names
-that start with `"grid_"`)
+single model and what is a collection of models (using function names
+that start with `"grid_"`).
 
 ## See also
 

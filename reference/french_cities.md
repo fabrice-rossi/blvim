@@ -10,7 +10,7 @@ french_cities
 
 ## Format
 
-A `data.frame` with 121 rows and 9 columns
+A `data.frame` with 121 rows and 10 columns
 
 - id:
 
@@ -37,23 +37,23 @@ A `data.frame` with 121 rows and 9 columns
 
 - area:
 
-  Area of the city in squared kilometers
-
-- th_latitude:
-
-  The latitude of the of town hall the city (epsg:4326)
+  The area of the city in square kilometres
 
 - th_longitude:
 
   The longitude of the town hall of the city (epsg:4326)
 
-- center_latitude:
+- th_latitude:
 
-  The latitude of the centre of the city (epsg:4326)
+  The latitude of the town hall of the city (epsg:4326)
 
-- center_longitude:
+- centre_longitude:
 
   The longitude of the centre of the city (epsg:4326)
+
+- centre_latitude:
+
+  The latitude of the centre of the city (epsg:4326)
 
 ## Source
 
@@ -68,11 +68,12 @@ Geo API (2025) <https://geo.api.gouv.fr/>
 
 ## Details
 
-This data set describes all Metropolitan France cities with 50,000 or
+This data set describes all cities of Metropolitan France with 50,000 or
 more inhabitants in 2022, excluding Corsican cities. It contains 121
-cities described by 8 variables. The data frame is sorted in decreasing
-population order, making it straightforward to select the most populated
-cities. The same order is used for rows and columns in distance matrices
+cities described by 10 variables. The data frame is sorted in decreasing
+order of population, making it straightforward to select the most
+populous cities. The same order is used for the rows and columns of the
+distance matrices
 [french_cities_distances](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
 and
 [french_cities_times](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md).
@@ -81,7 +82,7 @@ The population and administrative information was collected from the
 INSEE open data in November 2025. These data are distributed under the
 [French "Open
 Licence"](https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Open_Licence.pdf).
-Geographical coordinates and areas have been obtained from the [Geo
+Geographical coordinates and areas were obtained from the [Geo
 API](https://geo.api.gouv.fr/) in November 2025 and are also available
 under the French "Open Licence".
 

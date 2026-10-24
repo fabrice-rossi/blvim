@@ -1,12 +1,12 @@
 # Compute terminals for a spatial interaction model
 
-This function identifies terminals in the locations underlying the given
-spatial interaction model. Terminals are locally dominating locations
-that essentially send less to other locations than they receive (see
-details for formal definitions). As we compare incoming flows to
-outgoing flows, terminal computation is restricted to interaction models
-in which origin and destination locations are identical, i.e. models
-that are not `bipartite`.
+This function identifies terminals among the locations underlying the
+given spatial interaction model. Terminals are locally dominant
+locations that essentially send less to other locations than they
+receive (see details for formal definitions). As we compare incoming
+flows to outgoing flows, terminal computation is restricted to
+interaction models in which origin and destination locations are
+identical, i.e. models that are not bipartite.
 
 ## Usage
 
@@ -18,7 +18,7 @@ terminals(sim, definition = c("ND", "RW"), ...)
 
 - sim:
 
-  a spatial interaction model object
+  a non-bipartite spatial interaction model object
 
 - definition:
 
@@ -36,13 +36,13 @@ flow matrix of the interaction model.
 
 ## Details
 
-The notion of terminal used in this function is based on seminal work by
-J. D. Nystuen and M. F. Dacey (Nystuen & Dacey, 1961), as well as on the
-follow up variation from Rihll & Wislon (1987 and 1991). We assume given
-a square flow matrix \\(Y\_{ij})\_{1\leq i\leq n, 1\leq j\leq n}\\. The
-incoming flow at location \\j\\ is given by
+The notion of terminal used in this function is based on the seminal
+work of J. D. Nystuen and M. F. Dacey (Nystuen & Dacey, 1961), as well
+as on the follow-up variation by Rihll & Wilson (1987 and 1991). We are
+given a square flow matrix \\(Y\_{ij})\_{1\leq i\leq n, 1\leq j\leq
+n}\\. The incoming flow at location \\j\\ is given by
 
-\$\$D_j=\sum\_{j=i}^{p}Y\_{ij},\$\$
+\$\$D_j=\sum\_{i=1}^{n}Y\_{ij},\$\$
 
 and is used as a measure of importance of this location. Then in Nystuen
 & Dacey (1961), location \\j\\ is a "terminal point" (or a "central
@@ -59,17 +59,17 @@ its largest flow is less important than \\j\\ itself, in terms of
 incoming flows. This is the definition used by the function when
 `definition` is `"ND"`.
 
-Rihll & Wilson (1987) use a modified version of this definition
-described in details in Rihll and Wilson (1991). With this relaxed
+Rihll & Wilson (1987) use a modified version of this definition,
+described in detail in Rihll and Wilson (1991). With this relaxed
 version, location \\j\\ is a terminal if
 
-\$\$\forall i,\quad D_j \geq Y\_{ij}.\$\$
+\$\$\forall l,\quad D_j \geq Y\_{jl}.\$\$
 
-In words, \\j\\ is a terminal if it receives more flows than it is
-sending to each other location. It is easy to see that each Nystuen &
-Dacey terminal is a Rihll & Wilson terminal, but the reverse is false in
-general. The function use the Rihll & Wilson definition when
-`definition` is `"RW"`
+In words, \\j\\ is a terminal if its total incoming flow is at least as
+large as the flow it sends to any other location. It is easy to see that
+each Nystuen & Dacey terminal is a Rihll & Wilson terminal, but the
+converse does not hold in general. The function uses the Rihll & Wilson
+definition when `definition` is `"RW"`.
 
 ## References
 
@@ -90,9 +90,11 @@ London: Routledge.
 
 ## See also
 
-[`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md),
 [`is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/is_terminal.md),
-[`grid_is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/grid_is_terminal.md)
+[`grid_is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/grid_is_terminal.md),
+[`nd_graph()`](https://fabrice-rossi.github.io/blvim/reference/nd_graph.md),
+[`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md),
+[`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)
 
 ## Examples
 

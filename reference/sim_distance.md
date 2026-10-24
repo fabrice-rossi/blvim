@@ -43,7 +43,7 @@ an object of class `"dist"`
 
 ## Details
 
-The vector representation is selected using the `flows` parameters.
+The vector representation is selected using the `flows` parameter.
 Possible values are
 
 - `"full"` (default value): the representation is obtained by
@@ -54,15 +54,17 @@ Possible values are
 
 - `"destination"`: the representation is the
   [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
-  vector associated to each spatial interaction model;
+  vector associated with each spatial interaction model;
 
 - `"attractiveness"`: the representation is the
   [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)
-  vector associated to each spatial interaction model.
+  vector associated with each spatial interaction model.
 
 ## See also
 
-[`dist()`](https://rdrr.io/r/stats/dist.html)
+[`stats::dist()`](https://rdrr.io/r/stats/dist.html),
+[`median.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/median.sim_list.md),
+[`summary.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md)
 
 ## Examples
 

@@ -1,6 +1,6 @@
-# Create a complete variability for a collection of spatial interaction models
+# Create a complete variability plot for a collection of spatial interaction models
 
-This function represents graphically the variability of the flows
+This function graphically represents the variability of the flows
 represented by the spatial interaction models contained in a collection
 (a `sim_list` object).
 
@@ -46,22 +46,22 @@ autoplot(
 
 - cut_off:
 
-  cut off limit for inclusion of a graphical primitive when
+  cut-off limit for inclusion of a graphical primitive when
   `with_positions = TRUE`. In the attractiveness or destination
   representation, circles are removed when the corresponding upper
-  quantile value is below the cut off.
+  quantile value is below the cut-off.
 
 - adjust_limits:
 
-  if `FALSE` (default value), the limits of the position based graph are
+  if `FALSE` (default value), the limits of the position-based graph are
   not adjusted after removing graphical primitives. This eases
-  comparison between graphical representations with different cut off
-  value. If `TRUE`, limits are adjusted to the data using the standard
+  comparison between graphical representations with different cut-off
+  values. If `TRUE`, limits are adjusted to the data using the standard
   ggplot2 behaviour.
 
 - with_labels:
 
-  if `FALSE` (default value) names are displayed using plain texts. If
+  if `FALSE` (default value) names are displayed using plain text. If
   `TRUE`, names are shown using labels.
 
 - qmin:
@@ -105,16 +105,16 @@ destination. We consider three quantiles:
 
 - the median;
 
-- a upper quantile `qmax` defaulting to 0.95.
+- an upper quantile `qmax` defaulting to 0.95.
 
-If `with_position` is `FALSE` (default value), the graphical
+If `with_positions` is `FALSE` (default value), the graphical
 representations are "abstract". Depending on `flows` we have the
 following representations:
 
 - `"full"`: the function displays the quantiles over the collection of
   models of the flows using nested squares
   ([`flows()`](https://fabrice-rossi.github.io/blvim/reference/flows.md)).
-  The graph is organised as matrix with origin locations on rows and
+  The graph is organised as a matrix with origin locations on rows and
   destination locations on columns. At each row and column intersection,
   three nested squares represent respectively the lower quantile, the
   median and the upper quantile of the distribution of the flows between
@@ -131,7 +131,7 @@ following representations:
   [`ggplot2::geom_crossbar()`](https://ggplot2.tidyverse.org/reference/geom_linerange.html):
   each location is represented by a rectangle that spans from its lower
   quantile to its upper quantile. An intermediate thicker bar represents
-  the median quantile.
+  the median.
 
 - `"attractiveness"`: the function displays the quantiles over the
   collection of models of the attractiveness of each destination
@@ -148,16 +148,16 @@ following representations:
 
 When the `with_names` parameter is `TRUE`, the location names
 ([`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md))
-are used to label the axis of the graphical representation. If names are
+are used to label the axes of the graphical representation. If names are
 not specified, they are replaced by indexes.
 
 When the `with_positions` parameter is `TRUE`, the location positions
 ([`location_positions()`](https://fabrice-rossi.github.io/blvim/reference/location_positions.md))
-are used to produce more "geographically informed" representations.
-Notice that if no positions are known for the locations, the use of
+are used to produce more "geographically informed" representations. Note
+that if no positions are known for the locations, using
 `with_positions = TRUE` is an error. Moreover, `flows = "full"` is not
-supported: the function will issue a warning and revert to the position
-free representation if this value is used.
+supported: the function will issue a warning and revert to the
+position-free representation if this value is used.
 
 The representations for `flows="destination"` and
 `flows="attractiveness"` are based on the same principle. Each
@@ -165,13 +165,12 @@ destination location is represented by a collection of three nested
 circles centred on the corresponding location position, representing
 respectively the lower quantile, the median and the upper quantile of
 the incoming flows or of the attractivenesses. The diameters of the
-circles are proportional to the quantities they represent. The border ot
-the median circle is thicker than the ones of the other circles.
+circles are proportional to the quantities they represent. The border of
+the median circle is thicker than those of the other circles.
 
 When both `with_positions` and `with_names` are `TRUE`, the names of the
 destinations are added to the graphical representation. If `with_labels`
-is `TRUE` the names are represented as labels instead of plain texts
-(see
+is `TRUE` the names are represented as labels instead of plain text (see
 [`ggplot2::geom_label()`](https://ggplot2.tidyverse.org/reference/geom_text.html)).
 If the `ggrepel` package is installed, its functions are used instead of
 `ggplot2` native functions.
@@ -179,7 +178,9 @@ If the `ggrepel` package is installed, its functions are used instead of
 ## See also
 
 [`fortify.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim_list.md),
-[`quantile.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/quantile.sim_list.md)
+[`quantile.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/quantile.sim_list.md),
+[`autoplot.sim()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim.md),
+[`grid_var_autoplot()`](https://fabrice-rossi.github.io/blvim/reference/grid_var_autoplot.md)
 
 ## Examples
 
@@ -209,26 +210,26 @@ ggplot2::autoplot(all_flows, with_names = TRUE, normalisation = "none") +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 
 ggplot2::autoplot(all_flows,
-  flow = "destination", with_names = TRUE,
+  flows = "destination", with_names = TRUE,
   qmin = 0, qmax = 1
 ) +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 
 ggplot2::autoplot(all_flows,
-  flow = "destination", with_positions = TRUE,
+  flows = "destination", with_positions = TRUE,
   qmin = 0, qmax = 1
 ) + ggplot2::scale_size_continuous(range = c(0, 6)) +
   ggplot2::coord_sf(crs = "epsg:4326")
 
 ggplot2::autoplot(all_flows,
-  flow = "destination", with_positions = TRUE,
+  flows = "destination", with_positions = TRUE,
   qmin = 0, qmax = 1,
   cut_off = 1.1
 ) +
   ggplot2::coord_sf(crs = "epsg:4326")
 
 ggplot2::autoplot(all_flows,
-  flow = "destination", with_positions = TRUE,
+  flows = "destination", with_positions = TRUE,
   with_names = TRUE,
   with_labels = TRUE,
   qmin = 0, qmax = 1,

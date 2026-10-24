@@ -1,8 +1,8 @@
-# Create a sim_list object from a list of spatial interaction objects
+# Create a sim_list object from a list of spatial interaction models
 
 The collection of `sim` objects represented by a `sim_list` object is
-assumed to be homogeneous, that is to correspond to a fix set of origin
-and destination locations, associated to a fixed cost matrix.
+assumed to be homogeneous, that is to correspond to a fixed set of
+origin and destination locations, associated with a fixed cost matrix.
 
 ## Usage
 
@@ -14,16 +14,23 @@ sim_list(sims, validate = TRUE)
 
 - sims:
 
-  a list of homogeneous spatial interaction objects
+  a list of homogeneous spatial interaction models
 
 - validate:
 
   should the function validate the homogeneity of the list of spatial
-  interaction objects (defaults to `TRUE`)
+  interaction models (defaults to `TRUE`)
 
 ## Value
 
 a `sim_list` object
+
+## See also
+
+[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md),
+[`c.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/c.sim_list.md),
+[`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md),
+[`summary.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md)
 
 ## Examples
 

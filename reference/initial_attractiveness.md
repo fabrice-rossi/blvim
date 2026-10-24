@@ -27,12 +27,13 @@ initial_attractiveness(sim, ...)
 
 ## Value
 
-A vector containing the initial destination attractivenesses.
+a vector containing the initial destination attractivenesses
 
 ## See also
 
 [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md),
-[`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
+[`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md),
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
 
 ## Examples
 

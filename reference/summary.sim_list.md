@@ -18,7 +18,7 @@ print(x, ...)
 - object:
 
   a collection of spatial interaction models, an object of class
-  `sim_list` `summary.sim_list()`
+  `sim_list`
 
 - ...:
 
@@ -26,7 +26,7 @@ print(x, ...)
 
 - x:
 
-  an object of class `summary_sim_list` produced by
+  an object of class `summary_sim_list` produced by `summary.sim_list()`
 
 ## Value
 
@@ -37,7 +37,7 @@ statistics computed on the collection of spatial interaction models
 
 The list returned by the function contains the following elements:
 
-- `median`: the median of the collection, as return by the
+- `median`: the median of the collection, as returned by the
   [`median.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/median.sim_list.md)
   function
 
@@ -49,8 +49,8 @@ The list returned by the function contains the following elements:
 
 - `nb_sims`: the size of the collection
 
-In addition, if the collection contains non bipartite models, the result
-has another element, `nb_configurations` which gives the number of
+In addition, if the collection contains non-bipartite models, the result
+has another element, `nb_configurations`, which gives the number of
 distinct terminal sets in the collection, where the terminals are
 computed by
 [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md),
@@ -59,6 +59,7 @@ using the `"RW"` definition.
 ## See also
 
 [`median.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/median.sim_list.md),
+[`sim_distance()`](https://fabrice-rossi.github.io/blvim/reference/sim_distance.md),
 [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
 
 ## Examples
@@ -74,7 +75,7 @@ all_flows <- grid_blvim(distances,
   c(1, 2, 3),
   attractiveness,
   epsilon = 0.1,
-  bipartite = FALSE,
+  bipartite = FALSE
 )
 summary(all_flows)
 #> 

@@ -1,11 +1,11 @@
 # Create a spatial interaction models data frame from a collection of interaction models
 
-This function build a data frame from a collection of spatial
+This function builds a data frame from a collection of spatial
 interaction models. The data frame has a list column `sim` of type
 `sim_list` which stores the collection of models and classical columns
 that contain characteristics of the models. The name of the list column
-can be set to something else than `sim` (but not a name used by other
-default columns). See details for the default columns.
+can be set to something other than `sim` (but not to a name used by
+other default columns). See details for the default columns.
 
 ## Usage
 
@@ -38,7 +38,7 @@ following columns:
 
 - `alpha`: the return to scale parameter used to build the model
 
-- `beta`: the cost inverse scale parameter used to build the model
+- `beta`: the inverse cost scale parameter used to build the model
 
 - `diversity`: model default
   [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
@@ -50,16 +50,16 @@ following columns:
 - `iterations`: the number of iterations used to produce the model (1
   for a static model)
 
-- `converged`: `TRUE` is the iterative calculation of the model
+- `converged`: `TRUE` if the iterative calculation of the model
   converged (for models produced by
   [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
   and related approaches), `FALSE` for no convergence and `NA` for
   static models
 
-The resulting object behaves mostly like a `data.frame` and support
+The resulting object behaves mostly like a `data.frame` and supports
 standard extraction and replacement operators. The object tries to keep
 its `sim_df` class during modifications. In particular,
-`names<-.sim_df()` tracks name change for the `sim_list` column. If a
+`names<-.sim_df()` tracks name changes for the `sim_list` column. If a
 modification or an extraction operation changes the type of the
 `sim_list` column or drops it, the resulting object is a standard
 `data.frame`. See
@@ -67,6 +67,15 @@ modification or an extraction operation changes the type of the
 and
 [`names<-.sim_df()`](https://fabrice-rossi.github.io/blvim/reference/names-set-.sim_df.md)
 for details.
+
+## See also
+
+[`sim_column()`](https://fabrice-rossi.github.io/blvim/reference/sim_column.md),
+[sim_df_extract](https://fabrice-rossi.github.io/blvim/reference/sim_df_extract.md),
+[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md),
+[`autoplot.sim_df()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_df.md),
+[`grid_autoplot()`](https://fabrice-rossi.github.io/blvim/reference/grid_autoplot.md),
+[`grid_var_autoplot()`](https://fabrice-rossi.github.io/blvim/reference/grid_var_autoplot.md)
 
 ## Examples
 
@@ -78,7 +87,7 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
 all_flows_df <- sim_df(all_flows)
 all_flows_df$converged

@@ -67,8 +67,9 @@ diversity(
 
 ## Value
 
-the diversity of destination flows (one value per spatial interaction
-model)
+the diversity of the destination activities (destination flows or
+attractivenesses). In the case of a `sim_list`, the function returns a
+numeric vector with one value per spatial interaction model.
 
 ## Details
 
@@ -85,45 +86,46 @@ parameter `activity` is set to `"destination"`).
 
 For dynamic models produced by
 [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md),
-the destination attractivenesses can be also considered as activity
+the destination attractivenesses can also be considered as activity
 measures. When convergence occurs, the values are identical, but prior
-convergence they can be quite different. When `activity` is set to
-`"attractiveness"`, the diversity measures are computed using the same
-formula as below but with \\D_j\\ replaced by \\Z_j\\ (as given by
+to convergence they can be quite different. When `activity` is set to
+`"attractiveness"`, the diversity measures are computed using the
+formulas below but with \\D_j\\ replaced by \\Z_j\\ (as given by
 [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)).
 
-To compute their diversity using entropy based definitions, the
-activities are first normalised to be interpreted as a probability
-distribution over the destination locations. For instance for
-destination flows, we use
+To compute their diversity using entropy-based definitions, the
+activities are first normalised so that they can be interpreted as a
+probability distribution over the \\p\\ destination locations. For
+instance, for destination flows, we use
 
-\$\$\forall j,\quad p_j=\frac{D_j}{\sum\_{k=1}^n D_k}.\$\$
+\$\$\forall j,\quad p_j=\frac{D_j}{\sum\_{k=1}^p D_k}.\$\$
 
-The most classic diversity index is given by the exponential of
+The most classical diversity index is given by the exponential of
 Shannon's entropy (parameter `definition="shannon"`). This gives
 
-\$\$\text{diversity}(p, \text{Shannon})=\exp\left(-\sum\_{k=1}^n p_k\ln
+\$\$\text{diversity}(p, \text{Shannon})=\exp\left(-\sum\_{k=1}^p p_k\ln
 p_k\right).\$\$
 
-Rényi generalized entropy can be used to define a collection of other
+Rényi's generalised entropy can be used to define a collection of other
 diversity metrics. The Rényi diversity of order \\\gamma\\ is the
-exponential of the Rényi entropy of order \\\gamma\\ of the \\p\\
-distribution, that is
+exponential of the Rényi entropy of order \\\gamma\\ of the distribution
+\\(p_j)\_{1\leq j\leq p}\\, that is
 
 \$\$\text{diversity}(p, \text{Rényi},
 \gamma)=\exp\left(\frac{1}{1-\gamma}\ln
-\left(\sum\_{k=1}^np_k^\gamma\right)\right).\$\$
+\left(\sum\_{k=1}^pp_k^\gamma\right)\right).\$\$
 
 This is defined directly only for \\\gamma\in\]0,1\[\cup \]1,\infty\[\\,
-but extensions to the limit case are straightforward:
+but extensions to the limit cases are straightforward:
 
 - \\\gamma=1\\ is Shannon's entropy/diversity
 
-- \\\gamma=0\\ is the max-entropy, here \\\ln(n)\\ and thus the
-  corresponding diversity is the number of locations
+- \\\gamma=0\\ is the max-entropy, here \\\ln(p)\\ (when all \\p_k\\ are
+  positive) and thus the corresponding diversity is the number of
+  destination locations
 
-- \\\gamma=\infty\\ is the min-entropy, here \\-\log \max\_{k}p_k\\ and
-  thhe corresponding diversity is \\\frac{1}{\max\_{k}p_k}\\
+- \\\gamma=\infty\\ is the min-entropy, here \\-\ln \max\_{k}p_k\\ and
+  the corresponding diversity is \\\frac{1}{\max\_{k}p_k}\\
 
 The `definition` parameter specifies the diversity used for calculation.
 The default value is `shannon` for Shannon's entropy (in this case the
@@ -132,10 +134,10 @@ diversities as specified by the `order` parameter. Large values of
 `order` tend to generate underflows in the calculation that will trigger
 the use of the min-entropy instead of the exact Rényi entropy.
 
-In addition to those entropy based definition, terminal based
+In addition to these entropy-based definitions, terminal-based
 calculations are also provided. Using any definition supported by the
 [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
-function, the diversity is the number of terminals identified. Notice
+function, the diversity is the number of terminals identified. Note that
 this applies only to interaction models in which origin and destination
 locations are identical, i.e. when the model is not bipartite. In
 addition, the notion of terminals is based on destination flows and
@@ -166,7 +168,8 @@ Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md),
 [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md),
 [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md),
-[`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)
+[`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md),
+[`grid_diversity()`](https://fabrice-rossi.github.io/blvim/reference/grid_diversity.md)
 
 ## Examples
 

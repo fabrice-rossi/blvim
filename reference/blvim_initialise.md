@@ -26,7 +26,9 @@ blvim_initialise(generator = blvim_simplex_initialise, ...)
 
 ## Value
 
-An object of class `blvim_initialise`.
+an object of class `blvim_initialise`, to be used as the `Z` argument of
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md) or
+[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 
 ## Details
 
@@ -57,7 +59,7 @@ The `context` argument is a named list containing:
 
 - `n_destinations`: number of destinations.
 
-Some of the parameters are easily deducible from others (`C`,
+Some of the parameters can easily be deduced from others (`C`,
 `n_origins` and `n_destinations`) but are included to simplify the
 design of initialisers.
 
@@ -68,9 +70,13 @@ generated.
 ## See also
 
 [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
-for the use of this function, and
+for the use of this function,
 [`blvim_simplex_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_simplex_initialise.md)
-for the default initialiser.
+for the default initialiser, and
+[`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md)
+and
+[`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md)
+for the results of the multiple runs.
 
 ## Examples
 

@@ -33,11 +33,11 @@ quantile(
 
 - normalisation:
 
-  when `flows="full"`, the flows are used as is, that without
-  normalisation (`normalisation="none"`, default case) or they can be
-  normalised prior the calculation of the quantiles, either to sum to
-  one for each origin location (`normalisation="origin"`) or to sum to
-  one globally (`normalisation="full"`). This is useful for
+  when `flows="full"`, the flows are either used as is, without
+  normalisation (`normalisation="none"`, default case), or normalised
+  prior to the calculation of the quantiles, either to sum to one for
+  each origin location (`normalisation="origin"`) or to sum to one
+  globally (`normalisation="full"`). This is useful for
   [`autoplot.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md).
 
 - ...:
@@ -46,13 +46,13 @@ quantile(
 
 ## Value
 
-a date frame, see details
+a data frame, see details
 
 ## Details
 
 The exact behaviour depends on the value of `flows`. In all cases, the
 function returns a data frame. The data frame has one column per
-quantile, named after the quantile using a percentage based named, as in
+quantile, named after the quantile using a percentage-based name, as in
 the default
 [`stats::quantile()`](https://rdrr.io/r/stats/quantile.html). For a
 graphical representation of those quantiles, see
@@ -61,7 +61,7 @@ graphical representation of those quantiles, see
 - if `flows="full"`: this is the default case in which the function
   computes for each pair of origin \\o\\ and destination \\d\\ locations
   the quantiles of the distribution of the flow from \\o\\ to \\d\\ in
-  the collection of models (the flows maybe normalised before quantile
+  the collection of models (the flows may be normalised before quantile
   calculations, depending on the value of `normalisation`). In addition
   to the quantiles, the data frame has two columns:
 
@@ -72,14 +72,14 @@ graphical representation of those quantiles, see
     from 1 to the number of destination locations.
 
 - if `flows="destination"`, the function computes quantiles for each
-  destination \\d\\ location of the distribution of its incoming flow
+  destination location \\d\\ of the distribution of its incoming flow
   ([`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md))
   in the collection of models. In addition to the quantiles, the data
   frame has one column `destination` that identifies the destination
   location by its index from 1 to the number of destination locations.
 
 - if `flows="attractiveness"`, the function computes quantiles for each
-  destination \\d\\ location of the distribution of its attractiveness
+  destination location \\d\\ of the distribution of its attractiveness
   ([`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md))
   in the collection of models. In addition to the quantiles, the data
   frame has one column `destination` that identifies the destination
@@ -87,8 +87,9 @@ graphical representation of those quantiles, see
 
 ## See also
 
-[`fortify.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim_list.md)
-[`autoplot.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md)
+[`fortify.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim_list.md),
+[`autoplot.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md),
+[`median.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/median.sim_list.md)
 
 ## Examples
 

@@ -4,7 +4,7 @@
 interaction model**. The model is described in [Wilson, A. (2008),
 “Boltzmann, Lotka and Volterra and spatial structural evolution: an
 integrated methodology for some dynamical systems”, J. R. Soc.
-Interface, 5:865–871](http://dx.doi.org/10.1098/rsif.2007.1288).
+Interface, 5:865–871](https://doi.org/10.1098/rsif.2007.1288).
 
 The package’s primary goal is to provide a fast implementation of the
 BLV model, complete with a collection of tools designed to explore the
@@ -65,7 +65,7 @@ To compute a spatial interaction model with `blvim`, you need at least a
 cost matrix. The package comes with distance data for a selection of
 large French cities. We use the 30 largest ones as origin locations and
 the 20 smallest ones as destination locations. The cost matrix is the
-distance between the cities (in meters).
+distance between the cities (in metres).
 
 ``` r
 
@@ -115,15 +115,15 @@ instance.
 In Wilson’s production-constrained maximum entropy model, the flows are
 given by
 
-\\ Y\_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta
-c\_{ij})}{\sum\_{k=1}^pZ_k^{\alpha}\exp(-\beta c\_{ik})}, \\
+\\Y\_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta
+c\_{ij})}{\sum\_{k=1}^pZ_k^{\alpha}\exp(-\beta c\_{ik})},\\
 
 where \\\alpha\\ is a return-to-scale parameter and \\\beta\\ is the
 inverse of a cost scale parameter. Note that the flow matrix is
 **production-constrained**, meaning that the total outgoing flow from
-any origin location is equals the production of that location:
+any origin location equals the production of that location:
 
-\\ \forall i,\quad X_i=\sum\_{j=1}^{p}Y\_{ij}. \\
+\\\forall i,\quad X_i=\sum\_{j=1}^{p}Y\_{ij}.\\
 
 The model is obtained using the
 [`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
@@ -205,7 +205,7 @@ autoplot(b_model) +
 ![A matrix representation of the flows. The flows are much more
 concentrated than with the previous choice of parameters. Many
 destination locations do not receive any flow. Most of the flow goes to
-Vaulx-en-Vellin, Arles, Albi and
+Vaulx-en-Velin, Arles, Albi and
 Cagnes-sur-mer.](reference/figures/README-b_flow-1.png)
 
 As the two figures above exemplify, different values of the parameters
@@ -220,7 +220,7 @@ incoming flows.
 
 Ideally, we aim for the following condition to hold in the limit:
 
-\\ Z_j =\sum\_{i=1}^{n}Y\_{ij}, \\
+\\Z_j =\sum\_{i=1}^{n}Y\_{ij}, \\
 
 where the flows are given by the equations above. The model is estimated
 using the
@@ -238,7 +238,7 @@ a_blv_model
 #> ℹ The BLV model converged after 4800 iterations.
 ```
 
-Notice that we start with some initial values of the attractiveness, but
+Note that we start with some initial values of the attractiveness, but
 the final values are different. These final values can be obtained using
 the
 [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)
@@ -252,7 +252,7 @@ barplot(a_final_Z)
 ```
 
 ![A bar plot representation of the attractivenesses of the destination
-locations. Only one bar is visible: Vaulx-en-Vellin dominates the
+locations. Only one bar is visible: Vaulx-en-Velin dominates the
 destination locations.](reference/figures/README-a_blv_Z-1.png) In this
 particular example, one destination location acts as a global attractor
 of all the flows. This pattern is also visible in the final flow matrix.
@@ -265,12 +265,12 @@ autoplot(a_blv_model) +
 
 ![A matrix representation of the flows. The matrix has only one black
 column, showing that all the flow goes to
-Vaulx-en-Vellin.](reference/figures/README-a_blv_flow-1.png)
+Vaulx-en-Velin.](reference/figures/README-a_blv_flow-1.png)
 
 The
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
 function can also be used to show the destination flows or the
-attractivenesses values:
+attractiveness values:
 
 ``` r
 
@@ -279,7 +279,7 @@ autoplot(a_blv_model, "attractiveness", with_names = TRUE) +
 ```
 
 ![A bar plot representation of the attractivenesses of the destination
-locations. Only one bar is visible: Vaulx-en-Vellin dominates the
+locations. Only one bar is visible: Vaulx-en-Velin dominates the
 destination locations.](reference/figures/README-a_blv_Z_ggplot2-1.png)
 
 Naturally, the results are strongly influenced by the parameters, as
@@ -304,7 +304,7 @@ autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
 
 ![A bar plot representation of the attractivenesses of the destination
 locations. Nine out of the twenty destination locations remain
-attractive. Vaulx-en-Vellin is still the most attractive location, but
+attractive. Vaulx-en-Velin is still the most attractive location, but
 Cholet and Arles are quite attractive also. They are closely followed by
 Saint-Ouen-sur-Seine and Saint-Quentin. Then the graph shows a set of
 four remaining attractive destinations but with small values (between
@@ -321,12 +321,12 @@ autoplot(b_blv_model, with_names = TRUE) +
 
 ![A matrix representation of the flows. The figure shows essentially the
 same things as the previous bar plot. In most of the cases, the flow
-outgoing from a origin location goes to a unique destination location.
+outgoing from an origin location goes to a unique destination location.
 The main exception is the pair Saint-Ouen-sur-Seine and Saint-Quentin
 who share incoming flows.](reference/figures/README-b_blv_flow-1.png)
 
-`bvlim` offers a collection of graphical representations that can
-leverage the data associated to the origin and destination locations.
+`blvim` offers a collection of graphical representations that can
+leverage the data associated with the origin and destination locations.
 For instance, we can display the full flows using geographical
 coordinates of the cities.
 
@@ -372,16 +372,16 @@ parameters.
 - [`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md)
   : Specify how initial attractivenesses are generated
 - [`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md)
-  : Extract the cost matrix used to compute this model
+  : Extract the cost matrix used to compute a model
 - [`inverse_cost()`](https://fabrice-rossi.github.io/blvim/reference/inverse_cost.md)
-  : Extract the inverse cost scale parameter used to compute this model
+  : Extract the inverse cost scale parameter used to compute a model
 - [`return_to_scale()`](https://fabrice-rossi.github.io/blvim/reference/return_to_scale.md)
-  : Extract the return to scale parameter used to compute this model
+  : Extract the return to scale parameter used to compute a model
 - [`sim_conversion()`](https://fabrice-rossi.github.io/blvim/reference/sim_conversion.md)
-  : Returns the conversion factors between attractivenesses and incoming
+  : Return the conversion factors between attractivenesses and incoming
   flows
 - [`sim_is_bipartite()`](https://fabrice-rossi.github.io/blvim/reference/sim_is_bipartite.md)
-  : Reports whether the spatial interaction model is bipartite
+  : Report whether a spatial interaction model is bipartite
 - [`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md)
   [`` `location_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/location_names.md)
   : Names of origin and destination locations in a spatial interaction
@@ -391,13 +391,13 @@ parameters.
   : Positions of origin and destination locations in a spatial
   interaction model
 - [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
-  : Compute the flows incoming at each destination location
+  : Compute the incoming flow at each destination location
 - [`destination_names()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
   [`` `destination_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
   : Names of destination locations in a spatial interaction model
 - [`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
   [`` `destination_positions<-`() ``](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
-  : positions of destination locations in a spatial interaction model
+  : Positions of destination locations in a spatial interaction model
 - [`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
   [`` `origin_names<-`() ``](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
   : Names of origin locations in a spatial interaction model
@@ -415,7 +415,7 @@ Functions for getting properties of spatial interaction models.
   : Extract the initial attractivenesses from a spatial interaction
   model object
 - [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
-  : Compute the flows incoming at each destination location
+  : Compute the incoming flow at each destination location
 - [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
   : Compute the diversity of the destination locations in a spatial
   interaction model
@@ -429,8 +429,8 @@ Functions for getting properties of spatial interaction models.
   object
 - [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
   : Compute the potential of a spatial interaction model
-- [`sim_fp_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_fp_jacobian.md)
-  : Compute the Jacobian of the fixed-point map G
+- [`sim_residual_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_residual_jacobian.md)
+  : Compute the Jacobian of the residual map G
 
 ## Monitoring the construction of spatial interaction models
 
@@ -438,24 +438,25 @@ Functions for getting diagnostics of the algorithms used to build the
 models.
 
 - [`sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/sim_converged.md)
-  : Reports whether the spatial interaction model construction converged
+  : Report whether the construction of a spatial interaction model
+  converged
 - [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
-  : Returns a full diagnostic of the algorithm used to build a spatial
+  : Return a full diagnostic of the algorithm used to build a spatial
   interaction model
 - [`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)
-  : Returns the number of iterations used to produce this spatial
+  : Return the number of iterations used to produce a spatial
   interaction model
 - [`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md)
   : Extract summaries of individual algorithm runs
 - [`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md)
   : Extract spatial interaction models produced by individual runs
 
-## Non bipartite models
+## Non-bipartite models
 
-Functions that apply only to non bipartite models.
+Functions that apply only to non-bipartite models.
 
 - [`is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/is_terminal.md)
-  : Report whether locations are terminal sites or not
+  : Report whether locations are terminals
 - [`nd_graph()`](https://fabrice-rossi.github.io/blvim/reference/nd_graph.md)
   : Compute the Nystuen and Dacey graph for a spatial interaction model
 - [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
@@ -483,16 +484,16 @@ grid of parameters.
 - [`grid_diversity()`](https://fabrice-rossi.github.io/blvim/reference/grid_diversity.md)
   : Compute diversities for a collection of spatial interaction models
 - [`grid_is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/grid_is_terminal.md)
-  : Extract all terminal status from a collection of spatial interaction
-  models
+  : Extract all terminal statuses from a collection of spatial
+  interaction models
 - [`grid_sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_converged.md)
-  : Reports the convergence statuses of a collection of spatial
+  : Report the convergence statuses of a collection of spatial
   interaction models
 - [`grid_sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_iterations.md)
-  : Returns the number of iterations used to produce of a collection of
+  : Return the numbers of iterations used to produce a collection of
   spatial interaction models
 - [`grid_sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_potential.md)
-  : Returns potential of a collection of spatial interaction models
+  : Compute the potentials of a collection of spatial interaction models
 - [`grid_var_autoplot()`](https://fabrice-rossi.github.io/blvim/reference/grid_var_autoplot.md)
   : Create a complete variability plot for spatial interaction models in
   a data frame
@@ -518,11 +519,11 @@ grid of parameters.
   : Compute all pairwise distances between the spatial interaction
   models in a collection
 - [`sim_list()`](https://fabrice-rossi.github.io/blvim/reference/sim_list.md)
-  : Create a sim_list object from a list of spatial interaction objects
+  : Create a sim_list object from a list of spatial interaction models
 - [`c(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/c.sim_list.md)
   : Combine multiple sim_list objects into a single one
 - [`as.data.frame(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/as.data.frame.sim_list.md)
-  : Coerce to a Data Frame
+  : Coerce a collection of spatial interaction models to a data frame
 - [`summary(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md)
   [`print(`*`<summary_sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md)
   : Summary of a collection of spatial interaction models
@@ -537,7 +538,7 @@ models.
 - [`autoplot(`*`<sim_df>`*`)`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_df.md)
   : Create a complete ggplot for a spatial interaction models data frame
 - [`autoplot(`*`<sim_list>`*`)`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md)
-  : Create a complete variability for a collection of spatial
+  : Create a complete variability plot for a collection of spatial
   interaction models
 - [`fortify(`*`<sim>`*`)`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim.md)
   : Turn a spatial interaction model into a data frame
@@ -563,7 +564,7 @@ models.
   : French cities
 - [`french_cities_distances`](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
   [`french_cities_times`](https://fabrice-rossi.github.io/blvim/reference/french_cities_distances.md)
-  : French cities distances
+  : Distances and travel times between French cities
 - [`french_departments`](https://fabrice-rossi.github.io/blvim/reference/french_departments.md)
   : French departments
 - [`french_regions`](https://fabrice-rossi.github.io/blvim/reference/french_regions.md)

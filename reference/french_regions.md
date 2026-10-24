@@ -1,6 +1,6 @@
 # French regions
 
-This data set contains the list of all French regions It can be joined
+This data set contains the list of all French regions. It can be joined
 with the
 [french_departments](https://fabrice-rossi.github.io/blvim/reference/french_departments.md)
 or the

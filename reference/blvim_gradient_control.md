@@ -1,10 +1,10 @@
 # Control parameters for the blvim gradient algorithms
 
-This function returns a list with parameters used to tweak the gradient
-algorithms used in
+This function returns a list of parameters used to tune the gradient
+algorithms of
 [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md).
-These parameters control the line search algorithm which is a standard
-backtracking method with Armijo stopping criterion.
+These parameters control the line search algorithm, which is a standard
+backtracking method with the Armijo stopping criterion.
 
 ## Usage
 
@@ -37,7 +37,10 @@ blvim_gradient_control(
 
 ## Value
 
-a list containing the values of the parameters
+a list containing the values of the parameters, to be used as the
+`control` argument of
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md) or
+[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 
 ## References
 
@@ -47,7 +50,8 @@ continuous first partial derivatives", Pacific J. Math. 16 (1): 1–3
 
 ## See also
 
-[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md),
+[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 
 ## Examples
 

@@ -3,11 +3,11 @@
 This function computes a collection of flows between origin locations
 and destination locations using
 [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md) on
-a grid of parameters. The flows use the same costs, same production
-constraints and same attractivenesses. Each flow is computed using one
-of all the pairwise combinations between the alpha values given by
-`alphas` and the beta values given by `betas`. The function returns an
-object of class `sim_list` which contains the resulting flows.
+a grid of parameters. The flows use the same costs, the same production
+constraints and the same initial attractivenesses. One model is computed
+for each combination of an alpha value from `alphas` and a beta value
+from `betas`. The function returns an object of class `sim_list` which
+contains the resulting models.
 
 ## Usage
 
@@ -48,7 +48,7 @@ grid_blvim(
 
 - betas:
 
-  a vector of cost inverse scale parameters
+  a vector of inverse cost scale parameters
 
 - Z:
 
@@ -70,8 +70,8 @@ grid_blvim(
 
   when `TRUE` (default value), the origin and destination locations are
   considered to be distinct. When `FALSE`, a single set of locations
-  plays the both roles. This has only consequences in functions specific
-  to this latter case such as
+  plays both roles. This only affects functions specific to this latter
+  case, such as
   [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md).
 
 - origin_data:
@@ -122,12 +122,13 @@ grid_blvim(
 
 - progress:
 
-  if TRUE, a progress bar is shown during the calculation (defaults to
-  FALSE)
+  if `TRUE`, a progress bar is shown during the calculation (defaults to
+  `FALSE`)
 
 ## Value
 
-an object of class `sim_list`
+an object of class `sim_list` containing one spatial interaction model
+per pair of parameters
 
 ## Location data
 
@@ -142,8 +143,8 @@ locations, using
 [`origin_names<-()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
 and
 [`destination_names<-()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md).
-Names are taken by default from names of the cost matrix `costs`. More
-precisely, `rownames(costs)` is used for origin location names and
+Names are taken by default from the names of the cost matrix `costs`.
+More precisely, `rownames(costs)` is used for origin location names and
 `colnames(costs)` for destination location names.
 
 ### Origin and destination location positions
@@ -159,7 +160,7 @@ and
 In addition to the functions mentioned above, location data can be
 specified directly using the `origin_data` and `destination_data`
 parameters. Data are given by a list whose components are not
-interpreted excepted the following ones:
+interpreted except for the following ones:
 
 - `names` is used to specify location names and its content has to
   follow the restrictions documented in
@@ -172,6 +173,18 @@ interpreted excepted the following ones:
   [`origin_positions<-()`](https://fabrice-rossi.github.io/blvim/reference/origin_positions.md)
   and
   [`destination_positions<-()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
+
+## See also
+
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+for the underlying model,
+[`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md)
+to turn the result into a data frame, and
+[`grid_attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/grid_attractiveness.md),
+[`grid_sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_converged.md)
+or
+[`grid_diversity()`](https://fabrice-rossi.github.io/blvim/reference/grid_diversity.md)
+for extracting information from the collection.
 
 ## Examples
 

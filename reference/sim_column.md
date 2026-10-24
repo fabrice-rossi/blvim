@@ -20,6 +20,11 @@ sim_column(sim_df)
 the collection of spatial interaction models in the `sim_df` object, as
 a `sim_list` object
 
+## See also
+
+[`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md),
+[sim_df_extract](https://fabrice-rossi.github.io/blvim/reference/sim_df_extract.md)
+
 ## Examples
 
 ``` r
@@ -30,9 +35,9 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
-all_flows_df <- sim_df(all_flows, sim_colum = "my_col")
+all_flows_df <- sim_df(all_flows, sim_column = "my_col")
 names(all_flows_df)
 #> [1] "alpha"      "beta"       "diversity"  "potential"  "iterations"
 #> [6] "converged"  "my_col"    

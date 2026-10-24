@@ -1,7 +1,7 @@
 # Turn a spatial interaction model into a data frame
 
 This function extracts from a spatial interaction model different types
-of data frame that can be used to produce graphical representations.
+of data frames that can be used to produce graphical representations.
 [`autoplot.sim()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim.md)
 leverages this function to produce its graphical representations.
 
@@ -47,7 +47,7 @@ fortify(
 
 - cut_off:
 
-  cut off limit for inclusion of a flow row in the final data frame.
+  cut-off limit for inclusion of a flow row in the final data frame.
 
 - ...:
 
@@ -60,13 +60,13 @@ a data frame, see details
 ## Details
 
 The data frame produced by the method depends on the values of `flows`
-and `with_positions`. The general principal is to have one row per flow,
+and `with_positions`. The general principle is to have one row per flow,
 either a single flow from an origin location to a destination location,
 or an aggregated flow to a destination location. Flows are stored in one
 column of the data frame, while the other columns are used to identify
 origin and destination.
 
-If `with_position` is `FALSE` (default value), data frames are simple.
+If `with_positions` is `FALSE` (default value), data frames are simple.
 Depending on `flows`, the function extracts different data frames:
 
 - `"full"`: this is the default case for which the full flow matrix is
@@ -78,8 +78,8 @@ Depending on `flows`, the function extracts different data frames:
   - `destination`: identifies the destination location by its index from
     1 to the number of destination locations
 
-  - `flow`: the flow between the corresponding location It is recommend
-    to use
+  - `flow`: the flow between the corresponding locations It is
+    recommended to use
     [`flows_df()`](https://fabrice-rossi.github.io/blvim/reference/flows_df.md)
     for more control over the extraction outside of simple graphical
     representations.
@@ -95,15 +95,15 @@ Depending on `flows`, the function extracts different data frames:
   - `name`: the name of the destination location if `with_names` is
     `TRUE`
 
-- `"attractiveness"`: the data frame has also two ot three columns,
+- `"attractiveness"`: the data frame also has two or three columns,
   `destination` and `name` as in the previous case and `attractiveness`
   which contains the attractivenesses of the destinations (see
   [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)).
 
 When the `with_positions` parameter is `TRUE`, the location positions
 ([`location_positions()`](https://fabrice-rossi.github.io/blvim/reference/location_positions.md))
-are used to produce more "geographically informed" extractions. Notice
-that if no positions are known for the locations, the use of
+are used to produce more "geographically informed" extractions. Note
+that if no positions are known for the locations, using
 `with_positions = TRUE` is an error. Depending on `flows` we have the
 following representations:
 
@@ -119,7 +119,7 @@ following representations:
 
   - `flow` is used for the flows
 
-- `"destination"` and `"attractiveness"` produce both a data frame with
+- `"destination"` and `"attractiveness"` both produce a data frame with
   three or four columns. As when `with_positions` is `FALSE`, one column
   is dedicated either to the incoming flows
   ([`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md))
@@ -129,19 +129,20 @@ following representations:
   in which case its name is `attractiveness`. The other two columns are
   used for the positions of the destination locations. Their names are
   the names of the columns of the positions
-  (`colnames(destination_location(object))`) or `"x"` and `"y"`, when
+  (`colnames(destination_positions(model))`) or `"x"` and `"y"`, when
   such names are not specified. If `with_names` is `TRUE`, a `name`
   column is included and contains the names of the destination
   locations.
 
-In the position based data frames, rows are excluded from the returned
-data frames when the flow they represent are small, i.e. when they are
+In the position-based data frames, rows are excluded from the returned
+data frames when the flows they represent are small, i.e. when they are
 smaller than the `cut_off` value.
 
 ## See also
 
 [`autoplot.sim()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim.md),
-[`flows_df()`](https://fabrice-rossi.github.io/blvim/reference/flows_df.md)
+[`flows_df()`](https://fabrice-rossi.github.io/blvim/reference/flows_df.md),
+[`fortify.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim_list.md)
 
 ## Examples
 

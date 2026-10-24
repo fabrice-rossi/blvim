@@ -1,6 +1,6 @@
-# Compute the flows incoming at each destination location
+# Compute the incoming flow at each destination location
 
-Compute the flows incoming at each destination location
+Compute the incoming flow at each destination location
 
 ## Usage
 
@@ -20,12 +20,14 @@ destination_flow(sim, ...)
 
 ## Value
 
-a vector of flows incoming at destination locations
+a vector of incoming flows, one per destination location
 
 ## See also
 
+[`flows()`](https://fabrice-rossi.github.io/blvim/reference/flows.md),
 [`production()`](https://fabrice-rossi.github.io/blvim/reference/production.md),
-[`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)
+[`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md),
+[`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
 
 ## Examples
 

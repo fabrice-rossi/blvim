@@ -4,9 +4,9 @@ This function computes all pairwise distances between spatial
 interaction models (SIMs) of its `x` parameter, using
 [`sim_distance()`](https://fabrice-rossi.github.io/blvim/reference/sim_distance.md)
 with the specified distance parameters. Then it returns the "median" of
-the collection defined as the SIM that is in average the closest to all
-the other SIMs. Tie breaking uses the order of the SIMs in the
-collection.
+the collection, defined as the SIM that is on average the closest to all
+the other SIMs (also known as the medoid). Ties are broken using the
+order of the SIMs in the collection.
 
 ## Usage
 
@@ -62,12 +62,18 @@ attributes
 As distance calculation can be slow in a large collection of SIMs, the
 distance object can be returned as a `distances` attribute of the median
 SIM by setting the `return_distances` parameter to `TRUE`. In addition,
-the returned SIM has always two attributes:
+the returned SIM always has two attributes:
 
-- `index` gives the index of the mode in the original `sim_list`
+- `index` gives the index of the median in the original `sim_list`
 
 - `distortion` gives the mean of the distances from the median SIM to
   all the other SIMs
+
+## See also
+
+[`sim_distance()`](https://fabrice-rossi.github.io/blvim/reference/sim_distance.md),
+[`summary.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/summary.sim_list.md),
+[`quantile.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/quantile.sim_list.md)
 
 ## Examples
 
@@ -79,7 +85,7 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
 all_flows_median <- median(all_flows)
 attr(all_flows_median, "index")

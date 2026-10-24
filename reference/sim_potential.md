@@ -2,7 +2,7 @@
 
 The potential is a measure of stability introduced by Osawa, Akamatsu,
 and Kogure. It is only defined for spatial interaction models produced
-by BLV framework. The function returns `NA` when applied to spatial
+by the BLV framework. The function returns `NA` when applied to spatial
 interaction models for which a potential cannot be computed. The
 function applies also to a collection of spatial interaction models as
 represented by a `sim_list`.
@@ -27,8 +27,9 @@ sim_potential(sim, ...)
 
 ## Value
 
-the scalar value of the potential. In the case of a `sim_list` the
-function returns a numerical vector with one value per model.
+the scalar value of the potential, or `NA` when it cannot be computed.
+In the case of a `sim_list` the function returns a numeric vector with
+one value per model.
 
 ## Details
 
@@ -40,7 +41,7 @@ Z_j^{\alpha}\\ \exp(-\beta c\_{ij})\right)-\sum\_{j=1}^p\kappa_jZ_j,\$\$
 where:
 
 - \\c\\ is the cost matrix
-  [`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md)
+  ([`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md))
 
 - \\X\\ is the production constraint vector
   ([`production()`](https://fabrice-rossi.github.io/blvim/reference/production.md))
@@ -63,6 +64,13 @@ Osawa, M., Akamatsu, T., & Kogure, Y. (2025). "Most likely retail
 agglomeration patterns: Potential maximization and stochastic stability
 of spatial equilibria". <https://arxiv.org/abs/2011.06778v2>
 
+## See also
+
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md),
+[`grid_sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_potential.md),
+[`sim_residual_jacobian()`](https://fabrice-rossi.github.io/blvim/reference/sim_residual_jacobian.md),
+[`sim_conversion()`](https://fabrice-rossi.github.io/blvim/reference/sim_conversion.md)
+
 ## Examples
 
 ``` r
@@ -70,6 +78,9 @@ distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-sim_conversion(model) ## must NA
+sim_potential(model) ## must be NA
 #> [1] NA
+dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
+sim_potential(dyn_model)
+#> [1] 335.9337
 ```

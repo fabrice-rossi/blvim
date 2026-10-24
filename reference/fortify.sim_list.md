@@ -2,7 +2,7 @@
 
 This function extracts from a collection of spatial interaction models
 (represented by a `sim_list`) a data frame in a long format, with one
-flow per row. This can be seen a collection oriented version of
+flow per row. This can be seen as a collection-oriented version of
 [`fortify.sim()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim.md).
 The resulting data frame is used by
 [`autoplot.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md)
@@ -62,10 +62,10 @@ a data frame, see details
 
 The data frame produced by the method depends on the values of `flows`
 and to a lesser extent on the value of `with_names`. In all cases, the
-data frame has a `configuration` column that identify from which spatial
-interaction model the other values have been extracted: this is the
-index of the model in the original `sim_list`. Depending on `flows` we
-have the following representations:
+data frame has a `configuration` column that identifies from which
+spatial interaction model the other values have been extracted: this is
+the index of the model in the original `sim_list`. Depending on `flows`
+we have the following representations:
 
 - if `flows="full"`: this is the default case for which the full flow
   matrix of each spatial interaction model is extracted. The data frame
@@ -77,12 +77,12 @@ have the following representations:
   - `destination_idx`: identifies the destination location by its index
     from 1 to the number of destination locations
 
-  - `flow`: the flow between the corresponding location. By default,
-    flows are normalised by origin location (when
-    `normalisation="origin"`): the total flows originating from each
-    origin location is normalised to 1. If `normalisation="full"`, this
-    normalisation is global: the sum of all flows in each model is
-    normalised to 1. If `normalisation="none"` flows are not normalised.
+  - `flow`: the flow between the corresponding locations. By default
+    (`normalisation="none"`), flows are not normalised. If
+    `normalisation="origin"`, flows are normalised by origin location:
+    the total flow originating from each origin location is normalised
+    to 1. If `normalisation="full"`, this normalisation is global: the
+    sum of all flows in each model is normalised to 1.
 
   - `configuration`: the spatial interaction model index
 
@@ -92,7 +92,7 @@ have the following representations:
   - `destination`: identifies the destination location by its index from
     1 to the number of destination locations
 
-  - `flow` or `attractiveness` depending on the value of `"flows"`: this
+  - `flow` or `attractiveness` depending on the value of `flows`: this
     contains either the
     [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
     or the
@@ -104,7 +104,7 @@ have the following representations:
   - `name`: the destination location names if `with_names=TRUE` (the
     column is not present if `with_names=FALSE`)
 
-The normalisation operated when `flows="full"` can improve the
+The normalisation applied when `flows="full"` can improve the
 readability of the graphical representation proposed in
 [`autoplot.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md)
 when the production constraints differ significantly from one origin
@@ -112,7 +112,9 @@ location to another.
 
 ## See also
 
-[`autoplot.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md)
+[`autoplot.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_list.md),
+[`quantile.sim_list()`](https://fabrice-rossi.github.io/blvim/reference/quantile.sim_list.md),
+[`fortify.sim()`](https://fabrice-rossi.github.io/blvim/reference/fortify.sim.md)
 
 ## Examples
 
@@ -124,7 +126,7 @@ attractiveness <- c(2, rep(1, 9))
 flows_1 <- blvim(distances, production, 1.5, 1, attractiveness)
 flows_2 <- blvim(distances, production, 1.25, 2, attractiveness)
 all_flows <- sim_list(list(flows_1, flows_2))
-ggplot2::fortify(all_flows) ## somewhat similar to a row bind of sim_df results
+ggplot2::fortify(all_flows) ## somewhat similar to row-binding flows_df() results
 #>     origin_idx destination_idx         flow configuration
 #> 1            1               1 3.155229e-09             1
 #> 2            2               1 3.685412e-11             1

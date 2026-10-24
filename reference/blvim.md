@@ -71,8 +71,8 @@ blvim(
 
   when `TRUE` (default value), the origin and destination locations are
   considered to be distinct. When `FALSE`, a single set of locations
-  plays the both roles. This has only consequences in functions specific
-  to this latter case such as
+  plays both roles. This only affects functions specific to this latter
+  case, such as
   [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md).
 
 - origin_data:
@@ -166,7 +166,8 @@ in the same order as the starting points.
 Several iterative algorithms are available. The model can be run from a
 single initial attractiveness vector or from several starting points. In
 the latter case, the solution with the largest final potential is
-returned.
+returned (see
+[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)).
 
 ### Initialisation and multiple runs
 
@@ -204,8 +205,9 @@ to perform multiple runs.
 For multiple runs, all starting points use the same model parameters,
 algorithm, convergence settings, and algorithm-specific controls. The
 final potential is evaluated for each run, and the run with the strictly
-largest potential is selected. If several runs have the same largest
-potential, the first is selected.
+largest potential is selected (see
+[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)).
+If several runs have the same largest potential, the first is selected.
 
 Summaries of all runs are stored in the returned model and can be
 obtained with
@@ -241,7 +243,7 @@ For both algorithms, \\\epsilon\\ is specified by `epsilon` and should
 generally be smaller than one. Convergence is checked every `conv_check`
 iterations and is attained when
 
-\$\$ \lVert Z^{t+1} - Z^t \rVert &lt; \delta \left( \lVert Z^{t+1}
+\$\$ \lVert Z^{t+1} - Z^t \rVert \< \delta \left( \lVert Z^{t+1}
 \rVert + \delta \right), \$\$
 
 where \\\delta\\ is specified by `precision`. Iteration stops at
@@ -288,8 +290,8 @@ locations, using
 [`origin_names<-()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
 and
 [`destination_names<-()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md).
-Names are taken by default from names of the cost matrix `costs`. More
-precisely, `rownames(costs)` is used for origin location names and
+Names are taken by default from the names of the cost matrix `costs`.
+More precisely, `rownames(costs)` is used for origin location names and
 `colnames(costs)` for destination location names.
 
 ### Origin and destination location positions
@@ -305,7 +307,7 @@ and
 In addition to the functions mentioned above, location data can be
 specified directly using the `origin_data` and `destination_data`
 parameters. Data are given by a list whose components are not
-interpreted excepted the following ones:
+interpreted except for the following ones:
 
 - `names` is used to specify location names and its content has to
   follow the restrictions documented in
@@ -330,6 +332,10 @@ Wilson, A. (2008). "Boltzmann, Lotka and Volterra and spatial structural
 evolution: an integrated methodology for some dynamical systems",
 Journal of the Royal Society Interface, 5, 865-871.
 [doi:10.1098/rsif.2007.1288](https://doi.org/10.1098/rsif.2007.1288)
+
+Osawa, M., Akamatsu, T., & Kogure, Y. (2025). "Most likely retail
+agglomeration patterns: Potential maximization and stochastic stability
+of spatial equilibria". <https://arxiv.org/abs/2011.06778v2>
 
 ## See also
 

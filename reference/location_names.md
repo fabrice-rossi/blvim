@@ -1,7 +1,7 @@
 # Names of origin and destination locations in a spatial interaction model
 
-Those functions provide low level access to origin and destination local
-names. It is recommended to use
+These functions provide low-level access to origin and destination
+location names. It is recommended to use
 [`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
 and
 [`destination_names()`](https://fabrice-rossi.github.io/blvim/reference/destination_names.md)
@@ -45,7 +45,7 @@ object.
 distances <- french_cities_distances[1:10, 1:10]
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-## the row/column names of the cost matrix are used for the location
+## the row/column names of the cost matrix are used for the location names
 model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 location_names(model)
 #> $origin

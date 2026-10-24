@@ -47,7 +47,7 @@ constraints:
   \\\sum\_{j=1}^pY\_{ij}=X_i\\ for all \\i\\;
 - On capacity: the \\(Z_j)\\ are interpreted as destination capacities.
   Then the model is *capacity-constrained* if
-  \\\sum\_{i=1}^pY\_{ij}=Z_j\\ for all \\j\\;
+  \\\sum\_{i=1}^nY\_{ij}=Z_j\\ for all \\j\\;
 - On both: the *doubly-constrained* models are both production- and
   capacity-constrained. One of the most common models used in practice
   is the doubly-constrained gravity model.
@@ -88,11 +88,11 @@ function.
 ## Dynamic Models
 
 The models described above are *static*: they correspond to a frozen
-view of the exchanges with no retroaction of the flow received at one
+view of the exchanges with no feedback of the flow received at one
 destination location on its attractiveness, for instance.
 
 In the 1960s and 1970s, Harris and Wilson developed dynamic models that
-assume a form of etroaction, initially in terms of an equilibrium state.
+assume a form of feedback, initially in terms of an equilibrium state.
 
 ### Harris and Wilson Equilibrium Values
 
@@ -103,18 +103,18 @@ Essentially, this could be written as:
 
 \\ \forall j,\\ \kappa_j Z_j= D_j, \\
 
-where the \\\kappa_j\\ are destination specific conversion factors
-between capacities and costs, and where \\D_j\\ is the total flow
-incoming in \\Z_j\\, i.e.:
+where the \\\kappa_j\\ are destination-specific conversion factors
+between attractivenesses and incoming flows, and where \\D_j\\ is the
+total flow received by destination \\j\\, i.e.:
 
 \\ \forall j,\\ D_j=\sum\_{i=1}^nY\_{ij}. \\
 
 Applied to the maximum entropy production-constrained model, this leads
-to a spatial interaction model defined implicitly as follows. We assume
-given the production constraints \\(X_i)\_{1\leq i\leq n}\\ and the cost
-matrix \\(c\_{ij})\_{1\leq i\leq n, 1\leq j\leq p}\\, then the
-attractiveness \\(Z_j)\_{1\leq j\leq p}\\ is a solution of the following
-collection of fixed-point equations:
+to a spatial interaction model defined implicitly as follows. Given the
+production constraints \\(X_i)\_{1\leq i\leq n}\\ and the cost matrix
+\\(c\_{ij})\_{1\leq i\leq n, 1\leq j\leq p}\\, the attractiveness
+\\(Z_j)\_{1\leq j\leq p}\\ is a solution of the following collection of
+fixed-point equations:
 
 \\ \forall j,\\ \kappa_j
 Z_j=\sum\_{i=1}^n\left(\frac{X_iZ_j^{\alpha}\exp(-\beta
@@ -155,7 +155,7 @@ c\_{ik})}\right),\\ \forall j,\\ Z_j^{t+1} &:= Z_j^t
 \end{align\*} \\
 
 Using \\\epsilon\<1\\, typically a small value of \\0.01\\, gives a full
-trajectory for the \\Z\\s with the added value of preventing oscillation
+trajectory for the \\Z\\s with the added value of preventing oscillatory
 behaviour.
 
 A variant of the dynamic model has been proposed by Wilson in 2008,
@@ -164,8 +164,13 @@ replacing the second update by a quadratic version:
 \\ \forall j,\\ Z_j^{t+1} := Z_j^t +\epsilon\left(\frac{1}{\kappa_j}
 D^{t}\_j-Z^{t}\_j\right)Z^{t}\_j. \\
 
-Both solutions are implemented in
-[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md).
+Both update rules are implemented in
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+(`algorithm = "linear"` and `algorithm = "quadratic"`). In addition,
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+provides projected gradient ascent algorithms (`algorithm = "gradient"`
+and `algorithm = "gradient_unit"`) that directly maximise the potential
+function described below.
 
 ### Diversity
 
@@ -193,13 +198,15 @@ index. Based on the principle outlined above, the diversity of
 \\\mathcal{P}\\ is equal to the diversity index of the uniform
 distribution on \\\\1, \ldots, m\\\\. It can be shown that for the
 Shannon entropy, the diversity of \\\mathcal{P}\\ is
-\\\exp(H(\mathcal{P}))\\. This holds also for all the Rényi entropies.
+\\\exp(H(\mathcal{P}))\\. This also holds for all the Rényi entropies.
 
-Notice that in
+Note that by default
 [`diversity()`](https://fabrice-rossi.github.io/blvim/reference/diversity.md)
-the diversities are computed according to the incoming flows, i.e., not
+computes the diversities according to the incoming flows, i.e., not
 using the \\(Z_j)\_{1\leq j\leq p}\\ but rather the \\D_j\\ defined
-above by \\ \forall j,\\ D_j=\sum\_{i=1}^nY\_{ij}. \\
+above by \\ \forall j,\\ D_j=\sum\_{i=1}^nY\_{ij}. \\ The
+attractivenesses can be used instead with `activity = "attractiveness"`.
+Both give the same result at equilibrium.
 
 ## Self-Exchange Configurations
 
@@ -221,7 +228,7 @@ the total incoming flow (the \\(D_j)\_{1\leq j\leq p}\\). More
 precisely, they define the importance of location \\j\\ as \\D_j\\ and
 introduce the notion of *domination*: a location \\k\\ is *dominated* if
 its importance is smaller than the importance of the location to which
-it is sending its largest flow. In equation:
+it sends its largest flow. Formally:
 
 \\ D_k \< D\_{\arg\max\_{j} Y\_{kj}}. \\
 
@@ -234,8 +241,8 @@ if:
 \\ D_k \< \max\_{j}Y\_{kj}. \\
 
 It is easy to see that a terminal in the Nystuen and Dacey definition is
-also a terminal for Rihll and Wilson, but the reverse is false. The
-functions
+also a terminal for Rihll and Wilson, but the converse does not hold in
+general. The functions
 [`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md)
 and
 [`is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/is_terminal.md)
@@ -249,16 +256,17 @@ included in the definitions supported by
 In addition to extracting terminals from a non-bipartite model, Nystuen
 and Dacey propose to analyse the so-called *nodal structure* of the
 flows. It consists of the *nodal flows*, i.e. the links between each
-non-terminal location and the location to which it is sending its
-largest flow. This defines a graph on the locations which is very sparse
-(it has \\p-t\\ edges, where \\p\\ is the number of locations and \\t\\
-the number of terminals). The function
+non-terminal location and the location to which it sends its largest
+flow. This defines a graph on the locations which is very sparse (it has
+\\p-t\\ edges, where \\p\\ is the number of locations and \\t\\ the
+number of terminals). The function
 [`nd_graph()`](https://fabrice-rossi.github.io/blvim/reference/nd_graph.md)
 computes this graph according to both terminal definitions.
 
-## Potential function from Osawa et al (2025)
+## Potential Function from Osawa et al. (2025)
 
-Before going further we introduce simplified notation for the HW model :
+Before going further, we introduce a simplified notation for the
+Harris–Wilson (HW) model:
 
 \\ w\_{ij}=w\_{ij}(\beta)=\exp(-\beta c\_{ij}) \qquad
 S_i=S_i(\mathbf{Z},\alpha,\beta)=\sum\_{k=1}^pZ_k^{\alpha}w\_{ik} \qquad
@@ -267,17 +275,17 @@ share of origin \\i\\’s demand attracted to destination \\j\\. The total
 flow received by destination \\j\\ is
 
 \\ D_j(\mathbf{Z},\alpha,\beta) = \sum\_{i=1}^n X_i P\_{ij}, \\ and the
-Harris–Wilson fixed-point residual is
+Harris–Wilson residual map is
 
 \\ G_j(\mathbf{Z},\alpha,\beta) = D_j(\mathbf{Z},\alpha,\beta) -
-\kappa_j Z_j, \\ where \\\kappa_j \> 0\\ is the capacity cost at
+\kappa_j Z_j, \\ where \\\kappa_j \> 0\\ is the conversion factor at
 destination \\j\\. A **Harris–Wilson equilibrium** is a vector
 \\\mathbf{Z}^\* \geq 0\\ satisfying \\G(\mathbf{Z}^\*) = \mathbf{0}\\.
 
-### The potential function
+### The Potential Function
 
-Osawa, Akamatsu and Kogure introduced in 2025 a new interpretation of
-the HW model. It can be seen as a large population potential game. This
+In 2025, Osawa, Akamatsu and Kogure introduced a new interpretation of
+the HW model. It can be seen as a large-population potential game. This
 concept, which comes from game theory, allows us to see the HW model as
 a single maximisation problem characterised by a potential function
 defined as:
@@ -295,7 +303,7 @@ stochastic-stability result of Sandholm (2010, §12.2), the global
 maximiser(s) of \\f\\ correspond to the most likely spatial patterns
 when small random perturbations can occur.
 
-### Gradient of the potential function
+### Gradient of the Potential Function
 
 Differentiating \\A\\ with respect to \\Z_j\\ gives
 
@@ -315,9 +323,9 @@ P\_{ij} = \frac{D_j}{Z_j} \\ Adding the derivative of the linear term
 \frac{G_j(\mathbf{Z},\alpha,\beta)}{Z_j} \\ The gradient \\\nabla f\\
 vanishes at an interior point (\\Z_j \> 0\\ for all \\j\\) if and only
 if \\G(\mathbf{Z}) = \mathbf{0}\\, i.e. at a Harris–Wilson equilibrium.
-Conversely, if \\Z_j = 0\\, the gradient is not directly defined, but
-the KKT analysis below shows that boundary points can also be critical
-points of the constrained problem.
+When \\Z_j = 0\\, on the other hand, the gradient is not directly
+defined, but the KKT analysis below shows that boundary points can also
+be critical points of the constrained problem.
 
 Every interior maximum of \\f\\ is a Harris–Wilson equilibrium; the
 converse is false in general. \\G\\ is not the gradient of \\f\\:
@@ -325,15 +333,15 @@ converse is false in general. \\G\\ is not the gradient of \\f\\:
 Jacobian of \\G\\ is not the Hessian of \\f\\, although the two are
 closely related at equilibrium.
 
-### Hessian of the potential function
+### Hessian of the Potential Function
 
-We introduce the softmax share \\P\_{ij} = Z_j^\alpha w\_{ij}/S_i\\ with
-\\S_i = \sum_k Z_k^\alpha w\_{ik}\\, and record its derivative with
-respect to \\Z_k\\: \\ \frac{\partial P\_{ij}}{\partial Z_k} =
+Recall the softmax share \\P\_{ij} = Z_j^\alpha w\_{ij}/S_i\\ with \\S_i
+= \sum_k Z_k^\alpha w\_{ik}\\, and record its derivative with respect to
+\\Z_k\\: \\ \frac{\partial P\_{ij}}{\partial Z_k} =
 \frac{\alpha}{Z_k}\\P\_{ik}\bigl(\delta\_{jk} - P\_{ij}\bigr), \\ where
 \\\delta\_{jk}\\ is the Kronecker symbol.
 
-#### The general Hessian
+#### The General Hessian
 
 Recall that \\\partial f/\partial Z_j = G_j/Z_j\\, where \\G_j = D_j -
 \kappa_j Z_j\\ is the disequilibrium gap. Differentiating once more with
@@ -347,7 +355,7 @@ f/\partial Z_j\\\partial Z_k\bigr)\\ at any interior point \\\mathbf{Z}
 k,\\\[10pt\] \displaystyle -\alpha\\Z_j^{\alpha-1}Z_k^{\alpha-1} \sum_i
 X_i\\\frac{w\_{ij}\\w\_{ik}}{S_i^2}, & j \neq k. \end{cases} \\
 
-#### Simplification at an interior equilibrium
+#### Simplification at an Interior Equilibrium
 
 At a Harris–Wilson equilibrium \\G_j = 0\\ for every active destination,
 the term \\-G_j/Z_j^2\\ vanishes on the diagonal and the Hessian reduces
@@ -359,9 +367,14 @@ to
 k,\\\[10pt\] \displaystyle -\alpha\\Z_j^{\alpha-1}Z_k^{\alpha-1} \sum_i
 X_i\\\frac{w\_{ij}\\w\_{ik}}{S_i^2}, & j \neq k. \end{cases} \\
 
-The equilibrium is a strict local maximum of \\f\\ if and only if \\H\\
-is negative definite, i.e. \\\lambda\_{\max}(H) \< 0\\. The bifurcation
-threshold corresponds to \\\lambda\_{\max}(H) = 0\\.
+As the maximisation is constrained by \\\sum_j \kappa_j Z_j = \sum_i
+X_i\\, the second-order analysis must be restricted to the directions
+compatible with this constraint. An interior equilibrium is a strict
+local maximum of \\f\\ on the weighted simplex if \\H\\ is negative
+definite on the tangent space \\\\\mathbf{v} : \sum_j \kappa_j v_j =
+0\\\\, i.e. if the largest eigenvalue of the restriction of \\H\\ to
+this subspace is negative. The bifurcation threshold corresponds to this
+largest eigenvalue reaching \\0\\.
 
 ### KKT Conditions and Equilibrium Structure
 
@@ -372,21 +385,35 @@ subject to \\\sum_j \kappa_j Z_j = \sum_i X_i\\, \\Z_j \geq 0\\) is
 -f(\mathbf{Z},\alpha,\beta) - \sum\_{j=1}^p \lambda_j Z_j +
 \mu\\\left(\sum\_{i=1}^n X_i - \sum\_{j=1}^p \kappa_j Z_j\right). \\
 
-The first-order KKT conditions give, for each \\j\\:
+The first-order KKT conditions are, for each \\j\\:
 
-\\ \frac{\partial \mathcal{L}}{\partial Z_j} = -\frac{D_j}{Z_j} +
-\kappa_j - \lambda_j - \mu\kappa_j = 0, \qquad \lambda_j \geq 0, \quad
-\lambda_j Z_j = 0. \\ Multiplying by \\Z_j\\ and summing over \\j\\, and
+\\ \frac{\partial \mathcal{L}}{\partial Z_j} = -\sum\_{i=1}^n
+X_i\\\frac{Z_j^{\alpha-1}\\w\_{ij}}{S_i} + \kappa_j - \lambda_j -
+\mu\kappa_j = 0, \qquad \lambda_j \geq 0, \quad \lambda_j Z_j = 0. \\
+Note that we use here the expression of the derivative of \\A\\ obtained
+above, before the simplification into \\D_j/Z_j\\: it remains defined
+when \\Z_j = 0\\ (for \\\alpha \> 1\\), in which case the sum vanishes.
+
+**KKT points are equilibria.** Multiplying the condition by \\Z_j\\
+gives \\-D_j + (1-\mu)\kappa_j Z_j - \lambda_j Z_j = 0\\. Using
+complementary slackness (\\\lambda_j Z_j = 0\\), summing over \\j\\ and
 using \\\sum_j D_j = \sum_i X_i = \sum_j \kappa_j Z_j\\, one finds \\\mu
-= -2\\. Therefore:
+= 0\\. Then, for each \\j\\, \\\kappa_j Z_j = D_j\\, i.e. \\G_j = 0\\:
+this holds for active destinations (\\Z_j \> 0\\) as well as for
+inactive ones, for which both sides vanish.
 
-- If \\Z_j \> 0\\: complementary slackness forces \\\lambda_j = 0\\, and
-  the condition reduces to \\D_j = \kappa_j Z_j\\, i.e. \\G_j = 0\\.
-- If \\Z_j = 0\\: \\\lambda_j\\ absorbs the residual and the condition
-  is automatically satisfied.
+**Equilibria are KKT points.** Conversely, let \\\mathbf{Z}^\*\\ be a
+Harris–Wilson equilibrium and set \\\mu^\* = 0\\.
 
-Hence every KKT point of the constrained problem is a Harris–Wilson
-equilibrium (possibly with inactive destinations), and conversely.
+- If \\Z^\*\_j \> 0\\, then \\\sum_i X_i Z_j^{\*\alpha-1} w\_{ij}/S_i =
+  D_j/Z^\*\_j = \kappa_j\\ and \\\lambda^\*\_j = 0\\ cancels the partial
+  derivative while satisfying \\\lambda^\*\_j Z^\*\_j = 0\\.
+- If \\Z^\*\_j = 0\\, the partial derivative reduces to \\\kappa_j -
+  \lambda_j\\: setting \\\lambda^\*\_j = \kappa_j \> 0\\ cancels it, and
+  obviously \\\lambda^\*\_j Z^\*\_j = 0\\.
+
+Hence the KKT points of the constrained problem are exactly the
+Harris–Wilson equilibria (possibly with inactive destinations).
 
 ## References
 
@@ -396,14 +423,14 @@ Penn-Jersey Transportation Study, Philadelphia, Pennsylvania (mimeo).
 Harris, B., & Wilson, A. G. (1978). “Equilibrium Values and Dynamics of
 Attractiveness Terms in Production-Constrained Spatial-Interaction
 Models”, Environment and Planning A: Economy and Space, 10(4), 371-388.
-<https://dx.doi.org/10.1068/a100371>
+<https://doi.org/10.1068/a100371>
 
 Jost, L. (2006), “Entropy and diversity”, Oikos, 113: 363-375.
-<https://dx.doi.org/10.1111/j.2006.0030-1299.14714.x>
+<https://doi.org/10.1111/j.2006.0030-1299.14714.x>
 
 Nystuen, J.D. and Dacey, M.F. (1961), “A graph theory interpretation of
 nodal regions”, Papers and Proceedings of the Regional Science
-Association 7: 29–42. <https://dx.doi.org/10.1007/bf01969070>
+Association 7: 29–42. <https://doi.org/10.1007/bf01969070>
 
 Rihll, T., and Wilson, A. (1991), “Modelling settlement structures in
 ancient Greece: new approaches to the polis”, In City and Country in the
@@ -411,8 +438,9 @@ Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58–95.
 London: Routledge.
 
 Wilson, A. (2008), “Boltzmann, Lotka and Volterra and spatial structural
-evolution: an integrated methodology for some dynamical systems”, J. R.
-Soc. Interface.5865–871 <https://dx.doi.org/10.1098/rsif.2007.1288>
+evolution: an integrated methodology for some dynamical systems”,
+Journal of the Royal Society Interface, 5, 865–871.
+<https://doi.org/10.1098/rsif.2007.1288>
 
 Osawa, M., Akamatsu, T., & Kogure, Y. (2025). “Most likely retail
 agglomeration patterns: Potential maximization and stochastic stability

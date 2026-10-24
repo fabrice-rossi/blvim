@@ -1,8 +1,8 @@
-# Returns potential of a collection of spatial interaction models
+# Compute the potentials of a collection of spatial interaction models
 
-The function reports the potentia of each spatial interaction model of
+The function reports the potential of each spatial interaction model of
 its `sim_list` parameter (see
-[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md))
+[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)).
 
 ## Usage
 
@@ -23,20 +23,22 @@ grid_sim_potential(sim, ...)
 
 ## Value
 
-a vector of numbers of iteration, one per spatial interaction model
+a numeric vector of potentials, one per spatial interaction model (`NA`
+for models without a potential)
 
 ## Details
 
-Notice that
+Note that
 [`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
 is generic and can be applied directly to `sim_list` objects. The
 current function is provided to be explicit in R code about what is a
-unique model and what is a collection of models (using function names
-that start with `"grid_"`)
+single model and what is a collection of models (using function names
+that start with `"grid_"`).
 
 ## See also
 
-[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md)
+[`sim_potential()`](https://fabrice-rossi.github.io/blvim/reference/sim_potential.md),
+[`grid_sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_converged.md)
 and
 [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 

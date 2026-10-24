@@ -55,7 +55,7 @@ sample_weighted_simplex(
 
   A nonnegative integer controlling the allocation of face points.
 
-  If zero, the function maximizes the number of distinct selected faces.
+  If zero, the function maximises the number of distinct selected faces.
   If positive, it is the requested maximum number of points on each
   selected nonvertex face. The function may increase this value, with a
   warning, when the requested value is incompatible with the number and
@@ -123,7 +123,7 @@ The number of points allocated to proper faces is
 where \\p\\ is `face_fraction`. The remaining points are sampled in the
 relative interior.
 
-The `points_per_face` argument controls the tradeoff between covering
+The `points_per_face` argument controls the trade-off between covering
 many distinct faces and sampling each selected face more thoroughly:
 
 - If `points_per_face = 0`, the function selects as many different faces
@@ -136,7 +136,7 @@ many distinct faces and sampling each selected face more thoroughly:
 - If `points_per_face > 0`, the function attempts to generate at most
   `points_per_face` points on each selected nonvertex face. It selects
   the smallest number of faces that provides sufficient capacity,
-  prioritizing low-codimension faces.
+  prioritising low-codimension faces.
 
 A vertex has support size one and consists of a single point.
 Consequently, a selected vertex can receive only one sample point,
@@ -186,9 +186,17 @@ function to obtain reproducible results.
 ## Numerical considerations
 
 Coordinates outside the selected support are set exactly to zero.
-Positive coordinates are generated using normalized exponential random
+Positive coordinates are generated using normalised exponential random
 variables. The weighted equality constraint is satisfied up to
 floating-point roundoff.
+
+## See also
+
+[`blvim_simplex_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_simplex_initialise.md)
+and
+[`blvim_initialise()`](https://fabrice-rossi.github.io/blvim/reference/blvim_initialise.md),
+which use this function to generate starting points for
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md).
 
 ## Examples
 
@@ -217,7 +225,7 @@ sample$selected_face_count
 max(abs(drop(sample$Z %*% c(1, 2, 3, 4, 5)) - 2))
 #> [1] 4.440892e-16
 
-# Maximize coverage across distinct faces.
+# Maximise coverage across distinct faces.
 set.seed(123)
 
 broad_sample <- sample_weighted_simplex(

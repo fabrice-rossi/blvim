@@ -24,6 +24,7 @@ a vector of attractivenesses at the destination locations
 
 ## See also
 
+[`initial_attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/initial_attractiveness.md),
 [`production()`](https://fabrice-rossi.github.io/blvim/reference/production.md),
 [`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
 

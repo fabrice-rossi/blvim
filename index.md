@@ -4,7 +4,7 @@
 interaction model**. The model is described in [Wilson, A. (2008),
 “Boltzmann, Lotka and Volterra and spatial structural evolution: an
 integrated methodology for some dynamical systems”, J. R. Soc.
-Interface, 5:865–871](http://dx.doi.org/10.1098/rsif.2007.1288).
+Interface, 5:865–871](https://doi.org/10.1098/rsif.2007.1288).
 
 The package’s primary goal is to provide a fast implementation of the
 BLV model, complete with a collection of tools designed to explore the
@@ -65,7 +65,7 @@ To compute a spatial interaction model with `blvim`, you need at least a
 cost matrix. The package comes with distance data for a selection of
 large French cities. We use the 30 largest ones as origin locations and
 the 20 smallest ones as destination locations. The cost matrix is the
-distance between the cities (in meters).
+distance between the cities (in metres).
 
 ``` r
 
@@ -115,15 +115,15 @@ instance.
 In Wilson’s production-constrained maximum entropy model, the flows are
 given by
 
-\\ Y\_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta
-c\_{ij})}{\sum\_{k=1}^pZ_k^{\alpha}\exp(-\beta c\_{ik})}, \\
+\\Y\_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta
+c\_{ij})}{\sum\_{k=1}^pZ_k^{\alpha}\exp(-\beta c\_{ik})},\\
 
 where \\\alpha\\ is a return-to-scale parameter and \\\beta\\ is the
 inverse of a cost scale parameter. Note that the flow matrix is
 **production-constrained**, meaning that the total outgoing flow from
-any origin location is equals the production of that location:
+any origin location equals the production of that location:
 
-\\ \forall i,\quad X_i=\sum\_{j=1}^{p}Y\_{ij}. \\
+\\\forall i,\quad X_i=\sum\_{j=1}^{p}Y\_{ij}.\\
 
 The model is obtained using the
 [`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md)
@@ -205,7 +205,7 @@ autoplot(b_model) +
 ![A matrix representation of the flows. The flows are much more
 concentrated than with the previous choice of parameters. Many
 destination locations do not receive any flow. Most of the flow goes to
-Vaulx-en-Vellin, Arles, Albi and
+Vaulx-en-Velin, Arles, Albi and
 Cagnes-sur-mer.](reference/figures/README-b_flow-1.png)
 
 As the two figures above exemplify, different values of the parameters
@@ -220,7 +220,7 @@ incoming flows.
 
 Ideally, we aim for the following condition to hold in the limit:
 
-\\ Z_j =\sum\_{i=1}^{n}Y\_{ij}, \\
+\\Z_j =\sum\_{i=1}^{n}Y\_{ij}, \\
 
 where the flows are given by the equations above. The model is estimated
 using the
@@ -238,7 +238,7 @@ a_blv_model
 #> ℹ The BLV model converged after 4800 iterations.
 ```
 
-Notice that we start with some initial values of the attractiveness, but
+Note that we start with some initial values of the attractiveness, but
 the final values are different. These final values can be obtained using
 the
 [`attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/attractiveness.md)
@@ -252,7 +252,7 @@ barplot(a_final_Z)
 ```
 
 ![A bar plot representation of the attractivenesses of the destination
-locations. Only one bar is visible: Vaulx-en-Vellin dominates the
+locations. Only one bar is visible: Vaulx-en-Velin dominates the
 destination locations.](reference/figures/README-a_blv_Z-1.png) In this
 particular example, one destination location acts as a global attractor
 of all the flows. This pattern is also visible in the final flow matrix.
@@ -265,12 +265,12 @@ autoplot(a_blv_model) +
 
 ![A matrix representation of the flows. The matrix has only one black
 column, showing that all the flow goes to
-Vaulx-en-Vellin.](reference/figures/README-a_blv_flow-1.png)
+Vaulx-en-Velin.](reference/figures/README-a_blv_flow-1.png)
 
 The
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
 function can also be used to show the destination flows or the
-attractivenesses values:
+attractiveness values:
 
 ``` r
 
@@ -279,7 +279,7 @@ autoplot(a_blv_model, "attractiveness", with_names = TRUE) +
 ```
 
 ![A bar plot representation of the attractivenesses of the destination
-locations. Only one bar is visible: Vaulx-en-Vellin dominates the
+locations. Only one bar is visible: Vaulx-en-Velin dominates the
 destination locations.](reference/figures/README-a_blv_Z_ggplot2-1.png)
 
 Naturally, the results are strongly influenced by the parameters, as
@@ -304,7 +304,7 @@ autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
 
 ![A bar plot representation of the attractivenesses of the destination
 locations. Nine out of the twenty destination locations remain
-attractive. Vaulx-en-Vellin is still the most attractive location, but
+attractive. Vaulx-en-Velin is still the most attractive location, but
 Cholet and Arles are quite attractive also. They are closely followed by
 Saint-Ouen-sur-Seine and Saint-Quentin. Then the graph shows a set of
 four remaining attractive destinations but with small values (between
@@ -321,12 +321,12 @@ autoplot(b_blv_model, with_names = TRUE) +
 
 ![A matrix representation of the flows. The figure shows essentially the
 same things as the previous bar plot. In most of the cases, the flow
-outgoing from a origin location goes to a unique destination location.
+outgoing from an origin location goes to a unique destination location.
 The main exception is the pair Saint-Ouen-sur-Seine and Saint-Quentin
 who share incoming flows.](reference/figures/README-b_blv_flow-1.png)
 
-`bvlim` offers a collection of graphical representations that can
-leverage the data associated to the origin and destination locations.
+`blvim` offers a collection of graphical representations that can
+leverage the data associated with the origin and destination locations.
 For instance, we can display the full flows using geographical
 coordinates of the cities.
 

@@ -1,10 +1,10 @@
-# Extract all terminal status from a collection of spatial interaction models
+# Extract all terminal statuses from a collection of spatial interaction models
 
-The function extract terminal status from all the spatial interaction
+The function extracts terminal statuses from all the spatial interaction
 models of the collection and returns them in a matrix in which each row
 corresponds to a model and each column to a destination location. The
 value at row `i` and column `j` is `TRUE` if destination `j` is a
-terminal in model `i`. This function applies only to non bipartite
+terminal in model `i`. This function applies only to non-bipartite
 models.
 
 ## Usage
@@ -17,7 +17,7 @@ grid_is_terminal(sim_list, definition = c("ND", "RW"), ...)
 
 - sim_list:
 
-  a collection of non bipartite spatial interaction models, an object of
+  a collection of non-bipartite spatial interaction models, an object of
   class `sim_list`
 
 - definition:
@@ -33,7 +33,8 @@ grid_is_terminal(sim_list, definition = c("ND", "RW"), ...)
 
 ## Value
 
-a matrix of terminal status at the destination locations
+a logical matrix of terminal statuses at the destination locations, with
+one row per model
 
 ## Details
 
@@ -43,7 +44,9 @@ for the definition of terminal locations.
 
 ## See also
 
-[`is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/is_terminal.md)
+[`is_terminal()`](https://fabrice-rossi.github.io/blvim/reference/is_terminal.md),
+[`terminals()`](https://fabrice-rossi.github.io/blvim/reference/terminals.md),
+[`grid_diversity()`](https://fabrice-rossi.github.io/blvim/reference/grid_diversity.md)
 and
 [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 

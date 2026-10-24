@@ -28,7 +28,8 @@ the cost matrix
 ## See also
 
 [`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md),
-[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
+[`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md),
+[`sim_list()`](https://fabrice-rossi.github.io/blvim/reference/sim_list.md)
 
 ## Examples
 

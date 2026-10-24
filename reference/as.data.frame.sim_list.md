@@ -1,8 +1,8 @@
-# Coerce to a Data Frame
+# Coerce a collection of spatial interaction models to a data frame
 
 This function creates a data frame with a single column storing its
 collection of spatial interaction models. The default name of the column
-is `"sim"` (can be modified using the `sim_column` parameter). An more
+is `"sim"` (it can be modified using the `sim_column` parameter). A more
 flexible alternative is provided by the
 [`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md)
 function.
@@ -31,7 +31,7 @@ as.data.frame(x, ..., sim_column = "sim")
 
 ## Value
 
-a data frame
+a data frame with a single column containing the `sim_list`
 
 ## See also
 

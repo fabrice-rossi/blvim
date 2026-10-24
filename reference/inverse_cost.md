@@ -1,6 +1,6 @@
-# Extract the inverse cost scale parameter used to compute this model
+# Extract the inverse cost scale parameter used to compute a model
 
-Extract the inverse cost scale parameter used to compute this model
+Extract the inverse cost scale parameter used to compute a model
 
 ## Usage
 
@@ -12,7 +12,7 @@ inverse_cost(sim, ...)
 
 - sim:
 
-  a spatial interaction model with a inverse cost scale parameter
+  a spatial interaction model with an inverse cost scale parameter
 
 - ...:
 
@@ -21,6 +21,13 @@ inverse_cost(sim, ...)
 ## Value
 
 the inverse cost scale parameter
+
+## See also
+
+[`return_to_scale()`](https://fabrice-rossi.github.io/blvim/reference/return_to_scale.md),
+[`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md),
+[`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md),
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
 
 ## Examples
 

@@ -1,6 +1,6 @@
 # Extract all the destination flows from a collection of spatial interaction models
 
-The function extract destination flows from all the spatial interaction
+The function extracts destination flows from all the spatial interaction
 models of the collection and returns them in a matrix in which each row
 corresponds to a model and each column to a destination location.
 
@@ -25,11 +25,13 @@ grid_destination_flow(sim_list, ...)
 
 ## Value
 
-a matrix of destination flows at the destination locations
+a matrix of destination flows at the destination locations, with one row
+per model
 
 ## See also
 
-[`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md)
+[`destination_flow()`](https://fabrice-rossi.github.io/blvim/reference/destination_flow.md),
+[`grid_attractiveness()`](https://fabrice-rossi.github.io/blvim/reference/grid_attractiveness.md)
 and
 [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
 

@@ -23,19 +23,20 @@ destination_names(sim) <- value
 - value:
 
   a character vector of length equal to the number of destination
-  locations, or `NULL` (vectors of adapted length are converted to
-  character vectors)
+  locations, or `NULL` (vectors of the appropriate length are converted
+  to character vectors)
 
 ## Value
 
-for `destination_names` `NULL` or a character vector with one name per
-destination locations in the model. for `destination_names<-` the
+for `destination_names`, `NULL` or a character vector with one name per
+destination location in the model. For `destination_names<-`, the
 modified `sim` object or `sim_list` object.
 
 ## See also
 
 [`location_names()`](https://fabrice-rossi.github.io/blvim/reference/location_names.md),
-[`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md)
+[`origin_names()`](https://fabrice-rossi.github.io/blvim/reference/origin_names.md),
+[`destination_positions()`](https://fabrice-rossi.github.io/blvim/reference/destination_positions.md)
 
 ## Examples
 
@@ -43,7 +44,7 @@ modified `sim` object or `sim_list` object.
 distances <- french_cities_distances[1:10, 1:10]
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-## the row/column names of the cost matrix are used for the location
+## the row/column names of the cost matrix are used for the location names
 model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 destination_names(model)
 #>  [1] "75056" "13055" "69123" "31555" "06088" "44109" "34172" "67482" "33063"

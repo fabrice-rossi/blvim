@@ -1,6 +1,6 @@
-# Extract the return to scale parameter used to compute this model
+# Extract the return to scale parameter used to compute a model
 
-Extract the return to scale parameter used to compute this model
+Extract the return to scale parameter used to compute a model
 
 ## Usage
 
@@ -21,6 +21,13 @@ return_to_scale(sim, ...)
 ## Value
 
 the return to scale parameter
+
+## See also
+
+[`inverse_cost()`](https://fabrice-rossi.github.io/blvim/reference/inverse_cost.md),
+[`costs()`](https://fabrice-rossi.github.io/blvim/reference/costs.md),
+[`static_blvim()`](https://fabrice-rossi.github.io/blvim/reference/static_blvim.md),
+[`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
 
 ## Examples
 

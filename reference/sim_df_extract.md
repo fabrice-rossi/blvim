@@ -5,8 +5,8 @@ functions is very close to the one of the corresponding `data.frame`
 functions, see
 [`[.data.frame`](https://rdrr.io/r/base/Extract.data.frame.html).
 However, modifications of the SIM columns or suppression of core columns
-will turn the object into a standard `data.frame` to void issues in e.g.
-graphical representations, see below for details.
+will turn the object into a standard `data.frame` to avoid issues in
+e.g. graphical representations, see below for details.
 
 ## Usage
 
@@ -28,7 +28,8 @@ x[i, j] <- value
 
 - x:
 
-  data frame of spatial interaction models, an object of class `sim_df`
+  a data frame of spatial interaction models, an object of class
+  `sim_df`
 
 - name:
 
@@ -39,14 +40,15 @@ x[i, j] <- value
   a suitable replacement value: it will be repeated a whole number of
   times if necessary and it may be coerced: see the Coercion section in
   [`[.data.frame`](https://rdrr.io/r/base/Extract.data.frame.html). If
-  NULL, deletes the column if a single column is selected.
+  `NULL`, deletes the column if a single column is selected.
 
 - i, j, ...:
 
   elements to extract or replace. For `[` and `[[`, these are numeric or
   character or, for `[` only, empty or logical. Numeric values are
-  coerced to integer as if by as.integer. For replacement by `[`, a
-  logical matrix is allowed.
+  coerced to integer as if by
+  [`as.integer()`](https://rdrr.io/r/base/integer.html). For replacement
+  by `[`, a logical matrix is allowed.
 
 - drop:
 
@@ -74,13 +76,19 @@ after any modification of the `sim_list` column. Modifications of the
 core columns are rejected (removing a core column is accepted but this
 turns the `sim_df` into a standard `data.frame`).
 
-In addition, the `sim_list` column obeys to restriction on `sim_list`
-modifications (i.e, a `sim_list` contains a homogeneous collection of
+In addition, the `sim_list` column obeys the restrictions on `sim_list`
+modifications (i.e., a `sim_list` contains a homogeneous collection of
 spatial interaction models).
 
 Extraction functions keep the `sim_df` class only if the result is a
 data frame with a `sim_list` column, the core columns and potentially
 additional columns.
+
+## See also
+
+[`sim_df()`](https://fabrice-rossi.github.io/blvim/reference/sim_df.md),
+[`names<-.sim_df()`](https://fabrice-rossi.github.io/blvim/reference/names-set-.sim_df.md),
+[`sim_column()`](https://fabrice-rossi.github.io/blvim/reference/sim_column.md)
 
 ## Examples
 
@@ -92,7 +100,7 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
 all_flows_df <- sim_df(all_flows)
 ## the models as a sim_list
@@ -101,7 +109,7 @@ all_flows_df[, "sim"]
 #> destination locations computed on the following grid:
 #> • alpha: 1.05, 1.25, and 1.45
 #> • beta: 0.0025, 0.00375, 0.005, 0.00625, and 0.0075
-## sub data frame, a sim_df
+## subset of the rows, still a sim_df
 all_flows_df[1:5, ]
 #>   alpha    beta diversity  potential iterations converged          sim
 #> 1  1.05 0.00250  1.967999  2.6558277       1000      TRUE c(0.8172....
@@ -109,7 +117,7 @@ all_flows_df[1:5, ]
 #> 3  1.45 0.00250  1.990039  3.3304103       1001     FALSE c(0.8383....
 #> 4  1.05 0.00375  2.672869 -1.2996429       1001     FALSE c(0.8971....
 #> 5  1.25 0.00375  1.999562 -0.5530286        500      TRUE c(0.9454....
-## sub data frame, not a sim_df (alpha is missing)
+## subset of the columns, not a sim_df (alpha is missing)
 all_flows_df[6:10, 2:7]
 #>       beta diversity potential iterations converged          sim
 #> 6  0.00375  1.999209  0.364261        500      TRUE c(0.9438....
@@ -122,7 +130,7 @@ all_flows_2 <- grid_blvim(distances, log(french_cities$population[1:10]),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
 ## replace the sim_list column by the new models
 ## before

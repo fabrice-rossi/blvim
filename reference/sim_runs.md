@@ -23,7 +23,7 @@ sim_runs(sim)
 A `sim_list` containing the available spatial interaction models
 produced by the algorithm runs.
 
-For a single run, a one-element `sim_list` containing `x` is returned.
+For a single run, a one-element `sim_list` containing `sim` is returned.
 For multiple runs retained with `keep_runs = TRUE`, the models are
 returned in the same order as the starting points supplied to
 [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md).
