@@ -515,7 +515,7 @@ sim_conversion.sim <- function(sim, ...) {
 #' production <- log(french_cities$population[1:10])
 #' attractiveness <- log(french_cities$area[1:10])
 #' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-#' sim_conversion(model) ## must NA
+#' sim_potential(model) ## must NA
 sim_potential <- function(sim, ...) {
   UseMethod("sim_potential")
 }

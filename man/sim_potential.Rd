@@ -44,7 +44,7 @@ distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-sim_conversion(model) ## must NA
+sim_potential(model) ## must NA
 }
 \references{
 Osawa, M., Akamatsu, T., & Kogure, Y. (2025). "Most likely retail
