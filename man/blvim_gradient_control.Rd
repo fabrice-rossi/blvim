@@ -21,12 +21,13 @@ blvim_gradient_control(
 \item{ls_iter_max}{Maximum number of iterations of the line search.}
 }
 \value{
-a list containing the values of the parameters
+a list containing the values of the parameters, to be used as the
+\code{control} argument of \code{\link[=blvim]{blvim()}} or \code{\link[=grid_blvim]{grid_blvim()}}
 }
 \description{
-This function returns a list with parameters used to tweak the gradient
-algorithms used in \code{\link[=blvim]{blvim()}}. These parameters control the line search
-algorithm which is a standard backtracking method with Armijo stopping
+This function returns a list of parameters used to tune the gradient
+algorithms of \code{\link[=blvim]{blvim()}}. These parameters control the line search
+algorithm, which is a standard backtracking method with the Armijo stopping
 criterion.
 }
 \examples{
@@ -35,8 +36,8 @@ blvim_gradient_control(0.5, 0.7, 1e-4, 25)
 \references{
 Armijo, Larry (1966), "Minimization of functions having Lipschitz
 continuous first partial derivatives", Pacific J. Math. 16 (1): 1–3
-\doi{doi:10.2140/pjm.1966.16.1}
+\doi{10.2140/pjm.1966.16.1}
 }
 \seealso{
-\code{\link[=blvim]{blvim()}}
+\code{\link[=blvim]{blvim()}}, \code{\link[=grid_blvim]{grid_blvim()}}
 }

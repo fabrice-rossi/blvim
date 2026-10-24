@@ -21,7 +21,7 @@ INSEE Official Geographical Code (2025)
 french_regions
 }
 \description{
-This data set contains the list of all French regions It can be joined with
+This data set contains the list of all French regions. It can be joined with
 the \link{french_departments} or the \link{french_cities} data set. The data set was
 extracted from the INSEE open data in November 2025. These data are
 distributed under the \href{https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Open_Licence.pdf}{French "Open Licence"}.

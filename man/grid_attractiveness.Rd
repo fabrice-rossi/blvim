@@ -14,10 +14,11 @@ class \code{sim_list}}
 \item{...}{additional parameters for the \code{\link[=attractiveness]{attractiveness()}} function}
 }
 \value{
-a matrix of attractivenesses at the destination locations
+a matrix of attractivenesses at the destination locations, with
+one row per model
 }
 \description{
-The function extract attractivenesses from all the spatial interaction models
+The function extracts attractivenesses from all the spatial interaction models
 of the collection and returns them in a matrix in which each row corresponds
 to a model and each column to a destination location.
 }
@@ -36,5 +37,5 @@ g_Z <- grid_attractiveness(all_flows)
 dim(g_Z)
 }
 \seealso{
-\code{\link[=attractiveness]{attractiveness()}} and \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=attractiveness]{attractiveness()}}, \code{\link[=grid_destination_flow]{grid_destination_flow()}} and \code{\link[=grid_blvim]{grid_blvim()}}
 }

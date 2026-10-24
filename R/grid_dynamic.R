@@ -2,18 +2,22 @@
 #'
 #' This function computes a collection of flows between origin locations and
 #' destination locations using [blvim()] on a grid of parameters. The flows use
-#' the same costs, same production constraints and same attractivenesses. Each
-#' flow is computed using one of all the pairwise combinations between the alpha
-#' values given by `alphas` and the beta values given by `betas`. The function
-#' returns an object of class `sim_list` which contains the resulting flows.
+#' the same costs, the same production constraints and the same initial
+#' attractivenesses. One model is computed for each combination of an alpha
+#' value from `alphas` and a beta value from `betas`. The function returns an
+#' object of class `sim_list` which contains the resulting models.
 #'
 #' @inheritSection static_blvim Location data
 #' @inheritParams blvim
 #' @param alphas a vector of return to scale parameters
-#' @param betas a vector of cost inverse scale parameters
-#' @param progress if TRUE, a progress bar is shown during the calculation
-#'   (defaults to FALSE)
-#' @return an object of class `sim_list`
+#' @param betas a vector of inverse cost scale parameters
+#' @param progress if `TRUE`, a progress bar is shown during the calculation
+#'   (defaults to `FALSE`)
+#' @returns an object of class `sim_list` containing one spatial interaction
+#'   model per pair of parameters
+#' @seealso [blvim()] for the underlying model, [sim_df()] to turn the result
+#'   into a data frame, and [grid_attractiveness()], [grid_sim_converged()] or
+#'   [grid_diversity()] for extracting information from the collection.
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km

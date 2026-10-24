@@ -2,23 +2,23 @@
 % Please edit documentation in R/sim_list.R
 \name{sim_list}
 \alias{sim_list}
-\title{Create a sim_list object from a list of spatial interaction objects}
+\title{Create a sim_list object from a list of spatial interaction models}
 \usage{
 sim_list(sims, validate = TRUE)
 }
 \arguments{
-\item{sims}{a list of homogeneous spatial interaction objects}
+\item{sims}{a list of homogeneous spatial interaction models}
 
 \item{validate}{should the function validate the homogeneity of the list of
-spatial interaction objects (defaults to \code{TRUE})}
+spatial interaction models (defaults to \code{TRUE})}
 }
 \value{
 a \code{sim_list} object
 }
 \description{
 The collection of \code{sim} objects represented by a \code{sim_list} object is assumed
-to be homogeneous, that is to correspond to a fix set of origin and
-destination locations, associated to a fixed cost matrix.
+to be homogeneous, that is to correspond to a fixed set of origin and
+destination locations, associated with a fixed cost matrix.
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
@@ -28,4 +28,7 @@ attractiveness <- c(2, rep(1, 9))
 flows_1 <- blvim(distances, production, 1.5, 1, attractiveness)
 flows_2 <- blvim(distances, production, 1.25, 2, attractiveness)
 all_flows <- sim_list(list(flows_1, flows_2))
+}
+\seealso{
+\code{\link[=grid_blvim]{grid_blvim()}}, \code{\link[=c.sim_list]{c.sim_list()}}, \code{\link[=sim_df]{sim_df()}}, \code{\link[=summary.sim_list]{summary.sim_list()}}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim.R
 \name{sim_is_bipartite}
 \alias{sim_is_bipartite}
-\title{Reports whether the spatial interaction model is bipartite}
+\title{Report whether a spatial interaction model is bipartite}
 \usage{
 sim_is_bipartite(sim)
 }
@@ -14,9 +14,9 @@ sim_is_bipartite(sim)
 not.
 }
 \description{
-The function returns \code{TRUE} is the spatial interaction model (SIM) is
+The function returns \code{TRUE} if the spatial interaction model (SIM) is
 bipartite, that is if the origin locations are distinct from the destination
-locations (at least from the analysis point of view). The function return
+locations (at least from the analysis point of view). The function returns
 \code{FALSE} when the SIM uses the same locations for origin and destination.
 }
 \examples{
@@ -27,9 +27,14 @@ attractiveness <- c(2, rep(1, 9))
 model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 ## returns TRUE despite the use of a single set of positions
 sim_is_bipartite(model)
-## now we are clear about the non bipartite nature of the model
+## now we are explicit about the non-bipartite nature of the model
 model <- static_blvim(distances, production, 1.5, 1, attractiveness,
   bipartite = FALSE
 )
 sim_is_bipartite(model)
+}
+\seealso{
+\code{\link[=static_blvim]{static_blvim()}} and \code{\link[=blvim]{blvim()}} (parameter \code{bipartite}), and
+\code{\link[=terminals]{terminals()}} and \code{\link[=nd_graph]{nd_graph()}} for functions specific to non-bipartite
+models.
 }

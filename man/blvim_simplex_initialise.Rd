@@ -35,7 +35,7 @@ as the first starting point. If \code{TRUE}, \code{n - 1} points are sampled and
 centre is prepended. Thus, the returned matrix always has \code{n} rows.}
 }
 \value{
-A list containing:
+a list containing:
 \itemize{
 \item \code{Z}: the matrix of initial attractivenesses;
 \item \code{sampling}: diagnostics returned by \code{\link[=sample_weighted_simplex]{sample_weighted_simplex()}}, or \code{NULL}
@@ -66,4 +66,7 @@ multistart_flows <- blvim(
   keep_runs = TRUE
 )
 head(sim_logs(multistart_flows))
+}
+\seealso{
+\code{\link[=blvim_initialise]{blvim_initialise()}}, \code{\link[=sample_weighted_simplex]{sample_weighted_simplex()}}, \code{\link[=blvim]{blvim()}}
 }

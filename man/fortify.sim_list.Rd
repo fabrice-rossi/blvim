@@ -18,7 +18,7 @@
 
 \item{data}{not used}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+\item{flows}{\code{"full"} (default), \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
 \item{with_names}{specifies whether the extracted data frame includes
@@ -38,14 +38,14 @@ a data frame, see details
 \description{
 This function extracts from a collection of spatial interaction models
 (represented by a \code{sim_list}) a data frame in a long format, with one flow
-per row. This can be seen a collection oriented version of \code{\link[=fortify.sim]{fortify.sim()}}.
+per row. This can be seen as a collection-oriented version of \code{\link[=fortify.sim]{fortify.sim()}}.
 The resulting data frame is used by \code{\link[=autoplot.sim_list]{autoplot.sim_list()}} to produce summary
 graphics.
 }
 \details{
 The data frame produced by the method depends on the values of \code{flows} and to
 a lesser extent on the value of \code{with_names}. In all cases, the data frame
-has a \code{configuration} column that identify from which spatial interaction
+has a \code{configuration} column that identifies from which spatial interaction
 model the other values have been extracted: this is the index of the model in
 the original \code{sim_list}. Depending on \code{flows} we have the following
 representations:
@@ -58,12 +58,12 @@ columns:
 of origin locations
 \item \code{destination_idx}: identifies the destination location by its index from 1
 to the number of destination locations
-\item \code{flow}: the flow between the corresponding location. By default, flows
-are normalised by origin location (when \code{normalisation="origin"}): the total
-flows originating from each origin location is normalised to 1. If
-\code{normalisation="full"}, this normalisation is global: the sum of all flows in
-each model is normalised to 1. If \code{normalisation="none"} flows are not
-normalised.
+\item \code{flow}: the flow between the corresponding locations. By default
+(\code{normalisation="none"}), flows are not normalised. If
+\code{normalisation="origin"}, flows are normalised by origin location: the
+total flow originating from each origin location is normalised to 1. If
+\code{normalisation="full"}, this normalisation is global: the sum of all flows
+in each model is normalised to 1.
 \item \code{configuration}: the spatial interaction model index
 }
 \item if \code{flows="destination"} or \code{flows="attractiveness"}, the data frame contains
@@ -71,7 +71,7 @@ normalised.
 \itemize{
 \item \code{destination}: identifies the destination location by its index from 1
 to the number of destination locations
-\item \code{flow} or \code{attractiveness} depending on the value of \code{"flows"}: this contains
+\item \code{flow} or \code{attractiveness} depending on the value of \code{flows}: this contains
 either the \code{\link[=destination_flow]{destination_flow()}} or the \code{\link[=attractiveness]{attractiveness()}} of the destination
 location
 \item \code{configuration}: the spatial interaction model index
@@ -80,7 +80,7 @@ not present if \code{with_names=FALSE})
 }
 }
 
-The normalisation operated when \code{flows="full"} can improve the readability
+The normalisation applied when \code{flows="full"} can improve the readability
 of the graphical representation proposed in \code{\link[=autoplot.sim_list]{autoplot.sim_list()}} when the
 production constraints differ significantly from one origin location to another.
 }
@@ -93,12 +93,12 @@ attractiveness <- c(2, rep(1, 9))
 flows_1 <- blvim(distances, production, 1.5, 1, attractiveness)
 flows_2 <- blvim(distances, production, 1.25, 2, attractiveness)
 all_flows <- sim_list(list(flows_1, flows_2))
-ggplot2::fortify(all_flows) ## somewhat similar to a row bind of sim_df results
+ggplot2::fortify(all_flows) ## somewhat similar to row-binding flows_df() results
 ggplot2::fortify(all_flows, flows = "destination")
 destination_names(all_flows) <- letters[1:10]
 ggplot2::fortify(all_flows, flows = "attractiveness", with_names = TRUE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=autoplot.sim_list]{autoplot.sim_list()}}
+\code{\link[=autoplot.sim_list]{autoplot.sim_list()}}, \code{\link[=quantile.sim_list]{quantile.sim_list()}}, \code{\link[=fortify.sim]{fortify.sim()}}
 }

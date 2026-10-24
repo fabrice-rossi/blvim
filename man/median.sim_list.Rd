@@ -19,7 +19,7 @@
 
 \item{na.rm}{not used}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+\item{flows}{\code{"full"} (default), \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
 \item{method}{the distance measure to be used. Currently only \code{"euclidean"}
@@ -37,18 +37,19 @@ additional attributes
 }
 \description{
 This function computes all pairwise distances between spatial interaction
-models (SIMs) of its \code{x} parameter, using \code{sim_distance()} with the specified
-distance parameters. Then it returns the "median" of the collection defined
-as the SIM that is in average the closest to all the other SIMs. Tie breaking
-uses the order of the SIMs in the collection.
+models (SIMs) of its \code{x} parameter, using \code{\link[=sim_distance]{sim_distance()}} with the specified
+distance parameters. Then it returns the "median" of the collection, defined
+as the SIM that is on average the closest to all the other SIMs (also known
+as the medoid). Ties are broken using the order of the SIMs in the
+collection.
 }
 \details{
 As distance calculation can be slow in a large collection of SIMs, the
 distance object can be returned as a \code{distances} attribute of the median SIM
 by setting the \code{return_distances} parameter to \code{TRUE}. In addition, the
-returned SIM has always two attributes:
+returned SIM always has two attributes:
 \itemize{
-\item \code{index} gives the index of the mode in the original \code{sim_list}
+\item \code{index} gives the index of the median in the original \code{sim_list}
 \item \code{distortion} gives the mean of the distances from the median SIM to all
 the other SIMs
 }
@@ -61,11 +62,14 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
 all_flows_median <- median(all_flows)
 attr(all_flows_median, "index")
 attr(all_flows_median, "distortion")
 median(all_flows, flows = "destination")
 median(all_flows, flows = "attractiveness")
+}
+\seealso{
+\code{\link[=sim_distance]{sim_distance()}}, \code{\link[=summary.sim_list]{summary.sim_list()}}, \code{\link[=quantile.sim_list]{quantile.sim_list()}}
 }

@@ -1,16 +1,17 @@
 #' Compute the "median" of a collection of spatial interaction models
 #'
 #' This function computes all pairwise distances between spatial interaction
-#' models (SIMs) of its `x` parameter, using `sim_distance()` with the specified
-#' distance parameters. Then it returns the "median" of the collection defined
-#' as the SIM that is in average the closest to all the other SIMs. Tie breaking
-#' uses the order of the SIMs in the collection.
+#' models (SIMs) of its `x` parameter, using [sim_distance()] with the specified
+#' distance parameters. Then it returns the "median" of the collection, defined
+#' as the SIM that is on average the closest to all the other SIMs (also known
+#' as the medoid). Ties are broken using the order of the SIMs in the
+#' collection.
 #'
 #' As distance calculation can be slow in a large collection of SIMs, the
 #' distance object can be returned as a `distances` attribute of the median SIM
 #' by setting the `return_distances` parameter to `TRUE`. In addition, the
-#' returned SIM has always two attributes:
-#' -  `index` gives the index of the mode in the original `sim_list`
+#' returned SIM always has two attributes:
+#' -  `index` gives the index of the median in the original `sim_list`
 #' -  `distortion` gives the mean of the distances from the median SIM to all
 #' the other SIMs
 #'
@@ -25,6 +26,7 @@
 #' @inheritParams sim_distance
 #' @returns a spatial interaction model, an object of class `sim` with
 #'   additional attributes
+#' @seealso [sim_distance()], [summary.sim_list()], [quantile.sim_list()]
 #' @export
 #'
 #' @examples
@@ -35,7 +37,7 @@
 #'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
-#'   epsilon = 0.1, iter_max = 1000,
+#'   epsilon = 0.1, iter_max = 1000
 #' )
 #' all_flows_median <- median(all_flows)
 #' attr(all_flows_median, "index")
@@ -115,14 +117,14 @@ quantile_sim_data <- function(sim_data, flows, probs) {
 #'
 #' The exact behaviour depends on the value of `flows`. In all cases, the
 #' function returns a data frame. The data frame has one column per quantile,
-#' named after the quantile using a percentage based named, as in the default
+#' named after the quantile using a percentage-based name, as in the default
 #' [stats::quantile()]. For a graphical representation of those quantiles, see
 #' [autoplot.sim_list()].
 #'
 #' -  if `flows="full"`: this is the default case in which the function
 #' computes for each pair of origin \eqn{o} and destination \eqn{d} locations
 #' the quantiles of the distribution of the flow from \eqn{o} to \eqn{d} in the
-#' collection of models (the flows maybe normalised before quantile
+#' collection of models (the flows may be normalised before quantile
 #' calculations, depending on the value of `normalisation`). In addition to the
 #' quantiles, the data frame has two columns:
 #'    - `origin_idx`: identifies the origin location by its index from 1 to the number
@@ -130,30 +132,30 @@ quantile_sim_data <- function(sim_data, flows, probs) {
 #'    - `destination_idx`: identifies the destination location by its index from 1
 #' to the number of destination locations.
 #' -  if `flows="destination"`, the function computes quantiles for each
-#' destination \eqn{d} location of the distribution of its incoming flow
+#' destination location \eqn{d} of the distribution of its incoming flow
 #' ([destination_flow()]) in the collection of models. In addition to the
 #' quantiles, the data frame has one column `destination` that identifies the
 #' destination location by its index from 1 to the number of destination
 #' locations.
 #' - if `flows="attractiveness"`, the function computes quantiles for each
-#' destination \eqn{d} location of the distribution of its attractiveness
+#' destination location \eqn{d} of the distribution of its attractiveness
 #' ([attractiveness()]) in the collection of models. In addition to the
 #' quantiles, the data frame has one column `destination` that identifies the
 #' destination location by its index from 1 to the number of destination
 #' locations.
 #'
 #' @param x a collection of spatial interaction models, a `sim_list`
-#' @param flows `"full"` (default),  `"destination"` or `"attractiveness"`, see
+#' @param flows `"full"` (default), `"destination"` or `"attractiveness"`, see
 #'   details.
 #' @param probs numeric vector of probabilities with values in \eqn{[0,1]}.
-#' @param normalisation when `flows="full"`, the flows are used as is, that
-#'  without normalisation (`normalisation="none"`, default case) or they can be
-#'   normalised prior the calculation of the quantiles, either to sum to one
+#' @param normalisation when `flows="full"`, the flows are either used as is,
+#'   without normalisation (`normalisation="none"`, default case), or
+#'   normalised prior to the calculation of the quantiles, either to sum to one
 #'   for each origin location (`normalisation="origin"`) or to sum to one globally
 #'   (`normalisation="full"`). This is useful for [autoplot.sim_list()].
 #' @param ... additional parameters, not used currently
-#' @returns a date frame, see details
-#' @seealso [fortify.sim_list()] [autoplot.sim_list()]
+#' @returns a data frame, see details
+#' @seealso [fortify.sim_list()], [autoplot.sim_list()], [median.sim_list()]
 #' @export
 #'
 #' @examples

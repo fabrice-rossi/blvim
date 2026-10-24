@@ -11,7 +11,7 @@ location_names(sim) <- value
 }
 \arguments{
 \item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
-collection of spatial interaction  models (an object of class \code{sim_list})}
+collection of spatial interaction models (an object of class \code{sim_list})}
 
 \item{value}{a list with two components (see the returned value) or \code{NULL}}
 }
@@ -22,7 +22,7 @@ location names. For \verb{location_names<-()} the modified \code{sim} object or
 \code{sim_list} object.
 }
 \description{
-Those functions provide low level access to origin and destination local
+These functions provide low-level access to origin and destination location
 names. It is recommended to use \code{\link[=origin_names]{origin_names()}} and \code{\link[=destination_names]{destination_names()}}
 instead of \code{location_names} and \verb{location_names<-}.
 }
@@ -30,7 +30,7 @@ instead of \code{location_names} and \verb{location_names<-}.
 distances <- french_cities_distances[1:10, 1:10]
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-## the row/column names of the cost matrix are used for the location
+## the row/column names of the cost matrix are used for the location names
 model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 location_names(model)
 location_names(model) <- NULL

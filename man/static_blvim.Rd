@@ -28,8 +28,8 @@ static_blvim(
 
 \item{bipartite}{when \code{TRUE} (default value), the origin and destination
 locations are considered to be distinct. When \code{FALSE}, a single set of
-locations plays the both roles. This has only consequences in functions
-specific to this latter case such as \code{\link[=terminals]{terminals()}}.}
+locations plays both roles. This only affects functions specific to this
+latter case, such as \code{\link[=terminals]{terminals()}}.}
 
 \item{origin_data}{\code{NULL} or a list of additional data about the origin
 locations (see details)}
@@ -39,25 +39,25 @@ destination locations (see details)}
 }
 \value{
 an object of class \code{sim} (and \code{sim_wpc}) for spatial interaction
-model that contains the matrix of flows from the origin locations to the
+models that contains the matrix of flows from the origin locations to the
 destination locations (see \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}}
 above) and the attractivenesses of the destination locations.
 }
 \description{
 This function computes flows between origin locations and destination
-locations according to the production constrained entropy maximising model
+locations according to the production-constrained entropy-maximising model
 proposed by A. Wilson.
 }
 \details{
 The model computes flows using the following parameters:
 \itemize{
-\item \code{costs} (\eqn{c}) is a \eqn{n\times p} matrix whose \eqn{(i,j )} entry is
+\item \code{costs} (\eqn{c}) is an \eqn{n\times p} matrix whose \eqn{(i,j)} entry is
 the cost of having a "unitary" flow from origin location \eqn{i} to
 destination location \eqn{j}
-\item \code{X} (\eqn{X}) is a vector of size \eqn{n} containing non negative
+\item \code{X} (\eqn{X}) is a vector of size \eqn{n} containing non-negative
 production constraints for the \eqn{n} origin locations
-\item \code{alpha} (\eqn{\alpha}) is a return to scale parameter that enhance (or
-reduce if smaller that 1) the attractivenesses of destination locations when
+\item \code{alpha} (\eqn{\alpha}) is a return to scale parameter that enhances (or
+reduces if smaller than 1) the attractivenesses of destination locations when
 they are larger than 1
 \item \code{beta} (\eqn{\beta}) is the inverse of a cost scale parameter, i.e., costs
 are multiplied by \code{beta} in the model
@@ -75,7 +75,7 @@ The model is production constrained because
 
 \deqn{\forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij},}
 
-that is the origin location \eqn{i} sends a total flow of exactly \eqn{X_i}.
+that is, origin location \eqn{i} sends a total flow of exactly \eqn{X_i}.
 }
 \section{Location data}{
 While models in this package do not use location data beyond \code{X} and \code{Z},
@@ -85,7 +85,7 @@ models.
 
 Spatial interaction models can store names for origin and destination
 locations, using \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}. Names
-are taken by default from names of the cost matrix \code{costs}. More precisely,
+are taken by default from the names of the cost matrix \code{costs}. More precisely,
 \code{rownames(costs)} is used for origin location names and \code{colnames(costs)} for
 destination location names.
 }
@@ -101,8 +101,8 @@ destination locations, using \code{\link[=origin_positions<-]{origin_positions<-
 
 In addition to the functions mentioned above, location data can be specified
 directly using the \code{origin_data} and \code{destination_data} parameters. Data are
-given by a list whose components are not interpreted excepted the following
-ones:
+given by a list whose components are not interpreted except for the
+following ones:
 \itemize{
 \item \code{names} is used to specify location names and its content has to follow
 the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and
@@ -139,6 +139,8 @@ associated developments", Environment and Planning A: Economy and Space,
 3(1), 1-32 \doi{10.1068/a030001}
 }
 \seealso{
-\code{\link[=origin_names]{origin_names()}}, \code{\link[=destination_names]{destination_names()}}, \code{\link[=origin_positions]{origin_positions()}},
-\code{\link[=destination_positions]{destination_positions()}}
+\code{\link[=blvim]{blvim()}} for the dynamic model, \code{\link[=flows]{flows()}}, \code{\link[=production]{production()}} and
+\code{\link[=attractiveness]{attractiveness()}} for extracting the results, and \code{\link[=origin_names]{origin_names()}},
+\code{\link[=destination_names]{destination_names()}}, \code{\link[=origin_positions]{origin_positions()}}, \code{\link[=destination_positions]{destination_positions()}}
+for location data.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim.R
 \name{sim_diagnostic}
 \alias{sim_diagnostic}
-\title{Returns a full diagnostic of the algorithm used to build a spatial
+\title{Return a full diagnostic of the algorithm used to build a spatial
 interaction model}
 \usage{
 sim_diagnostic(sim, ...)
@@ -13,12 +13,14 @@ sim_diagnostic(sim, ...)
 \item{...}{additional parameters}
 }
 \value{
-a diagnostic object of class deriving from \code{sim_diagnostic}
+a diagnostic object whose class inherits from \code{sim_diagnostic}
 }
 \description{
 Some spatial interaction models are the result of an iterative calculation,
 see for instance \code{\link[=blvim]{blvim()}}. This function returns a diagnostic object that
-gives details about the behaviour of the iterative algorithm.
+gives details about the behaviour of the iterative algorithm. For a
+spatial interaction model that is not the result of an iterative
+calculation, the diagnostic object is essentially empty.
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
@@ -26,7 +28,12 @@ production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 sim_diagnostic(model)
+dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness,
+  algorithm = "gradient"
+)
+sim_diagnostic(dyn_model)
 }
 \seealso{
-\code{\link[=sim_iterations]{sim_iterations()}}, \code{\link[=sim_converged]{sim_converged()}}, \code{\link[=blvim]{blvim()}}, \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=sim_iterations]{sim_iterations()}}, \code{\link[=sim_converged]{sim_converged()}}, \code{\link[=sim_logs]{sim_logs()}}, \code{\link[=blvim]{blvim()}},
+\code{\link[=blvim_gradient_control]{blvim_gradient_control()}}
 }

@@ -12,8 +12,8 @@ initial_attractiveness(sim, ...)
 \item{...}{additional parameters}
 }
 \value{
-A vector containing the initial destination
-attractivenesses.
+a vector containing the initial destination
+attractivenesses
 }
 \description{
 Extracts the destination attractivenesses used to initialise the construction
@@ -34,5 +34,5 @@ identical(
 )
 }
 \seealso{
-\code{\link[=attractiveness]{attractiveness()}}, \code{\link[=static_blvim]{static_blvim()}}
+\code{\link[=attractiveness]{attractiveness()}}, \code{\link[=static_blvim]{static_blvim()}}, \code{\link[=blvim]{blvim()}}
 }

@@ -36,12 +36,13 @@ inverse cost scale (beta) = {.val {sim$beta}}"
   )
 }
 
-#' Extract the return to scale parameter used to compute this model
+#' Extract the return to scale parameter used to compute a model
 #'
 #' @param sim a spatial interaction model with a return to scale parameter
 #' @param ... additional parameters
 #'
 #' @returns the return to scale parameter
+#' @seealso [inverse_cost()], [costs()], [static_blvim()], [blvim()]
 #' @export
 #'
 #' @examples
@@ -60,12 +61,13 @@ return_to_scale.sim_wpc <- function(sim, ...) {
   sim$alpha
 }
 
-#' Extract the inverse cost scale parameter used to compute this model
+#' Extract the inverse cost scale parameter used to compute a model
 #'
-#' @param sim a spatial interaction model with a inverse cost scale parameter
+#' @param sim a spatial interaction model with an inverse cost scale parameter
 #' @param ... additional parameters
 #'
 #' @returns the inverse cost scale parameter
+#' @seealso [return_to_scale()], [costs()], [static_blvim()], [blvim()]
 #' @export
 #'
 #' @examples
@@ -84,12 +86,14 @@ inverse_cost.sim_wpc <- function(sim, ...) {
   sim$beta
 }
 
-#' Extract the cost matrix used to compute this model
+#' Extract the cost matrix used to compute a model
 #'
 #' @param sim a spatial interaction model with a cost matrix
 #' @param ... additional parameters
 #'
 #' @returns the cost matrix
+#' @seealso [return_to_scale()], [inverse_cost()], [static_blvim()],
+#'   [costs.sim_list()]
 #' @export
 #'
 #' @examples

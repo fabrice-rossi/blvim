@@ -286,9 +286,10 @@ sim_list_autoplot <- function(sim_list,
   }
 }
 
-#' Create a complete variability for a collection of spatial interaction models
+#' Create a complete variability plot for a collection of spatial interaction
+#' models
 #'
-#' This function represents graphically the variability of the flows represented
+#' This function graphically represents the variability of the flows represented
 #' by the spatial interaction models contained in a collection (a `sim_list`
 #' object).
 #'
@@ -301,14 +302,14 @@ sim_list_autoplot <- function(sim_list,
 #' observed in the collection at each destination. We consider three quantiles:
 #' - a lower quantile `qmin` defaulting to 0.05;
 #' - the median;
-#' - a upper quantile `qmax` defaulting to 0.95.
+#' - an upper quantile `qmax` defaulting to 0.95.
 #'
-#' If `with_position` is `FALSE` (default value), the graphical representations
+#' If `with_positions` is `FALSE` (default value), the graphical representations
 #' are "abstract". Depending on `flows` we have the following representations:
 #'
 #' -  `"full"`: the function displays the quantiles over the collection of
 #' models of the flows using nested squares ([flows()]). The graph is organised
-#' as matrix with origin locations on rows and destination locations on columns.
+#' as a matrix with origin locations on rows and destination locations on columns.
 #' At each row and column intersection, three nested squares represent
 #' respectively the lower quantile, the median and the upper quantile of the
 #' distribution of the flows between the corresponding origin and destination
@@ -321,7 +322,7 @@ sim_list_autoplot <- function(sim_list,
 #' [destination_flow()]). Quantiles are represented using
 #' [ggplot2::geom_crossbar()]: each location is represented by a rectangle that
 #' spans from its lower quantile to its upper quantile. An intermediate thicker
-#' bar represents the median quantile.
+#' bar represents the median.
 #' -  `"attractiveness"`: the function displays the quantiles over the
 #' collection of models of the attractiveness of each destination location (as
 #' given by [attractiveness()]). The graphical representation is the same as for
@@ -331,14 +332,14 @@ sim_list_autoplot <- function(sim_list,
 #' `"attractiveness"` graphics should be almost identical.
 #'
 #' When the `with_names` parameter is `TRUE`, the location names
-#' ([location_names()]) are used to label the axis of the graphical
+#' ([location_names()]) are used to label the axes of the graphical
 #' representation. If names are not specified, they are replaced by indexes.
 #'
 #' When the `with_positions` parameter is `TRUE`, the location positions
 #' ([location_positions()]) are used to produce more "geographically informed"
-#' representations. Notice that if no positions are known for the locations, the
-#' use of `with_positions = TRUE` is an error. Moreover, `flows = "full"` is not
-#' supported: the function will issue a warning and revert to the position free
+#' representations. Note that if no positions are known for the locations,
+#' using `with_positions = TRUE` is an error. Moreover, `flows = "full"` is not
+#' supported: the function will issue a warning and revert to the position-free
 #' representation if this value is used.
 #'
 #' The representations for `flows="destination"` and `flows="attractiveness"`
@@ -347,33 +348,33 @@ sim_list_autoplot <- function(sim_list,
 #' position, representing respectively the lower quantile, the median and the
 #' upper quantile of the incoming flows or of the attractivenesses. The
 #' diameters of the circles are proportional to the quantities they represent.
-#' The border ot the median circle is thicker than the ones of the other
+#' The border of the median circle is thicker than those of the other
 #' circles.
 #'
 #' When both `with_positions` and `with_names` are `TRUE`, the names of the
 #' destinations are added to the graphical representation. If `with_labels` is
-#' `TRUE` the names are represented as labels instead of plain texts (see
+#' `TRUE` the names are represented as labels instead of plain text (see
 #' [ggplot2::geom_label()]). If the `ggrepel` package is installed, its
 #' functions are used instead of `ggplot2` native functions.
 #'
 #' @param object a collection of spatial interaction models, a `sim_list`
-#' @param flows `"full"` (default),  `"destination"` or `"attractiveness"`, see
+#' @param flows `"full"` (default), `"destination"` or `"attractiveness"`, see
 #'   details.
 #' @param with_names specifies whether the graphical representation includes
 #'   location names (`FALSE` by default)
 #' @param with_positions specifies whether the graphical representation is based
 #'   on location positions (`FALSE` by default)
-#' @param cut_off cut off limit for inclusion of a graphical primitive when
+#' @param cut_off cut-off limit for inclusion of a graphical primitive when
 #'   `with_positions = TRUE`. In the attractiveness or destination
 #'   representation, circles are removed when the corresponding upper quantile
-#'   value is below the cut off.
-#' @param adjust_limits if `FALSE` (default value), the limits of the position
-#'   based graph are not adjusted after removing graphical primitives. This
-#'   eases comparison between graphical representations with different cut off
-#'   value. If `TRUE`, limits are adjusted to the data using the standard
+#'   value is below the cut-off.
+#' @param adjust_limits if `FALSE` (default value), the limits of the
+#'   position-based graph are not adjusted after removing graphical primitives.
+#'   This eases comparison between graphical representations with different
+#'   cut-off values. If `TRUE`, limits are adjusted to the data using the standard
 #'   ggplot2 behaviour.
 #' @param with_labels if `FALSE` (default value) names are displayed using plain
-#'   texts. If `TRUE`, names are shown using labels.
+#'   text. If `TRUE`, names are shown using labels.
 #' @param qmin lower quantile, see details (default: 0.05)
 #' @param qmax upper quantile, see details (default: 0.95)
 #' @param normalisation when `flows="full"`, the flows can be reported without
@@ -384,7 +385,8 @@ sim_list_autoplot <- function(sim_list,
 #' @param ... additional parameters, not used currently
 #'
 #' @returns a ggplot object
-#' @seealso [fortify.sim_list()], [quantile.sim_list()]
+#' @seealso [fortify.sim_list()], [quantile.sim_list()], [autoplot.sim()],
+#'   [grid_var_autoplot()]
 #' @exportS3Method ggplot2::autoplot
 #'
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
@@ -411,23 +413,23 @@ sim_list_autoplot <- function(sim_list,
 #' ggplot2::autoplot(all_flows, with_names = TRUE, normalisation = "none") +
 #'   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 #' ggplot2::autoplot(all_flows,
-#'   flow = "destination", with_names = TRUE,
+#'   flows = "destination", with_names = TRUE,
 #'   qmin = 0, qmax = 1
 #' ) +
 #'   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 #' ggplot2::autoplot(all_flows,
-#'   flow = "destination", with_positions = TRUE,
+#'   flows = "destination", with_positions = TRUE,
 #'   qmin = 0, qmax = 1
 #' ) + ggplot2::scale_size_continuous(range = c(0, 6)) +
 #'   ggplot2::coord_sf(crs = "epsg:4326")
 #' ggplot2::autoplot(all_flows,
-#'   flow = "destination", with_positions = TRUE,
+#'   flows = "destination", with_positions = TRUE,
 #'   qmin = 0, qmax = 1,
 #'   cut_off = 1.1
 #' ) +
 #'   ggplot2::coord_sf(crs = "epsg:4326")
 #' ggplot2::autoplot(all_flows,
-#'   flow = "destination", with_positions = TRUE,
+#'   flows = "destination", with_positions = TRUE,
 #'   with_names = TRUE,
 #'   with_labels = TRUE,
 #'   qmin = 0, qmax = 1,

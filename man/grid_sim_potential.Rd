@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_list.R
 \name{grid_sim_potential}
 \alias{grid_sim_potential}
-\title{Returns potential of a collection of spatial interaction models}
+\title{Compute the potentials of a collection of spatial interaction models}
 \usage{
 grid_sim_potential(sim, ...)
 }
@@ -13,17 +13,18 @@ grid_sim_potential(sim, ...)
 \item{...}{additional parameters}
 }
 \value{
-a vector of numbers of iteration, one per spatial interaction model
+a numeric vector of potentials, one per spatial interaction model
+(\code{NA} for models without a potential)
 }
 \description{
-The function reports the potentia of each spatial interaction model of its
-\code{sim_list} parameter  (see \code{\link[=sim_potential]{sim_potential()}})
+The function reports the potential of each spatial interaction model of its
+\code{sim_list} parameter (see \code{\link[=sim_potential]{sim_potential()}}).
 }
 \details{
-Notice that \code{\link[=sim_potential]{sim_potential()}} is generic and can be applied directly to
+Note that \code{\link[=sim_potential]{sim_potential()}} is generic and can be applied directly to
 \code{sim_list} objects. The current function is provided to be explicit in R code
-about what is a unique model and what is a collection of models (using
-function names that start with \code{"grid_"})
+about what is a single model and what is a collection of models (using
+function names that start with \code{"grid_"}).
 }
 \examples{
 distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
@@ -39,5 +40,5 @@ all_flows <- grid_blvim(
 grid_sim_potential(all_flows)
 }
 \seealso{
-\code{\link[=sim_potential]{sim_potential()}} and \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=sim_potential]{sim_potential()}}, \code{\link[=grid_sim_converged]{grid_sim_converged()}} and \code{\link[=grid_blvim]{grid_blvim()}}
 }

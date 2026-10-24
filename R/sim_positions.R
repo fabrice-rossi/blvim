@@ -43,7 +43,7 @@ location positions differ.",
 
 #' Positions of origin and destination locations in a spatial interaction model
 #'
-#' These functions provide low level access to origin and destination local
+#' These functions provide low-level access to origin and destination location
 #' positions. It is recommended to use [origin_positions()] and
 #' [destination_positions()] instead of `location_positions` and
 #' `location_positions<-`.
@@ -51,17 +51,18 @@ location positions differ.",
 #' # Positions
 #'
 #' Location positions are given by numeric matrices with 2 or 3 columns. The
-#' first two columns are assumed to be geographical coordinates while the 3rd
-#' column can be used for instance to store altitude. Coordinates are
+#' first two columns are assumed to be geographical coordinates while the third
+#' column can be used, for instance, to store altitude. Coordinates are
 #' interpreted as is in graphical representations (see [autoplot.sim()]). They
 #' are not matched to the costs as those can be derived from complex movement
-#' models and other non purely geographic considerations.
+#' models and other not purely geographical considerations.
 #'
-#' @param sim a spatial interaction model object
-#' @returns for `location_positions` `NULL` or a list with two components:
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction models (an object of class `sim_list`)
+#' @returns for `location_positions`, `NULL` or a list with two components:
 #'   `origin` for the origin location positions and `destination` for the
-#'   destination location positions. For `location_positions<-()` the modified
-#'   `sim` object.
+#'   destination location positions. For `location_positions<-()`, the modified
+#'   `sim` object or `sim_list` object.
 #'
 #' @export
 #' @seealso [origin_positions()], [destination_positions()]
@@ -71,7 +72,8 @@ location positions differ.",
 #' production <- rep(1, 10)
 #' attractiveness <- rep(1, 10)
 #' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-#' ## No positions
+#' ## no positions
+#' location_positions(model)
 #' location_positions(model) <- list(
 #'   origin = positions,
 #'   destination = positions
@@ -108,14 +110,16 @@ location_positions.sim <- function(sim) {
 #' Positions of origin locations in a spatial interaction model
 #'
 #' Functions to get or set the positions of the origin locations in a spatial
-#' interaction model.
+#' interaction model (or in a collection of spatial interaction models).
 #'
 #' @inheritSection location_positions Positions
 #'
-#' @param sim a spatial interaction model object
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction models (an object of class `sim_list`)
 #'
-#' @returns for `origin_positions` `NULL` or the coordinate matrix for the
-#'   origin locations. for `origin_positions<-` the modified `sim` object
+#' @returns for `origin_positions`, `NULL` or the coordinate matrix for the
+#'   origin locations. For `origin_positions<-`, the modified `sim` object or
+#'   `sim_list` object.
 #' @export
 #'
 #' @examples
@@ -126,7 +130,7 @@ location_positions.sim <- function(sim) {
 #' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
 #' origin_positions(model) <- positions
 #' origin_positions(model)
-#' @seealso [location_positions()], [destination_positions()]
+#' @seealso [location_positions()], [destination_positions()], [origin_names()]
 origin_positions <- function(sim) {
   UseMethod("origin_positions")
 }
@@ -139,7 +143,7 @@ origin_positions.sim <- function(sim) {
 
 #' @export
 #' @rdname origin_positions
-#' @param value a matrix with as many rows as  the number of origin locations
+#' @param value a matrix with as many rows as the number of origin locations
 #'   and 2 or 3 columns, or `NULL`
 `origin_positions<-` <- function(sim, value) {
   UseMethod("origin_positions<-")
@@ -155,18 +159,19 @@ origin_positions.sim <- function(sim) {
   sim
 }
 
-#' positions of destination locations in a spatial interaction model
+#' Positions of destination locations in a spatial interaction model
 #'
 #' Functions to get or set the positions of the destination locations in a
-#' spatial interaction model.
+#' spatial interaction model (or in a collection of spatial interaction models).
 #'
 #' @inheritSection location_positions Positions
 #'
-#' @param sim a spatial interaction model object
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction models (an object of class `sim_list`)
 #'
-#' @returns for `destination_positions` `NULL` or coordinate matrix for the
-#'   destination locations. for `destination_positions<-` the modified `sim`
-#'   object
+#' @returns for `destination_positions`, `NULL` or the coordinate matrix for the
+#'   destination locations. For `destination_positions<-`, the modified `sim`
+#'   object or `sim_list` object.
 #' @export
 #'
 #' @examples
@@ -177,7 +182,7 @@ origin_positions.sim <- function(sim) {
 #' model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 #' destination_positions(model) <- positions
 #' destination_positions(model)
-#' @seealso [location_positions()], [origin_positions()]
+#' @seealso [location_positions()], [origin_positions()], [destination_names()]
 destination_positions <- function(sim) {
   UseMethod("destination_positions")
 }
@@ -189,7 +194,7 @@ destination_positions.sim <- function(sim) {
 
 #' @export
 #' @rdname destination_positions
-#' @param value a matrix with as many rows as  the number of destination
+#' @param value a matrix with as many rows as the number of destination
 #'   locations and 2 or 3 columns, or `NULL`
 `destination_positions<-` <- function(sim, value) {
   UseMethod("destination_positions<-")

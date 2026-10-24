@@ -6,19 +6,21 @@
 #'
 #' The value to display is specified via an expression evaluated in the context
 #' of the data frame. It defaults to the diversity as computed by [diversity()].
-#' See the below for examples of use.
+#' See below for examples of use.
 #'
 #' The horizontal axis is used by default for the cost scale parameter, that is
-#' \eqn{1/\beta}. This is in general easier to read than using the inverse cost
+#' \eqn{1/\beta}. This is generally easier to read than the inverse cost
 #' scale. The `inverse` parameter can be used to turn off this feature. The
 #' vertical axis is used by default for the return to scale parameter.
 #'
 #' @param object a data frame of spatial interaction models, an object of class
 #'   `sim_df`
-#' @param value the value to display, default to `diversity` if unspecified
-#' @param inverse whether to use the cost scale parameter (default)
+#' @param value the value to display, defaults to `diversity` if unspecified
+#' @param inverse whether to use the cost scale parameter \eqn{1/\beta} (default,
+#'   `TRUE`) or the inverse cost scale parameter \eqn{\beta} (`FALSE`) on the
+#'   horizontal axis
 #' @param ... additional parameters (not used currently)
-#' @seealso [sim_df()], [diversity()]
+#' @seealso [sim_df()], [diversity()], [grid_autoplot()], [grid_var_autoplot()]
 #' @returns a ggplot object
 #' @exportS3Method ggplot2::autoplot
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
@@ -30,15 +32,13 @@
 #'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
-#'   epsilon = 0.1, iter_max = 1000,
+#'   epsilon = 0.1, iter_max = 1000
 #' )
 #' all_flows_df <- sim_df(all_flows)
 #'
 #' ## default display: Shannon diversity
 #' ggplot2::autoplot(all_flows_df)
-#' ## iterations
-#' ggplot2::autoplot(all_flows_df, iterations)
-#' ## we leverage non standard evaluation to compute a different diversity
+#' ## we leverage non-standard evaluation to compute a different diversity
 #' ggplot2::autoplot(all_flows_df, diversity(sim, "RW"))
 #' ## or to refer to columns of the data frame, either default ones
 #' ggplot2::autoplot(all_flows_df, converged)

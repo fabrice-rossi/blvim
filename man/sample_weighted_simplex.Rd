@@ -31,7 +31,7 @@ remaining points are sampled in the relative interior.}
 \item{points_per_face}{A nonnegative integer controlling the allocation of
 face points.
 
-If zero, the function maximizes the number of distinct selected faces.
+If zero, the function maximises the number of distinct selected faces.
 If positive, it is the requested maximum number of points on each selected
 nonvertex face. The function may increase this value, with a warning, when
 the requested value is incompatible with the number and capacities of the
@@ -107,7 +107,7 @@ The number of points allocated to proper faces is
 where \eqn{p} is \code{face_fraction}. The remaining points are sampled in the
 relative interior.
 
-The \code{points_per_face} argument controls the tradeoff between covering many
+The \code{points_per_face} argument controls the trade-off between covering many
 distinct faces and sampling each selected face more thoroughly:
 \itemize{
 \item If \code{points_per_face = 0}, the function selects as many different faces as
@@ -117,7 +117,7 @@ Otherwise, all available faces are selected and the remaining points are
 distributed as evenly as possible among the nonvertex faces.
 \item If \code{points_per_face > 0}, the function attempts to generate at most
 \code{points_per_face} points on each selected nonvertex face. It selects the
-smallest number of faces that provides sufficient capacity, prioritizing
+smallest number of faces that provides sufficient capacity, prioritising
 low-codimension faces.
 }
 
@@ -179,7 +179,7 @@ the function to obtain reproducible results.
 \section{Numerical considerations}{
 
 Coordinates outside the selected support are set exactly to zero. Positive
-coordinates are generated using normalized exponential random variables.
+coordinates are generated using normalised exponential random variables.
 The weighted equality constraint is satisfied up to floating-point
 roundoff.
 }
@@ -204,7 +204,7 @@ sample$selected_face_count
 # Verify the weighted equality constraint.
 max(abs(drop(sample$Z \%*\% c(1, 2, 3, 4, 5)) - 2))
 
-# Maximize coverage across distinct faces.
+# Maximise coverage across distinct faces.
 set.seed(123)
 
 broad_sample <- sample_weighted_simplex(
@@ -220,4 +220,8 @@ broad_sample$faces$count
 # Inspect the selected codimension layers.
 broad_sample$layer_count
 
+}
+\seealso{
+\code{\link[=blvim_simplex_initialise]{blvim_simplex_initialise()}} and \code{\link[=blvim_initialise]{blvim_initialise()}}, which use
+this function to generate starting points for \code{\link[=blvim]{blvim()}}.
 }

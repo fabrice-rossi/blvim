@@ -2,12 +2,12 @@
 % Please edit documentation in R/sim_list.R
 \name{grid_is_terminal}
 \alias{grid_is_terminal}
-\title{Extract all terminal status from a collection of spatial interaction models}
+\title{Extract all terminal statuses from a collection of spatial interaction models}
 \usage{
 grid_is_terminal(sim_list, definition = c("ND", "RW"), ...)
 }
 \arguments{
-\item{sim_list}{a collection of non bipartite spatial interaction models, an
+\item{sim_list}{a collection of non-bipartite spatial interaction models, an
 object of class \code{sim_list}}
 
 \item{definition}{terminal definition, either \code{"ND"} (for Nystuen & Dacey,
@@ -16,14 +16,15 @@ default) or \code{"RW"} (for Rihll & Wilson), see details.}
 \item{...}{additional parameters for the \code{\link[=is_terminal]{is_terminal()}} function}
 }
 \value{
-a matrix of terminal status at the destination locations
+a logical matrix of terminal statuses at the destination locations,
+with one row per model
 }
 \description{
-The function extract terminal status from all the spatial interaction models
+The function extracts terminal statuses from all the spatial interaction models
 of the collection and returns them in a matrix in which each row corresponds
 to a model and each column to a destination location. The value at row \code{i}
 and column \code{j} is \code{TRUE} if destination \code{j} is a terminal in model \code{i}. This
-function applies only to non bipartite models.
+function applies only to non-bipartite models.
 }
 \details{
 See \code{\link[=terminals]{terminals()}} for the definition of terminal locations.
@@ -44,5 +45,5 @@ g_df <- grid_is_terminal(all_flows)
 dim(g_df)
 }
 \seealso{
-\code{\link[=is_terminal]{is_terminal()}} and \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=is_terminal]{is_terminal()}}, \code{\link[=terminals]{terminals()}}, \code{\link[=grid_diversity]{grid_diversity()}} and \code{\link[=grid_blvim]{grid_blvim()}}
 }

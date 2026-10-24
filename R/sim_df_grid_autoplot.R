@@ -3,25 +3,25 @@
 #' This function combines spatial interaction model representations similar to
 #' the ones produced by [autoplot.sim()] into a single ggplot. It provides an
 #' alternative graphical representation to the one produced by
-#' [autoplot.sim_df()] for collection of spatial interaction models in a
+#' [autoplot.sim_df()] for collections of spatial interaction models in a
 #' `sim_df` object.
 #'
 #' The rationale of [autoplot.sim_df()] is to display a single value for each
 #' spatial interaction model (SIM) in the `sim_df` data frame. On the contrary,
 #' this function produces a full graphical representation of each SIM. It is
-#' therefore limited to small collection of SIMs (as specified by the `max_sims`
-#' parameter which default to 25).
+#' therefore limited to small collections of SIMs (as specified by the `max_sims`
+#' parameter, which defaults to 25).
 #'
 #' Under the hood, the function uses [fortify.sim()] and shares code with
 #' [autoplot.sim()] to have identical representations. It is simply based on
-#' facet wrapping facility of ggplot2. In particular the `key` parameter is used
+#' the facet wrapping facility of ggplot2. In particular, the `key` parameter is used
 #' as the wrapping variable in the call to [ggplot2::facet_wrap()]. If not
 #' specified, the function generates an `id` variable which ranges from 1 to the
 #' number of SIMs in the `sim_df` data frame. If specified, it is evaluated in
-#' the context of the data frame and used for wrapping. Notice that if the
+#' the context of the data frame and used for wrapping. Note that if the
 #' expression evaluates to identical values for different SIMs, they will be
-#' drawn on the same panel of the final figure, which may end up with
-#' meaningless representations. Parameters of [ggplot2::facet_wrap()] can be set
+#' drawn on the same panel of the final figure, which may produce meaningless
+#' representations. Parameters of [ggplot2::facet_wrap()] can be set
 #' using the `fw_params` parameter (in a list).
 #'
 #' @param sim_df a data frame of spatial interaction models, an object of class
@@ -31,11 +31,13 @@
 #' @inheritParams autoplot.sim
 #' @param max_sims the maximum number of spatial interaction models allowed in
 #'   the `sim_df` data frame
-#' @param fw_params parameters for the [ggplot2::facet_wrap] call (if non
-#'   `NULL`)
+#' @param fw_params parameters for the [ggplot2::facet_wrap()] call (if
+#'   non-`NULL`)
 #' @param ... additional (named) parameters passed to [autoplot.sim()]
 #' @export
 #' @returns a ggplot object
+#' @seealso [autoplot.sim()], [autoplot.sim_df()], [grid_var_autoplot()],
+#'   [sim_df()]
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
 #' positions <- as.matrix(french_cities[1:10, c("th_longitude", "th_latitude")])
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km

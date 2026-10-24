@@ -2,12 +2,12 @@
 % Please edit documentation in R/terminals.R
 \name{is_terminal}
 \alias{is_terminal}
-\title{Report whether locations are terminal sites or not}
+\title{Report whether locations are terminals}
 \usage{
 is_terminal(sim, definition = c("ND", "RW"), ...)
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a non-bipartite spatial interaction model object}
 
 \item{definition}{terminal definition, either \code{"ND"} (for Nystuen & Dacey,
 default) or \code{"RW"} (for Rihll & Wilson), see details.}
@@ -41,5 +41,5 @@ destination_names(tmodel) <- french_cities$name[1:10]
 is_terminal(tmodel)
 }
 \seealso{
-\code{\link[=terminals]{terminals()}}
+\code{\link[=terminals]{terminals()}}, \code{\link[=grid_is_terminal]{grid_is_terminal()}}, \code{\link[=nd_graph]{nd_graph()}}
 }

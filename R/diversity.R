@@ -20,42 +20,43 @@
 #' to `"destination"`).
 #'
 #' For dynamic models produced by [blvim()], the destination attractivenesses
-#' can be also considered as activity measures. When convergence occurs,
-#' the values are identical, but prior convergence they can be quite different.
-#' When `activity` is set to `"attractiveness"`, the diversity measures are
-#' computed using the same formula as below but with \eqn{D_j} replaced by
+#' can also be considered as activity measures. When convergence occurs,
+#' the values are identical, but prior to convergence they can be quite
+#' different. When `activity` is set to `"attractiveness"`, the diversity
+#' measures are computed using the formulas below but with \eqn{D_j} replaced by
 #' \eqn{Z_j} (as given by [attractiveness()]).
 #'
-#' To compute their
-#' diversity using entropy based definitions, the activities are first normalised to
-#' be interpreted as a probability distribution over the destination locations.
-#' For instance for destination flows, we use
+#' To compute their diversity using entropy-based definitions, the activities
+#' are first normalised so that they can be interpreted as a probability
+#' distribution over the \eqn{p} destination locations. For instance, for
+#' destination flows, we use
 #'
-#' \deqn{\forall j,\quad p_j=\frac{D_j}{\sum_{k=1}^n D_k}.}
+#' \deqn{\forall j,\quad p_j=\frac{D_j}{\sum_{k=1}^p D_k}.}
 #'
-#' The most classic diversity index is given by the exponential of Shannon's
+#' The most classical diversity index is given by the exponential of Shannon's
 #' entropy (parameter `definition="shannon"`). This gives
 #'
-#' \deqn{\text{diversity}(p, \text{Shannon})=\exp\left(-\sum_{k=1}^n p_k\ln
+#' \deqn{\text{diversity}(p, \text{Shannon})=\exp\left(-\sum_{k=1}^p p_k\ln
 #' p_k\right).}
 #'
-#' Rényi generalized entropy can be used to define a collection of other
+#' Rényi's generalised entropy can be used to define a collection of other
 #' diversity metrics. The Rényi diversity of order \eqn{\gamma} is the
-#' exponential of the Rényi entropy of order \eqn{\gamma} of the \eqn{p}
-#' distribution, that is
+#' exponential of the Rényi entropy of order \eqn{\gamma} of the distribution
+#' \eqn{(p_j)_{1\leq j\leq p}}, that is
 #'
 #' \deqn{\text{diversity}(p, \text{Rényi},
 #' \gamma)=\exp\left(\frac{1}{1-\gamma}\ln
-#' \left(\sum_{k=1}^np_k^\gamma\right)\right).}
+#' \left(\sum_{k=1}^pp_k^\gamma\right)\right).}
 #'
 #' This is defined directly only for \eqn{\gamma\in]0,1[\cup ]1,\infty[}, but
-#' extensions to the limit case are straightforward:
+#' extensions to the limit cases are straightforward:
 #'
 #'  - \eqn{\gamma=1} is Shannon's entropy/diversity
-#'  - \eqn{\gamma=0} is the max-entropy, here \eqn{\ln(n)} and thus the
-#' corresponding diversity is the number of locations
-#'  - \eqn{\gamma=\infty} is the min-entropy, here \eqn{-\log \max_{k}p_k} and
-#' thhe corresponding diversity is \eqn{\frac{1}{\max_{k}p_k}}
+#'  - \eqn{\gamma=0} is the max-entropy, here \eqn{\ln(p)} (when all
+#' \eqn{p_k} are positive) and thus the corresponding diversity is the number of
+#' destination locations
+#'  - \eqn{\gamma=\infty} is the min-entropy, here \eqn{-\ln \max_{k}p_k} and
+#' the corresponding diversity is \eqn{\frac{1}{\max_{k}p_k}}
 #'
 #' The `definition` parameter specifies the diversity used for calculation. The
 #' default value is `shannon` for Shannon's entropy (in this case the `order`
@@ -64,9 +65,9 @@
 #' generate underflows in the calculation that will trigger the use of the
 #' min-entropy instead of the exact Rényi entropy.
 #'
-#' In addition to those entropy based definition, terminal based calculations
+#' In addition to these entropy-based definitions, terminal-based calculations
 #' are also provided. Using any definition supported by the [terminals()]
-#' function, the diversity is the number of terminals identified. Notice this
+#' function, the diversity is the number of terminals identified. Note that this
 #' applies only to interaction models in which origin and destination locations
 #' are identical, i.e. when the model is not bipartite. In addition, the notion
 #' of terminals is based on destination flows and cannot be used with activities
@@ -77,25 +78,26 @@
 #'
 #' See [terminals()] for details.
 #'
-#' When applied to a collection of spatial interaction  models (an object of
+#' When applied to a collection of spatial interaction models (an object of
 #' class `sim_list`) the function uses the same parameters (`definition` and
 #' `order`) for all models and returns a vector of diversities. This is
 #' completely equivalent to [grid_diversity()].
 #'
 #' @param sim a spatial interaction model object (an object of class `sim`) or a
-#'   collection of spatial interaction  models (an object of class `sim_list`)
+#'   collection of spatial interaction models (an object of class `sim_list`)
 #' @param definition diversity definition `"shannon"` (default), `"renyi"` (see
-#'   details) or a definition supported by  [terminals()]
+#'   details) or a definition supported by [terminals()]
 #' @param order order of the Rényi entropy, used only when `definition="renyi"`
 #' @param activity specifies whether the diversity is computed based on the
 #' destination flows (for `activity="destination"`, the default case) or on
 #' the attractivenesses (for `activity="attractiveness"`).
 #' @param ... additional parameters
 #'
-#' @returns the diversity of destination flows (one value per spatial
-#'   interaction model)
+#' @returns the diversity of the destination activities (destination flows or
+#'   attractivenesses). In the case of a `sim_list`, the function returns a
+#'   numeric vector with one value per spatial interaction model.
 #' @seealso [destination_flow()], [attractiveness()], [terminals()],
-#'   [sim_is_bipartite()]
+#'   [sim_is_bipartite()], [grid_diversity()]
 #' @export
 #'
 #' @references Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.

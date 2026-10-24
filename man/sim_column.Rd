@@ -25,9 +25,12 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
-all_flows_df <- sim_df(all_flows, sim_colum = "my_col")
+all_flows_df <- sim_df(all_flows, sim_column = "my_col")
 names(all_flows_df)
 sim_column(all_flows_df)
+}
+\seealso{
+\code{\link[=sim_df]{sim_df()}}, \link{sim_df_extract}
 }

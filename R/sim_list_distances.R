@@ -5,27 +5,27 @@
 #' a vector representation derived from its flow matrix (see details). This
 #' vector is then used to compute distances between the models.
 #'
-#' The vector representation is selected using the `flows` parameters. Possible
+#' The vector representation is selected using the `flows` parameter. Possible
 #' values are
 #'
 #' -  `"full"` (default value): the representation is obtained by considering
 #' the matrix of [flows()] as a vector (with the standard [as.vector()]
 #' function);
 #' -  `"destination"`: the representation is the [destination_flow()] vector
-#' associated to each spatial interaction model;
+#' associated with each spatial interaction model;
 #' -  `"attractiveness"`: the representation is the [attractiveness()] vector
-#' associated to each spatial interaction model.
+#' associated with each spatial interaction model.
 #'
 #' @param sim_list a collection of spatial interaction models, an object of
 #'   class `sim_list`
-#' @param flows `"full"` (default),  `"destination"` or `"attractiveness"`, see
+#' @param flows `"full"` (default), `"destination"` or `"attractiveness"`, see
 #'   details.
 #' @param method the distance measure to be used. Currently only `"euclidean"`
 #'   is supported
 #' @param ... additional parameters (not used currently)
 #'
 #' @returns an object of class `"dist"`
-#' @seealso [dist()]
+#' @seealso [stats::dist()], [median.sim_list()], [summary.sim_list()]
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km

@@ -19,7 +19,7 @@
 
 \item{data}{not used}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+\item{flows}{\code{"full"} (default), \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
 \item{with_names}{specifies whether the extracted data frame includes
@@ -28,7 +28,7 @@ location names (\code{FALSE} by default)}
 \item{with_positions}{specifies whether the extracted data frame is based on
 location positions (\code{FALSE} by default)}
 
-\item{cut_off}{cut off limit for inclusion of a flow row in the final data
+\item{cut_off}{cut-off limit for inclusion of a flow row in the final data
 frame.}
 
 \item{...}{additional parameters, not used currently}
@@ -38,19 +38,19 @@ a data frame, see details
 }
 \description{
 This function extracts from a spatial interaction model different types of
-data frame that can be used to produce graphical representations.
+data frames that can be used to produce graphical representations.
 \code{\link[=autoplot.sim]{autoplot.sim()}} leverages this function to produce its graphical
 representations.
 }
 \details{
 The data frame produced by the method depends on the values of \code{flows} and
-\code{with_positions}. The general principal is to have one row per flow, either a
+\code{with_positions}. The general principle is to have one row per flow, either a
 single flow from an origin location to a destination location, or an
 aggregated flow to a destination location. Flows are stored in one column of
 the data frame, while the other columns are used to identify origin and
 destination.
 
-If \code{with_position} is \code{FALSE} (default value), data frames are simple.
+If \code{with_positions} is \code{FALSE} (default value), data frames are simple.
 Depending on \code{flows}, the function extracts different data frames:
 \itemize{
 \item \code{"full"}: this is the default case for which the full flow matrix is extracted.
@@ -60,8 +60,8 @@ The data frame has three variables:
 of origin locations
 \item \code{destination}: identifies the destination location by its index from 1
 to the number of destination locations
-\item \code{flow}: the flow between the corresponding location
-It is recommend to use \code{\link[=flows_df]{flows_df()}} for more control over the extraction
+\item \code{flow}: the flow between the corresponding locations
+It is recommended to use \code{\link[=flows_df]{flows_df()}} for more control over the extraction
 outside of simple graphical representations.
 }
 \item \code{"destination"}: the data frame has only two or three columns:
@@ -71,15 +71,15 @@ to the number of destination locations
 \item \code{flow}: the incoming flows (see \code{\link[=destination_flow]{destination_flow()}})
 \item \code{name}: the name of the destination location if \code{with_names} is \code{TRUE}
 }
-\item \code{"attractiveness"}: the data frame has also two ot three columns,
+\item \code{"attractiveness"}: the data frame also has two or three columns,
 \code{destination} and \code{name} as in the previous case and \code{attractiveness} which
 contains the attractivenesses of the destinations (see \code{\link[=attractiveness]{attractiveness()}}).
 }
 
 When the  \code{with_positions} parameter is \code{TRUE}, the location positions
 (\code{\link[=location_positions]{location_positions()}}) are used to produce more "geographically informed"
-extractions. Notice that if no positions are known for the locations, the use
-of \code{with_positions = TRUE} is an error. Depending on \code{flows} we have the
+extractions. Note that if no positions are known for the locations, using
+\code{with_positions = TRUE} is an error. Depending on \code{flows} we have the
 following representations:
 \itemize{
 \item \code{"full"}: this is the default case for which the full flow matrix is extracted.
@@ -91,20 +91,20 @@ locations (see below for the names of the columns)
 \item \code{xend} and \code{yend} are used for the coordinates of the destination locations
 \item \code{flow} is used for the flows
 }
-\item \code{"destination"} and \code{"attractiveness"} produce both a data frame with three
+\item \code{"destination"} and \code{"attractiveness"} both produce a data frame with three
 or four columns. As when \code{with_positions} is \code{FALSE}, one column is dedicated either
 to the incoming flows (\code{\link[=destination_flow]{destination_flow()}}) for \code{flows="destination"} (the
 name of the column is \code{destination}) or to the attractivenesses
 (\code{\link[=attractiveness]{attractiveness()}}), in which case its name is \code{attractiveness}. The other
 two columns are used for the positions of the destination locations. Their
 names are the names of the columns of the positions
-(\code{colnames(destination_location(object))}) or \code{"x"} and \code{"y"}, when such
+(\code{colnames(destination_positions(model))}) or \code{"x"} and \code{"y"}, when such
 names are not specified. If \code{with_names} is \code{TRUE}, a \code{name} column is included
 and contains the names of the destination locations.
 }
 
-In the position based data frames, rows are excluded from the returned data
-frames when the flow they represent are small, i.e. when they are smaller
+In the position-based data frames, rows are excluded from the returned data
+frames when the flows they represent are small, i.e. when they are smaller
 than the \code{cut_off} value.
 }
 \examples{
@@ -134,5 +134,5 @@ ggplot2::fortify(flows, with_positions = TRUE, cut_off = 0.1)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=autoplot.sim]{autoplot.sim()}}, \code{\link[=flows_df]{flows_df()}}
+\code{\link[=autoplot.sim]{autoplot.sim()}}, \code{\link[=flows_df]{flows_df()}}, \code{\link[=fortify.sim_list]{fortify.sim_list()}}
 }

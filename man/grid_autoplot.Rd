@@ -28,7 +28,7 @@ grid_autoplot(
 \item{key}{the wrapping variable which acts as an identifier for spatial
 interaction models}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+\item{flows}{\code{"full"} (default), \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
 \item{with_names}{specifies whether the graphical representation includes
@@ -37,37 +37,37 @@ location names (\code{FALSE} by default)}
 \item{with_positions}{specifies whether the graphical representation is based
 on location positions (\code{FALSE} by default)}
 
-\item{show_destination}{specifies whether the position based \code{"full"} flow
+\item{show_destination}{specifies whether the position-based \code{"full"} flow
 figure includes a representation of the destination flows (\code{FALSE} by
 default)}
 
-\item{show_attractiveness}{specifies whether the position based \code{"full"} flow
-figure includes a representation of the attractivenesses  (\code{FALSE} by
+\item{show_attractiveness}{specifies whether the position-based \code{"full"} flow
+figure includes a representation of the attractivenesses (\code{FALSE} by
 default)}
 
-\item{show_production}{specifies whether the position based \code{"full"} flow
+\item{show_production}{specifies whether the position-based \code{"full"} flow
 figure includes a representation of the productions (\code{FALSE} by default)}
 
-\item{cut_off}{cut off limit for inclusion of a graphical primitive when
+\item{cut_off}{cut-off limit for inclusion of a graphical primitive when
 \code{with_positions = TRUE}. In the full flow matrix representation, segments
-are removed when their flow is smaller than the cut off. In the
+are removed when their flow is smaller than the cut-off. In the
 attractiveness or destination representation, disks are removed when the
-corresponding value is below the cut off.}
+corresponding value is below the cut-off.}
 
-\item{adjust_limits}{if \code{FALSE} (default value), the limits of the position
-based graph are not adjusted after removing graphical primitives. This
-eases comparison between graphical representations with different cut off
-value. If \code{TRUE}, limits are adjusted to the data using the standard
+\item{adjust_limits}{if \code{FALSE} (default value), the limits of the
+position-based graph are not adjusted after removing graphical primitives.
+This eases comparison between graphical representations with different
+cut-off values. If \code{TRUE}, limits are adjusted to the data using the standard
 ggplot2 behaviour.}
 
 \item{with_labels}{if \code{FALSE} (default value) names are displayed using plain
-texts. If \code{TRUE}, names are shown using labels.}
+text. If \code{TRUE}, names are shown using labels.}
 
 \item{max_sims}{the maximum number of spatial interaction models allowed in
 the \code{sim_df} data frame}
 
-\item{fw_params}{parameters for the \link[ggplot2:facet_wrap]{ggplot2::facet_wrap} call (if non
-\code{NULL})}
+\item{fw_params}{parameters for the \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} call (if
+non-\code{NULL})}
 
 \item{...}{additional (named) parameters passed to \code{\link[=autoplot.sim]{autoplot.sim()}}}
 }
@@ -78,26 +78,26 @@ a ggplot object
 This function combines spatial interaction model representations similar to
 the ones produced by \code{\link[=autoplot.sim]{autoplot.sim()}} into a single ggplot. It provides an
 alternative graphical representation to the one produced by
-\code{\link[=autoplot.sim_df]{autoplot.sim_df()}} for collection of spatial interaction models in a
+\code{\link[=autoplot.sim_df]{autoplot.sim_df()}} for collections of spatial interaction models in a
 \code{sim_df} object.
 }
 \details{
 The rationale of \code{\link[=autoplot.sim_df]{autoplot.sim_df()}} is to display a single value for each
 spatial interaction model (SIM) in the \code{sim_df} data frame. On the contrary,
 this function produces a full graphical representation of each SIM. It is
-therefore limited to small collection of SIMs (as specified by the \code{max_sims}
-parameter which default to 25).
+therefore limited to small collections of SIMs (as specified by the \code{max_sims}
+parameter, which defaults to 25).
 
 Under the hood, the function uses \code{\link[=fortify.sim]{fortify.sim()}} and shares code with
 \code{\link[=autoplot.sim]{autoplot.sim()}} to have identical representations. It is simply based on
-facet wrapping facility of ggplot2. In particular the \code{key} parameter is used
+the facet wrapping facility of ggplot2. In particular, the \code{key} parameter is used
 as the wrapping variable in the call to \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}}. If not
 specified, the function generates an \code{id} variable which ranges from 1 to the
 number of SIMs in the \code{sim_df} data frame. If specified, it is evaluated in
-the context of the data frame and used for wrapping. Notice that if the
+the context of the data frame and used for wrapping. Note that if the
 expression evaluates to identical values for different SIMs, they will be
-drawn on the same panel of the final figure, which may end up with
-meaningless representations. Parameters of \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} can be set
+drawn on the same panel of the final figure, which may produce meaningless
+representations. Parameters of \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} can be set
 using the \code{fw_params} parameter (in a list).
 }
 \examples{
@@ -133,4 +133,8 @@ grid_autoplot(all_flows_df, with_positions = TRUE, show_destination = TRUE) +
   ggplot2::scale_size_continuous(range = c(0, 2)) +
   ggplot2::coord_sf(crs = "epsg:4326")
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{\link[=autoplot.sim]{autoplot.sim()}}, \code{\link[=autoplot.sim_df]{autoplot.sim_df()}}, \code{\link[=grid_var_autoplot]{grid_var_autoplot()}},
+\code{\link[=sim_df]{sim_df()}}
 }

@@ -10,9 +10,11 @@
 \item{object}{a data frame of spatial interaction models, an object of class
 \code{sim_df}}
 
-\item{value}{the value to display, default to \code{diversity} if unspecified}
+\item{value}{the value to display, defaults to \code{diversity} if unspecified}
 
-\item{inverse}{whether to use the cost scale parameter (default)}
+\item{inverse}{whether to use the cost scale parameter \eqn{1/\beta} (default,
+\code{TRUE}) or the inverse cost scale parameter \eqn{\beta} (\code{FALSE}) on the
+horizontal axis}
 
 \item{...}{additional parameters (not used currently)}
 }
@@ -27,10 +29,10 @@ interaction models.
 \details{
 The value to display is specified via an expression evaluated in the context
 of the data frame. It defaults to the diversity as computed by \code{\link[=diversity]{diversity()}}.
-See the below for examples of use.
+See below for examples of use.
 
 The horizontal axis is used by default for the cost scale parameter, that is
-\eqn{1/\beta}. This is in general easier to read than using the inverse cost
+\eqn{1/\beta}. This is generally easier to read than the inverse cost
 scale. The \code{inverse} parameter can be used to turn off this feature. The
 vertical axis is used by default for the return to scale parameter.
 }
@@ -44,15 +46,13 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.1),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
 all_flows_df <- sim_df(all_flows)
 
 ## default display: Shannon diversity
 ggplot2::autoplot(all_flows_df)
-## iterations
-ggplot2::autoplot(all_flows_df, iterations)
-## we leverage non standard evaluation to compute a different diversity
+## we leverage non-standard evaluation to compute a different diversity
 ggplot2::autoplot(all_flows_df, diversity(sim, "RW"))
 ## or to refer to columns of the data frame, either default ones
 ggplot2::autoplot(all_flows_df, converged)
@@ -64,5 +64,5 @@ ggplot2::autoplot(all_flows_df, `Nystuen & Dacey`)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=sim_df]{sim_df()}}, \code{\link[=diversity]{diversity()}}
+\code{\link[=sim_df]{sim_df()}}, \code{\link[=diversity]{diversity()}}, \code{\link[=grid_autoplot]{grid_autoplot()}}, \code{\link[=grid_var_autoplot]{grid_var_autoplot()}}
 }

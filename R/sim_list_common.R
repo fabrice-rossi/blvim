@@ -7,7 +7,7 @@
 #' @param ... additional parameters
 #'
 #' @returns the cost matrix
-#' @seealso [costs()], [grid_blvim()]
+#' @seealso [costs()], [grid_blvim()], [sim_list()]
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_list.R
 \name{grid_sim_converged}
 \alias{grid_sim_converged}
-\title{Reports the convergence statuses of a collection of spatial interaction
+\title{Report the convergence statuses of a collection of spatial interaction
 models}
 \usage{
 grid_sim_converged(sim, ...)
@@ -14,17 +14,18 @@ grid_sim_converged(sim, ...)
 \item{...}{additional parameters}
 }
 \value{
-a vector of convergence status, one per spatial interaction model
+a logical vector of convergence statuses, one per spatial
+interaction model
 }
 \description{
 The function reports for each spatial interaction model of its \code{sim_list}
 parameter its convergence status, as defined in \code{\link[=sim_converged]{sim_converged()}}.
 }
 \details{
-Notice that \code{\link[=sim_converged]{sim_converged()}} is generic and can be applied directly to
+Note that \code{\link[=sim_converged]{sim_converged()}} is generic and can be applied directly to
 \code{sim_list} objects. The current function is provided to be explicit in R code
-about what is a unique model and what is a collection of models (using
-function names that start with \code{"grid_"})
+about what is a single model and what is a collection of models (using
+function names that start with \code{"grid_"}).
 }
 \examples{
 distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km

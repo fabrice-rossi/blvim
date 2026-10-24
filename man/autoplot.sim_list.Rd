@@ -2,7 +2,8 @@
 % Please edit documentation in R/sim_list_autoplot.R
 \name{autoplot.sim_list}
 \alias{autoplot.sim_list}
-\title{Create a complete variability for a collection of spatial interaction models}
+\title{Create a complete variability plot for a collection of spatial interaction
+models}
 \usage{
 \method{autoplot}{sim_list}(
   object,
@@ -21,7 +22,7 @@
 \arguments{
 \item{object}{a collection of spatial interaction models, a \code{sim_list}}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+\item{flows}{\code{"full"} (default), \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
 \item{with_names}{specifies whether the graphical representation includes
@@ -30,19 +31,19 @@ location names (\code{FALSE} by default)}
 \item{with_positions}{specifies whether the graphical representation is based
 on location positions (\code{FALSE} by default)}
 
-\item{cut_off}{cut off limit for inclusion of a graphical primitive when
+\item{cut_off}{cut-off limit for inclusion of a graphical primitive when
 \code{with_positions = TRUE}. In the attractiveness or destination
 representation, circles are removed when the corresponding upper quantile
-value is below the cut off.}
+value is below the cut-off.}
 
-\item{adjust_limits}{if \code{FALSE} (default value), the limits of the position
-based graph are not adjusted after removing graphical primitives. This
-eases comparison between graphical representations with different cut off
-value. If \code{TRUE}, limits are adjusted to the data using the standard
+\item{adjust_limits}{if \code{FALSE} (default value), the limits of the
+position-based graph are not adjusted after removing graphical primitives.
+This eases comparison between graphical representations with different
+cut-off values. If \code{TRUE}, limits are adjusted to the data using the standard
 ggplot2 behaviour.}
 
 \item{with_labels}{if \code{FALSE} (default value) names are displayed using plain
-texts. If \code{TRUE}, names are shown using labels.}
+text. If \code{TRUE}, names are shown using labels.}
 
 \item{qmin}{lower quantile, see details (default: 0.05)}
 
@@ -60,7 +61,7 @@ normalised, either to sum to one for each origin location
 a ggplot object
 }
 \description{
-This function represents graphically the variability of the flows represented
+This function graphically represents the variability of the flows represented
 by the spatial interaction models contained in a collection (a \code{sim_list}
 object).
 }
@@ -75,15 +76,15 @@ observed in the collection at each destination. We consider three quantiles:
 \itemize{
 \item a lower quantile \code{qmin} defaulting to 0.05;
 \item the median;
-\item a upper quantile \code{qmax} defaulting to 0.95.
+\item an upper quantile \code{qmax} defaulting to 0.95.
 }
 
-If \code{with_position} is \code{FALSE} (default value), the graphical representations
+If \code{with_positions} is \code{FALSE} (default value), the graphical representations
 are "abstract". Depending on \code{flows} we have the following representations:
 \itemize{
 \item \code{"full"}: the function displays the quantiles over the collection of
 models of the flows using nested squares (\code{\link[=flows]{flows()}}). The graph is organised
-as matrix with origin locations on rows and destination locations on columns.
+as a matrix with origin locations on rows and destination locations on columns.
 At each row and column intersection, three nested squares represent
 respectively the lower quantile, the median and the upper quantile of the
 distribution of the flows between the corresponding origin and destination
@@ -95,7 +96,7 @@ of models of the incoming flows for each destination location (using
 \code{\link[=destination_flow]{destination_flow()}}). Quantiles are represented using
 \code{\link[ggplot2:geom_crossbar]{ggplot2::geom_crossbar()}}: each location is represented by a rectangle that
 spans from its lower quantile to its upper quantile. An intermediate thicker
-bar represents the median quantile.
+bar represents the median.
 \item \code{"attractiveness"}: the function displays the quantiles over the
 collection of models of the attractiveness of each destination location (as
 given by \code{\link[=attractiveness]{attractiveness()}}). The graphical representation is the same as for
@@ -106,14 +107,14 @@ calculation has converged (see \code{\link[=sim_converged]{sim_converged()}}), b
 }
 
 When the \code{with_names} parameter is \code{TRUE}, the location names
-(\code{\link[=location_names]{location_names()}}) are used to label the axis of the graphical
+(\code{\link[=location_names]{location_names()}}) are used to label the axes of the graphical
 representation. If names are not specified, they are replaced by indexes.
 
 When the \code{with_positions} parameter is \code{TRUE}, the location positions
 (\code{\link[=location_positions]{location_positions()}}) are used to produce more "geographically informed"
-representations. Notice that if no positions are known for the locations, the
-use of \code{with_positions = TRUE} is an error. Moreover, \code{flows = "full"} is not
-supported: the function will issue a warning and revert to the position free
+representations. Note that if no positions are known for the locations,
+using \code{with_positions = TRUE} is an error. Moreover, \code{flows = "full"} is not
+supported: the function will issue a warning and revert to the position-free
 representation if this value is used.
 
 The representations for \code{flows="destination"} and \code{flows="attractiveness"}
@@ -122,12 +123,12 @@ a collection of three nested circles centred on the corresponding location
 position, representing respectively the lower quantile, the median and the
 upper quantile of the incoming flows or of the attractivenesses. The
 diameters of the circles are proportional to the quantities they represent.
-The border ot the median circle is thicker than the ones of the other
+The border of the median circle is thicker than those of the other
 circles.
 
 When both \code{with_positions} and \code{with_names} are \code{TRUE}, the names of the
 destinations are added to the graphical representation. If \code{with_labels} is
-\code{TRUE} the names are represented as labels instead of plain texts (see
+\code{TRUE} the names are represented as labels instead of plain text (see
 \code{\link[ggplot2:geom_label]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed, its
 functions are used instead of \code{ggplot2} native functions.
 }
@@ -156,23 +157,23 @@ ggplot2::autoplot(all_flows, with_names = TRUE) +
 ggplot2::autoplot(all_flows, with_names = TRUE, normalisation = "none") +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 ggplot2::autoplot(all_flows,
-  flow = "destination", with_names = TRUE,
+  flows = "destination", with_names = TRUE,
   qmin = 0, qmax = 1
 ) +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 ggplot2::autoplot(all_flows,
-  flow = "destination", with_positions = TRUE,
+  flows = "destination", with_positions = TRUE,
   qmin = 0, qmax = 1
 ) + ggplot2::scale_size_continuous(range = c(0, 6)) +
   ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(all_flows,
-  flow = "destination", with_positions = TRUE,
+  flows = "destination", with_positions = TRUE,
   qmin = 0, qmax = 1,
   cut_off = 1.1
 ) +
   ggplot2::coord_sf(crs = "epsg:4326")
 ggplot2::autoplot(all_flows,
-  flow = "destination", with_positions = TRUE,
+  flows = "destination", with_positions = TRUE,
   with_names = TRUE,
   with_labels = TRUE,
   qmin = 0, qmax = 1,
@@ -182,5 +183,6 @@ ggplot2::autoplot(all_flows,
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=fortify.sim_list]{fortify.sim_list()}}, \code{\link[=quantile.sim_list]{quantile.sim_list()}}
+\code{\link[=fortify.sim_list]{fortify.sim_list()}}, \code{\link[=quantile.sim_list]{quantile.sim_list()}}, \code{\link[=autoplot.sim]{autoplot.sim()}},
+\code{\link[=grid_var_autoplot]{grid_var_autoplot()}}
 }

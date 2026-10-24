@@ -289,7 +289,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "25917.006KB",
+  "fileSize": "28826.867KB",
   "releaseNotes": "https://github.com/fabrice-rossi/blvim/blob/main/NEWS.md",
   "readme": "https://github.com/fabrice-rossi/blvim/blob/main/README.md",
   "contIntegration": ["https://github.com/fabrice-rossi/blvim/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/fabrice-rossi/blvim"],

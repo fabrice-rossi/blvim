@@ -7,7 +7,7 @@
 terminals(sim, definition = c("ND", "RW"), ...)
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a non-bipartite spatial interaction model object}
 
 \item{definition}{terminal definition, either \code{"ND"} (for Nystuen & Dacey,
 default) or \code{"RW"} (for Rihll & Wilson), see details.}
@@ -19,21 +19,21 @@ a vector containing the indexes of the terminals identified from the
 flow matrix of the interaction model.
 }
 \description{
-This function identifies terminals in the locations underlying the given
-spatial interaction model. Terminals are locally dominating locations that
+This function identifies terminals among the locations underlying the given
+spatial interaction model. Terminals are locally dominant locations that
 essentially send less to other locations than they receive (see details for
 formal definitions). As we compare incoming flows to outgoing flows, terminal
 computation is restricted to interaction models in which origin and
-destination locations are identical, i.e. models that are not \code{bipartite}.
+destination locations are identical, i.e. models that are not bipartite.
 }
 \details{
-The notion of terminal used in this function is based on seminal work by J.
-D. Nystuen and M. F. Dacey (Nystuen & Dacey, 1961), as well as on the follow
-up variation from Rihll & Wislon (1987 and 1991). We assume given a square
+The notion of terminal used in this function is based on the seminal work of
+J. D. Nystuen and M. F. Dacey (Nystuen & Dacey, 1961), as well as on the
+follow-up variation by Rihll & Wilson (1987 and 1991). We are given a square
 flow matrix \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq n}}. The incoming flow
 at location \eqn{j} is given by
 
-\deqn{D_j=\sum_{j=i}^{p}Y_{ij},}
+\deqn{D_j=\sum_{i=1}^{n}Y_{ij},}
 
 and is used as a measure of importance of this location. Then in Nystuen &
 Dacey (1961), location \eqn{j} is a "terminal point" (or a "central city") if
@@ -49,16 +49,17 @@ its largest flow is less important than \eqn{j} itself, in terms of incoming
 flows. This is the definition used by the function when \code{definition} is
 \code{"ND"}.
 
-Rihll & Wilson (1987) use a modified version of this definition described in
-details in Rihll and Wilson (1991). With this relaxed version, location
+Rihll & Wilson (1987) use a modified version of this definition, described in
+detail in Rihll and Wilson (1991). With this relaxed version, location
 \eqn{j} is a terminal if
 
-\deqn{\forall i,\quad D_j \geq Y_{ij}.}
+\deqn{\forall l,\quad D_j \geq Y_{jl}.}
 
-In words, \eqn{j} is a terminal if it receives more flows than it is sending
-to each other location. It is easy to see that each Nystuen & Dacey terminal
-is a Rihll & Wilson terminal, but the reverse is false in general. The
-function use the Rihll & Wilson definition when \code{definition} is \code{"RW"}
+In words, \eqn{j} is a terminal if its total incoming flow is at least as
+large as the flow it sends to any other location. It is easy to see that each
+Nystuen & Dacey terminal is a Rihll & Wilson terminal, but the converse does
+not hold in general. The function uses the Rihll & Wilson definition when
+\code{definition} is \code{"RW"}.
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
@@ -92,5 +93,6 @@ Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58-95.
 London: Routledge.
 }
 \seealso{
-\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}, \code{\link[=is_terminal]{is_terminal()}}, \code{\link[=grid_is_terminal]{grid_is_terminal()}}
+\code{\link[=is_terminal]{is_terminal()}}, \code{\link[=grid_is_terminal]{grid_is_terminal()}}, \code{\link[=nd_graph]{nd_graph()}}, \code{\link[=diversity]{diversity()}},
+\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}
 }

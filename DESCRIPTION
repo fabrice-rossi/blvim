@@ -17,6 +17,7 @@ Description: Estimates Boltzmann–Lotka–Volterra (BLV) interaction model
     <dx.doi.org/10.1098/rsif.2007.1288>.
 License: GPL (>= 3)
 Encoding: UTF-8
+Language: en-GB
 Roxygen: list(markdown = TRUE)
 LinkingTo: 
     Rcpp,

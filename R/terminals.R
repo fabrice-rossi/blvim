@@ -1,19 +1,19 @@
 #' Compute terminals for a spatial interaction model
 #'
-#' This function identifies terminals in the locations underlying the given
-#' spatial interaction model. Terminals are locally dominating locations that
+#' This function identifies terminals among the locations underlying the given
+#' spatial interaction model. Terminals are locally dominant locations that
 #' essentially send less to other locations than they receive (see details for
 #' formal definitions). As we compare incoming flows to outgoing flows, terminal
 #' computation is restricted to interaction models in which origin and
-#' destination locations are identical, i.e. models that are not `bipartite`.
+#' destination locations are identical, i.e. models that are not bipartite.
 #'
-#' The notion of terminal used in this function is based on seminal work by J.
-#' D. Nystuen and M. F. Dacey (Nystuen & Dacey, 1961), as well as on the follow
-#' up variation from Rihll & Wislon (1987 and 1991). We assume given a square
+#' The notion of terminal used in this function is based on the seminal work of
+#' J. D. Nystuen and M. F. Dacey (Nystuen & Dacey, 1961), as well as on the
+#' follow-up variation by Rihll & Wilson (1987 and 1991). We are given a square
 #' flow matrix \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq n}}. The incoming flow
 #' at location \eqn{j} is given by
 #'
-#' \deqn{D_j=\sum_{j=i}^{p}Y_{ij},}
+#' \deqn{D_j=\sum_{i=1}^{n}Y_{ij},}
 #'
 #' and is used as a measure of importance of this location. Then in Nystuen &
 #' Dacey (1961), location \eqn{j} is a "terminal point" (or a "central city") if
@@ -29,18 +29,19 @@
 #' flows. This is the definition used by the function when `definition` is
 #' `"ND"`.
 #'
-#' Rihll & Wilson (1987) use a modified version of this definition described in
-#' details in Rihll and Wilson (1991). With this relaxed version, location
+#' Rihll & Wilson (1987) use a modified version of this definition, described in
+#' detail in Rihll and Wilson (1991). With this relaxed version, location
 #' \eqn{j} is a terminal if
 #'
-#' \deqn{\forall i,\quad D_j \geq Y_{ij}.}
+#' \deqn{\forall l,\quad D_j \geq Y_{jl}.}
 #'
-#' In words, \eqn{j} is a terminal if it receives more flows than it is sending
-#' to each other location. It is easy to see that each Nystuen & Dacey terminal
-#' is a Rihll & Wilson terminal, but the reverse is false in general. The
-#' function use the Rihll & Wilson definition when `definition` is `"RW"`
+#' In words, \eqn{j} is a terminal if its total incoming flow is at least as
+#' large as the flow it sends to any other location. It is easy to see that each
+#' Nystuen & Dacey terminal is a Rihll & Wilson terminal, but the converse does
+#' not hold in general. The function uses the Rihll & Wilson definition when
+#' `definition` is `"RW"`.
 #'
-#' @param sim a spatial interaction model object
+#' @param sim a non-bipartite spatial interaction model object
 #' @param definition terminal definition, either `"ND"` (for Nystuen & Dacey,
 #'   default) or `"RW"` (for Rihll & Wilson), see details.
 #' @param ... additional parameters
@@ -48,7 +49,8 @@
 #' @returns a vector containing the indexes of the terminals identified from the
 #'   flow matrix of the interaction model.
 #' @export
-#' @seealso [sim_is_bipartite()], [is_terminal()], [grid_is_terminal()]
+#' @seealso [is_terminal()], [grid_is_terminal()], [nd_graph()], [diversity()],
+#'   [sim_is_bipartite()]
 #'
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
@@ -91,7 +93,7 @@ terminals.sim <- function(sim, definition = c("ND", "RW"), ...) {
   which(is_terminal(sim, definition, ...))
 }
 
-#' Report whether locations are terminal sites or not
+#' Report whether locations are terminals
 #'
 #' This function returns a logical vector whose length equals the number of
 #' locations. The value in position `i` is `TRUE` if location number `i` is
@@ -99,7 +101,7 @@ terminals.sim <- function(sim, definition = c("ND", "RW"), ...) {
 #' see [terminals()].
 #'
 #' @inheritParams terminals
-#' @seealso [terminals()]
+#' @seealso [terminals()], [grid_is_terminal()], [nd_graph()]
 #' @returns a logical vector with `TRUE` at the positions of locations that are
 #' terminals and `FALSE` for other locations.
 #' @export

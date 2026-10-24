@@ -68,7 +68,7 @@ number_of_nonvertex_faces_capped <- function(d, cap) {
 #' where \eqn{p} is `face_fraction`. The remaining points are sampled in the
 #' relative interior.
 #'
-#' The `points_per_face` argument controls the tradeoff between covering many
+#' The `points_per_face` argument controls the trade-off between covering many
 #' distinct faces and sampling each selected face more thoroughly:
 #'
 #' * If `points_per_face = 0`, the function selects as many different faces as
@@ -79,7 +79,7 @@ number_of_nonvertex_faces_capped <- function(d, cap) {
 #'
 #' * If `points_per_face > 0`, the function attempts to generate at most
 #'   `points_per_face` points on each selected nonvertex face. It selects the
-#'   smallest number of faces that provides sufficient capacity, prioritizing
+#'   smallest number of faces that provides sufficient capacity, prioritising
 #'   low-codimension faces.
 #'
 #' A vertex has support size one and consists of a single point. Consequently,
@@ -122,7 +122,7 @@ number_of_nonvertex_faces_capped <- function(d, cap) {
 #' @param points_per_face A nonnegative integer controlling the allocation of
 #'   face points.
 #'
-#'   If zero, the function maximizes the number of distinct selected faces.
+#'   If zero, the function maximises the number of distinct selected faces.
 #'   If positive, it is the requested maximum number of points on each selected
 #'   nonvertex face. The function may increase this value, with a warning, when
 #'   the requested value is incompatible with the number and capacities of the
@@ -197,13 +197,16 @@ number_of_nonvertex_faces_capped <- function(d, cap) {
 #' The function exhausts these layers in increasing order of \eqn{k}. Only the
 #' final selected codimension layer can be partial.
 #'
+#' @seealso [blvim_simplex_initialise()] and [blvim_initialise()], which use
+#'   this function to generate starting points for [blvim()].
+#'
 #' @section Reproducibility:
 #' Sampling uses R's random-number generator. Use [set.seed()] before calling
 #' the function to obtain reproducible results.
 #'
 #' @section Numerical considerations:
 #' Coordinates outside the selected support are set exactly to zero. Positive
-#' coordinates are generated using normalized exponential random variables.
+#' coordinates are generated using normalised exponential random variables.
 #' The weighted equality constraint is satisfied up to floating-point
 #' roundoff.
 #'
@@ -227,7 +230,7 @@ number_of_nonvertex_faces_capped <- function(d, cap) {
 #' # Verify the weighted equality constraint.
 #' max(abs(drop(sample$Z %*% c(1, 2, 3, 4, 5)) - 2))
 #'
-#' # Maximize coverage across distinct faces.
+#' # Maximise coverage across distinct faces.
 #' set.seed(123)
 #'
 #' broad_sample <- sample_weighted_simplex(

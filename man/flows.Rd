@@ -28,5 +28,6 @@ flows(model)
 }
 \seealso{
 \code{\link[=flows_df]{flows_df()}} for a data frame version of the flows,
-\code{\link[=destination_flow]{destination_flow()}} for destination flows.
+\code{\link[=destination_flow]{destination_flow()}} for destination flows, \code{\link[=production]{production()}} and
+\code{\link[=attractiveness]{attractiveness()}}.
 }

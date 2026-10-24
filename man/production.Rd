@@ -28,5 +28,5 @@ production(model)
 all.equal(as.numeric(production(model)), production)
 }
 \seealso{
-\code{\link[=attractiveness]{attractiveness()}}, \code{\link[=destination_flow]{destination_flow()}}
+\code{\link[=attractiveness]{attractiveness()}}, \code{\link[=destination_flow]{destination_flow()}}, \code{\link[=flows]{flows()}}
 }

@@ -14,10 +14,11 @@ class \code{sim_list}}
 \item{...}{additional parameters for the \code{\link[=destination_flow]{destination_flow()}} function}
 }
 \value{
-a matrix of destination flows at the destination locations
+a matrix of destination flows at the destination locations, with
+one row per model
 }
 \description{
-The function extract destination flows from all the spatial interaction
+The function extracts destination flows from all the spatial interaction
 models of the collection and returns them in a matrix in which each row
 corresponds to a model and each column to a destination location.
 }
@@ -36,5 +37,5 @@ g_df <- grid_destination_flow(all_flows)
 dim(g_df)
 }
 \seealso{
-\code{\link[=destination_flow]{destination_flow()}} and \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=destination_flow]{destination_flow()}}, \code{\link[=grid_attractiveness]{grid_attractiveness()}} and \code{\link[=grid_blvim]{grid_blvim()}}
 }

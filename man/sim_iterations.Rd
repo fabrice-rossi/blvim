@@ -2,32 +2,34 @@
 % Please edit documentation in R/sim.R
 \name{sim_iterations}
 \alias{sim_iterations}
-\title{Returns the number of iterations used to produce this spatial interaction model}
+\title{Return the number of iterations used to produce a spatial interaction model}
 \usage{
 sim_iterations(sim, ...)
 }
 \arguments{
 \item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
-collection of spatial interaction  models (an object of class \code{sim_list})}
+collection of spatial interaction models (an object of class \code{sim_list})}
 
 \item{...}{additional parameters}
 }
 \value{
-a number of iterations that may be one if the spatial interaction model
-has been obtained using a static model (see \code{\link[=static_blvim]{static_blvim()}}). In the case of a \code{sim_list}
-the function returns a vector with iteration number per model.
+the number of iterations, which is one for a static model (see
+\code{\link[=static_blvim]{static_blvim()}}). In the case of a \code{sim_list} the function returns a
+vector with one number of iterations per model.
 }
 \description{
-Returns the number of iterations used to produce this spatial interaction model
+Return the number of iterations used to produce a spatial interaction model
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-destination_flow(model)
 sim_iterations(model) ## must be one
+dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
+sim_iterations(dyn_model)
 }
 \seealso{
-\code{\link[=sim_converged]{sim_converged()}}
+\code{\link[=sim_converged]{sim_converged()}}, \code{\link[=sim_diagnostic]{sim_diagnostic()}}, \code{\link[=blvim]{blvim()}},
+\code{\link[=grid_sim_iterations]{grid_sim_iterations()}}
 }

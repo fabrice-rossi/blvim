@@ -33,10 +33,10 @@ diversity(
 }
 \arguments{
 \item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
-collection of spatial interaction  models (an object of class \code{sim_list})}
+collection of spatial interaction models (an object of class \code{sim_list})}
 
 \item{definition}{diversity definition \code{"shannon"} (default), \code{"renyi"} (see
-details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
+details) or a definition supported by \code{\link[=terminals]{terminals()}}}
 
 \item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
 
@@ -47,8 +47,9 @@ the attractivenesses (for \code{activity="attractiveness"}).}
 \item{...}{additional parameters}
 }
 \value{
-the diversity of destination flows (one value per spatial
-interaction model)
+the diversity of the destination activities (destination flows or
+attractivenesses). In the case of a \code{sim_list}, the function returns a
+numeric vector with one value per spatial interaction model.
 }
 \description{
 This function computes the diversity of the destination locations according
@@ -70,42 +71,43 @@ calculation mode in this function (when the parameter \code{activity} is set
 to \code{"destination"}).
 
 For dynamic models produced by \code{\link[=blvim]{blvim()}}, the destination attractivenesses
-can be also considered as activity measures. When convergence occurs,
-the values are identical, but prior convergence they can be quite different.
-When \code{activity} is set to \code{"attractiveness"}, the diversity measures are
-computed using the same formula as below but with \eqn{D_j} replaced by
+can also be considered as activity measures. When convergence occurs,
+the values are identical, but prior to convergence they can be quite
+different. When \code{activity} is set to \code{"attractiveness"}, the diversity
+measures are computed using the formulas below but with \eqn{D_j} replaced by
 \eqn{Z_j} (as given by \code{\link[=attractiveness]{attractiveness()}}).
 
-To compute their
-diversity using entropy based definitions, the activities are first normalised to
-be interpreted as a probability distribution over the destination locations.
-For instance for destination flows, we use
+To compute their diversity using entropy-based definitions, the activities
+are first normalised so that they can be interpreted as a probability
+distribution over the \eqn{p} destination locations. For instance, for
+destination flows, we use
 
-\deqn{\forall j,\quad p_j=\frac{D_j}{\sum_{k=1}^n D_k}.}
+\deqn{\forall j,\quad p_j=\frac{D_j}{\sum_{k=1}^p D_k}.}
 
-The most classic diversity index is given by the exponential of Shannon's
+The most classical diversity index is given by the exponential of Shannon's
 entropy (parameter \code{definition="shannon"}). This gives
 
-\deqn{\text{diversity}(p, \text{Shannon})=\exp\left(-\sum_{k=1}^n p_k\ln
+\deqn{\text{diversity}(p, \text{Shannon})=\exp\left(-\sum_{k=1}^p p_k\ln
 p_k\right).}
 
-Rényi generalized entropy can be used to define a collection of other
+Rényi's generalised entropy can be used to define a collection of other
 diversity metrics. The Rényi diversity of order \eqn{\gamma} is the
-exponential of the Rényi entropy of order \eqn{\gamma} of the \eqn{p}
-distribution, that is
+exponential of the Rényi entropy of order \eqn{\gamma} of the distribution
+\eqn{(p_j)_{1\leq j\leq p}}, that is
 
 \deqn{\text{diversity}(p, \text{Rényi},
 \gamma)=\exp\left(\frac{1}{1-\gamma}\ln
-\left(\sum_{k=1}^np_k^\gamma\right)\right).}
+\left(\sum_{k=1}^pp_k^\gamma\right)\right).}
 
 This is defined directly only for \eqn{\gamma\in]0,1[\cup ]1,\infty[}, but
-extensions to the limit case are straightforward:
+extensions to the limit cases are straightforward:
 \itemize{
 \item \eqn{\gamma=1} is Shannon's entropy/diversity
-\item \eqn{\gamma=0} is the max-entropy, here \eqn{\ln(n)} and thus the
-corresponding diversity is the number of locations
-\item \eqn{\gamma=\infty} is the min-entropy, here \eqn{-\log \max_{k}p_k} and
-thhe corresponding diversity is \eqn{\frac{1}{\max_{k}p_k}}
+\item \eqn{\gamma=0} is the max-entropy, here \eqn{\ln(p)} (when all
+\eqn{p_k} are positive) and thus the corresponding diversity is the number of
+destination locations
+\item \eqn{\gamma=\infty} is the min-entropy, here \eqn{-\ln \max_{k}p_k} and
+the corresponding diversity is \eqn{\frac{1}{\max_{k}p_k}}
 }
 
 The \code{definition} parameter specifies the diversity used for calculation. The
@@ -115,9 +117,9 @@ as specified by the \code{order} parameter. Large values of \code{order} tend to
 generate underflows in the calculation that will trigger the use of the
 min-entropy instead of the exact Rényi entropy.
 
-In addition to those entropy based definition, terminal based calculations
+In addition to these entropy-based definitions, terminal-based calculations
 are also provided. Using any definition supported by the \code{\link[=terminals]{terminals()}}
-function, the diversity is the number of terminals identified. Notice this
+function, the diversity is the number of terminals identified. Note that this
 applies only to interaction models in which origin and destination locations
 are identical, i.e. when the model is not bipartite. In addition, the notion
 of terminals is based on destination flows and cannot be used with activities
@@ -129,7 +131,7 @@ based on attractivenesses. \code{definition} can be:
 
 See \code{\link[=terminals]{terminals()}} for details.
 
-When applied to a collection of spatial interaction  models (an object of
+When applied to a collection of spatial interaction models (an object of
 class \code{sim_list}) the function uses the same parameters (\code{definition} and
 \code{order}) for all models and returns a vector of diversities. This is
 completely equivalent to \code{\link[=grid_diversity]{grid_diversity()}}.
@@ -154,5 +156,5 @@ Jost, L. (2006), "Entropy and diversity", Oikos, 113: 363-375.
 }
 \seealso{
 \code{\link[=destination_flow]{destination_flow()}}, \code{\link[=attractiveness]{attractiveness()}}, \code{\link[=terminals]{terminals()}},
-\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}
+\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}, \code{\link[=grid_diversity]{grid_diversity()}}
 }

@@ -16,7 +16,7 @@ sim_distance(
 \item{sim_list}{a collection of spatial interaction models, an object of
 class \code{sim_list}}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+\item{flows}{\code{"full"} (default), \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
 \item{method}{the distance measure to be used. Currently only \code{"euclidean"}
@@ -33,16 +33,16 @@ a vector representation derived from its flow matrix (see details). This
 vector is then used to compute distances between the models.
 }
 \details{
-The vector representation is selected using the \code{flows} parameters. Possible
+The vector representation is selected using the \code{flows} parameter. Possible
 values are
 \itemize{
 \item \code{"full"} (default value): the representation is obtained by considering
 the matrix of \code{\link[=flows]{flows()}} as a vector (with the standard \code{\link[=as.vector]{as.vector()}}
 function);
 \item \code{"destination"}: the representation is the \code{\link[=destination_flow]{destination_flow()}} vector
-associated to each spatial interaction model;
+associated with each spatial interaction model;
 \item \code{"attractiveness"}: the representation is the \code{\link[=attractiveness]{attractiveness()}} vector
-associated to each spatial interaction model.
+associated with each spatial interaction model.
 }
 }
 \examples{
@@ -58,5 +58,5 @@ flows_distances <- sim_distance(all_flows)
 inflows_distances <- sim_distance(all_flows, "destination")
 }
 \seealso{
-\code{\link[=dist]{dist()}}
+\code{\link[stats:dist]{stats::dist()}}, \code{\link[=median.sim_list]{median.sim_list()}}, \code{\link[=summary.sim_list]{summary.sim_list()}}
 }

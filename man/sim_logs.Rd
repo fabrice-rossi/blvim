@@ -14,7 +14,7 @@ object of class \code{sim} and \code{sim_blvim}}
 A data frame with one row per starting point and the following
 columns:
 \itemize{
-\item \code{run}: index of the run from 1 to number of initial point;
+\item \code{run}: index of the run, from 1 to the number of starting points;
 \item \code{potential}: final value of the potential;
 \item \code{iterations}: number of iterations;
 \item \code{converged}: whether the run converged;

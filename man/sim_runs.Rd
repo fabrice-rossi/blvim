@@ -14,7 +14,7 @@ object of class \code{sim} and \code{sim_blvim}}
 A \code{sim_list} containing the available spatial interaction models
 produced by the algorithm runs.
 
-For a single run, a one-element \code{sim_list} containing \code{x} is returned. For
+For a single run, a one-element \code{sim_list} containing \code{sim} is returned. For
 multiple runs retained with \code{keep_runs = TRUE}, the models are returned in
 the same order as the starting points supplied to \code{\link[=blvim]{blvim()}}.
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim.R
 \name{sim_conversion}
 \alias{sim_conversion}
-\title{Returns the conversion factors between attractivenesses and incoming flows}
+\title{Return the conversion factors between attractivenesses and incoming flows}
 \usage{
 sim_conversion(sim, ...)
 }
@@ -12,21 +12,25 @@ sim_conversion(sim, ...)
 \item{...}{additional parameters}
 }
 \value{
-NA or a vector of conversion factors, see above.
+\code{NA} or a vector of conversion factors (one per destination
+location), see above.
 }
 \description{
-Some spatial interaction models use conversion factors between attractivenesses
-and incoming flows to check whether they are at equilibrium (see for instance
-\code{\link[=blvim]{blvim()}}). This function returns the conversion factors used to build this
-sim is applicable, and \code{NA} when not applicable.
+Some spatial interaction models use conversion factors between
+attractivenesses and incoming flows to check whether they are at equilibrium
+(see for instance \code{\link[=blvim]{blvim()}}). This function returns the conversion factors
+used to build the spatial interaction model when applicable, and \code{NA}
+otherwise.
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-sim_conversion(model) ## must NA
+sim_conversion(model) ## must be NA
+dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
+sim_conversion(dyn_model) ## the default value 1, for each destination
 }
 \seealso{
-\code{\link[=blvim]{blvim()}}
+\code{\link[=blvim]{blvim()}}, \code{\link[=sim_potential]{sim_potential()}}, \code{\link[=sim_fp_jacobian]{sim_fp_jacobian()}}
 }

@@ -7,15 +7,15 @@
 \method{c}{sim_list}(...)
 }
 \arguments{
-\item{...}{\code{sim_list} and \code{sim} to be concatenated.}
+\item{...}{\code{sim_list} and \code{sim} objects to be concatenated.}
 }
 \value{
-A combined object of class \code{sim_list}.
+a combined object of class \code{sim_list}
 }
 \description{
-This function combines the \code{sim_list} and \code{sim} objects use as arguments
-in a single \code{sim_list}, provided they are compatible. Compatibility is
-defined as in \code{sim_list()}: all spatial interaction models must share
+This function combines the \code{sim_list} and \code{sim} objects used as arguments
+into a single \code{sim_list}, provided they are compatible. Compatibility is
+defined as in \code{\link[=sim_list]{sim_list()}}: all spatial interaction models must share
 the same costs as well as the same origin and destination data.
 }
 \examples{
@@ -39,4 +39,7 @@ all_flows_unit <- grid_blvim(
   iter_max = 750
 )
 all_flows <- c(all_flows_log, all_flows_unit)
+}
+\seealso{
+\code{\link[=sim_list]{sim_list()}}, \code{\link[=grid_blvim]{grid_blvim()}}
 }

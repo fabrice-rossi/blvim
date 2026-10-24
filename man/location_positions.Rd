@@ -10,29 +10,30 @@ location_positions(sim)
 location_positions(sim) <- value
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
+collection of spatial interaction models (an object of class \code{sim_list})}
 
 \item{value}{a list with two components (see the returned value) or \code{NULL}}
 }
 \value{
-for \code{location_positions} \code{NULL} or a list with two components:
+for \code{location_positions}, \code{NULL} or a list with two components:
 \code{origin} for the origin location positions and \code{destination} for the
-destination location positions. For \verb{location_positions<-()} the modified
-\code{sim} object.
+destination location positions. For \verb{location_positions<-()}, the modified
+\code{sim} object or \code{sim_list} object.
 }
 \description{
-These functions provide low level access to origin and destination local
+These functions provide low-level access to origin and destination location
 positions. It is recommended to use \code{\link[=origin_positions]{origin_positions()}} and
 \code{\link[=destination_positions]{destination_positions()}} instead of \code{location_positions} and
 \verb{location_positions<-}.
 }
 \section{Positions}{
 Location positions are given by numeric matrices with 2 or 3 columns. The
-first two columns are assumed to be geographical coordinates while the 3rd
-column can be used for instance to store altitude. Coordinates are
+first two columns are assumed to be geographical coordinates while the third
+column can be used, for instance, to store altitude. Coordinates are
 interpreted as is in graphical representations (see \code{\link[=autoplot.sim]{autoplot.sim()}}). They
 are not matched to the costs as those can be derived from complex movement
-models and other non purely geographic considerations.
+models and other not purely geographical considerations.
 }
 
 \examples{
@@ -41,7 +42,8 @@ distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-## No positions
+## no positions
+location_positions(model)
 location_positions(model) <- list(
   origin = positions,
   destination = positions

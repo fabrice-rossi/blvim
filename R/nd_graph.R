@@ -2,27 +2,27 @@
 #'
 #' This function computes the most important flows in a spatial interaction
 #' model according to the approach outlined by J. D. Nystuen and M. F. Dacey
-#' (Nystuen & Dacey, 1961. In this work, a *nodal flow* is the largest flow sent
-#' from a non terminal location (based on the definition of terminals recalled
+#' (Nystuen & Dacey, 1961). In this work, a *nodal flow* is the largest flow sent
+#' from a non-terminal location (based on the definition of terminals recalled
 #' in [terminals()]). The *nodal structure* is the collection of those flows.
-#' They form an oriented graph that has interesting properties. In particular
+#' They form a directed graph that has interesting properties. In particular,
 #' each weakly connected component contains a single terminal location which can
-#' be seen as the dominant location of the component. Notice that because nodal
-#' flows are based on terminals, this function applies only to the non bipartite
+#' be seen as the dominant location of the component. Note that because nodal
+#' flows are based on terminals, this function applies only to the non-bipartite
 #' setting.
 #'
-#' In practice, the function computes first the terminals and non terminals
+#' In practice, the function first computes the terminals and non-terminals
 #' according to either Nystuen & Dacey (1961) or Rihll and Wilson (1991). Then
 #' it extracts the nodal flows. The result of the analysis is returned as a data
 #' frame with three columns:
-#' -  `from`: the index of the non terminal origin location
-#' -  `to`: the index of destination location of the nodal flow of `from`
-#' -   `flow`: the value of the nodal flow
+#' -  `from`: the index of the non-terminal origin location
+#' -  `to`: the index of the destination location of the nodal flow of `from`
+#' -  `flow`: the value of the nodal flow
 #'
-#' An important aspect of the node structure is that is does not contain
-#' isolated terminals. If a location is a terminal but is never the receiver of
-#' a nodal flow it will not appear in the collection of nodal flows. It
-#' constitutes a a trivial connected component in itself.
+#' An important aspect of the nodal structure is that it does not contain
+#' isolated terminals. If a location is a terminal but never receives a nodal
+#' flow, it does not appear in the collection of nodal flows. It constitutes a
+#' trivial connected component in itself.
 #'
 #' @inheritParams terminals
 #'
@@ -38,7 +38,7 @@
 #'   London: Routledge.
 #' @export
 #'
-#' @seealso [sim_is_bipartite()], [is_terminal()], [terminals()]
+#' @seealso [terminals()], [is_terminal()], [diversity()], [sim_is_bipartite()]
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- rep(1, 10)

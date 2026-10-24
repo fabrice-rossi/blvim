@@ -47,30 +47,30 @@ recompute_sim_df <- function(sim_df) {
 #' Create a spatial interaction models data frame from a collection of
 #' interaction models
 #'
-#' This function build a data frame from a collection of spatial interaction
+#' This function builds a data frame from a collection of spatial interaction
 #' models. The data frame has a list column `sim` of type `sim_list` which
 #' stores the collection of models and classical columns that contain
 #' characteristics of the models. The name of the list column can be set to
-#' something else than `sim` (but not a name used by other default columns). See
+#' something other than `sim` (but not to a name used by other default columns). See
 #' details for the default columns.
 #'
 #' The data frame has one row per spatial interaction model and the following
 #' columns:
 #' - `sim` (default name): the last column that contains the models
 #' - `alpha`: the return to scale parameter used to build the model
-#' - `beta`: the cost inverse scale parameter used to build the model
+#' - `beta`: the inverse cost scale parameter used to build the model
 #' - `diversity`: model default [diversity()] (Shannon's diversity)
 #' - `potential`: model potential [sim_potential()]
 #' - `iterations`: the number of iterations used to produce the model (1 for a
 #' static model)
-#' - `converged`: `TRUE` is the iterative calculation of the model converged
+#' - `converged`: `TRUE` if the iterative calculation of the model converged
 #' (for models produced by [blvim()] and related approaches), `FALSE` for no
 #' convergence and `NA` for static models
 #'
-#' The resulting object behaves mostly like a `data.frame` and support standard
+#' The resulting object behaves mostly like a `data.frame` and supports standard
 #' extraction and replacement operators. The object tries to keep its `sim_df`
 #' class during modifications. In particular, `names<-.sim_df()` tracks
-#' name change for the `sim_list` column. If a modification or an extraction
+#' name changes for the `sim_list` column. If a modification or an extraction
 #' operation changes the type of the `sim_list` column or drops it, the
 #' resulting object is a standard `data.frame`. See \code{\link{[.sim_df}}
 #' and [names<-.sim_df()] for details.
@@ -80,6 +80,8 @@ recompute_sim_df <- function(sim_df) {
 #' @param sim_column the name of the `sim_list` column (default `"sim"`)
 #' @returns a data frame representation of the spatial interaction model
 #'   collection with classes `sim_df` and `data.frame`
+#' @seealso [sim_column()], [sim_df_extract], [grid_blvim()],
+#'   [autoplot.sim_df()], [grid_autoplot()], [grid_var_autoplot()]
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
@@ -89,7 +91,7 @@ recompute_sim_df <- function(sim_df) {
 #'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
-#'   epsilon = 0.1, iter_max = 1000,
+#'   epsilon = 0.1, iter_max = 1000
 #' )
 #' all_flows_df <- sim_df(all_flows)
 #' all_flows_df$converged
@@ -109,7 +111,8 @@ sim_df <- function(x, sim_column = "sim") {
 #'   `sim_df`
 #'
 #' @returns the collection of spatial interaction models in the `sim_df` object,
-#' as a `sim_list` object
+#'   as a `sim_list` object
+#' @seealso [sim_df()], [sim_df_extract]
 #' @export
 #'
 #' @examples
@@ -120,9 +123,9 @@ sim_df <- function(x, sim_column = "sim") {
 #'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
-#'   epsilon = 0.1, iter_max = 1000,
+#'   epsilon = 0.1, iter_max = 1000
 #' )
-#' all_flows_df <- sim_df(all_flows, sim_colum = "my_col")
+#' all_flows_df <- sim_df(all_flows, sim_column = "my_col")
 #' names(all_flows_df)
 #' sim_column(all_flows_df)
 sim_column <- function(sim_df) {
@@ -141,7 +144,7 @@ sim_column <- function(sim_df) {
 #' is very close to the one of the corresponding `data.frame` functions, see
 #' \code{\link[base]{[.data.frame}}. However, modifications of the SIM columns
 #' or suppression of core columns will turn the object into a standard
-#' `data.frame` to void issues in e.g. graphical representations, see below for
+#' `data.frame` to avoid issues in e.g. graphical representations, see below for
 #' details.
 #'
 #' In a `sim_df`, the core columns are derived from the `sim_list` column.
@@ -150,31 +153,32 @@ sim_column <- function(sim_df) {
 #' are rejected (removing a core column is accepted but this turns the `sim_df`
 #' into a standard `data.frame`).
 #'
-#' In addition, the `sim_list` column obeys to restriction on `sim_list`
-#' modifications (i.e, a `sim_list` contains a homogeneous collection of spatial
+#' In addition, the `sim_list` column obeys the restrictions on `sim_list`
+#' modifications (i.e., a `sim_list` contains a homogeneous collection of spatial
 #' interaction models).
 #'
 #' Extraction functions keep the `sim_df` class only if the result is a data
 #' frame with a `sim_list` column, the core columns and potentially additional
 #' columns.
 #'
-#' @param x  data frame of spatial interaction models, an object of class
+#' @param x a data frame of spatial interaction models, an object of class
 #'   `sim_df`
 #' @param name a literal character string
 #' @param drop If `TRUE` the result is coerced to the lowest possible
 #'   dimension. The default is to drop if only one column is left, but not to
 #'   drop if only one row is left.
-#' @param i,j,...	 elements to extract or replace. For `[` and `[[`, these are
+#' @param i,j,... elements to extract or replace. For `[` and `[[`, these are
 #'   numeric or character or, for `[` only, empty or logical. Numeric values are
-#'   coerced to integer as if by as.integer. For replacement by `[`, a logical
+#'   coerced to integer as if by [as.integer()]. For replacement by `[`, a logical
 #'   matrix is allowed.
 #' @param value a suitable replacement value: it will be repeated a whole number
 #'   of times if necessary and it may be coerced: see the Coercion section in
-#'   \code{\link[base]{[.data.frame}}. If NULL, deletes the column if a single
+#'   \code{\link[base]{[.data.frame}}. If `NULL`, deletes the column if a single
 #'   column is selected.
 #'
 #' @name sim_df_extract
-#' @return For `[` a `sim_df`, a `data.frame` or a single column depending on the
+#' @seealso [sim_df()], [names<-.sim_df()], [sim_column()]
+#' @returns For `[` a `sim_df`, a `data.frame` or a single column depending on the
 #'  values of `i` and `j`.
 #'
 #'  For `[[` a column of the `sim_df` (or `NULL`) or an element of a column when
@@ -192,21 +196,21 @@ sim_column <- function(sim_df) {
 #'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
-#'   epsilon = 0.1, iter_max = 1000,
+#'   epsilon = 0.1, iter_max = 1000
 #' )
 #' all_flows_df <- sim_df(all_flows)
 #' ## the models as a sim_list
 #' all_flows_df[, "sim"]
-#' ## sub data frame, a sim_df
+#' ## subset of the rows, still a sim_df
 #' all_flows_df[1:5, ]
-#' ## sub data frame, not a sim_df (alpha is missing)
+#' ## subset of the columns, not a sim_df (alpha is missing)
 #' all_flows_df[6:10, 2:7]
 #' all_flows_2 <- grid_blvim(distances, log(french_cities$population[1:10]),
 #'   seq(1.05, 1.45, by = 0.2),
 #'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
-#'   epsilon = 0.1, iter_max = 1000,
+#'   epsilon = 0.1, iter_max = 1000
 #' )
 #' ## replace the sim_list column by the new models
 #' ## before
@@ -348,11 +352,12 @@ NULL
 #' supported and tracked, but renaming any core column turns the `sim_df`
 #' into a standard `data.frame`.
 #'
-#' @param x  data frame of spatial interaction models, an object of class
+#' @param x a data frame of spatial interaction models, an object of class
 #'   `sim_df`
 #' @param value unique names for the columns of the data frame
 #' @returns a `sim_df` data frame if possible, a standard `data.frame` when
-#'  this is not possible.
+#'   this is not possible.
+#' @seealso [sim_df()], [sim_df_extract], [sim_column()]
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
@@ -362,7 +367,7 @@ NULL
 #'   seq(1, 3, by = 0.5) / 400,
 #'   attractiveness,
 #'   bipartite = FALSE,
-#'   epsilon = 0.1, iter_max = 1000,
+#'   epsilon = 0.1, iter_max = 1000
 #' )
 #' all_flows_df <- sim_df(all_flows)
 #' names(all_flows_df)

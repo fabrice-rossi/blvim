@@ -15,21 +15,21 @@
 \arguments{
 \item{x}{a collection of spatial interaction models, a \code{sim_list}}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+\item{flows}{\code{"full"} (default), \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
 \item{probs}{numeric vector of probabilities with values in \eqn{[0,1]}.}
 
-\item{normalisation}{when \code{flows="full"}, the flows are used as is, that
-without normalisation (\code{normalisation="none"}, default case) or they can be
-normalised prior the calculation of the quantiles, either to sum to one
+\item{normalisation}{when \code{flows="full"}, the flows are either used as is,
+without normalisation (\code{normalisation="none"}, default case), or
+normalised prior to the calculation of the quantiles, either to sum to one
 for each origin location (\code{normalisation="origin"}) or to sum to one globally
 (\code{normalisation="full"}). This is useful for \code{\link[=autoplot.sim_list]{autoplot.sim_list()}}.}
 
 \item{...}{additional parameters, not used currently}
 }
 \value{
-a date frame, see details
+a data frame, see details
 }
 \description{
 The function computes the specified quantiles for individual or aggregated
@@ -38,14 +38,14 @@ flows in a collection of spatial interaction models.
 \details{
 The exact behaviour depends on the value of \code{flows}. In all cases, the
 function returns a data frame. The data frame has one column per quantile,
-named after the quantile using a percentage based named, as in the default
+named after the quantile using a percentage-based name, as in the default
 \code{\link[stats:quantile]{stats::quantile()}}. For a graphical representation of those quantiles, see
 \code{\link[=autoplot.sim_list]{autoplot.sim_list()}}.
 \itemize{
 \item if \code{flows="full"}: this is the default case in which the function
 computes for each pair of origin \eqn{o} and destination \eqn{d} locations
 the quantiles of the distribution of the flow from \eqn{o} to \eqn{d} in the
-collection of models (the flows maybe normalised before quantile
+collection of models (the flows may be normalised before quantile
 calculations, depending on the value of \code{normalisation}). In addition to the
 quantiles, the data frame has two columns:
 \itemize{
@@ -55,13 +55,13 @@ of origin locations;
 to the number of destination locations.
 }
 \item if \code{flows="destination"}, the function computes quantiles for each
-destination \eqn{d} location of the distribution of its incoming flow
+destination location \eqn{d} of the distribution of its incoming flow
 (\code{\link[=destination_flow]{destination_flow()}}) in the collection of models. In addition to the
 quantiles, the data frame has one column \code{destination} that identifies the
 destination location by its index from 1 to the number of destination
 locations.
 \item if \code{flows="attractiveness"}, the function computes quantiles for each
-destination \eqn{d} location of the distribution of its attractiveness
+destination location \eqn{d} of the distribution of its attractiveness
 (\code{\link[=attractiveness]{attractiveness()}}) in the collection of models. In addition to the
 quantiles, the data frame has one column \code{destination} that identifies the
 destination location by its index from 1 to the number of destination
@@ -86,5 +86,5 @@ head(quantile(all_flows,
 ))
 }
 \seealso{
-\code{\link[=fortify.sim_list]{fortify.sim_list()}} \code{\link[=autoplot.sim_list]{autoplot.sim_list()}}
+\code{\link[=fortify.sim_list]{fortify.sim_list()}}, \code{\link[=autoplot.sim_list]{autoplot.sim_list()}}, \code{\link[=median.sim_list]{median.sim_list()}}
 }

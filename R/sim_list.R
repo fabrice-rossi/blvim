@@ -125,17 +125,18 @@ new_sim_list <- function(sims, common = NULL, ..., class = character()) {
   )
 }
 
-#' Create a sim_list object from a list of spatial interaction objects
+#' Create a sim_list object from a list of spatial interaction models
 #'
 #' The collection of `sim` objects represented by a `sim_list` object is assumed
-#' to be homogeneous, that is to correspond to a fix set of origin and
-#' destination locations, associated to a fixed cost matrix.
+#' to be homogeneous, that is to correspond to a fixed set of origin and
+#' destination locations, associated with a fixed cost matrix.
 #'
-#' @param sims a list of homogeneous spatial interaction objects
+#' @param sims a list of homogeneous spatial interaction models
 #' @param validate should the function validate the homogeneity of the list of
-#'   spatial interaction objects (defaults to `TRUE`)
+#'   spatial interaction models (defaults to `TRUE`)
 #'
 #' @returns a `sim_list` object
+#' @seealso [grid_blvim()], [c.sim_list()], [sim_df()], [summary.sim_list()]
 #' @export
 #'
 #' @examples
@@ -268,7 +269,7 @@ as.list.sim_list <- function(x, ...) {
 #' Extract all the attractivenesses from a collection of spatial interaction
 #' models
 #'
-#' The function extract attractivenesses from all the spatial interaction models
+#' The function extracts attractivenesses from all the spatial interaction models
 #' of the collection and returns them in a matrix in which each row corresponds
 #' to a model and each column to a destination location.
 #'
@@ -276,8 +277,9 @@ as.list.sim_list <- function(x, ...) {
 #'   class `sim_list`
 #' @param ... additional parameters for the [attractiveness()] function
 #'
-#' @returns a matrix of attractivenesses at the destination locations
-#' @seealso [attractiveness()] and [grid_blvim()]
+#' @returns a matrix of attractivenesses at the destination locations, with
+#'   one row per model
+#' @seealso [attractiveness()], [grid_destination_flow()] and [grid_blvim()]
 #' @export
 #'
 #' @examples
@@ -303,7 +305,7 @@ grid_attractiveness <- function(sim_list, ...) {
 #' Extract all the destination flows from a collection of spatial interaction
 #' models
 #'
-#' The function extract destination flows from all the spatial interaction
+#' The function extracts destination flows from all the spatial interaction
 #' models of the collection and returns them in a matrix in which each row
 #' corresponds to a model and each column to a destination location.
 #'
@@ -311,8 +313,9 @@ grid_attractiveness <- function(sim_list, ...) {
 #'   class `sim_list`
 #' @param ... additional parameters for the [destination_flow()] function
 #'
-#' @returns a matrix of destination flows at the destination locations
-#' @seealso [destination_flow()] and [grid_blvim()]
+#' @returns a matrix of destination flows at the destination locations, with
+#'   one row per model
+#' @seealso [destination_flow()], [grid_attractiveness()] and [grid_blvim()]
 #' @export
 #'
 #' @examples
@@ -335,23 +338,24 @@ grid_destination_flow <- function(sim_list, ...) {
   t(sapply(sim_list, destination_flow, ...))
 }
 
-#' Extract all terminal status from a collection of spatial interaction models
+#' Extract all terminal statuses from a collection of spatial interaction models
 #'
-#' The function extract terminal status from all the spatial interaction models
+#' The function extracts terminal statuses from all the spatial interaction models
 #' of the collection and returns them in a matrix in which each row corresponds
 #' to a model and each column to a destination location. The value at row `i`
 #' and column `j` is `TRUE` if destination `j` is a terminal in model `i`. This
-#' function applies only to non bipartite models.
+#' function applies only to non-bipartite models.
 #'
 #' See [terminals()] for the definition of terminal locations.
 #'
-#' @param sim_list a collection of non bipartite spatial interaction models, an
+#' @param sim_list a collection of non-bipartite spatial interaction models, an
 #'   object of class `sim_list`
 #' @inheritParams is_terminal
 #' @param ... additional parameters for the [is_terminal()] function
 #'
-#' @returns a matrix of terminal status at the destination locations
-#' @seealso [is_terminal()] and [grid_blvim()]
+#' @returns a logical matrix of terminal statuses at the destination locations,
+#'   with one row per model
+#' @seealso [is_terminal()], [terminals()], [grid_diversity()] and [grid_blvim()]
 #' @export
 #'
 #' @examples
@@ -382,18 +386,18 @@ grid_is_terminal <- function(sim_list, definition = c("ND", "RW"), ...) {
 #' returns the values as a vector. The type of diversity and the associated
 #' parameters are identical for all models.
 #'
-#' See [diversity()] for the definition of the diversities. Notice that
+#' See [diversity()] for the definition of the diversities. Note that
 #' [diversity()] is generic and can be applied directly to `sim_list` objects.
 #' The current function is provided to be explicit in R code about what is a
-#' unique model and what is a collection of models (using function names that
-#' start with `"grid_"`)
+#' single model and what is a collection of models (using function names that
+#' start with `"grid_"`).
 #'
 #' @param sim a collection of spatial interaction models, an object of class
 #'   `sim_list`
 #' @inheritParams diversity
 #'
 #' @returns a vector of diversities, one per spatial interaction model
-#' @seealso [diversity()] and [grid_blvim()]
+#' @seealso [diversity()], [grid_is_terminal()] and [grid_blvim()]
 #' @export
 #'
 #' @examples
@@ -420,21 +424,22 @@ sim_converged.sim_list <- function(sim, ...) {
   sapply(sim, sim_converged)
 }
 
-#' Reports the convergence statuses of a collection of spatial interaction
+#' Report the convergence statuses of a collection of spatial interaction
 #' models
 #'
 #' The function reports for each spatial interaction model of its `sim_list`
 #' parameter its convergence status, as defined in [sim_converged()].
 #'
-#' Notice that [sim_converged()] is generic and can be applied directly to
+#' Note that [sim_converged()] is generic and can be applied directly to
 #' `sim_list` objects. The current function is provided to be explicit in R code
-#' about what is a unique model and what is a collection of models (using
-#' function names that start with `"grid_"`)
+#' about what is a single model and what is a collection of models (using
+#' function names that start with `"grid_"`).
 #'
 #' @inheritParams sim_converged
 #' @param sim a collection of spatial interaction models, an object of class
 #'   `sim_list`
-#' @returns a vector of convergence status, one per spatial interaction model
+#' @returns a logical vector of convergence statuses, one per spatial
+#'   interaction model
 #' @seealso [sim_converged()], [grid_sim_iterations()] and [grid_blvim()]
 #' @export
 #'
@@ -459,22 +464,23 @@ sim_iterations.sim_list <- function(sim, ...) {
   sapply(sim, sim_iterations)
 }
 
-#' Returns the number of iterations used to produce of a collection of spatial
+#' Return the numbers of iterations used to produce a collection of spatial
 #' interaction models
 #'
 #' The function reports for each spatial interaction model of its `sim_list`
 #' parameter the number of iterations used to produce it (see
-#' [sim_iterations()])
+#' [sim_iterations()]).
 #'
-#' Notice that [sim_iterations()] is generic and can be applied directly to
+#' Note that [sim_iterations()] is generic and can be applied directly to
 #' `sim_list` objects. The current function is provided to be explicit in R code
-#' about what is a unique model and what is a collection of models (using
-#' function names that start with `"grid_"`)
+#' about what is a single model and what is a collection of models (using
+#' function names that start with `"grid_"`).
 #'
 #' @inheritParams sim_iterations
 #' @param sim a collection of spatial interaction models, an object of class
 #'   `sim_list`
-#' @returns a vector of numbers of iteration, one per spatial interaction model
+#' @returns a vector of numbers of iterations, one per spatial interaction
+#'   model
 #' @seealso [sim_iterations()], [grid_sim_converged()] and [grid_blvim()]
 #' @export
 #'
@@ -496,13 +502,14 @@ grid_sim_iterations <- function(sim, ...) {
 
 #' Combine multiple sim_list objects into a single one
 #'
-#' This function combines the `sim_list` and `sim` objects use as arguments
-#' in a single `sim_list`, provided they are compatible. Compatibility is
-#' defined as in `sim_list()`: all spatial interaction models must share
+#' This function combines the `sim_list` and `sim` objects used as arguments
+#' into a single `sim_list`, provided they are compatible. Compatibility is
+#' defined as in [sim_list()]: all spatial interaction models must share
 #' the same costs as well as the same origin and destination data.
 #'
-#' @param ... `sim_list` and `sim` to be concatenated.
-#' @return A combined object of class `sim_list`.
+#' @param ... `sim_list` and `sim` objects to be concatenated.
+#' @returns a combined object of class `sim_list`
+#' @seealso [sim_list()], [grid_blvim()]
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
@@ -553,11 +560,11 @@ c.sim_list <- function(...) {
   new_sim_list(c_args, common = attr(base_sl, "common"))
 }
 
-#' Coerce to a Data Frame
+#' Coerce a collection of spatial interaction models to a data frame
 #'
 #' This function creates a data frame with a single column storing its
 #' collection of spatial interaction models. The default name of the column
-#' is `"sim"` (can be modified using the `sim_column` parameter). An more
+#' is `"sim"` (it can be modified using the `sim_column` parameter). A more
 #' flexible alternative is provided by the [sim_df()] function.
 #'
 #' @param x a collection of spatial interaction models, an object of class
@@ -565,7 +572,7 @@ c.sim_list <- function(...) {
 #' @param ... additional parameters (not used currently)
 #' @param sim_column the name of the `sim_list` column (default `"sim"`)
 #' @seealso [sim_df()]
-#' @returns a data frame
+#' @returns a data frame with a single column containing the `sim_list`
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
@@ -593,21 +600,22 @@ as.data.frame.sim_list <- function(x, ..., sim_column = "sim") {
   pre_res
 }
 
-#' Returns potential of a collection of spatial interaction models
+#' Compute the potentials of a collection of spatial interaction models
 #'
-#' The function reports the potentia of each spatial interaction model of its
-#' `sim_list` parameter  (see [sim_potential()])
+#' The function reports the potential of each spatial interaction model of its
+#' `sim_list` parameter (see [sim_potential()]).
 #'
-#' Notice that [sim_potential()] is generic and can be applied directly to
+#' Note that [sim_potential()] is generic and can be applied directly to
 #' `sim_list` objects. The current function is provided to be explicit in R code
-#' about what is a unique model and what is a collection of models (using
-#' function names that start with `"grid_"`)
+#' about what is a single model and what is a collection of models (using
+#' function names that start with `"grid_"`).
 #'
 #' @inheritParams sim_potential
 #' @param sim a collection of spatial interaction models, an object of class
 #'   `sim_list`
-#' @returns a vector of numbers of iteration, one per spatial interaction model
-#' @seealso [sim_potential()] and [grid_blvim()]
+#' @returns a numeric vector of potentials, one per spatial interaction model
+#'   (`NA` for models without a potential)
+#' @seealso [sim_potential()], [grid_sim_converged()] and [grid_blvim()]
 #' @export
 #'
 #' @examples

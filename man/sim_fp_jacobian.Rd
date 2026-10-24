@@ -12,7 +12,8 @@ sim_fp_jacobian(sim, ...)
 \item{...}{additional parameters}
 }
 \value{
-a p x p matrix or NA
+a \eqn{p\times p} matrix, where \eqn{p} is the number of destination
+locations, or \code{NA} when the fixed-point map is not defined
 }
 \description{
 The function computes the Jacobian matrix of the fixed-point map with respect
@@ -20,7 +21,7 @@ to the attractivenesses. The function returns \code{NA} when applied to spatial
 interaction models for which the map is not defined.
 }
 \details{
-The fixed point map \eqn{\mathbf{G}} is given by
+The fixed-point map \eqn{\mathbf{G}} is given by
 
 \deqn{G_j=D_j-\kappa_j Z_j,}
 
@@ -36,5 +37,10 @@ distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-sim_fp_jacobian(model) ## must NA
+sim_fp_jacobian(model) ## must be NA
+dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
+sim_fp_jacobian(dyn_model)
+}
+\seealso{
+\code{\link[=sim_potential]{sim_potential()}}, \code{\link[=sim_conversion]{sim_conversion()}}, \code{\link[=destination_flow]{destination_flow()}}
 }

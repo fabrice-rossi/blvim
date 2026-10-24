@@ -11,12 +11,12 @@
 }
 \arguments{
 \item{object}{a collection of spatial interaction models, an object of class
-\code{sim_list}
-\code{\link[=summary.sim_list]{summary.sim_list()}}}
+\code{sim_list}}
 
 \item{...}{additional parameters (not used currently)}
 
-\item{x}{an object of class \code{summary_sim_list} produced by}
+\item{x}{an object of class \code{summary_sim_list} produced by
+\code{\link[=summary.sim_list]{summary.sim_list()}}}
 }
 \value{
 an object of class \code{summary_sim_list} and \code{list} with a set of
@@ -29,8 +29,8 @@ interaction models (in a \code{sim_list}).
 \details{
 The list returned by the function contains the following elements:
 \itemize{
-\item \code{median}: the median of the collection, as return by the \code{median.sim_list()}
-function
+\item \code{median}: the median of the collection, as returned by the
+\code{\link[=median.sim_list]{median.sim_list()}} function
 \item \code{distortion}: the average distance of all elements of the collection to
 the median model
 \item \code{withinss}: the sum of all pairwise distances between the elements of
@@ -38,10 +38,10 @@ the collection
 \item \code{nb_sims}: the size of the collection
 }
 
-In addition, if the collection contains non bipartite models, the result
-has another element, \code{nb_configurations} which gives the number of distinct
+In addition, if the collection contains non-bipartite models, the result
+has another element, \code{nb_configurations}, which gives the number of distinct
 terminal sets in the collection, where the terminals are computed by
-\code{terminals()}, using the \code{"RW"} definition.
+\code{\link[=terminals]{terminals()}}, using the \code{"RW"} definition.
 }
 \examples{
 positions <- matrix(rnorm(15 * 2), ncol = 2)
@@ -54,10 +54,10 @@ all_flows <- grid_blvim(distances,
   c(1, 2, 3),
   attractiveness,
   epsilon = 0.1,
-  bipartite = FALSE,
+  bipartite = FALSE
 )
 summary(all_flows)
 }
 \seealso{
-\code{\link[=median.sim_list]{median.sim_list()}}, \code{\link[=terminals]{terminals()}}
+\code{\link[=median.sim_list]{median.sim_list()}}, \code{\link[=sim_distance]{sim_distance()}}, \code{\link[=terminals]{terminals()}}
 }

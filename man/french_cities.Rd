@@ -5,7 +5,7 @@
 \alias{french_cities}
 \title{French cities}
 \format{
-A \code{data.frame} with 121 rows and 9 columns
+A \code{data.frame} with 121 rows and 10 columns
 \describe{
 \item{id}{The INSEE code of the city according to the official geographical
 code of 2025 (OGC)}
@@ -13,11 +13,11 @@ code of 2025 (OGC)}
 \item{department}{The code of the department of the city in the OGC (see \link{french_departments})}
 \item{region}{The code of the region of the city in the OGC (see \link{french_regions})}
 \item{population}{The population of the city in 2022}
-\item{area}{Area of the city in squared kilometers}
-\item{th_latitude}{The latitude of the of town hall the city (epsg:4326)}
+\item{area}{The area of the city in square kilometres}
 \item{th_longitude}{The longitude of the town hall of the city (epsg:4326)}
-\item{center_latitude}{The latitude of the centre of the city (epsg:4326)}
-\item{center_longitude}{The longitude of the centre of the city (epsg:4326)}
+\item{th_latitude}{The latitude of the town hall of the city (epsg:4326)}
+\item{centre_longitude}{The longitude of the centre of the city (epsg:4326)}
+\item{centre_latitude}{The latitude of the centre of the city (epsg:4326)}
 }
 }
 \source{
@@ -37,17 +37,17 @@ french_cities
 French cities with 50,000 inhabitants or more.
 }
 \details{
-This data set describes all Metropolitan France cities with 50,000 or more
+This data set describes all cities of Metropolitan France with 50,000 or more
 inhabitants in 2022, excluding Corsican cities. It contains 121 cities
-described by 8 variables. The data frame is sorted in decreasing population
-order, making it straightforward to select the most populated cities. The
-same order is used for rows and columns in distance matrices
+described by 10 variables. The data frame is sorted in decreasing order of
+population, making it straightforward to select the most populous cities.
+The same order is used for the rows and columns of the distance matrices
 \link{french_cities_distances} and \link{french_cities_times}.
 
 The population and administrative information was collected from the INSEE
 open data in November 2025. These data are distributed under the
 \href{https://www.etalab.gouv.fr/wp-content/uploads/2014/05/Open_Licence.pdf}{French "Open Licence"}.
-Geographical coordinates and areas have been obtained from the
+Geographical coordinates and areas were obtained from the
 \href{https://geo.api.gouv.fr/}{Geo API} in November 2025 and are also
 available under the French "Open Licence".
 }

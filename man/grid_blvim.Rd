@@ -30,7 +30,7 @@ grid_blvim(
 
 \item{alphas}{a vector of return to scale parameters}
 
-\item{betas}{a vector of cost inverse scale parameters}
+\item{betas}{a vector of inverse cost scale parameters}
 
 \item{Z}{Initial destination attractivenesses. This can be \code{NULL} for
 automatic single-point initialisation, a numeric vector with one value per
@@ -45,8 +45,8 @@ equations without destination-specific conversion factors.}
 
 \item{bipartite}{when \code{TRUE} (default value), the origin and destination
 locations are considered to be distinct. When \code{FALSE}, a single set of
-locations plays the both roles. This has only consequences in functions
-specific to this latter case such as \code{\link[=terminals]{terminals()}}.}
+locations plays both roles. This only affects functions specific to this
+latter case, such as \code{\link[=terminals]{terminals()}}.}
 
 \item{origin_data}{\code{NULL} or a list of additional data about the origin
 locations (see details)}
@@ -78,19 +78,20 @@ must be one of \code{"linear"}, \code{"quadratic"}, \code{"gradient"}, or
 produced by \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}. It is not used by \code{"linear"} or
 \code{"quadratic"}.}
 
-\item{progress}{if TRUE, a progress bar is shown during the calculation
-(defaults to FALSE)}
+\item{progress}{if \code{TRUE}, a progress bar is shown during the calculation
+(defaults to \code{FALSE})}
 }
 \value{
-an object of class \code{sim_list}
+an object of class \code{sim_list} containing one spatial interaction
+model per pair of parameters
 }
 \description{
 This function computes a collection of flows between origin locations and
 destination locations using \code{\link[=blvim]{blvim()}} on a grid of parameters. The flows use
-the same costs, same production constraints and same attractivenesses. Each
-flow is computed using one of all the pairwise combinations between the alpha
-values given by \code{alphas} and the beta values given by \code{betas}. The function
-returns an object of class \code{sim_list} which contains the resulting flows.
+the same costs, the same production constraints and the same initial
+attractivenesses. One model is computed for each combination of an alpha
+value from \code{alphas} and a beta value from \code{betas}. The function returns an
+object of class \code{sim_list} which contains the resulting models.
 }
 \section{Location data}{
 While models in this package do not use location data beyond \code{X} and \code{Z},
@@ -100,7 +101,7 @@ models.
 
 Spatial interaction models can store names for origin and destination
 locations, using \code{\link[=origin_names<-]{origin_names<-()}} and \code{\link[=destination_names<-]{destination_names<-()}}. Names
-are taken by default from names of the cost matrix \code{costs}. More precisely,
+are taken by default from the names of the cost matrix \code{costs}. More precisely,
 \code{rownames(costs)} is used for origin location names and \code{colnames(costs)} for
 destination location names.
 }
@@ -116,8 +117,8 @@ destination locations, using \code{\link[=origin_positions<-]{origin_positions<-
 
 In addition to the functions mentioned above, location data can be specified
 directly using the \code{origin_data} and \code{destination_data} parameters. Data are
-given by a list whose components are not interpreted excepted the following
-ones:
+given by a list whose components are not interpreted except for the
+following ones:
 \itemize{
 \item \code{names} is used to specify location names and its content has to follow
 the restrictions documented in \code{\link[=origin_names<-]{origin_names<-()}} and
@@ -140,4 +141,9 @@ all_flows <- grid_blvim(
 all_flows
 length(all_flows)
 all_flows[[2]]
+}
+\seealso{
+\code{\link[=blvim]{blvim()}} for the underlying model, \code{\link[=sim_df]{sim_df()}} to turn the result
+into a data frame, and \code{\link[=grid_attractiveness]{grid_attractiveness()}}, \code{\link[=grid_sim_converged]{grid_sim_converged()}} or
+\code{\link[=grid_diversity]{grid_diversity()}} for extracting information from the collection.
 }

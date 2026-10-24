@@ -10,26 +10,28 @@ origin_positions(sim)
 origin_positions(sim) <- value
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
+collection of spatial interaction models (an object of class \code{sim_list})}
 
-\item{value}{a matrix with as many rows as  the number of origin locations
+\item{value}{a matrix with as many rows as the number of origin locations
 and 2 or 3 columns, or \code{NULL}}
 }
 \value{
-for \code{origin_positions} \code{NULL} or the coordinate matrix for the
-origin locations. for \verb{origin_positions<-} the modified \code{sim} object
+for \code{origin_positions}, \code{NULL} or the coordinate matrix for the
+origin locations. For \verb{origin_positions<-}, the modified \code{sim} object or
+\code{sim_list} object.
 }
 \description{
 Functions to get or set the positions of the origin locations in a spatial
-interaction model.
+interaction model (or in a collection of spatial interaction models).
 }
 \section{Positions}{
 Location positions are given by numeric matrices with 2 or 3 columns. The
-first two columns are assumed to be geographical coordinates while the 3rd
-column can be used for instance to store altitude. Coordinates are
+first two columns are assumed to be geographical coordinates while the third
+column can be used, for instance, to store altitude. Coordinates are
 interpreted as is in graphical representations (see \code{\link[=autoplot.sim]{autoplot.sim()}}). They
 are not matched to the costs as those can be derived from complex movement
-models and other non purely geographic considerations.
+models and other not purely geographical considerations.
 }
 
 \examples{
@@ -42,5 +44,5 @@ origin_positions(model) <- positions
 origin_positions(model)
 }
 \seealso{
-\code{\link[=location_positions]{location_positions()}}, \code{\link[=destination_positions]{destination_positions()}}
+\code{\link[=location_positions]{location_positions()}}, \code{\link[=destination_positions]{destination_positions()}}, \code{\link[=origin_names]{origin_names()}}
 }

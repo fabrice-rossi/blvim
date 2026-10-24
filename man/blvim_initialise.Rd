@@ -14,7 +14,8 @@ Its first argument must be \code{context}. The default uses
 \item{...}{Arguments stored in the specification and passed to \code{generator}.}
 }
 \value{
-An object of class \code{blvim_initialise}.
+an object of class \code{blvim_initialise}, to be used as the \code{Z}
+argument of \code{\link[=blvim]{blvim()}} or \code{\link[=grid_blvim]{grid_blvim()}}
 }
 \description{
 \code{blvim_initialise()} creates a reusable specification for generating initial
@@ -43,7 +44,7 @@ The \code{context} argument is a named list containing:
 \item \code{n_destinations}: number of destinations.
 }
 
-Some of the parameters are easily deducible from others (\code{C}, \code{n_origins}
+Some of the parameters can easily be deduced from others (\code{C}, \code{n_origins}
 and \code{n_destinations}) but are included to simplify the design of
 initialisers.
 
@@ -82,6 +83,7 @@ initialise <- blvim_initialise(
 
 }
 \seealso{
-\code{\link[=blvim]{blvim()}} for the use of this function, and
-\code{\link[=blvim_simplex_initialise]{blvim_simplex_initialise()}} for the default initialiser.
+\code{\link[=blvim]{blvim()}} for the use of this function,
+\code{\link[=blvim_simplex_initialise]{blvim_simplex_initialise()}} for the default initialiser, and \code{\link[=sim_logs]{sim_logs()}}
+and \code{\link[=sim_runs]{sim_runs()}} for the results of the multiple runs.
 }

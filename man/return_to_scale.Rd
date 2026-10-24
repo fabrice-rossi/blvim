@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_wpc.R
 \name{return_to_scale}
 \alias{return_to_scale}
-\title{Extract the return to scale parameter used to compute this model}
+\title{Extract the return to scale parameter used to compute a model}
 \usage{
 return_to_scale(sim, ...)
 }
@@ -15,7 +15,7 @@ return_to_scale(sim, ...)
 the return to scale parameter
 }
 \description{
-Extract the return to scale parameter used to compute this model
+Extract the return to scale parameter used to compute a model
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
@@ -24,4 +24,7 @@ production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
 model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 return_to_scale(model) ## should be 1.5
+}
+\seealso{
+\code{\link[=inverse_cost]{inverse_cost()}}, \code{\link[=costs]{costs()}}, \code{\link[=static_blvim]{static_blvim()}}, \code{\link[=blvim]{blvim()}}
 }

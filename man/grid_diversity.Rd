@@ -17,7 +17,7 @@ grid_diversity(
 \code{sim_list}}
 
 \item{definition}{diversity definition \code{"shannon"} (default), \code{"renyi"} (see
-details) or a definition supported by  \code{\link[=terminals]{terminals()}}}
+details) or a definition supported by \code{\link[=terminals]{terminals()}}}
 
 \item{order}{order of the Rényi entropy, used only when \code{definition="renyi"}}
 
@@ -37,11 +37,11 @@ returns the values as a vector. The type of diversity and the associated
 parameters are identical for all models.
 }
 \details{
-See \code{\link[=diversity]{diversity()}} for the definition of the diversities. Notice that
+See \code{\link[=diversity]{diversity()}} for the definition of the diversities. Note that
 \code{\link[=diversity]{diversity()}} is generic and can be applied directly to \code{sim_list} objects.
 The current function is provided to be explicit in R code about what is a
-unique model and what is a collection of models (using function names that
-start with \code{"grid_"})
+single model and what is a collection of models (using function names that
+start with \code{"grid_"}).
 }
 \examples{
 distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
@@ -58,5 +58,5 @@ diversities ## should be a length 12 vector
 grid_diversity(all_flows, "renyi", 3)
 }
 \seealso{
-\code{\link[=diversity]{diversity()}} and \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=diversity]{diversity()}}, \code{\link[=grid_is_terminal]{grid_is_terminal()}} and \code{\link[=grid_blvim]{grid_blvim()}}
 }

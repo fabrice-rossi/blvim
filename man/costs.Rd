@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_wpc.R
 \name{costs}
 \alias{costs}
-\title{Extract the cost matrix used to compute this model}
+\title{Extract the cost matrix used to compute a model}
 \usage{
 costs(sim, ...)
 }
@@ -15,7 +15,7 @@ costs(sim, ...)
 the cost matrix
 }
 \description{
-Extract the cost matrix used to compute this model
+Extract the cost matrix used to compute a model
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
@@ -25,4 +25,8 @@ attractiveness <- c(2, rep(1, 9))
 model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 costs(model) ## should be equal to distances above
 all.equal(costs(model), distances)
+}
+\seealso{
+\code{\link[=return_to_scale]{return_to_scale()}}, \code{\link[=inverse_cost]{inverse_cost()}}, \code{\link[=static_blvim]{static_blvim()}},
+\code{\link[=costs.sim_list]{costs.sim_list()}}
 }

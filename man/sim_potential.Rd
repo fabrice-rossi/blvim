@@ -8,18 +8,19 @@ sim_potential(sim, ...)
 }
 \arguments{
 \item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
-collection of spatial interaction  models (an object of class \code{sim_list})}
+collection of spatial interaction models (an object of class \code{sim_list})}
 
 \item{...}{additional parameters}
 }
 \value{
-the scalar value of the potential. In the case of a \code{sim_list}
-the function returns a numerical vector with one value per model.
+the scalar value of the potential, or \code{NA} when it cannot be
+computed. In the case of a \code{sim_list} the function returns a numeric
+vector with one value per model.
 }
 \description{
 The potential is a measure of stability introduced by Osawa, Akamatsu, and
-Kogure. It is only defined for spatial interaction models produced by BLV
-framework. The function returns \code{NA} when applied to spatial interaction
+Kogure. It is only defined for spatial interaction models produced by the
+BLV framework. The function returns \code{NA} when applied to spatial interaction
 models for which a potential cannot be computed. The function applies also to
 a collection of spatial interaction models as represented by a \code{sim_list}.
 }
@@ -31,7 +32,7 @@ The potential of a spatial interaction model is given by
 
 where:
 \itemize{
-\item \eqn{c} is the cost matrix \code{\link[=costs]{costs()}}
+\item \eqn{c} is the cost matrix (\code{\link[=costs]{costs()}})
 \item \eqn{X} is the production constraint vector (\code{\link[=production]{production()}})
 \item \eqn{\alpha} is the return to scale parameter (\code{\link[=return_to_scale]{return_to_scale()}})
 \item \eqn{\beta} is the inverse of a cost scale parameter (\code{\link[=inverse_cost]{inverse_cost()}})
@@ -44,10 +45,16 @@ distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-sim_potential(model) ## must NA
+sim_potential(model) ## must be NA
+dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
+sim_potential(dyn_model)
 }
 \references{
 Osawa, M., Akamatsu, T., & Kogure, Y. (2025). "Most likely retail
 agglomeration patterns: Potential maximization and stochastic stability of
 spatial equilibria". \url{https://arxiv.org/abs/2011.06778v2}
+}
+\seealso{
+\code{\link[=blvim]{blvim()}}, \code{\link[=grid_sim_potential]{grid_sim_potential()}}, \code{\link[=sim_fp_jacobian]{sim_fp_jacobian()}},
+\code{\link[=sim_conversion]{sim_conversion()}}
 }

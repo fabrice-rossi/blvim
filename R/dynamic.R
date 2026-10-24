@@ -1,19 +1,20 @@
 #' Control parameters for the blvim gradient algorithms
 #'
-#' This function returns a list with parameters used to tweak the gradient
-#' algorithms used in [blvim()]. These parameters control the line search
-#' algorithm which is a standard backtracking method with Armijo stopping
+#' This function returns a list of parameters used to tune the gradient
+#' algorithms of [blvim()]. These parameters control the line search
+#' algorithm, which is a standard backtracking method with the Armijo stopping
 #' criterion.
 #'
 #' @param rho_init Initial value of the gradient step in the line search.
 #' @param shrink Shrink factor for the gradient step in the line search.
 #' @param sufficient_increase Relative sufficient increase in the line search.
-#' @param ls_iter_max  Maximum number of iterations of the line search.
-#' @returns a list containing the values of the parameters
-#' @seealso [blvim()]
+#' @param ls_iter_max Maximum number of iterations of the line search.
+#' @returns a list containing the values of the parameters, to be used as the
+#'   `control` argument of [blvim()] or [grid_blvim()]
+#' @seealso [blvim()], [grid_blvim()]
 #' @references Armijo, Larry (1966), "Minimization of functions having Lipschitz
 #'   continuous first partial derivatives", Pacific J. Math. 16 (1): 1–3
-#'   \doi{doi:10.2140/pjm.1966.16.1}
+#'   \doi{10.2140/pjm.1966.16.1}
 #' @export
 #' @examples
 #' blvim_gradient_control(0.5, 0.7, 1e-4, 25)
@@ -494,7 +495,7 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
 #' @returns A `sim_list` containing the available spatial interaction models
 #'   produced by the algorithm runs.
 #'
-#'   For a single run, a one-element `sim_list` containing `x` is returned. For
+#'   For a single run, a one-element `sim_list` containing `sim` is returned. For
 #'   multiple runs retained with `keep_runs = TRUE`, the models are returned in
 #'   the same order as the starting points supplied to [blvim()].
 #'
@@ -578,7 +579,7 @@ sim_runs <- function(sim) {
 #' @returns A data frame with one row per starting point and the following
 #'   columns:
 #'
-#'   * `run`: index of the run from 1 to number of initial point;
+#'   * `run`: index of the run, from 1 to the number of starting points;
 #'   * `potential`: final value of the potential;
 #'   * `iterations`: number of iterations;
 #'   * `converged`: whether the run converged;

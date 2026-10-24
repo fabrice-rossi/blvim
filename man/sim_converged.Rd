@@ -2,24 +2,24 @@
 % Please edit documentation in R/sim.R
 \name{sim_converged}
 \alias{sim_converged}
-\title{Reports whether the spatial interaction model construction converged}
+\title{Report whether the construction of a spatial interaction model converged}
 \usage{
 sim_converged(sim, ...)
 }
 \arguments{
 \item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
-collection of spatial interaction  models (an object of class \code{sim_list})}
+collection of spatial interaction models (an object of class \code{sim_list})}
 
 \item{...}{additional parameters}
 }
 \value{
-\code{TRUE}, \code{FALSE} or \code{NA}, as described above. In the case of a \code{sim_list}
-the function returns a logical vector with one value per model.
+\code{TRUE}, \code{FALSE} or \code{NA}, as described above. In the case of a
+\code{sim_list} the function returns a logical vector with one value per model.
 }
 \description{
 Some spatial interaction models are the result of an iterative calculation,
 see for instance \code{\link[=blvim]{blvim()}}. This calculation may have been interrupted before
-convergence. The present function returns \code{TRUE} if the calculation converged,
+convergence. This function returns \code{TRUE} if the calculation converged,
 \code{FALSE} if this was not the case and \code{NA} if the spatial interaction model
 is not the result of an iterative calculation. The function applies also to a
 collection of spatial interaction models as represented by a \code{sim_list}.
@@ -29,9 +29,11 @@ distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 production <- log(french_cities$population[1:10])
 attractiveness <- log(french_cities$area[1:10])
 model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-destination_flow(model)
 sim_converged(model) ## must be NA
+dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
+sim_converged(dyn_model)
 }
 \seealso{
-\code{\link[=sim_iterations]{sim_iterations()}}, \code{\link[=blvim]{blvim()}}, \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=sim_iterations]{sim_iterations()}}, \code{\link[=sim_diagnostic]{sim_diagnostic()}}, \code{\link[=blvim]{blvim()}},
+\code{\link[=grid_sim_converged]{grid_sim_converged()}}
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/sim_wpc.R
 \name{inverse_cost}
 \alias{inverse_cost}
-\title{Extract the inverse cost scale parameter used to compute this model}
+\title{Extract the inverse cost scale parameter used to compute a model}
 \usage{
 inverse_cost(sim, ...)
 }
 \arguments{
-\item{sim}{a spatial interaction model with a inverse cost scale parameter}
+\item{sim}{a spatial interaction model with an inverse cost scale parameter}
 
 \item{...}{additional parameters}
 }
@@ -15,7 +15,7 @@ inverse_cost(sim, ...)
 the inverse cost scale parameter
 }
 \description{
-Extract the inverse cost scale parameter used to compute this model
+Extract the inverse cost scale parameter used to compute a model
 }
 \examples{
 positions <- matrix(rnorm(10 * 2), ncol = 2)
@@ -24,4 +24,7 @@ production <- rep(1, 10)
 attractiveness <- c(2, rep(1, 9))
 model <- static_blvim(distances, production, 1.5, 1, attractiveness)
 inverse_cost(model) ## should be 1
+}
+\seealso{
+\code{\link[=return_to_scale]{return_to_scale()}}, \code{\link[=costs]{costs()}}, \code{\link[=static_blvim]{static_blvim()}}, \code{\link[=blvim]{blvim()}}
 }

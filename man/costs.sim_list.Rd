@@ -31,5 +31,5 @@ identical(distances, costs(all_flows))
 
 }
 \seealso{
-\code{\link[=costs]{costs()}}, \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=costs]{costs()}}, \code{\link[=grid_blvim]{grid_blvim()}}, \code{\link[=sim_list]{sim_list()}}
 }

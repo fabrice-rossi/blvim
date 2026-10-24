@@ -21,7 +21,7 @@
 \arguments{
 \item{object}{a spatial interaction model object}
 
-\item{flows}{\code{"full"} (default),  \code{"destination"} or \code{"attractiveness"}, see
+\item{flows}{\code{"full"} (default), \code{"destination"} or \code{"attractiveness"}, see
 details.}
 
 \item{with_names}{specifies whether the graphical representation includes
@@ -30,31 +30,31 @@ location names (\code{FALSE} by default)}
 \item{with_positions}{specifies whether the graphical representation is based
 on location positions (\code{FALSE} by default)}
 
-\item{show_destination}{specifies whether the position based \code{"full"} flow
+\item{show_destination}{specifies whether the position-based \code{"full"} flow
 figure includes a representation of the destination flows (\code{FALSE} by
 default)}
 
-\item{show_attractiveness}{specifies whether the position based \code{"full"} flow
-figure includes a representation of the attractivenesses  (\code{FALSE} by
+\item{show_attractiveness}{specifies whether the position-based \code{"full"} flow
+figure includes a representation of the attractivenesses (\code{FALSE} by
 default)}
 
-\item{show_production}{specifies whether the position based \code{"full"} flow
+\item{show_production}{specifies whether the position-based \code{"full"} flow
 figure includes a representation of the productions (\code{FALSE} by default)}
 
-\item{cut_off}{cut off limit for inclusion of a graphical primitive when
+\item{cut_off}{cut-off limit for inclusion of a graphical primitive when
 \code{with_positions = TRUE}. In the full flow matrix representation, segments
-are removed when their flow is smaller than the cut off. In the
+are removed when their flow is smaller than the cut-off. In the
 attractiveness or destination representation, disks are removed when the
-corresponding value is below the cut off.}
+corresponding value is below the cut-off.}
 
-\item{adjust_limits}{if \code{FALSE} (default value), the limits of the position
-based graph are not adjusted after removing graphical primitives. This
-eases comparison between graphical representations with different cut off
-value. If \code{TRUE}, limits are adjusted to the data using the standard
+\item{adjust_limits}{if \code{FALSE} (default value), the limits of the
+position-based graph are not adjusted after removing graphical primitives.
+This eases comparison between graphical representations with different
+cut-off values. If \code{TRUE}, limits are adjusted to the data using the standard
 ggplot2 behaviour.}
 
 \item{with_labels}{if \code{FALSE} (default value) names are displayed using plain
-texts. If \code{TRUE}, names are shown using labels.}
+text. If \code{TRUE}, names are shown using labels.}
 
 \item{...}{additional parameters, see details}
 }
@@ -62,15 +62,15 @@ texts. If \code{TRUE}, names are shown using labels.}
 a ggplot object
 }
 \description{
-This function represents graphical the flows of a spatial interaction model,
-in different direct or aggregated forms.
+This function graphically represents the flows of a spatial interaction
+model, in different direct or aggregated forms.
 }
 \details{
 The graphical representation depends on the values of \code{flows} and
 \code{with_positions}. It is based on the data frame representation produced by
 \code{\link[=fortify.sim]{fortify.sim()}}.
 
-If \code{with_position} is \code{FALSE} (default value), the graphical representations
+If \code{with_positions} is \code{FALSE} (default value), the graphical representations
 are "abstract". Depending on \code{flows} we have the following representations:
 \itemize{
 \item \code{"full"}: this is the default case for which the full flow matrix is
@@ -78,7 +78,7 @@ represented. It is extracted from the spatial interaction model with
 \code{\link[=flows]{flows()}} and displayed using a matrix representation with origin locations
 in rows and destination locations in columns. The colour of a cell
 corresponds to the intensity of a flow between the corresponding locations.
-To mimic the standard top to bottom reading order of a flow matrix, the top
+To mimic the standard top-to-bottom reading order of a flow matrix, the top
 row of the graphical representation corresponds to the first origin location.
 \item \code{"destination"}: the function computes the
 incoming flows for destination locations (using \code{\link[=destination_flow]{destination_flow()}}) and
@@ -93,27 +93,27 @@ and \code{"attractiveness"} graphics should be almost identical.
 }
 
 When the \code{with_names} parameter is \code{TRUE}, the location names
-(\code{\link[=location_names]{location_names()}}) are used to label the axis of the graphical
+(\code{\link[=location_names]{location_names()}}) are used to label the axes of the graphical
 representation. If names are not specified, they are replaced by indexes.
 
 When the  \code{with_positions} parameter is \code{TRUE}, the location positions
 (\code{\link[=location_positions]{location_positions()}}) are used to produce more "geographically informed"
-representations. Notice that if no positions are known for the locations, the
-use of \code{with_positions = TRUE} is an error. Depending on \code{flows} we have the
+representations. Note that if no positions are known for the locations,
+using \code{with_positions = TRUE} is an error. Depending on \code{flows} we have the
 following representations:
 \itemize{
 \item \code{"full"}: this is the default case for which the full flow matrix is
 represented. Positions for both origin and destination locations are needed.
 The representation uses arrows from origin location positions to destination
-location positions. The thickness of the lines (\code{linewidth} aesthetics) is
+location positions. The thickness of the lines (\code{linewidth} aesthetic) is
 proportional to the flows. Only segments that carry a flow above the
 \code{cut_off} value are included. When the spatial interaction model is not
-bipartite (see \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}), zero length segments corresponding to
-self exchange are removed. Additional parameters in \code{...} are submitted to
-\code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}. This can be used to override defaults parameters
+bipartite (see \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}), zero-length segments corresponding to
+self-exchanges are removed. Additional parameters in \code{...} are passed to
+\code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}. This can be used to override default parameters
 used for the arrow shapes, for instance. Those parameters must be named. In
-addition to the individual flows, the representation can include location
-based information. If \code{show_production} is \code{TRUE}, the production constraints
+addition to the individual flows, the representation can include
+location-based information. If \code{show_production} is \code{TRUE}, the production constraints
 (obtained by \code{\link[=production]{production()}}) are shown as disks centred on the origin
 locations. If \code{show_destination} is \code{TRUE}, incoming flows (obtained by
 \code{\link[=destination_flow]{destination_flow()}}) are shown as disks centred on the destination
@@ -125,20 +125,20 @@ be \code{TRUE}). \code{show_production} is compatible with \code{show_destinatio
 When disks are used, segments are drawn without arrows, while the default
 drawing uses arrows. This can be modified with the additional parameters.
 \item \code{"destination"}: the function draws a disk at each destination location
-using for the \code{size} aesthetics the incoming flow at this destination
+using for the \code{size} aesthetic the incoming flow at this destination
 location (using \code{\link[=destination_flow]{destination_flow()}}). Only destinations with an incoming
-flow above  the \code{cut_off} value are included.
+flow above the \code{cut_off} value are included.
 \item \code{"attractiveness"}: the function draws a disk at each destination location
-using for the \code{size} aesthetics the attractiveness of the destination. When
+using for the \code{size} aesthetic the attractiveness of the destination. When
 the calculation has converged (see \code{\link[=sim_converged]{sim_converged()}}), both \code{"destination"}
 and \code{"attractiveness"} graphics should be almost identical. Only destinations
-with an attractiveness above  the \code{cut_off} value are included.
+with an attractiveness above the \code{cut_off} value are included.
 }
 
-For the position based representations and when \code{with_names} is \code{TRUE}, the
-names of the destinations are added to the graphical representation . If
+For the position-based representations and when \code{with_names} is \code{TRUE}, the
+names of the destinations are added to the graphical representation. If
 \code{with_labels} is \code{TRUE} the names are represented as labels instead of plain
-texts (see \code{\link[ggplot2:geom_label]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed,
+text (see \code{\link[ggplot2:geom_label]{ggplot2::geom_label()}}). If the \code{ggrepel} package is installed,
 its functions are used instead of \code{ggplot2} native functions. When disks are
 used to show aggregated flows, the names match the chosen locations: for
 destination flow and attractiveness, destination locations are named, while
@@ -205,7 +205,7 @@ ggplot2::autoplot(flows,
 ) +
   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
   ggplot2::coord_sf(crs = "epsg:4326")
-## readding arrows
+## adding arrows back
 ggplot2::autoplot(flows,
   with_positions = TRUE,
   show_destination = TRUE,
@@ -216,5 +216,6 @@ ggplot2::autoplot(flows,
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=fortify.sim]{fortify.sim()}}
+\code{\link[=fortify.sim]{fortify.sim()}} for the underlying data, \code{\link[=autoplot.sim_list]{autoplot.sim_list()}} for
+collections of models, and \code{\link[=grid_autoplot]{grid_autoplot()}} for models in a data frame.
 }

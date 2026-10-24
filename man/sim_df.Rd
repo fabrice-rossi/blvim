@@ -18,11 +18,11 @@ a data frame representation of the spatial interaction model
 collection with classes \code{sim_df} and \code{data.frame}
 }
 \description{
-This function build a data frame from a collection of spatial interaction
+This function builds a data frame from a collection of spatial interaction
 models. The data frame has a list column \code{sim} of type \code{sim_list} which
 stores the collection of models and classical columns that contain
 characteristics of the models. The name of the list column can be set to
-something else than \code{sim} (but not a name used by other default columns). See
+something other than \code{sim} (but not to a name used by other default columns). See
 details for the default columns.
 }
 \details{
@@ -31,20 +31,20 @@ columns:
 \itemize{
 \item \code{sim} (default name): the last column that contains the models
 \item \code{alpha}: the return to scale parameter used to build the model
-\item \code{beta}: the cost inverse scale parameter used to build the model
+\item \code{beta}: the inverse cost scale parameter used to build the model
 \item \code{diversity}: model default \code{\link[=diversity]{diversity()}} (Shannon's diversity)
 \item \code{potential}: model potential \code{\link[=sim_potential]{sim_potential()}}
 \item \code{iterations}: the number of iterations used to produce the model (1 for a
 static model)
-\item \code{converged}: \code{TRUE} is the iterative calculation of the model converged
+\item \code{converged}: \code{TRUE} if the iterative calculation of the model converged
 (for models produced by \code{\link[=blvim]{blvim()}} and related approaches), \code{FALSE} for no
 convergence and \code{NA} for static models
 }
 
-The resulting object behaves mostly like a \code{data.frame} and support standard
+The resulting object behaves mostly like a \code{data.frame} and supports standard
 extraction and replacement operators. The object tries to keep its \code{sim_df}
 class during modifications. In particular, \code{names<-.sim_df()} tracks
-name change for the \code{sim_list} column. If a modification or an extraction
+name changes for the \code{sim_list} column. If a modification or an extraction
 operation changes the type of the \code{sim_list} column or drops it, the
 resulting object is a standard \code{data.frame}. See \code{\link{[.sim_df}}
 and \code{\link[=names<-.sim_df]{names<-.sim_df()}} for details.
@@ -57,7 +57,7 @@ all_flows <- grid_blvim(distances, production, seq(1.05, 1.45, by = 0.2),
   seq(1, 3, by = 0.5) / 400,
   attractiveness,
   bipartite = FALSE,
-  epsilon = 0.1, iter_max = 1000,
+  epsilon = 0.1, iter_max = 1000
 )
 all_flows_df <- sim_df(all_flows)
 all_flows_df$converged
@@ -67,4 +67,8 @@ names(all_flows_df)[7] <- "models"
 class(all_flows_df)
 ## get the models
 sim_column(all_flows_df)
+}
+\seealso{
+\code{\link[=sim_column]{sim_column()}}, \link{sim_df_extract}, \code{\link[=grid_blvim]{grid_blvim()}},
+\code{\link[=autoplot.sim_df]{autoplot.sim_df()}}, \code{\link[=grid_autoplot]{grid_autoplot()}}, \code{\link[=grid_var_autoplot]{grid_var_autoplot()}}
 }

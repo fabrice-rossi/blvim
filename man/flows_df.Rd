@@ -29,7 +29,7 @@ The resulting data frame has at least three columns:
 of origin locations
 \item \code{destination_idx}: identifies the destination location by its index from 1
 to the number of destination locations
-\item \code{flow}: the flow between the corresponding location
+\item \code{flow}: the flow between the corresponding locations
 }
 
 In addition, if location information is available, it will be included in
@@ -37,9 +37,9 @@ the data frame as follows:
 \itemize{
 \item location names are included using columns \code{origin_name} or \code{destination_name}
 \item positions are included using 2 or 3 columns (per location type, origin or
-destination) depending on the number of dimensions used for the location.
+destination) depending on the number of dimensions used for the locations.
 The names of the columns are by default \code{origin_x}, \code{origin_y} and
-\code{origin_z} ( and equivalent names for destination location) unless
+\code{origin_z} (and equivalent names for destination locations) unless
 coordinate names are specified in the location positions. In this latter
 case, the names are prefixed by \code{origin_} or \code{destination_}. For instance,
 if the destination location position coordinates are named \code{"longitude"}
@@ -69,5 +69,6 @@ destination_names(model) <- french_cities$name[1:10]
 head(flows_df(model))
 }
 \seealso{
-\code{\link[=location_positions]{location_positions()}},  \code{\link[=location_names]{location_names()}}, \code{\link[=flows]{flows()}}
+\code{\link[=flows]{flows()}}, \code{\link[=location_positions]{location_positions()}}, \code{\link[=location_names]{location_names()}},
+\code{\link[=fortify.sim]{fortify.sim()}}
 }

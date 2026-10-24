@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_list.R
 \name{as.data.frame.sim_list}
 \alias{as.data.frame.sim_list}
-\title{Coerce to a Data Frame}
+\title{Coerce a collection of spatial interaction models to a data frame}
 \usage{
 \method{as.data.frame}{sim_list}(x, ..., sim_column = "sim")
 }
@@ -15,12 +15,12 @@
 \item{sim_column}{the name of the \code{sim_list} column (default \code{"sim"})}
 }
 \value{
-a data frame
+a data frame with a single column containing the \code{sim_list}
 }
 \description{
 This function creates a data frame with a single column storing its
 collection of spatial interaction models. The default name of the column
-is \code{"sim"} (can be modified using the \code{sim_column} parameter). An more
+is \code{"sim"} (it can be modified using the \code{sim_column} parameter). A more
 flexible alternative is provided by the \code{\link[=sim_df]{sim_df()}} function.
 }
 \examples{

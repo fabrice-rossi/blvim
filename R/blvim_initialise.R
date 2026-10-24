@@ -23,7 +23,7 @@
 #' * `n_origins`: number of origins;
 #' * `n_destinations`: number of destinations.
 #'
-#' Some of the parameters are easily deducible from others (`C`, `n_origins`
+#' Some of the parameters can easily be deduced from others (`C`, `n_origins`
 #' and `n_destinations`) but are included to simplify the design of
 #' initialisers.
 #'
@@ -36,9 +36,11 @@
 #'
 #' @param ... Arguments stored in the specification and passed to `generator`.
 #'
-#' @return An object of class `blvim_initialise`.
-#' @seealso [blvim()] for the use of this function, and
-#' [blvim_simplex_initialise()] for the default initialiser.
+#' @returns an object of class `blvim_initialise`, to be used as the `Z`
+#'   argument of [blvim()] or [grid_blvim()]
+#' @seealso [blvim()] for the use of this function,
+#'   [blvim_simplex_initialise()] for the default initialiser, and [sim_logs()]
+#'   and [sim_runs()] for the results of the multiple runs.
 #'
 #' @examples
 #' # Ten starting points from the default simplex generator
@@ -163,12 +165,13 @@ print.blvim_initialise <- function(x, ...) {
 #'   as the first starting point. If `TRUE`, `n - 1` points are sampled and the
 #'   centre is prepended. Thus, the returned matrix always has `n` rows.
 #'
-#' @return A list containing:
+#' @returns a list containing:
 #'
 #' * `Z`: the matrix of initial attractivenesses;
 #' * `sampling`: diagnostics returned by [sample_weighted_simplex()], or `NULL`
 #'   when no random point is requested.
 #'
+#' @seealso [blvim_initialise()], [sample_weighted_simplex()], [blvim()]
 #' @export
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000

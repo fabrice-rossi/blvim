@@ -11,15 +11,15 @@ destination_names(sim) <- value
 }
 \arguments{
 \item{sim}{a spatial interaction model object (an object of class \code{sim}) or a
-collection of spatial interaction  models (an object of class \code{sim_list})}
+collection of spatial interaction models (an object of class \code{sim_list})}
 
 \item{value}{a character vector of length equal to the number of destination
-locations, or \code{NULL} (vectors of adapted length are converted to character
-vectors)}
+locations, or \code{NULL} (vectors of the appropriate length are converted to
+character vectors)}
 }
 \value{
-for \code{destination_names} \code{NULL} or a character vector with one name
-per destination locations in the model. for \verb{destination_names<-} the
+for \code{destination_names}, \code{NULL} or a character vector with one name
+per destination location in the model. For \verb{destination_names<-}, the
 modified \code{sim} object or \code{sim_list} object.
 }
 \description{
@@ -30,12 +30,12 @@ interaction model (or in a collection of spatial interaction models).
 distances <- french_cities_distances[1:10, 1:10]
 production <- rep(1, 10)
 attractiveness <- rep(1, 10)
-## the row/column names of the cost matrix are used for the location
+## the row/column names of the cost matrix are used for the location names
 model <- static_blvim(distances, production, 1.5, 1 / 250000, attractiveness)
 destination_names(model)
 destination_names(model) <- french_cities$name[1:10]
 destination_names(model)
 }
 \seealso{
-\code{\link[=location_names]{location_names()}}, \code{\link[=origin_names]{origin_names()}}
+\code{\link[=location_names]{location_names()}}, \code{\link[=origin_names]{origin_names()}}, \code{\link[=destination_positions]{destination_positions()}}
 }

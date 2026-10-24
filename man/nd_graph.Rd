@@ -10,7 +10,7 @@ nd_graph(sim, definition = c("ND", "RW"), ...)
 \method{nd_graph}{sim}(sim, definition = c("ND", "RW"), ...)
 }
 \arguments{
-\item{sim}{a spatial interaction model object}
+\item{sim}{a non-bipartite spatial interaction model object}
 
 \item{definition}{terminal definition, either \code{"ND"} (for Nystuen & Dacey,
 default) or \code{"RW"} (for Rihll & Wilson), see details.}
@@ -24,30 +24,30 @@ structure of a spatial interaction model
 \description{
 This function computes the most important flows in a spatial interaction
 model according to the approach outlined by J. D. Nystuen and M. F. Dacey
-(Nystuen & Dacey, 1961. In this work, a \emph{nodal flow} is the largest flow sent
-from a non terminal location (based on the definition of terminals recalled
+(Nystuen & Dacey, 1961). In this work, a \emph{nodal flow} is the largest flow sent
+from a non-terminal location (based on the definition of terminals recalled
 in \code{\link[=terminals]{terminals()}}). The \emph{nodal structure} is the collection of those flows.
-They form an oriented graph that has interesting properties. In particular
+They form a directed graph that has interesting properties. In particular,
 each weakly connected component contains a single terminal location which can
-be seen as the dominant location of the component. Notice that because nodal
-flows are based on terminals, this function applies only to the non bipartite
+be seen as the dominant location of the component. Note that because nodal
+flows are based on terminals, this function applies only to the non-bipartite
 setting.
 }
 \details{
-In practice, the function computes first the terminals and non terminals
+In practice, the function first computes the terminals and non-terminals
 according to either Nystuen & Dacey (1961) or Rihll and Wilson (1991). Then
 it extracts the nodal flows. The result of the analysis is returned as a data
 frame with three columns:
 \itemize{
-\item \code{from}: the index of the non terminal origin location
-\item \code{to}: the index of destination location of the nodal flow of \code{from}
+\item \code{from}: the index of the non-terminal origin location
+\item \code{to}: the index of the destination location of the nodal flow of \code{from}
 \item \code{flow}: the value of the nodal flow
 }
 
-An important aspect of the node structure is that is does not contain
-isolated terminals. If a location is a terminal but is never the receiver of
-a nodal flow it will not appear in the collection of nodal flows. It
-constitutes a a trivial connected component in itself.
+An important aspect of the nodal structure is that it does not contain
+isolated terminals. If a location is a terminal but never receives a nodal
+flow, it does not appear in the collection of nodal flows. It constitutes a
+trivial connected component in itself.
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
@@ -77,5 +77,5 @@ Ancient World, Vol. 3, Edited by J. Rich and A. Wallace-Hadrill, 58-95.
 London: Routledge.
 }
 \seealso{
-\code{\link[=sim_is_bipartite]{sim_is_bipartite()}}, \code{\link[=is_terminal]{is_terminal()}}, \code{\link[=terminals]{terminals()}}
+\code{\link[=terminals]{terminals()}}, \code{\link[=is_terminal]{is_terminal()}}, \code{\link[=diversity]{diversity()}}, \code{\link[=sim_is_bipartite]{sim_is_bipartite()}}
 }

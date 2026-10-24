@@ -1,17 +1,17 @@
 #' Compute flows between origin and destination locations
 #'
 #' This function computes flows between origin locations and destination
-#' locations according to the production constrained entropy maximising model
+#' locations according to the production-constrained entropy-maximising model
 #' proposed by A. Wilson.
 #'
 #' The model computes flows using the following parameters:
-#' * `costs` (\eqn{c}) is a \eqn{n\times p} matrix whose \eqn{(i,j )} entry is
+#' * `costs` (\eqn{c}) is an \eqn{n\times p} matrix whose \eqn{(i,j)} entry is
 #' the cost of having a "unitary" flow from origin location \eqn{i} to
 #' destination location \eqn{j}
-#' * `X` (\eqn{X}) is a vector of size \eqn{n} containing non negative
+#' * `X` (\eqn{X}) is a vector of size \eqn{n} containing non-negative
 #' production constraints for the \eqn{n} origin locations
-#' * `alpha` (\eqn{\alpha}) is a return to scale parameter that enhance (or
-#' reduce if smaller that 1) the attractivenesses of destination locations when
+#' * `alpha` (\eqn{\alpha}) is a return to scale parameter that enhances (or
+#' reduces if smaller than 1) the attractivenesses of destination locations when
 #' they are larger than 1
 #' * `beta` (\eqn{\beta}) is the inverse of a cost scale parameter, i.e., costs
 #' are multiplied by `beta` in the model
@@ -28,7 +28,7 @@
 #'
 #' \deqn{\forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij},}
 #'
-#' that is the origin location \eqn{i} sends a total flow of exactly \eqn{X_i}.
+#' that is, origin location \eqn{i} sends a total flow of exactly \eqn{X_i}.
 #'
 #' # Location data
 #'
@@ -40,7 +40,7 @@
 #'
 #' Spatial interaction models can store names for origin and destination
 #' locations, using [`origin_names<-()`] and [`destination_names<-()`]. Names
-#' are taken by default from names of the cost matrix `costs`. More precisely,
+#' are taken by default from the names of the cost matrix `costs`. More precisely,
 #' `rownames(costs)` is used for origin location names and `colnames(costs)` for
 #' destination location names.
 #'
@@ -54,8 +54,8 @@
 #'
 #' In addition to the functions mentioned above, location data can be specified
 #' directly using the `origin_data` and `destination_data` parameters. Data are
-#' given by a list whose components are not interpreted excepted the following
-#' ones:
+#' given by a list whose components are not interpreted except for the
+#' following ones:
 #'   - `names` is used to specify location names and its content has to follow
 #' the restrictions documented in [`origin_names<-()`] and
 #' [`destination_names<-()`]
@@ -70,15 +70,15 @@
 #' @param Z a vector of destination attractivenesses
 #' @param bipartite when `TRUE` (default value), the origin and destination
 #'   locations are considered to be distinct. When `FALSE`, a single set of
-#'   locations plays the both roles. This has only consequences in functions
-#'   specific to this latter case such as [terminals()].
+#'   locations plays both roles. This only affects functions specific to this
+#'   latter case, such as [terminals()].
 #' @param origin_data `NULL` or a list of additional data about the origin
 #'   locations (see details)
 #' @param destination_data `NULL` or a list of additional data about the
 #'   destination locations (see details)
 #'
 #' @returns an object of class `sim` (and `sim_wpc`) for spatial interaction
-#'   model that contains the matrix of flows from the origin locations to the
+#'   models that contains the matrix of flows from the origin locations to the
 #'   destination locations (see \eqn{(Y_{ij})_{1\leq i\leq n, 1\leq j\leq p}}
 #'   above) and the attractivenesses of the destination locations.
 #'
@@ -105,8 +105,10 @@
 #' @references Wilson, A. (1971), "A family of spatial interaction models, and
 #'   associated developments", Environment and Planning A: Economy and Space,
 #'   3(1), 1-32 \doi{10.1068/a030001}
-#' @seealso [origin_names()], [destination_names()], [origin_positions()],
-#'   [destination_positions()]
+#' @seealso [blvim()] for the dynamic model, [flows()], [production()] and
+#'   [attractiveness()] for extracting the results, and [origin_names()],
+#'   [destination_names()], [origin_positions()], [destination_positions()]
+#'   for location data.
 static_blvim <- function(costs, X, alpha, beta, Z, bipartite = TRUE,
                          origin_data = NULL, destination_data = NULL) {
   check_configuration(costs, X, alpha, beta, Z, 1, bipartite)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim.R
 \name{destination_flow}
 \alias{destination_flow}
-\title{Compute the flows incoming at each destination location}
+\title{Compute the incoming flow at each destination location}
 \usage{
 destination_flow(sim, ...)
 }
@@ -12,10 +12,10 @@ destination_flow(sim, ...)
 \item{...}{additional parameters}
 }
 \value{
-a vector of flows incoming at destination locations
+a vector of incoming flows, one per destination location
 }
 \description{
-Compute the flows incoming at each destination location
+Compute the incoming flow at each destination location
 }
 \examples{
 distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
@@ -27,5 +27,5 @@ destination_flow(model)
 attractiveness(model)
 }
 \seealso{
-\code{\link[=production]{production()}}, \code{\link[=attractiveness]{attractiveness()}}
+\code{\link[=flows]{flows()}}, \code{\link[=production]{production()}}, \code{\link[=attractiveness]{attractiveness()}}, \code{\link[=diversity]{diversity()}}
 }

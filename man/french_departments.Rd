@@ -9,7 +9,8 @@ A \code{data.frame} with 101 rows and 3 columns
 \describe{
 \item{department}{The code of the department in the official geographical
 code of 2025 (OGC)}
-\item{region}{The code of the region of the city in the OGC (see \link{french_regions})}
+\item{region}{The code of the region of the department in the OGC (see
+\link{french_regions})}
 \item{name}{The name of the department}
 }
 }

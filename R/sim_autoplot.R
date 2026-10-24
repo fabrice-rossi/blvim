@@ -361,14 +361,14 @@ sim_autoplot <- function(sim, sim_data,
 
 #' Create a complete ggplot for a spatial interaction model
 #'
-#' This function represents graphical the flows of a spatial interaction model,
-#' in different direct or aggregated forms.
+#' This function graphically represents the flows of a spatial interaction
+#' model, in different direct or aggregated forms.
 #'
 #' The graphical representation depends on the values of `flows` and
 #' `with_positions`. It is based on the data frame representation produced by
 #' [fortify.sim()].
 #'
-#' If `with_position` is `FALSE` (default value), the graphical representations
+#' If `with_positions` is `FALSE` (default value), the graphical representations
 #' are "abstract". Depending on `flows` we have the following representations:
 #'
 #' -  `"full"`: this is the default case for which the full flow matrix is
@@ -376,7 +376,7 @@ sim_autoplot <- function(sim, sim_data,
 #' [flows()] and displayed using a matrix representation with origin locations
 #' in rows and destination locations in columns. The colour of a cell
 #' corresponds to the intensity of a flow between the corresponding locations.
-#' To mimic the standard top to bottom reading order of a flow matrix, the top
+#' To mimic the standard top-to-bottom reading order of a flow matrix, the top
 #' row of the graphical representation corresponds to the first origin location.
 #' -  `"destination"`: the function computes the
 #' incoming flows for destination locations (using [destination_flow()]) and
@@ -390,27 +390,27 @@ sim_autoplot <- function(sim, sim_data,
 #' and `"attractiveness"` graphics should be almost identical.
 #'
 #' When the `with_names` parameter is `TRUE`, the location names
-#' ([location_names()]) are used to label the axis of the graphical
+#' ([location_names()]) are used to label the axes of the graphical
 #' representation. If names are not specified, they are replaced by indexes.
 #'
 #' When the  `with_positions` parameter is `TRUE`, the location positions
 #' ([location_positions()]) are used to produce more "geographically informed"
-#' representations. Notice that if no positions are known for the locations, the
-#' use of `with_positions = TRUE` is an error. Depending on `flows` we have the
+#' representations. Note that if no positions are known for the locations,
+#' using `with_positions = TRUE` is an error. Depending on `flows` we have the
 #' following representations:
 #'
 #' -  `"full"`: this is the default case for which the full flow matrix is
 #' represented. Positions for both origin and destination locations are needed.
 #' The representation uses arrows from origin location positions to destination
-#' location positions. The thickness of the lines (`linewidth` aesthetics) is
+#' location positions. The thickness of the lines (`linewidth` aesthetic) is
 #' proportional to the flows. Only segments that carry a flow above the
 #' `cut_off` value are included. When the spatial interaction model is not
-#' bipartite (see [sim_is_bipartite()]), zero length segments corresponding to
-#' self exchange are removed. Additional parameters in `...` are submitted to
-#' [ggplot2::geom_segment()]. This can be used to override defaults parameters
+#' bipartite (see [sim_is_bipartite()]), zero-length segments corresponding to
+#' self-exchanges are removed. Additional parameters in `...` are passed to
+#' [ggplot2::geom_segment()]. This can be used to override default parameters
 #' used for the arrow shapes, for instance. Those parameters must be named. In
-#' addition to the individual flows, the representation can include location
-#' based information. If `show_production` is `TRUE`, the production constraints
+#' addition to the individual flows, the representation can include
+#' location-based information. If `show_production` is `TRUE`, the production constraints
 #' (obtained by [production()]) are shown as disks centred on the origin
 #' locations. If `show_destination` is `TRUE`, incoming flows (obtained by
 #' [destination_flow()]) are shown as disks centred on the destination
@@ -422,19 +422,19 @@ sim_autoplot <- function(sim, sim_data,
 #' When disks are used, segments are drawn without arrows, while the default
 #' drawing uses arrows. This can be modified with the additional parameters.
 #' -  `"destination"`: the function draws a disk at each destination location
-#' using for the `size` aesthetics the incoming flow at this destination
+#' using for the `size` aesthetic the incoming flow at this destination
 #' location (using [destination_flow()]). Only destinations with an incoming
-#' flow above  the `cut_off` value are included.
+#' flow above the `cut_off` value are included.
 #' -  `"attractiveness"`: the function draws a disk at each destination location
-#' using for the `size` aesthetics the attractiveness of the destination. When
+#' using for the `size` aesthetic the attractiveness of the destination. When
 #' the calculation has converged (see [sim_converged()]), both `"destination"`
 #' and `"attractiveness"` graphics should be almost identical. Only destinations
-#' with an attractiveness above  the `cut_off` value are included.
+#' with an attractiveness above the `cut_off` value are included.
 #'
-#' For the position based representations and when `with_names` is `TRUE`, the
-#' names of the destinations are added to the graphical representation . If
+#' For the position-based representations and when `with_names` is `TRUE`, the
+#' names of the destinations are added to the graphical representation. If
 #' `with_labels` is `TRUE` the names are represented as labels instead of plain
-#' texts (see [ggplot2::geom_label()]). If the `ggrepel` package is installed,
+#' text (see [ggplot2::geom_label()]). If the `ggrepel` package is installed,
 #' its functions are used instead of `ggplot2` native functions. When disks are
 #' used to show aggregated flows, the names match the chosen locations: for
 #' destination flow and attractiveness, destination locations are named, while
@@ -442,34 +442,35 @@ sim_autoplot <- function(sim, sim_data,
 #' model is bipartite).
 #'
 #' @param object a spatial interaction model object
-#' @param flows  `"full"` (default),  `"destination"` or `"attractiveness"`, see
+#' @param flows `"full"` (default), `"destination"` or `"attractiveness"`, see
 #'   details.
 #' @param with_names specifies whether the graphical representation includes
 #'   location names (`FALSE` by default)
 #' @param with_positions specifies whether the graphical representation is based
 #'   on location positions (`FALSE` by default)
-#' @param show_destination specifies whether the position based `"full"` flow
+#' @param show_destination specifies whether the position-based `"full"` flow
 #'   figure includes a representation of the destination flows (`FALSE` by
 #'   default)
-#' @param show_attractiveness specifies whether the position based `"full"` flow
-#'   figure includes a representation of the attractivenesses  (`FALSE` by
+#' @param show_attractiveness specifies whether the position-based `"full"` flow
+#'   figure includes a representation of the attractivenesses (`FALSE` by
 #'   default)
-#' @param show_production specifies whether the position based `"full"` flow
+#' @param show_production specifies whether the position-based `"full"` flow
 #'   figure includes a representation of the productions (`FALSE` by default)
-#' @param cut_off cut off limit for inclusion of a graphical primitive when
+#' @param cut_off cut-off limit for inclusion of a graphical primitive when
 #'   `with_positions = TRUE`. In the full flow matrix representation, segments
-#'   are removed when their flow is smaller than the cut off. In the
+#'   are removed when their flow is smaller than the cut-off. In the
 #'   attractiveness or destination representation, disks are removed when the
-#'   corresponding value is below the cut off.
-#' @param adjust_limits if `FALSE` (default value), the limits of the position
-#'   based graph are not adjusted after removing graphical primitives. This
-#'   eases comparison between graphical representations with different cut off
-#'   value. If `TRUE`, limits are adjusted to the data using the standard
+#'   corresponding value is below the cut-off.
+#' @param adjust_limits if `FALSE` (default value), the limits of the
+#'   position-based graph are not adjusted after removing graphical primitives.
+#'   This eases comparison between graphical representations with different
+#'   cut-off values. If `TRUE`, limits are adjusted to the data using the standard
 #'   ggplot2 behaviour.
 #' @param with_labels if `FALSE` (default value) names are displayed using plain
-#'   texts. If `TRUE`, names are shown using labels.
+#'   text. If `TRUE`, names are shown using labels.
 #' @param ... additional parameters, see details
-#' @seealso [fortify.sim()]
+#' @seealso [fortify.sim()] for the underlying data, [autoplot.sim_list()] for
+#'   collections of models, and [grid_autoplot()] for models in a data frame.
 #' @exportS3Method ggplot2::autoplot
 #' @returns a ggplot object
 #' @examplesIf requireNamespace("ggplot2", quietly = TRUE)
@@ -531,7 +532,7 @@ sim_autoplot <- function(sim, sim_data,
 #' ) +
 #'   ggplot2::scale_linewidth_continuous(range = c(0, 2)) +
 #'   ggplot2::coord_sf(crs = "epsg:4326")
-#' ## readding arrows
+#' ## adding arrows back
 #' ggplot2::autoplot(flows,
 #'   with_positions = TRUE,
 #'   show_destination = TRUE,

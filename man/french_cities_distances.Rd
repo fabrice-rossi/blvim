@@ -4,9 +4,9 @@
 \name{french_cities_distances}
 \alias{french_cities_distances}
 \alias{french_cities_times}
-\title{French cities distances}
+\title{Distances and travel times between French cities}
 \format{
-matrices with 121 rows and 121 columns
+Numeric matrices with 121 rows and 121 columns
 
 An object of class \code{matrix} (inherits from \code{array}) with 121 rows and 121 columns.
 }
@@ -25,19 +25,20 @@ french_cities_distances
 french_cities_times
 }
 \description{
-Distances in meters and in minutes between the French cities with at least
+Distances in metres and travel times in minutes between the French cities with at least
 50,000 inhabitants (\link{french_cities}).
 }
 \details{
 Both data sets are square matrices of dimension (121, 121). If \code{D} is one of
-the matrix, \code{D[i,j]} is the distance from city of id \code{rownames(D)[i]} to city
-id \code{colnames(D)[j]} expressed in meters (\code{french_cities_distances}) or in
-minutes (\code{french_cities_times}). The distance is measured along the fastest
-path from \code{i} to \code{j} on the French road networks as computed using
-\href{https://project-osrm.org/}{OSRM} engine (see details below). Ids in
+the matrices, \code{D[i,j]} is the distance from the city with id \code{rownames(D)[i]}
+to the city with id \code{colnames(D)[j]} expressed in metres
+(\code{french_cities_distances}) or in minutes (\code{french_cities_times}). The
+distance is measured along the fastest path from \code{i} to \code{j} on the French road
+network as computed by the \href{https://project-osrm.org/}{OSRM} engine (see
+details below). Ids in
 column and row names can be used to get information on the cities in the
 \link{french_cities} data set (column \code{id}). Rows and columns are sorted in
-decreasing population order, as in \link{french_cities}. Note that the matrices
+decreasing order of population, as in \link{french_cities}. Note that the matrices
 are not symmetric.
 }
 \section{Distance calculation}{
@@ -47,14 +48,17 @@ The distances and durations have been computed using the
 \href{https://project-osrm.org/}{OSRM} engine in version
 \href{https://github.com/Project-OSRM/osrm-backend/releases/tag/v6.0.0}{6.0.0}.
 
-Calculations are based on the \code{car} profile included in OSRM sources for
-the 6.0.0 version.
+Calculations are based on the \code{car} profile included in the OSRM sources
+of version 6.0.0.
 
-France roads are provided by
+French roads are provided by
 \href{https://www.openstreetmap.org}{OpenStreetMap} under the
-\href{https://opendatacommons.org/licenses/odbl/}{Open Data Commons Open Database License (ODbL)}
-using the \href{https://download.geofabrik.de/europe/france.html}{GeoFabrik}
+\href{https://opendatacommons.org/licenses/odbl/}{Open Data Commons Open Database License (ODbL)}.
+The \href{https://download.geofabrik.de/europe/france.html}{GeoFabrik}
 export dated 2025-11-07T21:20:50Z was used.
 }
 
+\seealso{
+\link{french_cities}
+}
 \keyword{datasets}

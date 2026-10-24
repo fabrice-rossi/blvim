@@ -32,27 +32,26 @@ terminal configuration{?s}")
 #'
 #' The list returned by the function contains the following elements:
 #'
-#' - `median`: the median of the collection, as return by the `median.sim_list()`
-#'   function
+#' - `median`: the median of the collection, as returned by the
+#'   [median.sim_list()] function
 #' - `distortion`: the average distance of all elements of the collection to
 #'  the median model
 #' -  `withinss`: the sum of all pairwise distances between the elements of
 #'  the collection
 #' -  `nb_sims`: the size of the collection
 #'
-#' In addition, if the collection contains non bipartite models, the result
-#' has another element, `nb_configurations` which gives the number of distinct
+#' In addition, if the collection contains non-bipartite models, the result
+#' has another element, `nb_configurations`, which gives the number of distinct
 #' terminal sets in the collection, where the terminals are computed by
-#' `terminals()`, using the `"RW"` definition.
+#' [terminals()], using the `"RW"` definition.
 #'
 #' @param object a collection of spatial interaction models, an object of class
 #'   `sim_list`
-#' [summary.sim_list()]
 #' @param ... additional parameters (not used currently)
 #'
 #' @returns an object of class `summary_sim_list` and `list` with a set of
 #' summary statistics computed on the collection of spatial interaction models
-#' @seealso [median.sim_list()], [terminals()]
+#' @seealso [median.sim_list()], [sim_distance()], [terminals()]
 #' @export
 #'
 #' @examples
@@ -66,7 +65,7 @@ terminal configuration{?s}")
 #'   c(1, 2, 3),
 #'   attractiveness,
 #'   epsilon = 0.1,
-#'   bipartite = FALSE,
+#'   bipartite = FALSE
 #' )
 #' summary(all_flows)
 summary.sim_list <- function(object, ...) {
@@ -86,6 +85,7 @@ summary.sim_list <- function(object, ...) {
 
 #' @export
 #' @param x an object of class `summary_sim_list` produced by
+#'   [summary.sim_list()]
 #' @rdname summary.sim_list
 print.summary_sim_list <- function(x, ...) {
   cat(format(x, ...), sep = "\n")
