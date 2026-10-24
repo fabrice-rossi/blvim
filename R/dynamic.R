@@ -90,7 +90,8 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #'
 #' Several iterative algorithms are available. The model can be run from a
 #' single initial attractiveness vector or from several starting points. In
-#' the latter case, the solution with the largest final potential is returned.
+#' the latter case, the solution with the largest final potential is returned
+#' (see [sim_potential()]).
 #'
 #' ## Initialisation and multiple runs
 #'
@@ -125,8 +126,8 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #' For multiple runs, all starting points use the same model parameters,
 #' algorithm, convergence settings, and algorithm-specific controls. The final
 #' potential is evaluated for each run, and the run with the strictly largest
-#' potential is selected. If several runs have the same largest potential, the
-#' first is selected.
+#' potential is selected (see [sim_potential()]). If several runs have the same
+#' largest potential, the first is selected.
 #'
 #' Summaries of all runs are stored in the returned model and can be obtained
 #' with [sim_logs()]. If `keep_runs = TRUE`, the complete fitted models are
@@ -348,6 +349,10 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #' evolution: an integrated methodology for some dynamical systems",
 #' Journal of the Royal Society Interface, 5, 865-871.
 #' \doi{10.1098/rsif.2007.1288}
+#'
+#' Osawa, M., Akamatsu, T., & Kogure, Y. (2025). "Most likely retail
+#' agglomeration patterns: Potential maximization and stochastic stability of
+#' spatial equilibria". <https://arxiv.org/abs/2011.06778v2>
 #'
 #' @seealso
 #' [static_blvim()] for the underlying production-constrained interaction
