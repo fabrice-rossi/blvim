@@ -55,6 +55,6 @@ agglomeration patterns: Potential maximization and stochastic stability of
 spatial equilibria". \url{https://arxiv.org/abs/2011.06778v2}
 }
 \seealso{
-\code{\link[=blvim]{blvim()}}, \code{\link[=grid_sim_potential]{grid_sim_potential()}}, \code{\link[=sim_fp_jacobian]{sim_fp_jacobian()}},
+\code{\link[=blvim]{blvim()}}, \code{\link[=grid_sim_potential]{grid_sim_potential()}}, \code{\link[=sim_residual_jacobian]{sim_residual_jacobian()}},
 \code{\link[=sim_conversion]{sim_conversion()}}
 }

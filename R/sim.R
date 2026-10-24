@@ -480,7 +480,7 @@ sim_is_bipartite.sim <- function(sim) {
 #' @returns `NA` or a vector of conversion factors (one per destination
 #'   location), see above.
 #' @export
-#' @seealso [blvim()], [sim_potential()], [sim_fp_jacobian()]
+#' @seealso [blvim()], [sim_potential()], [sim_residual_jacobian()]
 #' @examples
 #' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
 #' production <- log(french_cities$population[1:10])
@@ -530,7 +530,7 @@ sim_conversion.sim <- function(sim, ...) {
 #' @returns the scalar value of the potential, or `NA` when it cannot be
 #'   computed. In the case of a `sim_list` the function returns a numeric
 #'   vector with one value per model.
-#' @seealso [blvim()], [grid_sim_potential()], [sim_fp_jacobian()],
+#' @seealso [blvim()], [grid_sim_potential()], [sim_residual_jacobian()],
 #'   [sim_conversion()]
 #' @export
 #' @examples
@@ -550,19 +550,21 @@ sim_potential.sim <- function(sim, ...) {
   NA
 }
 
-#' Compute the Jacobian of the fixed-point map G
+#' Compute the Jacobian of the residual map G
 #'
-#' The function computes the Jacobian matrix of the fixed-point map with respect
-#' to the attractivenesses. The function returns `NA` when applied to spatial
+#' The function computes the Jacobian matrix of the residual map with respect to
+#' the attractivenesses. The function returns `NA` when applied to spatial
 #' interaction models for which the map is not defined.
 #'
-#' The fixed-point map \eqn{\mathbf{G}} is given by
+#' The residual map \eqn{\mathbf{G}} is given by
 #'
 #' \deqn{G_j=D_j-\kappa_j Z_j,}
 #'
 #' where \eqn{D_j} is the destination flow ([destination_flow()]),
 #' \eqn{Z_j} the attractiveness ([attractiveness()]) and \eqn{\kappa_j} the
 #' conversion factor ([sim_conversion()]), all attached to destination \eqn{j}.
+#' The equilibria of the Harris and Wilson model (see [blvim()]) are the zeros
+#' of \eqn{\mathbf{G}}.
 #'
 #' The derivatives of \eqn{\mathbf{G}} w.r.t. \eqn{\mathbf{Z}} can be used to
 #' analyse the stability of the solutions, among other applications.
@@ -571,7 +573,7 @@ sim_potential.sim <- function(sim, ...) {
 #' @param ... additional parameters
 #'
 #' @returns a \eqn{p\times p} matrix, where \eqn{p} is the number of destination
-#'   locations, or `NA` when the fixed-point map is not defined
+#'   locations, or `NA` when the residual map is not defined
 #' @seealso [sim_potential()], [sim_conversion()], [destination_flow()]
 #' @export
 #' @examples
@@ -579,14 +581,14 @@ sim_potential.sim <- function(sim, ...) {
 #' production <- log(french_cities$population[1:10])
 #' attractiveness <- log(french_cities$area[1:10])
 #' model <- static_blvim(distances, production, 1.5, 1 / 250, attractiveness)
-#' sim_fp_jacobian(model) ## must be NA
+#' sim_residual_jacobian(model) ## must be NA
 #' dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
-#' sim_fp_jacobian(dyn_model)
-sim_fp_jacobian <- function(sim, ...) {
-  UseMethod("sim_fp_jacobian")
+#' sim_residual_jacobian(dyn_model)
+sim_residual_jacobian <- function(sim, ...) {
+  UseMethod("sim_residual_jacobian")
 }
 
 #' @export
-sim_fp_jacobian.sim <- function(sim, ...) {
+sim_residual_jacobian.sim <- function(sim, ...) {
   NA
 }

@@ -29,7 +29,7 @@ reference:
   - flows_df
   - production
   - sim_potential
-  - sim_fp_jacobian
+  - sim_residual_jacobian
 - title: "Monitoring the construction of spatial interaction models"
   desc: "Functions for getting diagnostics of the algorithms used to build the models."
   contents:

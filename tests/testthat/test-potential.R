@@ -23,7 +23,7 @@ test_that("potential is correctly computed", {
 test_that("Jacobian is NA when it cannot be computed", {
   config <- create_locations(40, 50, seed = 0)
   model <- static_blvim(config$costs, config$X, 1.5, 1, config$Z)
-  expect_true(is.na(sim_fp_jacobian(model)))
+  expect_true(is.na(sim_residual_jacobian(model)))
 })
 
 test_that("Jacobian is correctly computed", {
@@ -35,8 +35,8 @@ test_that("Jacobian is correctly computed", {
       kappa = kappas,
       precision = .Machine$double.eps^0.5
     )
-    expect_equal(sim_fp_jacobian(model),
-      fp_jacobian_non_zero(model),
+    expect_equal(sim_residual_jacobian(model),
+      residual_jacobian_non_zero(model),
       tolerance = 1e-5
     )
   }

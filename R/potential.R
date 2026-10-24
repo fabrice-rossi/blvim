@@ -28,10 +28,10 @@ sim_potential.sim_blvim <- function(sim, ...) {
   sum(X * log(S)) / alpha - sum(kappa * Z)
 }
 
-## Jacobian of the fixed point map
+## Jacobian of the residual map
 
 #' @export
-sim_fp_jacobian.sim_blvim <- function(sim, ...) {
+sim_residual_jacobian.sim_blvim <- function(sim, ...) {
   kappa <- sim_conversion(sim)
   alpha <- return_to_scale(sim)
   beta <- inverse_cost(sim)

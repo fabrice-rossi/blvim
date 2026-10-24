@@ -32,5 +32,5 @@ dyn_model <- blvim(distances, production, 1.5, 1 / 250, attractiveness)
 sim_conversion(dyn_model) ## the default value 1, for each destination
 }
 \seealso{
-\code{\link[=blvim]{blvim()}}, \code{\link[=sim_potential]{sim_potential()}}, \code{\link[=sim_fp_jacobian]{sim_fp_jacobian()}}
+\code{\link[=blvim]{blvim()}}, \code{\link[=sim_potential]{sim_potential()}}, \code{\link[=sim_residual_jacobian]{sim_residual_jacobian()}}
 }

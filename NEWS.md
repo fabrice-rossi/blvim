@@ -35,7 +35,7 @@ Akamatsu, and Kogure in a recent paper (<https://arxiv.org/abs/2011.06778v2>).
 * `blvim()` and `grid_blvim()` now support conversion factors between 
   attractivenesses and incoming flows, together with the new function 
   `sim_conversion()`.
-* `sim_fp_jacobian()` computes the Jacobian of the fixed-point map with respect
+* `sim_residual_jacobian()` computes the Jacobian of the residual map with respect
   to the attractivenesses.
 
 ## Documentation

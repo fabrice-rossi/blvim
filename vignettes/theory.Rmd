@@ -276,7 +276,7 @@ The total flow received by destination $j$ is
 $$
 D_j(\mathbf{Z},\alpha,\beta) = \sum_{i=1}^n X_i P_{ij},
 $$
-and the Harris--Wilson fixed-point residual is
+and the Harris--Wilson residual map is
 
 $$
 G_j(\mathbf{Z},\alpha,\beta) = D_j(\mathbf{Z},\alpha,\beta) - \kappa_j Z_j,

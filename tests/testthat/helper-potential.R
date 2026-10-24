@@ -1,4 +1,4 @@
-fp_jacobian_non_zero <- function(sim) {
+residual_jacobian_non_zero <- function(sim) {
   kappa <- sim_conversion(sim)
 
   P <- flows(sim) / production(sim)
@@ -32,7 +32,7 @@ fp_value <- function(sim, Z) {
   colSums(Y) - sim_conversion(sim) * Z
 }
 
-num_fp_jacobian <- function(sim, eps = 1e-8) {
+num_residual_jacobian <- function(sim, eps = 1e-8) {
   Z <- attractiveness(sim)
   JG <- matrix(0, ncol = length(Z), nrow = length(Z))
   for (k in seq_along(Z)) {
