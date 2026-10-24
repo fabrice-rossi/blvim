@@ -126,7 +126,7 @@ arma::vec project_simplex(const arma::vec& y, double tol, int max_iter) {
   // Construct final Z
   // no memory allocation
   arma::vec z(p);
-  arma::uword count_active;
+  arma::uword count_active = 0;
   for(size_t i = 0; i < p; ++i) {
     if(y[i] > lambda) {
       z[i] = y[i] - lambda;
@@ -138,7 +138,7 @@ arma::vec project_simplex(const arma::vec& y, double tol, int max_iter) {
   const double correction =
       (1.0 - arma::accu(z)) / static_cast<double>(count_active);
 
-  if(abs(correction) < std::numeric_limits<double>::epsilon()) {
+  if(std::abs(correction) < std::numeric_limits<double>::epsilon()) {
     // apply only to the largest value
     const arma::uword pivot = z.index_max();
     z[pivot] += static_cast<double>(count_active) * correction;
