@@ -18,7 +18,7 @@ status](https://fabrice-rossi.r-universe.dev/blvim/badges/checks)](https://fabri
 interaction model**. The model is described in [Wilson, A. (2008),
 “Boltzmann, Lotka and Volterra and spatial structural evolution: an
 integrated methodology for some dynamical systems”, J. R. Soc.
-Interface, 5:865–871](http://dx.doi.org/10.1098/rsif.2007.1288).
+Interface, 5:865–871](https://doi.org/10.1098/rsif.2007.1288).
 
 The package’s primary goal is to provide a fast implementation of the
 BLV model, complete with a collection of tools designed to explore the
@@ -72,7 +72,7 @@ To compute a spatial interaction model with `blvim`, you need at least a
 cost matrix. The package comes with distance data for a selection of
 large French cities. We use the 30 largest ones as origin locations and
 the 20 smallest ones as destination locations. The cost matrix is the
-distance between the cities (in meters).
+distance between the cities (in metres).
 
 ``` r
 ## 30 largest cities
@@ -119,18 +119,14 @@ instance.
 In Wilson’s production-constrained maximum entropy model, the flows are
 given by
 
-$$
-Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},
-$$
+$$Y_{ij} = \frac{X_iZ_j^{\alpha}\exp(-\beta c_{ij})}{\sum_{k=1}^pZ_k^{\alpha}\exp(-\beta c_{ik})},$$
 
 where $\alpha$ is a return-to-scale parameter and $\beta$ is the inverse
 of a cost scale parameter. Note that the flow matrix is
 **production-constrained**, meaning that the total outgoing flow from
-any origin location is equals the production of that location:
+any origin location equals the production of that location:
 
-$$
-\forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.
-$$
+$$\forall i,\quad X_i=\sum_{j=1}^{p}Y_{ij}.$$
 
 The model is obtained using the `static_blvim()` function:
 
@@ -191,7 +187,7 @@ autoplot(b_model) +
   coord_fixed()
 ```
 
-<img src="man/figures/README-b_flow-1.png" alt="A matrix representation of the flows. The flows are much more concentrated than with the previous choice of parameters. Many destination locations do not receive any flow. Most of the flow goes to Vaulx-en-Vellin, Arles, Albi and Cagnes-sur-mer." width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_flow-1.png" alt="A matrix representation of the flows. The flows are much more concentrated than with the previous choice of parameters. Many destination locations do not receive any flow. Most of the flow goes to Vaulx-en-Velin, Arles, Albi and Cagnes-sur-mer." width="80%" style="display: block; margin: auto;" />
 
 As the two figures above exemplify, different values of the parameters
 $\alpha$ and $\beta$ result in more or less concentrated flows.
@@ -205,9 +201,7 @@ incoming flows.
 
 Ideally, we aim for the following condition to hold in the limit:
 
-$$
-Z_j =\sum_{i=1}^{n}Y_{ij}, 
-$$
+$$Z_j =\sum_{i=1}^{n}Y_{ij}, $$
 
 where the flows are given by the equations above. The model is estimated
 using the `blvim()` function as follows.
@@ -222,7 +216,7 @@ a_blv_model
 #> ℹ The BLV model converged after 4800 iterations.
 ```
 
-Notice that we start with some initial values of the attractiveness, but
+Note that we start with some initial values of the attractiveness, but
 the final values are different. These final values can be obtained using
 the `attractiveness()` function (and visualised here using a bar plot).
 
@@ -232,7 +226,7 @@ a_final_Z <- attractiveness(a_blv_model)
 barplot(a_final_Z)
 ```
 
-<img src="man/figures/README-a_blv_Z-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Only one bar is visible: Vaulx-en-Vellin dominates the destination locations." width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_blv_Z-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Only one bar is visible: Vaulx-en-Velin dominates the destination locations." width="80%" style="display: block; margin: auto;" />
 In this particular example, one destination location acts as a global
 attractor of all the flows. This pattern is also visible in the final
 flow matrix.
@@ -242,17 +236,17 @@ autoplot(a_blv_model) +
   scale_fill_gradient(low = "white", high = "black")
 ```
 
-<img src="man/figures/README-a_blv_flow-1.png" alt="A matrix representation of the flows. The matrix has only one black column, showing that all the flow goes to Vaulx-en-Vellin." width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-a_blv_flow-1.png" alt="A matrix representation of the flows. The matrix has only one black column, showing that all the flow goes to Vaulx-en-Velin." width="80%" style="display: block; margin: auto;" />
 
 The `autoplot()` function can also be used to show the destination flows
-or the attractivenesses values:
+or the attractiveness values:
 
 ``` r
 autoplot(a_blv_model, "attractiveness", with_names = TRUE) +
   coord_flip()
 ```
 
-<img src="man/figures/README-a_blv_Z_ggplot2-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Only one bar is visible: Vaulx-en-Vellin dominates the destination locations." width="100%" />
+<img src="man/figures/README-a_blv_Z_ggplot2-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Only one bar is visible: Vaulx-en-Velin dominates the destination locations." width="100%" />
 
 Naturally, the results are strongly influenced by the parameters, as
 shown in this second example.
@@ -272,7 +266,7 @@ autoplot(b_blv_model, "attractiveness", with_names = TRUE) +
   coord_flip()
 ```
 
-<img src="man/figures/README-b_blv_Z-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Nine out of the twenty destination locations remain attractive. Vaulx-en-Vellin is still the most attractive location, but Cholet and Arles are quite attractive also. They are closely followed by Saint-Ouen-sur-Seine and Saint-Quentin. Then the graph shows a set of four remaining attractive destinations but with small values (between 0.5 and 1.5, compared to 4 or more for the other locations). The cities are Albi, Cagnes-sur-Mer, Vannes and Bayonne." width="100%" />
+<img src="man/figures/README-b_blv_Z-1.png" alt="A bar plot representation of the attractivenesses of the destination locations. Nine out of the twenty destination locations remain attractive. Vaulx-en-Velin is still the most attractive location, but Cholet and Arles are quite attractive also. They are closely followed by Saint-Ouen-sur-Seine and Saint-Quentin. Then the graph shows a set of four remaining attractive destinations but with small values (between 0.5 and 1.5, compared to 4 or more for the other locations). The cities are Albi, Cagnes-sur-Mer, Vannes and Bayonne." width="100%" />
 
 ``` r
 autoplot(b_blv_model, with_names = TRUE) +
@@ -280,10 +274,10 @@ autoplot(b_blv_model, with_names = TRUE) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
-<img src="man/figures/README-b_blv_flow-1.png" alt="A matrix representation of the flows. The figure shows essentially the same things as the previous bar plot. In most of the cases, the flow outgoing from a origin location goes to a unique destination location. The main exception is the pair Saint-Ouen-sur-Seine and Saint-Quentin who share incoming flows." width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-b_blv_flow-1.png" alt="A matrix representation of the flows. The figure shows essentially the same things as the previous bar plot. In most of the cases, the flow outgoing from an origin location goes to a unique destination location. The main exception is the pair Saint-Ouen-sur-Seine and Saint-Quentin who share incoming flows." width="80%" style="display: block; margin: auto;" />
 
-`bvlim` offers a collection of graphical representations that can
-leverage the data associated to the origin and destination locations.
+`blvim` offers a collection of graphical representations that can
+leverage the data associated with the origin and destination locations.
 For instance, we can display the full flows using geographical
 coordinates of the cities.
 
