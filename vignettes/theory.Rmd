@@ -414,26 +414,38 @@ $$
     + \mu\!\left(\sum_{i=1}^n X_i - \sum_{j=1}^p \kappa_j Z_j\right).
 $$
 
-The first-order KKT conditions give, for each $j$:
+The first-order KKT conditions are, for each $j$:
 
 $$
 \frac{\partial \mathcal{L}}{\partial Z_j}
-  = -\frac{D_j}{Z_j} + \kappa_j - \lambda_j - \mu\kappa_j = 0,
+  = -\sum_{i=1}^n X_i\,\frac{Z_j^{\alpha-1}\,w_{ij}}{S_i} + \kappa_j - \lambda_j
+    - \mu\kappa_j = 0,
   \qquad \lambda_j \geq 0, \quad \lambda_j Z_j = 0.
 $$
-Multiplying by $Z_j$, summing over $j$ and using complementary slackness
-($\lambda_j Z_j = 0$) together with
-$\sum_j D_j = \sum_i X_i = \sum_j \kappa_j Z_j$, one finds $\mu = 0$.
-Therefore:
+Note that we use here the expression of the derivative of $A$ obtained above,
+before the simplification into $D_j/Z_j$: it remains defined when $Z_j = 0$
+(for $\alpha > 1$), in which case the sum vanishes.
 
-- If $Z_j > 0$: complementary slackness forces $\lambda_j = 0$, and the
-  condition reduces to $D_j = \kappa_j Z_j$, i.e. $G_j = 0$.
-- If $Z_j = 0$: $\lambda_j$ absorbs the residual and the condition is
-  satisfied provided $\lambda_j = \kappa_j - \lim D_j/Z_j \geq 0$. For $\alpha > 1$,
-  $D_j/Z_j \to 0$ when $Z_j \to 0$ and the condition is automatically satisfied.
+**KKT points are equilibria.** Multiplying the condition by $Z_j$ gives
+$-D_j + (1-\mu)\kappa_j Z_j - \lambda_j Z_j = 0$. Using complementary slackness
+($\lambda_j Z_j = 0$), summing over $j$ and using
+$\sum_j D_j = \sum_i X_i = \sum_j \kappa_j Z_j$, one finds $\mu = 0$. Then, for
+each $j$, $\kappa_j Z_j = D_j$, i.e. $G_j = 0$: this holds for active
+destinations ($Z_j > 0$) as well as for inactive ones, for which both sides
+vanish.
 
-Hence every KKT point of the constrained problem is a Harris--Wilson equilibrium
-(possibly with inactive destinations), and conversely when $\alpha > 1$.
+**Equilibria are KKT points.** Conversely, let $\mathbf{Z}^*$ be a
+Harris--Wilson equilibrium and set $\mu^* = 0$.
+
+- If $Z^*_j > 0$, then $\sum_i X_i Z_j^{*\alpha-1} w_{ij}/S_i = D_j/Z^*_j = \kappa_j$
+  and $\lambda^*_j = 0$ cancels the partial derivative while satisfying
+  $\lambda^*_j Z^*_j = 0$.
+- If $Z^*_j = 0$, the partial derivative reduces to $\kappa_j - \lambda_j$:
+  setting $\lambda^*_j = \kappa_j > 0$ cancels it, and obviously
+  $\lambda^*_j Z^*_j = 0$.
+
+Hence the KKT points of the constrained problem are exactly the Harris--Wilson
+equilibria (possibly with inactive destinations).
 
 
 ## References
