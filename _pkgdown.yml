@@ -38,8 +38,8 @@ reference:
   - sim_iterations
   - sim_logs
   - sim_runs
-- title: "Non bipartite models"
-  desc: "Functions that apply only to non bipartite models."
+- title: "Non-bipartite models"
+  desc: "Functions that apply only to non-bipartite models."
   contents:
   - is_terminal
   - nd_graph
