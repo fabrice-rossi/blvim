@@ -118,9 +118,10 @@ autoplot(models[[1]]) +
 #| fig.alt: >
 #|   A dot and arrow representation of the flows on the five by five regular
 #|   grid of the locations. This representation shows a different type of flow
-#|   organisation. Locations on the border of the grid (top and bottom rows,
-#|   leftmost and rightmost columns) concentrate their flows on the internal
-#|   three by three subgrid.
+#|   organisation. Four internal locations, at (2,2), (2,4), (4,2) and (4,4),
+#|   act as hubs: the locations on the border of the grid (top and bottom rows,
+#|   leftmost and rightmost columns) send most of their flows to the nearest
+#|   hub or hubs.
 autoplot(models[[10]],
   flows = "full", with_positions = TRUE,
   arrow = arrow(length = unit(0.01, "npc"))
@@ -220,14 +221,15 @@ the diversities of the models.
 #|   model parameters: alpha (return to scale) on the y-axis (ranging from 1.05
 #|   to 2.00) and one over beta (cost scale) on the x-axis (ranging from
 #|   0.5 to 4.0). Diversity values are represented by a colour gradient, where
-#|   dark purple indicates low diversity (around 5) and bright yellow indicates
+#|   dark purple indicates low diversity (around 1) and bright yellow indicates
 #|   high diversity (up to almost 25). The plot reveals that high diversity is
 #|   concentrated in a very specific region: the bottom-left corner, where both
-#|   alpha is low (near 1.0) and 1 over beta is low (below 1.0). As either α or
-#|   1/β increases, the diversity drops sharply. The vast majority of the
-#|   parameter space – specifically when 1/β is greater than 1.2 or α is greater
-#|   than 1.3 - is a uniform dark purple, indicating that flow diversity remains
-#|   consistently low for most parameter combinations.
+#|   alpha is low (below 1.2) and 1 over beta is low (around 0.5). As either α
+#|   or 1/β increases, the diversity drops sharply. A vertical band on the left
+#|   (1/β below about 0.9, for all values of α) has a low diversity of about 4.
+#|   The rest of the parameter space (1/β above about 0.9, or above about 1.1
+#|   for α below 1.35) is a uniform dark purple, indicating that flow diversity
+#|   is minimal for most parameter combinations.
 autoplot(models_df) +
   scale_fill_viridis_c()
 ```
@@ -331,15 +333,16 @@ This can be immediately used in the standard `sim_df()` visualisation.
 #| fig.alt: >
 #|   A heatmap visualizing the distribution of 16 clusters resulting from
 #|   hierarchical clustering across the parameter space defined by α on the
-#|   y-axis (ranging from 1.00 to 2.00) and 1/β on the x-axis (ranging from
+#|   y-axis (ranging from 1.05 to 2.00) and 1/β on the x-axis (ranging from
 #|   0.5 to 4.0). Each distinct colour corresponds to one of the 16 numerical
 #|   clusters shown in the legend. The majority of the parameter space,
 #|   specifically regions with higher α or 1/β values, is dominated by a single
-#|   large purple region (cluster 13). A distinct teal vertical band (cluster 7)
-#|   occupies the left side where 1/β is low. The bottom-left corner and the
-#|   bottom edge, representing low values for both parameters, are highly
+#|   large purple region (cluster 13). A distinct teal vertical band (cluster 8)
+#|   occupies the left side where 1/β is low. The bottom edge (α close to 1.05)
+#|   is covered by pink bands (clusters 14 to 16), while the bottom-left
+#|   corner, representing low values for both parameters, is highly
 #|   fragmented into many small, distinct coloured blocks representing the
-#|   remaining diverse clusters.
+#|   remaining clusters.
 autoplot(models_df, cluster)
 ```
 
@@ -395,7 +398,7 @@ positions, provided we focus on the destination flows.
 #|   patterns across a 5x5 coordinate grid for each model cluster. Each
 #|   plot is a standard position-based variability plot. Subplots 13-16 exhibit
 #|   high central dominance with a large circle at (3,3); subplots 1-3 show
-#|   uniform flows across all internal locations; subplots 4 and 9 show an empty
+#|   uniform flows across all 25 locations; subplots 4 and 9 show an empty
 #|   centre; and subplots 5-12 display varying regional hub patterns at
 #|   coordinates (2,2), (2,4), (4,2), and (4,4).
 grid_var_autoplot(models_df, cluster,
@@ -490,7 +493,8 @@ Destination flows with positions are also supported.
 #|   A 4x4 grid of 16 dot representations showing the destination flows of the
 #|   medoid of each cluster. The figure displays patterns consistent with the
 #|   analysis conducted on the previous figure, for instance a dot at each
-#|   position for clusters 1 to 4, emphasising self-interaction only.
+#|   position for clusters 1 to 3, emphasising self-interaction only, and at
+#|   each position but the centre for clusters 4 and 9.
 grid_autoplot(models_centre_df, flows = "destination", with_positions = TRUE) +
   scale_size_continuous(range = c(0, 6)) +
   coord_fixed()
@@ -699,7 +703,7 @@ to identify distinct clusters.
 ```{r euro_cities_dendrogram}
 #| fig.alt: >
 #|   A Cluster Dendrogram for European city models using the ward.D2 method.
-#|   The tree splits into two primary branches at a height of approximately 350.
+#|   The tree splits into two primary branches at a height of approximately 300.
 #|   The left branch is a dense, large cluster representing highly similar
 #|   models, while the right branch is further subdivided into several smaller,
 #|   more distinct groups at heights between 50 and 150, indicating higher
@@ -737,10 +741,11 @@ typical behaviours.
 #| fig.alt: >
 #|   A 4x4 panel showing spatial flow circles for each of the 16 clusters on a
 #|   map of Europe. In clusters 13-15, a single large circle at Lyon dominates
-#|   the map. Clusters 1-4 show many small, uniform circles across all 21 city
-#|   locations. Clusters 5-12 show a mix of hubs, with larger circles appearing
-#|   at different locations like Brussels and Hook of Holland (clusters 4 and
-#|   6).
+#|   the map. Cluster 1 shows small, uniform circles across all 21 city
+#|   locations, while in clusters 2-4 larger circles start to appear at Lyon and
+#|   Brussels. Clusters 5-12 and 16 combine a large circle at Lyon with a second
+#|   hub in the north (Brussels or Hook of Holland), together with a few small
+#|   circles at peripheral cities such as Stockholm, Athens and Gibraltar.
 grid_var_autoplot(euro_models_df, cluster,
   flows = "destination",
   with_positions = TRUE
@@ -1098,7 +1103,8 @@ normalisation.
 #| fig.alt: >
 #|   A variability plot matrix for flows from large cities (y-axis) to small
 #|   cities (x-axis). Compared to the log population representation, it shows
-#|   more empty columns as well as more spread-out flows. In particular, the
+#|   more empty columns, i.e. flows concentrated on fewer destinations. In
+#|   particular, the
 #|   full column of squares associated with Vaulx-en-Velin has been replaced by
 #|   a more empty one, with large cities sending next to no flow to
 #|   Vaulx-en-Velin (for instance Paris, Nantes, Lille, etc.). On the contrary
@@ -1117,7 +1123,8 @@ comparing both graphical representations.
 #| fig.alt: >
 #|   A horizontal bar chart displaying flow statistics for the 20 small French
 #|   cities. Vaulx-en-Velin dominates with a very long bar showing a median
-#|   incoming flow larger than the maximum flow of all cities except Arles.
+#|   incoming flow larger than or close to the maximum flow of all other cities
+#|   except Arles.
 #|   Only 4 cities out of 20 have a non-zero median incoming flow (Saint-Herblain,
 #|   Arles, Vaulx-en-Velin and Saint-Quentin). 9 cities have a zero maximum
 #|   incoming flow.
@@ -1294,8 +1301,8 @@ grid_var_autoplot(fr_models_df, cluster,
 #|   vary from a concentration on two cities (cluster 16) to situations with up
 #|   to 12 active cities. A striking difference with the log population model
 #|   is the presence of a collection of active cities near Paris despite the
-#|   constant local (and global) domination of Saint-Ouen-sur-Seine whose
-#|   circle is always the largest.
+#|   constant local domination of Saint-Ouen-sur-Seine whose circle is always
+#|   the largest around Paris and among the largest overall.
 grid_var_autoplot(fr_models_direct_df, cluster,
   flows = "destination",
   with_positions = TRUE
