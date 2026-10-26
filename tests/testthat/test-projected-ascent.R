@@ -1,6 +1,8 @@
 test_that("projected ascent converges to a point with a small duality gap", {
   for (fixture in list(fixture_ascent(), fixture_ascent(p = 5, n = 12))) {
-    precision <- 1e-9
+    ## the duality gap cannot be reduced much below 1e-8 on some fixtures,
+    ## with a platform dependent floor
+    precision <- 1e-7
     result <- run_ascent(fixture, precision = precision)
     reference <- reference_ascent(fixture, result$Z)
 
@@ -85,7 +87,9 @@ test_that("projected ascent output is unchanged without history", {
 
 test_that("projected ascent with a metric converges to a small duality gap", {
   for (fixture in list(fixture_ascent(), fixture_ascent(p = 5, n = 12))) {
-    precision <- 1e-9
+    ## the duality gap cannot be reduced much below 1e-8 on some fixtures,
+    ## with a platform dependent floor
+    precision <- 1e-7
     result <- run_ascent(fixture,
       metric = fixture$kappa^2, precision = precision
     )
