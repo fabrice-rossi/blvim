@@ -148,6 +148,20 @@ test_that("argument validation rejects malformed inputs", {
   )
 })
 
+test_that("in dimension 2, the face points are the vertices", {
+  withr::local_seed(1)
+  kappa <- c(1, 2)
+  x <- sample_weighted_simplex(kappa, n = 4, face_fraction = 0.5)
+  expect_equal(x$n_face_points, 2L)
+  expect_equal(x$faces$count, c(1L, 1L))
+  ## the two vertices of the weighted simplex
+  expect_equal(x$Z[3:4, ], rbind(c(0, 1 / kappa[2]), c(1 / kappa[1], 0)))
+  expect_error(
+    sample_weighted_simplex(kappa, n = 4, face_fraction = 1),
+    "impossible in dimension 2"
+  )
+})
+
 test_that("zero face fraction produces only interior points", {
   withr::local_seed(1)
   x <- sample_weighted_simplex(c(1, 2, 3),
