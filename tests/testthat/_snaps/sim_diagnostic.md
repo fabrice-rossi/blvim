@@ -27,9 +27,9 @@
       sim_diagnostic(model)
     Output
       BLV model obtained with the "gradient" algorithm.
-      ! The algorithm stopped after 403 iterations:
-      * Number of potential evaluations: 514.
-      * Duality gap: 2.988258e-08.
+      ! The algorithm stopped after 415 iterations:
+      * Number of potential evaluations: 529.
+      * Duality gap: 1.214813e-06.
       * Return status: "stalled".
 
 ---
@@ -38,9 +38,9 @@
       sim_diagnostic(model)
     Output
       BLV model obtained with the "gradient" algorithm.
-      i The algorithm converged after 284 iterations:
-      * Number of potential evaluations: 363.
-      * Duality gap: 1.938069e-06.
+      i The algorithm converged after 305 iterations:
+      * Number of potential evaluations: 390.
+      * Duality gap: 4.071842e-05.
       * Return status: "converged".
 
 ---
@@ -51,6 +51,6 @@
       BLV model obtained with the "gradient" algorithm.
       ! The algorithm stopped after 100 iterations:
       * Number of potential evaluations: 134.
-      * Duality gap: 0.002428494.
+      * Duality gap: 0.09929525.
       * Return status: "maximum iteration reached".
 

@@ -10,6 +10,10 @@ R_project_weighted_simplex <- function(Y, kappa, X_tot, tol = 1e-9, max_iter = 5
   )[, 1]
 }
 
+R_project_simplex_metric <- function(Y, metric, tol = 1e-9, max_iter = 50L) {
+  project_simplex_metric(as.double(Y), as.double(metric), tol, max_iter)[, 1]
+}
+
 number_of_faces_capped <- function(d, cap) {
   if (cap <= 0L) {
     return(0L)

@@ -27,11 +27,19 @@ Akamatsu, and Kogure in a recent paper (<https://arxiv.org/abs/2011.06778v2>).
   uses the new function `sample_weighted_simplex()` to sample, in a structured
   way, the simplex associated with the spatial interaction model.
 * `blvim()` and `grid_blvim()` now support two new algorithms to find an 
-  equilibrium. Both are instances of a projected gradient ascent approach.
+  equilibrium. Both are instances of projected gradient ascent on the
+  potential and differ only in the geometry used for the gradient steps:
+  `"gradient"` uses the geometry of the attractivenesses while
+  `"gradient_unit"` uses that of rescaled attractivenesses that sum to one.
 * `sim_diagnostic()` gives details about the behaviour of the iterative
   algorithms for `blvim()` while `blvim_gradient_control()` can be used to set 
   the parameters of the line search used in the projected gradient ascent
   methods.
+* `blvim_gradient_control()` also accepts an arbitrary diagonal 
+  `preconditioner` for the gradient algorithms, given as one strictly positive
+  value per destination location. It changes the path followed by the 
+  algorithms (and therefore possibly the local maximum they reach), while the 
+  initial step `rho_init` keeps the same meaning.
 * `blvim()` and `grid_blvim()` now support conversion factors between 
   attractivenesses and incoming flows, together with the new function 
   `sim_conversion()`.

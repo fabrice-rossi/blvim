@@ -5,12 +5,8 @@ blv <- function(costs, X, alpha, beta, Z_init, kappa, epsilon, iter_max, conv_ch
     .Call(`_blvim_blv`, costs, X, alpha, beta, Z_init, kappa, epsilon, iter_max, conv_check, precision, quadratic, use_kappa)
 }
 
-blv_gradient <- function(costs, X, alpha, beta, Z_init, kappa, rho_init = 0.5, shrink = 0.5, c = 1e-4, iter_max = 1000L, ls_iter_max = 50L, precision = 1e-7) {
-    .Call(`_blvim_blv_gradient`, costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision)
-}
-
-blv_gradient_unit <- function(costs, X, alpha, beta, Z_init, kappa, rho_init = 0.5, shrink = 0.5, c = 1e-4, iter_max = 1000L, ls_iter_max = 50L, precision = 1e-7) {
-    .Call(`_blvim_blv_gradient_unit`, costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision)
+blv_gradient <- function(costs, X, alpha, beta, Z_init, kappa, metric = NULL, rho_init = 0.5, shrink = 0.5, c = 1e-4, iter_max = 1000L, ls_iter_max = 50L, precision = 1e-7, record_history = FALSE) {
+    .Call(`_blvim_blv_gradient`, costs, X, alpha, beta, Z_init, kappa, metric, rho_init, shrink, c, iter_max, ls_iter_max, precision, record_history)
 }
 
 project_weighted_simplex <- function(y, kappa, sum_kappa_sq, C, tol, max_iter) {
@@ -19,6 +15,10 @@ project_weighted_simplex <- function(y, kappa, sum_kappa_sq, C, tol, max_iter) {
 
 project_simplex <- function(y, tol, max_iter) {
     .Call(`_blvim_project_simplex`, y, tol, max_iter)
+}
+
+project_simplex_metric <- function(y, metric, tol, max_iter) {
+    .Call(`_blvim_project_simplex_metric`, y, metric, tol, max_iter)
 }
 
 sample_weighted_simplex_low_codim_cpp <- function(kappa, C, n, n_face_points, n_selected_faces, points_per_face, max_partial_attempts) {

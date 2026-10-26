@@ -1,14 +1,30 @@
 #' Control parameters for the blvim gradient algorithms
 #'
 #' This function returns a list of parameters used to tune the gradient
-#' algorithms of [blvim()]. These parameters control the line search
+#' algorithms of [blvim()]. Most of these parameters control the line search
 #' algorithm, which is a standard backtracking method with the Armijo stopping
-#' criterion.
+#' criterion. The `preconditioner` parameter changes the geometry used for the
+#' gradient steps.
 #'
-#' @param rho_init Initial value of the gradient step in the line search.
+#' @param rho_init Initial value of the gradient step in the line search. The
+#'   step is applied to the rescaled attractivenesses \eqn{U_j}, which sum to
+#'   one, and has the same meaning for the `"gradient"` and `"gradient_unit"`
+#'   algorithms; see [blvim()].
 #' @param shrink Shrink factor for the gradient step in the line search.
 #' @param sufficient_increase Relative sufficient increase in the line search.
 #' @param ls_iter_max Maximum number of iterations of the line search.
+#' @param preconditioner `NULL` (default) or a vector of strictly positive
+#'   values with one value per destination location. The gradient of the
+#'   potential with respect to the variables of the algorithm (the
+#'   attractivenesses \eqn{Z_j} for `"gradient"` and the rescaled
+#'   attractivenesses \eqn{U_j} for `"gradient_unit"`) is multiplied
+#'   component-wise by this vector, and trial points are projected onto the
+#'   simplex using the corresponding weighted Euclidean norm. The resulting
+#'   preconditioner is rescaled to a unit mean in the \eqn{U_j} variables, so
+#'   that `rho_init` keeps its meaning. Only the relative values of the
+#'   `preconditioner` matter. The preconditioner does not change the solutions
+#'   of the problem, but it changes the path followed by the algorithm, and
+#'   therefore possibly the local maximum it converges to.
 #' @returns a list containing the values of the parameters, to be used as the
 #'   `control` argument of [blvim()] or [grid_blvim()]
 #' @seealso [blvim()], [grid_blvim()]
@@ -18,15 +34,29 @@
 #' @export
 #' @examples
 #' blvim_gradient_control(0.5, 0.7, 1e-4, 25)
+#' ## favour moves of the first destination
+#' blvim_gradient_control(preconditioner = c(10, rep(1, 9)))
 blvim_gradient_control <- function(rho_init = 0.5,
                                    shrink = 0.5,
                                    sufficient_increase = 1e-5,
-                                   ls_iter_max = 50) {
+                                   ls_iter_max = 50,
+                                   preconditioner = NULL) {
+  if (!is.null(preconditioner) &&
+    (!is.numeric(preconditioner) || length(preconditioner) == 0 ||
+      anyNA(preconditioner) || any(!is.finite(preconditioner)) ||
+      any(preconditioner <= 0))) {
+    cli::cli_abort(
+      c("{.arg preconditioner} must be {.code NULL} or a vector of finite positive numbers",
+        "x" = "{.arg preconditioner} is {.val {head(preconditioner)}}"
+      )
+    )
+  }
   list(
     rho_init = rho_init,
     shrink = shrink,
     sufficient_increase = sufficient_increase,
-    ls_iter_max = ls_iter_max
+    ls_iter_max = ls_iter_max,
+    preconditioner = if (is.null(preconditioner)) NULL else as.double(preconditioner)
   )
 }
 
@@ -40,17 +70,23 @@ one_blvim <- function(costs, X, alpha, beta, Z,
                       control,
                       with_kappa) {
   convergence_diagnostic <- list()
-  if (algorithm == "gradient") {
+  if (algorithm %in% c("gradient", "gradient_unit")) {
+    ## "gradient" is the ascent in Z, i.e. the ascent in U with the diagonal
+    ## metric kappa^2 (times the preconditioner in Z)
+    if (algorithm == "gradient") {
+      metric <- all_kappa^2
+    } else {
+      metric <- rep(1, length(all_kappa))
+    }
+    if (!is.null(control$preconditioner)) {
+      metric <- metric * control$preconditioner
+    }
+    ## a constant metric is the Euclidean metric in U (faster code path)
+    if (all(metric == metric[1])) {
+      metric <- NULL
+    }
     pre <- blv_gradient(costs, X, alpha, beta, Z, all_kappa,
-      rho_init = control$rho_init,
-      shrink = control$shrink,
-      c = control$sufficient_increase,
-      iter_max = iter_max,
-      ls_iter_max = control$ls_iter_max,
-      precision = precision
-    )
-  } else if (algorithm == "gradient_unit") {
-    pre <- blv_gradient_unit(costs, X, alpha, beta, Z, all_kappa,
+      metric = metric,
       rho_init = control$rho_init,
       shrink = control$shrink,
       c = control$sufficient_increase,
@@ -196,19 +232,31 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #' function; see [sim_potential()]. The gradient algorithms optimise this
 #' potential directly using projected gradient ascent.
 #'
-#' The `"gradient"` algorithm works directly with the attractivenesses
-#' \eqn{Z_j}. The `"gradient_unit"` algorithm works with rescaled variables
-#' \eqn{U_j} satisfying
+#' Both algorithms work with rescaled variables
+#' \eqn{U_j = \kappa_j Z_j / \sum_{i=1}^{n} X_i} satisfying
 #'
 #' \deqn{
-#'   \sum_{j=1}^{p} U_j = 1.
+#'   \sum_{j=1}^{p} U_j = 1,
 #' }
 #'
-#' The rescaling can accelerate convergence in some settings. The two
-#' algorithms optimise equivalent formulations and should produce the same
-#' solution up to numerical precision. They can nevertheless converge to
-#' solutions different from those obtained with the `"linear"` and
-#' `"quadratic"` algorithms.
+#' and differ only by the geometry used for the gradient steps. The
+#' `"gradient_unit"` algorithm uses the Euclidean geometry of the \eqn{U_j}.
+#' The `"gradient"` algorithm uses the Euclidean geometry of the
+#' attractivenesses \eqn{Z_j}, which amounts to preconditioning the gradient in
+#' \eqn{U_j} by \eqn{\kappa_j^2}. The preconditioner is rescaled to a unit mean
+#' so that `rho_init` (see [blvim_gradient_control()]) has a similar meaning for
+#' both algorithms. When all the \eqn{\kappa_j} are equal, the two algorithms
+#' are identical (up to rounding errors). Otherwise, as the potential is not
+#' concave in general, they can converge to different local maxima from the
+#' same starting point. They can also converge to solutions different from
+#' those obtained with the `"linear"` and `"quadratic"` algorithms.
+#'
+#' An arbitrary diagonal preconditioner can be specified with the
+#' `preconditioner` parameter of [blvim_gradient_control()]. It multiplies the
+#' gradient with respect to the variables of the algorithm, \eqn{Z_j} for
+#' `"gradient"` and \eqn{U_j} for `"gradient_unit"`. For instance,
+#' `"gradient_unit"` with a preconditioner equal to \eqn{\kappa_j^2} is
+#' equivalent to `"gradient"` without preconditioner.
 #'
 #' Both gradient algorithms use projected ascent with a backtracking line
 #' search and an Armijo sufficient-increase condition. Convergence is assessed
@@ -375,6 +423,15 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
                   control = blvim_gradient_control(),
                   keep_runs = FALSE) {
   algorithm <- match.arg(algorithm)
+  if (algorithm %in% c("gradient", "gradient_unit") &&
+    !is.null(control$preconditioner) &&
+    length(control$preconditioner) != ncol(costs)) {
+    cli::cli_abort(
+      c("The {.arg preconditioner} must have one value per destination location",
+        "x" = "{.arg preconditioner} has {.val {length(control$preconditioner)}} values for {.val {ncol(costs)}} destinations"
+      )
+    )
+  }
   all_kappa <- rep(1, ncol(costs))
   if (isTRUE(kappa == 1)) {
     ## no real kappa

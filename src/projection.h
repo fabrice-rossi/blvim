@@ -12,4 +12,9 @@ arma::vec project_weighted_simplex(const arma::vec& y,
 
 arma::vec project_simplex(const arma::vec& y, double tol, int max_iter);
 
+arma::vec project_simplex_metric(const arma::vec& y,
+                                 const arma::vec& metric,
+                                 double tol,
+                                 int max_iter);
+
 #endif

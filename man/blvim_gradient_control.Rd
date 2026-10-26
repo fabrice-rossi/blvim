@@ -8,17 +8,34 @@ blvim_gradient_control(
   rho_init = 0.5,
   shrink = 0.5,
   sufficient_increase = 1e-05,
-  ls_iter_max = 50
+  ls_iter_max = 50,
+  preconditioner = NULL
 )
 }
 \arguments{
-\item{rho_init}{Initial value of the gradient step in the line search.}
+\item{rho_init}{Initial value of the gradient step in the line search. The
+step is applied to the rescaled attractivenesses \eqn{U_j}, which sum to
+one, and has the same meaning for the \code{"gradient"} and \code{"gradient_unit"}
+algorithms; see \code{\link[=blvim]{blvim()}}.}
 
 \item{shrink}{Shrink factor for the gradient step in the line search.}
 
 \item{sufficient_increase}{Relative sufficient increase in the line search.}
 
 \item{ls_iter_max}{Maximum number of iterations of the line search.}
+
+\item{preconditioner}{\code{NULL} (default) or a vector of strictly positive
+values with one value per destination location. The gradient of the
+potential with respect to the variables of the algorithm (the
+attractivenesses \eqn{Z_j} for \code{"gradient"} and the rescaled
+attractivenesses \eqn{U_j} for \code{"gradient_unit"}) is multiplied
+component-wise by this vector, and trial points are projected onto the
+simplex using the corresponding weighted Euclidean norm. The resulting
+preconditioner is rescaled to a unit mean in the \eqn{U_j} variables, so
+that \code{rho_init} keeps its meaning. Only the relative values of the
+\code{preconditioner} matter. The preconditioner does not change the solutions
+of the problem, but it changes the path followed by the algorithm, and
+therefore possibly the local maximum it converges to.}
 }
 \value{
 a list containing the values of the parameters, to be used as the
@@ -26,12 +43,15 @@ a list containing the values of the parameters, to be used as the
 }
 \description{
 This function returns a list of parameters used to tune the gradient
-algorithms of \code{\link[=blvim]{blvim()}}. These parameters control the line search
+algorithms of \code{\link[=blvim]{blvim()}}. Most of these parameters control the line search
 algorithm, which is a standard backtracking method with the Armijo stopping
-criterion.
+criterion. The \code{preconditioner} parameter changes the geometry used for the
+gradient steps.
 }
 \examples{
 blvim_gradient_control(0.5, 0.7, 1e-4, 25)
+## favour moves of the first destination
+blvim_gradient_control(preconditioner = c(10, rep(1, 9)))
 }
 \references{
 Armijo, Larry (1966), "Minimization of functions having Lipschitz

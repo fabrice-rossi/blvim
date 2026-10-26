@@ -34,8 +34,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // blv_gradient
-Rcpp::List blv_gradient(const arma::mat& costs, const arma::vec& X, double alpha, double beta, const arma::vec& Z_init, const arma::vec& kappa, double rho_init, double shrink, double c, int iter_max, int ls_iter_max, double precision);
-RcppExport SEXP _blvim_blv_gradient(SEXP costsSEXP, SEXP XSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP Z_initSEXP, SEXP kappaSEXP, SEXP rho_initSEXP, SEXP shrinkSEXP, SEXP cSEXP, SEXP iter_maxSEXP, SEXP ls_iter_maxSEXP, SEXP precisionSEXP) {
+Rcpp::List blv_gradient(const arma::mat& costs, const arma::vec& X, double alpha, double beta, const arma::vec& Z_init, const arma::vec& kappa, Rcpp::Nullable<Rcpp::NumericVector> metric, double rho_init, double shrink, double c, int iter_max, int ls_iter_max, double precision, bool record_history);
+RcppExport SEXP _blvim_blv_gradient(SEXP costsSEXP, SEXP XSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP Z_initSEXP, SEXP kappaSEXP, SEXP metricSEXP, SEXP rho_initSEXP, SEXP shrinkSEXP, SEXP cSEXP, SEXP iter_maxSEXP, SEXP ls_iter_maxSEXP, SEXP precisionSEXP, SEXP record_historySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -45,35 +45,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type Z_init(Z_initSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type metric(metricSEXP);
     Rcpp::traits::input_parameter< double >::type rho_init(rho_initSEXP);
     Rcpp::traits::input_parameter< double >::type shrink(shrinkSEXP);
     Rcpp::traits::input_parameter< double >::type c(cSEXP);
     Rcpp::traits::input_parameter< int >::type iter_max(iter_maxSEXP);
     Rcpp::traits::input_parameter< int >::type ls_iter_max(ls_iter_maxSEXP);
     Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
-    rcpp_result_gen = Rcpp::wrap(blv_gradient(costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision));
-    return rcpp_result_gen;
-END_RCPP
-}
-// blv_gradient_unit
-Rcpp::List blv_gradient_unit(const arma::mat& costs, const arma::vec& X, double alpha, double beta, const arma::vec& Z_init, const arma::vec& kappa, double rho_init, double shrink, double c, int iter_max, int ls_iter_max, double precision);
-RcppExport SEXP _blvim_blv_gradient_unit(SEXP costsSEXP, SEXP XSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP Z_initSEXP, SEXP kappaSEXP, SEXP rho_initSEXP, SEXP shrinkSEXP, SEXP cSEXP, SEXP iter_maxSEXP, SEXP ls_iter_maxSEXP, SEXP precisionSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type costs(costsSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type Z_init(Z_initSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type kappa(kappaSEXP);
-    Rcpp::traits::input_parameter< double >::type rho_init(rho_initSEXP);
-    Rcpp::traits::input_parameter< double >::type shrink(shrinkSEXP);
-    Rcpp::traits::input_parameter< double >::type c(cSEXP);
-    Rcpp::traits::input_parameter< int >::type iter_max(iter_maxSEXP);
-    Rcpp::traits::input_parameter< int >::type ls_iter_max(ls_iter_maxSEXP);
-    Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
-    rcpp_result_gen = Rcpp::wrap(blv_gradient_unit(costs, X, alpha, beta, Z_init, kappa, rho_init, shrink, c, iter_max, ls_iter_max, precision));
+    Rcpp::traits::input_parameter< bool >::type record_history(record_historySEXP);
+    rcpp_result_gen = Rcpp::wrap(blv_gradient(costs, X, alpha, beta, Z_init, kappa, metric, rho_init, shrink, c, iter_max, ls_iter_max, precision, record_history));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -103,6 +83,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
     rcpp_result_gen = Rcpp::wrap(project_simplex(y, tol, max_iter));
+    return rcpp_result_gen;
+END_RCPP
+}
+// project_simplex_metric
+arma::vec project_simplex_metric(const arma::vec& y, const arma::vec& metric, double tol, int max_iter);
+RcppExport SEXP _blvim_project_simplex_metric(SEXP ySEXP, SEXP metricSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type metric(metricSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(project_simplex_metric(y, metric, tol, max_iter));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -141,10 +135,10 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_blvim_blv", (DL_FUNC) &_blvim_blv, 12},
-    {"_blvim_blv_gradient", (DL_FUNC) &_blvim_blv_gradient, 12},
-    {"_blvim_blv_gradient_unit", (DL_FUNC) &_blvim_blv_gradient_unit, 12},
+    {"_blvim_blv_gradient", (DL_FUNC) &_blvim_blv_gradient, 14},
     {"_blvim_project_weighted_simplex", (DL_FUNC) &_blvim_project_weighted_simplex, 6},
     {"_blvim_project_simplex", (DL_FUNC) &_blvim_project_simplex, 3},
+    {"_blvim_project_simplex_metric", (DL_FUNC) &_blvim_project_simplex_metric, 4},
     {"_blvim_sample_weighted_simplex_low_codim_cpp", (DL_FUNC) &_blvim_sample_weighted_simplex_low_codim_cpp, 7},
     {"_blvim_we_oc", (DL_FUNC) &_blvim_we_oc, 5},
     {NULL, NULL, 0}

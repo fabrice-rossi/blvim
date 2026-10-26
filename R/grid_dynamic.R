@@ -60,7 +60,8 @@ grid_blvim <- function(costs, X, alphas, betas, Z = NULL,
       iter_max = iter_max,
       conv_check = conv_check,
       precision = precision,
-      algorithm = algorithm
+      algorithm = algorithm,
+      control = control
     )
     if (progress) { # nocov start
       cli::cli_progress_update()

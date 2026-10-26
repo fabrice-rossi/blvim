@@ -163,3 +163,86 @@ arma::vec project_simplex(const arma::vec& y, double tol, int max_iter) {
   }
   return z;
 }
+
+// Projection onto the unit simplex for the norm sum_j v_j^2 / metric_j, that is
+// z_j = max(y_j - lambda * metric_j, 0) with sum(z) = 1. Coordinates with a
+// zero metric are not moved (apart from clipping at zero). metric must be
+// nonnegative with at least one positive value.
+// [[Rcpp::export]]
+arma::vec project_simplex_metric(const arma::vec& y,
+                                 const arma::vec& metric,
+                                 double tol,
+                                 int max_iter) {
+  arma::uword p = y.n_elem;
+  if(p == 0)
+    return arma::vec();
+  if(p == 1)
+    return arma::vec({1.0});
+
+  // g(lambda) = sum_j max(y_j - lambda metric_j, 0) - 1 is convex and
+  // nonincreasing. Starting with all free coordinates active gives g >= 0, and
+  // Newton steps then increase lambda monotonically to the root, in a finite
+  // number of steps as g is piecewise linear.
+  double fixed_mass = 0.0;
+  double sum_y = 0.0;
+  double sum_metric = 0.0;
+  arma::uword count_active = 0;
+  for(arma::uword j = 0; j < p; ++j) {
+    if(metric[j] > 0.0) {
+      sum_y += y[j];
+      sum_metric += metric[j];
+      count_active++;
+    } else {
+      fixed_mass += std::max(y[j], 0.0);
+    }
+  }
+  double lambda = (sum_y + fixed_mass - 1.0) / sum_metric;
+  for(int iter = 0; iter < max_iter; ++iter) {
+    sum_y = 0.0;
+    sum_metric = 0.0;
+    arma::uword count = 0;
+    for(arma::uword j = 0; j < p; ++j) {
+      if(metric[j] > 0.0 && y[j] - lambda * metric[j] > 0.0) {
+        sum_y += y[j];
+        sum_metric += metric[j];
+        count++;
+      }
+    }
+    if(count == 0 || count == count_active)
+      break;
+    count_active = count;
+    const double lambda_new = (sum_y + fixed_mass - 1.0) / sum_metric;
+    if(!(lambda_new > lambda))
+      break;
+    lambda = lambda_new;
+  }
+
+  arma::vec z(p);
+  sum_metric = 0.0;
+  for(arma::uword j = 0; j < p; ++j) {
+    if(metric[j] > 0.0) {
+      z[j] = std::max(y[j] - lambda * metric[j], 0.0);
+      if(z[j] > 0.0)
+        sum_metric += metric[j];
+    } else {
+      z[j] = std::max(y[j], 0.0);
+    }
+  }
+  // remove the rounding error on the mass, keeping the structure of the
+  // solution (this is a small change of lambda)
+  const double correction =
+      sum_metric > 0.0 ? (1.0 - arma::accu(z)) / sum_metric : 0.0;
+  for(arma::uword j = 0; j < p; ++j) {
+    if(metric[j] > 0.0 && z[j] > 0.0)
+      z[j] = std::max(z[j] + correction * metric[j], 0.0);
+  }
+  double mass_error = std::abs(arma::accu(z) - 1.0);
+  if(mass_error > tol) {
+    std::ostringstream message;
+    message << std::scientific
+            << "Cannot project within the specified precision: "
+            << "mass error = " << mass_error << ", tolerance = " << tol;
+    Rcpp::stop(message.str());
+  }
+  return z;
+}

@@ -320,3 +320,42 @@ test_that("random results are reproducible from the R seed", {
   )
   expect_identical(x, y)
 })
+
+test_that("metric simplex projection with a unit metric is Euclidean", {
+  withr::local_seed(130)
+  for (k in 1:20) {
+    y <- stats::runif(20, min = -1, max = 1)
+    expect_equal(R_project_simplex_metric(y, rep(1, 20)), R_project_simplex(y))
+  }
+})
+
+test_that("metric simplex projection is the projection for the weighted norm", {
+  withr::local_seed(131)
+  for (k in 1:30) {
+    metric <- stats::runif(20, min = 0.1, max = 3)
+    y <- stats::runif(20, min = -1, max = 1) * sample(c(0.1, 1, 10), 1)
+    yp <- R_project_simplex_metric(y, metric)
+    expect_all_true(yp >= 0)
+    expect_equal(sum(yp), 1)
+    ## v = u / sqrt(metric) turns the problem into a weighted simplex projection
+    s <- sqrt(metric)
+    expect_equal(yp, s * R_project_weighted_simplex(y / s, s, 1))
+  }
+})
+
+test_that("metric simplex projection keeps zero metric coordinates", {
+  withr::local_seed(132)
+  for (k in 1:20) {
+    u <- sample_simplex(rep(1, 10), 1)
+    metric <- stats::runif(10, min = 0.1, max = 3)
+    fixed <- sample(10, 3)
+    metric[fixed] <- 0
+    y <- u + stats::rnorm(10) * metric
+    yp <- R_project_simplex_metric(y, metric)
+    expect_equal(yp[fixed], u[fixed])
+    expect_equal(sum(yp), 1)
+    expect_all_true(yp >= 0)
+  }
+  expect_equal(R_project_simplex_metric(numeric(), numeric()), numeric())
+  expect_equal(R_project_simplex_metric(rnorm(1), 2), 1)
+})

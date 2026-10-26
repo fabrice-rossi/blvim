@@ -230,19 +230,31 @@ Computing an equilibrium is equivalent to maximising the potential
 function; see \code{\link[=sim_potential]{sim_potential()}}. The gradient algorithms optimise this
 potential directly using projected gradient ascent.
 
-The \code{"gradient"} algorithm works directly with the attractivenesses
-\eqn{Z_j}. The \code{"gradient_unit"} algorithm works with rescaled variables
-\eqn{U_j} satisfying
+Both algorithms work with rescaled variables
+\eqn{U_j = \kappa_j Z_j / \sum_{i=1}^{n} X_i} satisfying
 
 \deqn{
-  \sum_{j=1}^{p} U_j = 1.
+  \sum_{j=1}^{p} U_j = 1,
 }
 
-The rescaling can accelerate convergence in some settings. The two
-algorithms optimise equivalent formulations and should produce the same
-solution up to numerical precision. They can nevertheless converge to
-solutions different from those obtained with the \code{"linear"} and
-\code{"quadratic"} algorithms.
+and differ only by the geometry used for the gradient steps. The
+\code{"gradient_unit"} algorithm uses the Euclidean geometry of the \eqn{U_j}.
+The \code{"gradient"} algorithm uses the Euclidean geometry of the
+attractivenesses \eqn{Z_j}, which amounts to preconditioning the gradient in
+\eqn{U_j} by \eqn{\kappa_j^2}. The preconditioner is rescaled to a unit mean
+so that \code{rho_init} (see \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}) has a similar meaning for
+both algorithms. When all the \eqn{\kappa_j} are equal, the two algorithms
+are identical (up to rounding errors). Otherwise, as the potential is not
+concave in general, they can converge to different local maxima from the
+same starting point. They can also converge to solutions different from
+those obtained with the \code{"linear"} and \code{"quadratic"} algorithms.
+
+An arbitrary diagonal preconditioner can be specified with the
+\code{preconditioner} parameter of \code{\link[=blvim_gradient_control]{blvim_gradient_control()}}. It multiplies the
+gradient with respect to the variables of the algorithm, \eqn{Z_j} for
+\code{"gradient"} and \eqn{U_j} for \code{"gradient_unit"}. For instance,
+\code{"gradient_unit"} with a preconditioner equal to \eqn{\kappa_j^2} is
+equivalent to \code{"gradient"} without preconditioner.
 
 Both gradient algorithms use projected ascent with a backtracking line
 search and an Armijo sufficient-increase condition. Convergence is assessed
