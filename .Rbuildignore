@@ -17,3 +17,5 @@ vignettes/grid_cache
 ^CRAN-SUBMISSION$
 ^\.positai$
 ^\.claude$
+^CLAUDE\.md$
+^claude$
