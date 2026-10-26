@@ -62,8 +62,8 @@ Akamatsu, and Kogure in a recent paper (<https://arxiv.org/abs/2011.06778v2>).
 
 ## Documentation
 
-* the theoretical vignette has been expanded with new content based on a
-  recent paper by Osawa et al.
+* the theoretical vignette has been expanded with new content based on the
+  recent paper by Osawa et al. <https://arxiv.org/abs/2011.06778v2>
 * the documentation has been proofread, with more cross-references between
   related functions and corrections of several inaccuracies.
 
