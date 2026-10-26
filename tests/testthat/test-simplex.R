@@ -142,7 +142,10 @@ test_that("number_of_nonvertex_faces_capped handles all branches", {
 test_that("argument validation rejects malformed inputs", {
   expect_error(sample_weighted_simplex(1:3, n = -2))
   expect_error(sample_weighted_simplex(1:3, n = NA_real_))
-  expect_error(sample_weighted_simplex(1:3, face_fraction = -1))
+  expect_error(
+    sample_weighted_simplex(1:3, face_fraction = -1),
+    "is -1"
+  )
 })
 
 test_that("zero face fraction produces only interior points", {

@@ -266,7 +266,7 @@ sample_weighted_simplex <- function(
   if (!is.numeric(face_fraction) || length(face_fraction) != 1 || is.na(face_fraction) || face_fraction < 0 || face_fraction > 1) {
     cli::cli_abort(
       c("{.arg face_fraction} must be a number between 0 and 1",
-        "x" = "{.arg face_fraction} is {.val {qmin}}"
+        "x" = "{.arg face_fraction} is {.val {head(face_fraction)}}"
       )
     )
   }
