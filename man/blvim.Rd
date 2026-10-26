@@ -105,6 +105,11 @@ run with the largest final potential. Run summaries are available through
 The last three columns are \code{NA} for \code{"linear"} and \code{"quadratic"}. If
 \code{keep_runs = TRUE}, the complete fitted models are additionally available
 through \code{\link[=sim_runs]{sim_runs()}}, in the same order as the starting points.
+
+When the \code{history} parameter of \code{\link[=blvim_gradient_control]{blvim_gradient_control()}} is \code{TRUE}, the
+iteration history of the gradient algorithms is available through
+\code{\link[=sim_history]{sim_history()}} for the returned model and, if \code{keep_runs = TRUE}, for
+each model returned by \code{\link[=sim_runs]{sim_runs()}}. It is not kept for the other runs.
 }
 \description{
 \code{blvim()} computes equilibrium flows between origin and destination locations

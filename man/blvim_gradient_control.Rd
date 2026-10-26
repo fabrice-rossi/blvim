@@ -9,7 +9,8 @@ blvim_gradient_control(
   shrink = 0.5,
   sufficient_increase = 1e-05,
   ls_iter_max = 50,
-  preconditioner = NULL
+  preconditioner = NULL,
+  history = FALSE
 )
 }
 \arguments{
@@ -36,6 +37,12 @@ that \code{rho_init} keeps its meaning. Only the relative values of the
 \code{preconditioner} matter. The preconditioner does not change the solutions
 of the problem, but it changes the path followed by the algorithm, and
 therefore possibly the local maximum it converges to.}
+
+\item{history}{A logical scalar. If \code{TRUE}, the gradient algorithms record
+the history of their iterations, which can be retrieved with
+\code{\link[=sim_history]{sim_history()}}. When multiple starting points are used in \code{\link[=blvim]{blvim()}}, the
+history is kept only for the retained models (the selected one, or all of
+them when \code{keep_runs = TRUE}).}
 }
 \value{
 a list containing the values of the parameters, to be used as the
@@ -59,5 +66,5 @@ continuous first partial derivatives", Pacific J. Math. 16 (1): 1–3
 \doi{10.2140/pjm.1966.16.1}
 }
 \seealso{
-\code{\link[=blvim]{blvim()}}, \code{\link[=grid_blvim]{grid_blvim()}}
+\code{\link[=blvim]{blvim()}}, \code{\link[=grid_blvim]{grid_blvim()}}, \code{\link[=sim_history]{sim_history()}}
 }

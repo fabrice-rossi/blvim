@@ -40,6 +40,12 @@ Akamatsu, and Kogure in a recent paper (<https://arxiv.org/abs/2011.06778v2>).
   value per destination location. It changes the path followed by the 
   algorithms (and therefore possibly the local maximum they reach), while the 
   initial step `rho_init` keeps the same meaning.
+* the gradient algorithms can record the history of their iterations (duality 
+  gap, potential, line search steps, etc.) using 
+  `blvim_gradient_control(history = TRUE)`. The new function `sim_history()`
+  returns this history for the models kept by `blvim()` and `grid_blvim()`. 
+  When applied to a `sim_list` (or with `grid_sim_history()`), it returns the 
+  histories of all the models in a single data frame.
 * `blvim()` and `grid_blvim()` now support conversion factors between 
   attractivenesses and incoming flows, together with the new function 
   `sim_conversion()`.

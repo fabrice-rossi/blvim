@@ -25,9 +25,14 @@
 #'   `preconditioner` matter. The preconditioner does not change the solutions
 #'   of the problem, but it changes the path followed by the algorithm, and
 #'   therefore possibly the local maximum it converges to.
+#' @param history A logical scalar. If `TRUE`, the gradient algorithms record
+#'   the history of their iterations, which can be retrieved with
+#'   [sim_history()]. When multiple starting points are used in [blvim()], the
+#'   history is kept only for the retained models (the selected one, or all of
+#'   them when `keep_runs = TRUE`).
 #' @returns a list containing the values of the parameters, to be used as the
 #'   `control` argument of [blvim()] or [grid_blvim()]
-#' @seealso [blvim()], [grid_blvim()]
+#' @seealso [blvim()], [grid_blvim()], [sim_history()]
 #' @references Armijo, Larry (1966), "Minimization of functions having Lipschitz
 #'   continuous first partial derivatives", Pacific J. Math. 16 (1): 1–3
 #'   \doi{10.2140/pjm.1966.16.1}
@@ -40,14 +45,30 @@ blvim_gradient_control <- function(rho_init = 0.5,
                                    shrink = 0.5,
                                    sufficient_increase = 1e-5,
                                    ls_iter_max = 50,
-                                   preconditioner = NULL) {
-  if (!is.null(preconditioner) &&
-    (!is.numeric(preconditioner) || length(preconditioner) == 0 ||
-      anyNA(preconditioner) || any(!is.finite(preconditioner)) ||
-      any(preconditioner <= 0))) {
+                                   preconditioner = NULL,
+                                   history = FALSE) {
+  valid_preconditioner <- is.null(preconditioner) || (
+    is.numeric(preconditioner) && length(preconditioner) > 0 &&
+      !anyNA(preconditioner) && all(is.finite(preconditioner)) &&
+      all(preconditioner > 0)
+  )
+  if (!valid_preconditioner) {
     cli::cli_abort(
-      c("{.arg preconditioner} must be {.code NULL} or a vector of finite positive numbers",
-        "x" = "{.arg preconditioner} is {.val {head(preconditioner)}}"
+      c(paste(
+        "{.arg preconditioner} must be {.code NULL} or a vector of finite",
+        "positive numbers"
+      ),
+      "x" = "{.arg preconditioner} is {.val {head(preconditioner)}}"
+      )
+    )
+  }
+  if (!is.null(preconditioner)) {
+    preconditioner <- as.double(preconditioner)
+  }
+  if (!rlang::is_bool(history)) {
+    cli::cli_abort(
+      c("{.arg history} must be {.val TRUE} or {.val FALSE}",
+        "x" = "{.arg history} is {.val {head(history)}}"
       )
     )
   }
@@ -56,7 +77,24 @@ blvim_gradient_control <- function(rho_init = 0.5,
     shrink = shrink,
     sufficient_increase = sufficient_increase,
     ls_iter_max = ls_iter_max,
-    preconditioner = if (is.null(preconditioner)) NULL else as.double(preconditioner)
+    preconditioner = preconditioner,
+    history = history
+  )
+}
+
+## Converts the iteration history of the projected ascent into the user facing
+## data frame. The merit of the ascent is minus the potential up to a constant:
+## on the simplex sum(kappa Z) = sum(X) and S = sum(X)^alpha A * row_scale.
+ascent_history <- function(history, X) {
+  X_tot <- sum(X)
+  data.frame(
+    iteration = history$iteration,
+    gap = history$residual,
+    potential = X_tot * log(X_tot) - X_tot - history$merit,
+    step = history$accepted_scale,
+    step_norm = history$step_norm,
+    line_search_reductions = history$line_search_reductions,
+    min_U = history$minimum_U
   )
 }
 
@@ -92,7 +130,8 @@ one_blvim <- function(costs, X, alpha, beta, Z,
       c = control$sufficient_increase,
       iter_max = iter_max,
       ls_iter_max = control$ls_iter_max,
-      precision = precision
+      precision = precision,
+      record_history = isTRUE(control$history)
     )
   } else {
     pre <- blv(
@@ -105,6 +144,9 @@ one_blvim <- function(costs, X, alpha, beta, Z,
     convergence_diagnostic$status <- pre$status
     convergence_diagnostic$duality_gap <- pre$gap
     convergence_diagnostic$eval <- pre$eval
+    if (!is.null(pre$history)) {
+      convergence_diagnostic$history <- ascent_history(pre$history, X)
+    }
   }
   pre$diagnostic <- convergence_diagnostic
   pre
@@ -327,6 +369,11 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #'   The last three columns are `NA` for `"linear"` and `"quadratic"`. If
 #'   `keep_runs = TRUE`, the complete fitted models are additionally available
 #'   through [sim_runs()], in the same order as the starting points.
+#'
+#'   When the `history` parameter of [blvim_gradient_control()] is `TRUE`, the
+#'   iteration history of the gradient algorithms is available through
+#'   [sim_history()] for the returned model and, if `keep_runs = TRUE`, for
+#'   each model returned by [sim_runs()]. It is not kept for the other runs.
 #'
 #' @inheritSection static_blvim Location data
 #'

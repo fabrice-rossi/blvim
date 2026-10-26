@@ -500,6 +500,65 @@ grid_sim_iterations <- function(sim, ...) {
   sim_iterations(sim, ...)
 }
 
+#' @export
+sim_history.sim_list <- function(sim, ...) {
+  histories <- lapply(seq_along(sim), function(k) {
+    history <- sim_history(sim[[k]], ...)
+    if (!is.null(history)) {
+      history <- cbind(sim = rep(k, nrow(history)), history)
+    }
+    history
+  })
+  histories <- histories[!sapply(histories, is.null)]
+  if (length(histories) == 0) {
+    return(NULL)
+  }
+  result <- do.call(rbind, histories)
+  rownames(result) <- NULL
+  result
+}
+
+#' Return the iteration histories of a collection of spatial interaction
+#' models
+#'
+#' The function gathers the iteration histories (see [sim_history()]) of the
+#' spatial interaction models of its `sim_list` parameter in a single data
+#' frame. The first column, `sim`, gives the index of the model in the
+#' `sim_list`, while the other columns are those described in [sim_history()].
+#' Models without history do not contribute any row.
+#'
+#' Note that [sim_history()] is generic and can be applied directly to
+#' `sim_list` objects. The current function is provided to be explicit in R code
+#' about what is a single model and what is a collection of models (using
+#' function names that start with `"grid_"`).
+#'
+#' @inheritParams sim_history
+#' @param sim a collection of spatial interaction models, an object of class
+#'   `sim_list`
+#' @returns a data frame describing the iterations of the algorithms, or `NULL`
+#'   if no model has a recorded history.
+#' @seealso [sim_history()], [blvim_gradient_control()], [grid_sim_converged()]
+#'   and [grid_blvim()]
+#' @export
+#'
+#' @examples
+#' distances <- french_cities_distances[1:15, 1:15] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:15])
+#' attractiveness <- log(french_cities$area[1:15])
+#' all_flows <- grid_blvim(
+#'   distances, production, c(1.1, 1.25, 1.5),
+#'   c(1, 2, 3, 4) / 500, attractiveness,
+#'   bipartite = FALSE,
+#'   algorithm = "gradient",
+#'   control = blvim_gradient_control(history = TRUE)
+#' )
+#' histories <- grid_sim_history(all_flows)
+#' head(histories)
+#' table(histories$sim) ## number of iterations per model
+grid_sim_history <- function(sim, ...) {
+  sim_history(sim, ...)
+}
+
 #' Combine multiple sim_list objects into a single one
 #'
 #' This function combines the `sim_list` and `sim` objects used as arguments

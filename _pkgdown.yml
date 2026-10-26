@@ -35,6 +35,7 @@ reference:
   contents:
   - sim_converged
   - sim_diagnostic
+  - sim_history
   - sim_iterations
   - sim_logs
   - sim_runs

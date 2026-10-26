@@ -428,6 +428,75 @@ sim_diagnostic.sim <- function(sim, ...) {
 }
 
 
+#' Return the iteration history of the algorithm used to build a spatial
+#' interaction model
+#'
+#' Some spatial interaction models are the result of an iterative calculation,
+#' see for instance [blvim()]. This function returns the history of the
+#' iterations of this calculation when it has been recorded, and `NULL` when
+#' this is not the case, in particular when the spatial interaction model is
+#' not the result of an iterative calculation. The function applies also to a
+#' collection of spatial interaction models as represented by a `sim_list`.
+#'
+#' Currently, only the gradient algorithms of [blvim()] can record their
+#' iteration history, when asked to do so with the `history` parameter of
+#' [blvim_gradient_control()]. For all other spatial interaction models, the
+#' function returns `NULL`.
+#'
+#' The history is a data frame with one row per iteration, including the
+#' initial point (iteration 0) and the final one, and the following columns:
+#'
+#' * `iteration`: iteration number;
+#' * `gap`: duality gap at the current point;
+#' * `potential`: potential at the current point (see [sim_potential()]);
+#' * `step`: accepted step in the line search (0 for the final point);
+#' * `step_norm`: Euclidean norm of the accepted step in the rescaled
+#'   attractivenesses (0 for the final point);
+#' * `line_search_reductions`: number of step reductions in the line search;
+#' * `min_U`: smallest rescaled attractiveness at the current point.
+#'
+#' When multiple starting points are used in [blvim()], the history is
+#' available only for the retained models, that is the selected one and, if
+#' `keep_runs = TRUE`, the ones returned by [sim_runs()].
+#'
+#' Applied to a `sim_list`, the function returns the histories of all its
+#' models in a single data frame; see [grid_sim_history()].
+#'
+#' @param sim a spatial interaction model object (an object of class `sim`) or a
+#'   collection of spatial interaction models (an object of class `sim_list`)
+#' @param ... additional parameters
+#'
+#' @returns a data frame describing the iterations of the algorithm, or `NULL`
+#'   if no history was recorded, as described above. In the case of a
+#'   `sim_list` the function returns a single data frame gathering the
+#'   histories of all models (see [grid_sim_history()]), or `NULL` if no
+#'   history was recorded for any of them.
+#' @export
+#' @seealso [blvim_gradient_control()], [sim_diagnostic()], [blvim()],
+#'   [grid_sim_history()]
+#' @examples
+#' distances <- french_cities_distances[1:10, 1:10] / 1000 ## convert to km
+#' production <- log(french_cities$population[1:10])
+#' attractiveness <- log(french_cities$area[1:10])
+#' model <- static_blvim(distances, production, 1.5, 1 / 100, attractiveness)
+#' sim_history(model) ## must be NULL
+#' model <- blvim(distances, production, 1.5, 1 / 100, attractiveness,
+#'   algorithm = "gradient",
+#'   control = blvim_gradient_control(history = TRUE)
+#' )
+#' sim_diagnostic(model)
+#' history <- sim_history(model)
+#' head(history)
+#' plot(history$iteration, history$gap, log = "y", type = "b")
+sim_history <- function(sim, ...) {
+  UseMethod("sim_history")
+}
+
+#' @export
+sim_history.sim <- function(sim, ...) {
+  NULL
+}
+
 #' Report whether a spatial interaction model is bipartite
 #'
 #' The function returns `TRUE` if the spatial interaction model (SIM) is

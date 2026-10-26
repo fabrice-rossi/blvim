@@ -69,6 +69,11 @@ sim_diagnostic.sim_blvim <- function(sim, ...) {
 }
 
 #' @export
+sim_history.sim_blvim <- function(sim, ...) {
+  sim$diagnostic$history
+}
+
+#' @export
 sim_diagnostic_cli_rep.sim_blvim_diagnostic <- function(sim_d, ...) {
   cli::cli_text("BLV model obtained with the {.str {sim_d$algorithm}} algorithm.")
   if (sim_d$algorithm %in% c("linear", "quadratic")) {
@@ -91,5 +96,9 @@ sim_diagnostic_cli_rep.sim_blvim_diagnostic <- function(sim_d, ...) {
     cli::cli_li("Number of potential evaluations: {.val {sim_d$cd$eval}}.")
     cli::cli_li("Duality gap: {.val {signif(sim_d$cd$duality_gap,7)}}.")
     cli::cli_li("Return status: {.str {sim_d$cd$status}}.")
+    if (!is.null(sim_d$cd$history)) {
+      cli::cli_li("Iteration history ({.val {nrow(sim_d$cd$history)}} rows)
+available via {.fn sim_history}.")
+    }
   }
 }
