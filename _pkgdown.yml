@@ -36,8 +36,10 @@ reference:
   - sim_converged
   - sim_diagnostic
   - sim_history
+  - summary.blvim_history
   - sim_iterations
   - sim_logs
+  - summary.blvim_logs
   - sim_runs
 - title: "Non-bipartite models"
   desc: "Functions that apply only to non-bipartite models."

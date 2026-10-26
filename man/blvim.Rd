@@ -99,10 +99,16 @@ run with the largest final potential. Run summaries are available through
 \item \code{converged}: whether the run stopped before \code{iter_max};
 \item \code{status}: stopping status for a gradient algorithm;
 \item \code{gap}: final duality gap for a gradient algorithm;
-\item \code{evaluations}: number of evaluations for a gradient algorithm.
+\item \code{evaluations}: number of evaluations for a gradient algorithm;
+\item \code{n_active}: number of active destinations of the final configuration;
+\item \code{configuration}: identifier of the final configuration, shared by the
+runs that reach the same configuration and numbered by decreasing
+potential;
+\item \code{selected}: whether the run is the returned one.
 }
 
-The last three columns are \code{NA} for \code{"linear"} and \code{"quadratic"}. If
+The \code{status}, \code{gap} and \code{evaluations} columns are \code{NA} for \code{"linear"} and
+\code{"quadratic"}. If
 \code{keep_runs = TRUE}, the complete fitted models are additionally available
 through \code{\link[=sim_runs]{sim_runs()}}, in the same order as the starting points.
 

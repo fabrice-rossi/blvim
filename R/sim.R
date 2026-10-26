@@ -453,6 +453,9 @@ sim_diagnostic.sim <- function(sim, ...) {
 #' * `step_norm`: Euclidean norm of the accepted step in the rescaled
 #'   attractivenesses (0 for the final point);
 #' * `line_search_reductions`: number of step reductions in the line search;
+#' * `n_active`: number of active destinations (with a positive rescaled
+#'   attractiveness) at the current point, which changes when the algorithm
+#'   moves from one face of the simplex to another;
 #' * `min_U`: smallest rescaled attractiveness at the current point.
 #'
 #' When multiple starting points are used in [blvim()], the history is
@@ -466,8 +469,10 @@ sim_diagnostic.sim <- function(sim, ...) {
 #'   collection of spatial interaction models (an object of class `sim_list`)
 #' @param ... additional parameters
 #'
-#' @returns a data frame describing the iterations of the algorithm, or `NULL`
-#'   if no history was recorded, as described above. In the case of a
+#' @returns a data frame of class `blvim_history` describing the iterations of
+#'   the algorithm, or `NULL` if no history was recorded, as described above.
+#'   Use [summary.blvim_history()] and [autoplot.blvim_history()] to describe
+#'   and display it. In the case of a
 #'   `sim_list` the function returns a single data frame gathering the
 #'   histories of all models (see [grid_sim_history()]), or `NULL` if no
 #'   history was recorded for any of them.
@@ -487,6 +492,7 @@ sim_diagnostic.sim <- function(sim, ...) {
 #' sim_diagnostic(model)
 #' history <- sim_history(model)
 #' head(history)
+#' summary(history)
 #' plot(history$iteration, history$gap, log = "y", type = "b")
 sim_history <- function(sim, ...) {
   UseMethod("sim_history")

@@ -14,8 +14,10 @@ collection of spatial interaction models (an object of class \code{sim_list})}
 \item{...}{additional parameters}
 }
 \value{
-a data frame describing the iterations of the algorithm, or \code{NULL}
-if no history was recorded, as described above. In the case of a
+a data frame of class \code{blvim_history} describing the iterations of
+the algorithm, or \code{NULL} if no history was recorded, as described above.
+Use \code{\link[=summary.blvim_history]{summary.blvim_history()}} and \code{\link[=autoplot.blvim_history]{autoplot.blvim_history()}} to describe
+and display it. In the case of a
 \code{sim_list} the function returns a single data frame gathering the
 histories of all models (see \code{\link[=grid_sim_history]{grid_sim_history()}}), or \code{NULL} if no
 history was recorded for any of them.
@@ -44,6 +46,9 @@ initial point (iteration 0) and the final one, and the following columns:
 \item \code{step_norm}: Euclidean norm of the accepted step in the rescaled
 attractivenesses (0 for the final point);
 \item \code{line_search_reductions}: number of step reductions in the line search;
+\item \code{n_active}: number of active destinations (with a positive rescaled
+attractiveness) at the current point, which changes when the algorithm
+moves from one face of the simplex to another;
 \item \code{min_U}: smallest rescaled attractiveness at the current point.
 }
 
@@ -67,6 +72,7 @@ model <- blvim(distances, production, 1.5, 1 / 100, attractiveness,
 sim_diagnostic(model)
 history <- sim_history(model)
 head(history)
+summary(history)
 plot(history$iteration, history$gap, log = "y", type = "b")
 }
 \seealso{

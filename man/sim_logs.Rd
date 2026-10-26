@@ -11,8 +11,8 @@ sim_logs(sim)
 object of class \code{sim} and \code{sim_blvim}}
 }
 \value{
-A data frame with one row per starting point and the following
-columns:
+A data frame of class \code{blvim_logs} with one row per starting point
+and the following columns:
 \itemize{
 \item \code{run}: index of the run, from 1 to the number of starting points;
 \item \code{potential}: final value of the potential;
@@ -20,7 +20,10 @@ columns:
 \item \code{converged}: whether the run converged;
 \item \code{status}: stopping status reported by a gradient algorithm;
 \item \code{gap}: final duality gap reported by a gradient algorithm;
-\item \code{evaluations}: number of evaluations reported by a gradient algorithm.
+\item \code{evaluations}: number of evaluations reported by a gradient algorithm;
+\item \code{n_active}: number of active destinations of the final configuration;
+\item \code{configuration}: identifier of the final configuration (see details);
+\item \code{selected}: whether the run is the one returned by \code{\link[=blvim]{blvim()}}.
 }
 
 The gradient-specific columns are \code{NA} for the \code{"linear"} and
@@ -35,10 +38,25 @@ The rows are in the same order as the starting points supplied to
 \code{\link[=blvim]{blvim()}}. Run summaries are retained independently of the value of
 \code{keep_runs}.
 
+The final configuration of a run is described by its rescaled
+attractivenesses \eqn{U_j = \kappa_j Z_j / \sum_k \kappa_k Z_k}. A
+destination is active when \eqn{U_j > 10^{-5}}. Two runs reach the same
+configuration when they have the same active destinations and their
+rescaled attractivenesses differ by at most \eqn{10^{-3}}. The
+configurations are numbered by decreasing best potential, so that
+configuration 1 is the one of the selected run. The number of runs that
+reach it measures the reliability of the multiple starts: when it is
+reached by a single run, more starting points might find a better one.
+
+The \code{summary()} and \code{autoplot()} methods of the result (see
+\code{\link[=summary.blvim_logs]{summary.blvim_logs()}} and \code{\link[=autoplot.blvim_logs]{autoplot.blvim_logs()}}) describe and display
+these summaries.
+
 See \code{\link[=blvim]{blvim()}} for details on how the nature of \code{Z} determines the number of
 runs. Use \code{\link[=sim_runs]{sim_runs()}} to extract the complete spatial interaction models
 produced by the runs when they are available.
 }
 \seealso{
-\code{\link[=blvim]{blvim()}}, \code{\link[=sim_runs]{sim_runs()}}, \code{\link[=sim_diagnostic]{sim_diagnostic()}}
+\code{\link[=blvim]{blvim()}}, \code{\link[=sim_runs]{sim_runs()}}, \code{\link[=sim_diagnostic]{sim_diagnostic()}},
+\code{\link[=summary.blvim_logs]{summary.blvim_logs()}}, \code{\link[=autoplot.blvim_logs]{autoplot.blvim_logs()}}
 }

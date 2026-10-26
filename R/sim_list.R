@@ -505,7 +505,7 @@ sim_history.sim_list <- function(sim, ...) {
   histories <- lapply(seq_along(sim), function(k) {
     history <- sim_history(sim[[k]], ...)
     if (!is.null(history)) {
-      history <- cbind(sim = rep(k, nrow(history)), history)
+      history <- cbind(sim = rep(k, nrow(history)), as.data.frame(history))
     }
     history
   })
@@ -515,7 +515,7 @@ sim_history.sim_list <- function(sim, ...) {
   }
   result <- do.call(rbind, histories)
   rownames(result) <- NULL
-  result
+  new_blvim_history(result)
 }
 
 #' Return the iteration histories of a collection of spatial interaction

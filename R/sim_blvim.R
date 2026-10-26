@@ -70,7 +70,11 @@ sim_diagnostic.sim_blvim <- function(sim, ...) {
 
 #' @export
 sim_history.sim_blvim <- function(sim, ...) {
-  sim$diagnostic$history
+  history <- sim$diagnostic$history
+  if (!is.null(history)) {
+    history <- new_blvim_history(history)
+  }
+  history
 }
 
 #' @export

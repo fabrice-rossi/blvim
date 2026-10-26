@@ -83,6 +83,7 @@ namespace blvim {
         record.residual = out.gap;
         record.merit = -arma::dot(X, arma::log(A) + log_row_scale) / alpha;
         record.minimum_U = U.min();
+        record.active = static_cast<int>(arma::accu(U > 0.0));
         record.beta = beta;
         out.history.push_back(record);
       }

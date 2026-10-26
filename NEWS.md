@@ -46,6 +46,14 @@ Akamatsu, and Kogure in a recent paper (<https://arxiv.org/abs/2011.06778v2>).
   returns this history for the models kept by `blvim()` and `grid_blvim()`. 
   When applied to a `sim_list` (or with `grid_sim_history()`), it returns the 
   histories of all the models in a single data frame.
+* the logs of the runs of `blvim()` (see `sim_logs()`) identify the final
+  configuration of each run (number of active destinations and identifier
+  shared by the runs that reach the same configuration) and the selected run.
+  `summary()` and `autoplot()` methods for the results of `sim_logs()` and
+  `sim_history()` describe the runs (distinct configurations found, share of
+  the runs that reach the best one, convergence) and the iterations
+  (convergence rate of the duality gap, line search, changes of the number of
+  active destinations, now recorded in the history).
 * `blvim()` and `grid_blvim()` now support conversion factors between 
   attractivenesses and incoming flows, together with the new function 
   `sim_conversion()`.

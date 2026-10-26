@@ -94,6 +94,7 @@ ascent_history <- function(history, X) {
     step = history$accepted_scale,
     step_norm = history$step_norm,
     line_search_reductions = history$line_search_reductions,
+    n_active = history$active,
     min_U = history$minimum_U
   )
 }
@@ -364,9 +365,15 @@ one_blvim <- function(costs, X, alpha, beta, Z,
 #'   * `converged`: whether the run stopped before `iter_max`;
 #'   * `status`: stopping status for a gradient algorithm;
 #'   * `gap`: final duality gap for a gradient algorithm;
-#'   * `evaluations`: number of evaluations for a gradient algorithm.
+#'   * `evaluations`: number of evaluations for a gradient algorithm;
+#'   * `n_active`: number of active destinations of the final configuration;
+#'   * `configuration`: identifier of the final configuration, shared by the
+#'     runs that reach the same configuration and numbered by decreasing
+#'     potential;
+#'   * `selected`: whether the run is the returned one.
 #'
-#'   The last three columns are `NA` for `"linear"` and `"quadratic"`. If
+#'   The `status`, `gap` and `evaluations` columns are `NA` for `"linear"` and
+#'   `"quadratic"`. If
 #'   `keep_runs = TRUE`, the complete fitted models are additionally available
 #'   through [sim_runs()], in the same order as the starting points.
 #'
@@ -527,6 +534,8 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
       gap = rep(NA_real_, nrow(Z)),
       evaluations = rep(NA_integer_, nrow(Z))
     )
+    final_U <- matrix(NA_real_, nrow(Z), ncol(Z))
+    best_run <- 1L
     if (keep_runs) {
       all_sims <- vector(mode = "list", nrow(Z))
     }
@@ -539,6 +548,7 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
       logs$potential[k] <- pre_potential
       logs$iterations[k] <- pre$iter + 1L
       logs$converged[k] <- pre$iter < iter_max
+      final_U[k, ] <- rescaled_attractiveness(pre$Z[, 1], all_kappa)
       pre_diag <- pre$diagnostic
       if (length(pre_diag) > 0) {
         logs$status[k] <- pre_diag$status
@@ -549,6 +559,7 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
         best_potential <- pre_potential
         best_sim <- pre
         best_init <- Z[k, ]
+        best_run <- k
       }
       if (keep_runs) {
         all_sims[[k]] <- new_sim_blvim(pre$Y, pre$Z[, 1], costs, alpha, beta,
@@ -565,6 +576,11 @@ blvim <- function(costs, X, alpha, beta, Z = NULL,
       }
     }
     pre <- best_sim
+    logs <- cbind(
+      logs,
+      run_configurations(final_U, logs$potential),
+      selected = seq_len(nrow(Z)) == best_run
+    )
     if (keep_runs) {
       all_sims <- sim_list(all_sims, validate = FALSE)
     }
@@ -680,8 +696,8 @@ sim_runs <- function(sim) {
 #' @param sim A spatial interaction model object produced by [blvim()], i.e. an
 #'   object of class `sim` and `sim_blvim`
 #'
-#' @returns A data frame with one row per starting point and the following
-#'   columns:
+#' @returns A data frame of class `blvim_logs` with one row per starting point
+#'   and the following columns:
 #'
 #'   * `run`: index of the run, from 1 to the number of starting points;
 #'   * `potential`: final value of the potential;
@@ -689,7 +705,10 @@ sim_runs <- function(sim) {
 #'   * `converged`: whether the run converged;
 #'   * `status`: stopping status reported by a gradient algorithm;
 #'   * `gap`: final duality gap reported by a gradient algorithm;
-#'   * `evaluations`: number of evaluations reported by a gradient algorithm.
+#'   * `evaluations`: number of evaluations reported by a gradient algorithm;
+#'   * `n_active`: number of active destinations of the final configuration;
+#'   * `configuration`: identifier of the final configuration (see details);
+#'   * `selected`: whether the run is the one returned by [blvim()].
 #'
 #'   The gradient-specific columns are `NA` for the `"linear"` and
 #'   `"quadratic"` algorithms.
@@ -699,11 +718,26 @@ sim_runs <- function(sim) {
 #' [blvim()]. Run summaries are retained independently of the value of
 #' `keep_runs`.
 #'
+#' The final configuration of a run is described by its rescaled
+#' attractivenesses \eqn{U_j = \kappa_j Z_j / \sum_k \kappa_k Z_k}. A
+#' destination is active when \eqn{U_j > 10^{-5}}. Two runs reach the same
+#' configuration when they have the same active destinations and their
+#' rescaled attractivenesses differ by at most \eqn{10^{-3}}. The
+#' configurations are numbered by decreasing best potential, so that
+#' configuration 1 is the one of the selected run. The number of runs that
+#' reach it measures the reliability of the multiple starts: when it is
+#' reached by a single run, more starting points might find a better one.
+#'
+#' The `summary()` and `autoplot()` methods of the result (see
+#' [summary.blvim_logs()] and [autoplot.blvim_logs()]) describe and display
+#' these summaries.
+#'
 #' See [blvim()] for details on how the nature of `Z` determines the number of
 #' runs. Use [sim_runs()] to extract the complete spatial interaction models
 #' produced by the runs when they are available.
 #'
-#' @seealso [blvim()], [sim_runs()], [sim_diagnostic()]
+#' @seealso [blvim()], [sim_runs()], [sim_diagnostic()],
+#'   [summary.blvim_logs()], [autoplot.blvim_logs()]
 #'
 #' @export
 sim_logs <- function(sim) {
@@ -712,19 +746,25 @@ sim_logs <- function(sim) {
   }
   if (is.null(sim$logs)) {
     sim_diag <- sim$diagnostic
+    na_if_null <- function(x, na) if (is.null(x)) na else x
     logs <- data.frame(
-      run = 1,
+      run = 1L,
       potential = sim_potential(sim),
       iterations = sim_iterations(sim),
       converged = sim_converged(sim),
-      status = sim_diag$status,
-      gap = sim_diag$duality_gap,
-      evaluations = sim_diag$eval
+      status = na_if_null(sim_diag$status, NA_character_),
+      gap = na_if_null(sim_diag$duality_gap, NA_real_),
+      evaluations = na_if_null(sim_diag$eval, NA_integer_),
+      n_active = sum(
+        rescaled_attractiveness(sim$Z, sim$kappa) > active_tolerance
+      ),
+      configuration = 1L,
+      selected = TRUE
     )
-    logs
   } else {
-    sim$logs
+    logs <- sim$logs
   }
+  new_blvim_logs(logs)
 }
 
 

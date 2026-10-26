@@ -39,7 +39,7 @@ test_that("sim_history describes the iterations of the gradient algorithms", {
     expect_s3_class(history, "data.frame")
     expect_named(history, c(
       "iteration", "gap", "potential", "step", "step_norm",
-      "line_search_reductions", "min_U"
+      "line_search_reductions", "n_active", "min_U"
     ))
     expect_equal(nrow(history), sim_iterations(model))
     expect_equal(history$iteration, seq_len(nrow(history)) - 1L)
@@ -51,6 +51,8 @@ test_that("sim_history describes the iterations of the gradient algorithms", {
       final$min_U,
       min(kappas * attractiveness(model)) / sum(config$X)
     )
+    expect_equal(final$n_active, sum(attractiveness(model) > 0))
+    expect_true(all(history$n_active <= length(config$Z)))
     ## the history does not change the result
     ref <- blvim(config$costs, config$X, 1.5, 20, config$Z,
       kappa = kappas, algorithm = algorithm

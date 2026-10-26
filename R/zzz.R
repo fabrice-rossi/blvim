@@ -9,5 +9,7 @@
   s3_register("ggplot2::autoplot", "sim")
   s3_register("ggplot2::autoplot", "sim_list")
   s3_register("ggplot2::autoplot", "sim_df")
+  s3_register("ggplot2::autoplot", "blvim_logs")
+  s3_register("ggplot2::autoplot", "blvim_history")
   invisible()
 }

@@ -14,6 +14,7 @@ namespace blvim {
     int line_search_reductions = 0;
     double reciprocal_condition = NA_REAL;
     double minimum_U = R_PosInf;
+    int active = NA_INTEGER;  // number of positive U_j (projected ascent only)
     double beta = NA_REAL;
   };
 

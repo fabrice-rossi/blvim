@@ -20,7 +20,7 @@ Rcpp::List solver_status_list(const SolverStatus& status) {
 
 Rcpp::DataFrame iteration_history_frame(const IterationHistory& history) {
   const int n = static_cast<int>(history.size());
-  Rcpp::IntegerVector iteration(n), reductions(n);
+  Rcpp::IntegerVector iteration(n), reductions(n), active(n);
   Rcpp::NumericVector residual(n), merit(n), step_norm(n), accepted_scale(n),
     reciprocal_condition(n), minimum_U(n), beta(n);
   for(int i = 0; i < n; ++i) {
@@ -32,6 +32,7 @@ Rcpp::DataFrame iteration_history_frame(const IterationHistory& history) {
     reductions[i] = history[i].line_search_reductions;
     reciprocal_condition[i] = history[i].reciprocal_condition;
     minimum_U[i] = history[i].minimum_U;
+    active[i] = history[i].active;
     beta[i] = history[i].beta;
   }
   return as_data_frame(List::create(
@@ -39,7 +40,7 @@ Rcpp::DataFrame iteration_history_frame(const IterationHistory& history) {
     _["step_norm"] = step_norm, _["accepted_scale"] = accepted_scale,
     _["line_search_reductions"] = reductions,
     _["reciprocal_condition"] = reciprocal_condition,
-    _["minimum_U"] = minimum_U, _["beta"] = beta), n);
+    _["minimum_U"] = minimum_U, _["active"] = active, _["beta"] = beta), n);
 }
 
 } // namespace blvim
