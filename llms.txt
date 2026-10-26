@@ -443,11 +443,20 @@ models.
 - [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
   : Return a full diagnostic of the algorithm used to build a spatial
   interaction model
+- [`sim_history()`](https://fabrice-rossi.github.io/blvim/reference/sim_history.md)
+  : Return the iteration history of the algorithm used to build a
+  spatial interaction model
+- [`summary(`*`<blvim_history>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.blvim_history.md)
+  [`print(`*`<summary_blvim_history>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.blvim_history.md)
+  : Summary of the iteration history of blvim
 - [`sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/sim_iterations.md)
   : Return the number of iterations used to produce a spatial
   interaction model
 - [`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md)
   : Extract summaries of individual algorithm runs
+- [`summary(`*`<blvim_logs>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.blvim_logs.md)
+  [`print(`*`<summary_blvim_logs>`*`)`](https://fabrice-rossi.github.io/blvim/reference/summary.blvim_logs.md)
+  : Summary of the runs of a multiple start blvim
 - [`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md)
   : Extract spatial interaction models produced by individual runs
 
@@ -488,6 +497,9 @@ grid of parameters.
   interaction models
 - [`grid_sim_converged()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_converged.md)
   : Report the convergence statuses of a collection of spatial
+  interaction models
+- [`grid_sim_history()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_history.md)
+  : Return the iteration histories of a collection of spatial
   interaction models
 - [`grid_sim_iterations()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_iterations.md)
   : Return the numbers of iterations used to produce a collection of
@@ -533,6 +545,10 @@ grid of parameters.
 Functions that provide graphical representations of spatial interaction
 models.
 
+- [`autoplot(`*`<blvim_history>`*`)`](https://fabrice-rossi.github.io/blvim/reference/autoplot.blvim_history.md)
+  : Plot the iteration history of blvim
+- [`autoplot(`*`<blvim_logs>`*`)`](https://fabrice-rossi.github.io/blvim/reference/autoplot.blvim_logs.md)
+  : Plot the runs of a multiple start blvim
 - [`autoplot(`*`<sim>`*`)`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim.md)
   : Create a complete ggplot for a spatial interaction model
 - [`autoplot(`*`<sim_df>`*`)`](https://fabrice-rossi.github.io/blvim/reference/autoplot.sim_df.md)

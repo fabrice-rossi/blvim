@@ -90,11 +90,18 @@ multistart_flows <- blvim(
   keep_runs = TRUE
 )
 head(sim_logs(multistart_flows))
-#>   run  potential iterations converged    status          gap evaluations
-#> 1   1  -8.431680         40      TRUE converged 1.445288e-06          54
-#> 2   2 -11.753690         53      TRUE converged 1.680213e-06          71
-#> 3   3 -11.651135         16      TRUE converged 8.894206e-07          23
-#> 4   4  -8.431680         27      TRUE converged 1.852890e-06          38
-#> 5   5  -9.042293         38      TRUE converged 7.091518e-07          52
-#> 6   6  -8.561907         46      TRUE converged 1.407509e-06          61
+#>   run potential iterations converged    status          gap evaluations
+#> 1   1 -8.431680         41      TRUE converged 1.908660e-06          55
+#> 2   2 -8.431680         25      TRUE converged 4.539827e-06          36
+#> 3   3 -9.193965         26      TRUE converged 5.766371e-06          37
+#> 4   4 -8.505239         32      TRUE converged 8.621229e-06          44
+#> 5   5 -8.561907         50      TRUE converged 9.338627e-06          66
+#> 6   6 -8.607270         75      TRUE converged 7.404967e-06          97
+#>   n_active configuration selected
+#> 1        8             1     TRUE
+#> 2        8             1    FALSE
+#> 3        8            30    FALSE
+#> 4        7             3    FALSE
+#> 5        8             5    FALSE
+#> 6        7             8    FALSE
 ```

@@ -52,6 +52,6 @@ sim_diagnostic(dyn_model)
 #> BLV model obtained with the "gradient" algorithm.
 #> ℹ The algorithm converged after 2 iterations:
 #> • Number of potential evaluations: 2.
-#> • Duality gap: 2.220446e-16.
+#> • Duality gap: 0.
 #> • Return status: "converged".
 ```

@@ -52,7 +52,10 @@ Akamatsu, and Kogure in a recent paper
   and
   [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
   now support two new algorithms to find an equilibrium. Both are
-  instances of a projected gradient ascent approach.
+  instances of projected gradient ascent on the potential and differ
+  only in the geometry used for the gradient steps: `"gradient"` uses
+  the geometry of the attractivenesses while `"gradient_unit"` uses that
+  of rescaled attractivenesses that sum to one.
 - [`sim_diagnostic()`](https://fabrice-rossi.github.io/blvim/reference/sim_diagnostic.md)
   gives details about the behaviour of the iterative algorithms for
   [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
@@ -60,6 +63,40 @@ Akamatsu, and Kogure in a recent paper
   [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
   can be used to set the parameters of the line search used in the
   projected gradient ascent methods.
+- [`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
+  also accepts an arbitrary diagonal `preconditioner` for the gradient
+  algorithms, given as one strictly positive value per destination
+  location. It changes the path followed by the algorithms (and
+  therefore possibly the local maximum they reach), while the initial
+  step `rho_init` keeps the same meaning.
+- the gradient algorithms can record the history of their iterations
+  (duality gap, potential, line search steps, etc.) using
+  `blvim_gradient_control(history = TRUE)`. The new function
+  [`sim_history()`](https://fabrice-rossi.github.io/blvim/reference/sim_history.md)
+  returns this history for the models kept by
+  [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+  and
+  [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md).
+  When applied to a `sim_list` (or with
+  [`grid_sim_history()`](https://fabrice-rossi.github.io/blvim/reference/grid_sim_history.md)),
+  it returns the histories of all the models in a single data frame.
+- the logs of the runs of
+  [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
+  (see
+  [`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md))
+  identify the final configuration of each run (number of active
+  destinations and identifier shared by the runs that reach the same
+  configuration) and the selected run.
+  [`summary()`](https://rdrr.io/r/base/summary.html) and
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  methods for the results of
+  [`sim_logs()`](https://fabrice-rossi.github.io/blvim/reference/sim_logs.md)
+  and
+  [`sim_history()`](https://fabrice-rossi.github.io/blvim/reference/sim_history.md)
+  describe the runs (distinct configurations found, share of the runs
+  that reach the best one, convergence) and the iterations (convergence
+  rate of the duality gap, line search, changes of the number of active
+  destinations, now recorded in the history).
 - [`blvim()`](https://fabrice-rossi.github.io/blvim/reference/blvim.md)
   and
   [`grid_blvim()`](https://fabrice-rossi.github.io/blvim/reference/grid_blvim.md)
@@ -72,8 +109,8 @@ Akamatsu, and Kogure in a recent paper
 
 ### Documentation
 
-- the theoretical vignette has been expanded with new content based on a
-  recent paper by Osawa et al.
+- the theoretical vignette has been expanded with new content based on
+  the recent paper by Osawa et al. <https://arxiv.org/abs/2011.06778v2>
 - the documentation has been proofread, with more cross-references
   between related functions and corrections of several inaccuracies.
 

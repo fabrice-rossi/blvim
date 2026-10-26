@@ -153,13 +153,31 @@ and contain:
 
 - `gap`: final duality gap for a gradient algorithm;
 
-- `evaluations`: number of evaluations for a gradient algorithm.
+- `evaluations`: number of evaluations for a gradient algorithm;
 
-The last three columns are `NA` for `"linear"` and `"quadratic"`. If
-`keep_runs = TRUE`, the complete fitted models are additionally
-available through
+- `n_active`: number of active destinations of the final configuration;
+
+- `configuration`: identifier of the final configuration, shared by the
+  runs that reach the same configuration and numbered by decreasing
+  potential;
+
+- `selected`: whether the run is the returned one.
+
+The `status`, `gap` and `evaluations` columns are `NA` for `"linear"`
+and `"quadratic"`. If `keep_runs = TRUE`, the complete fitted models are
+additionally available through
 [`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md),
 in the same order as the starting points.
+
+When the `history` parameter of
+[`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md)
+is `TRUE`, the iteration history of the gradient algorithms is available
+through
+[`sim_history()`](https://fabrice-rossi.github.io/blvim/reference/sim_history.md)
+for the returned model and, if `keep_runs = TRUE`, for each model
+returned by
+[`sim_runs()`](https://fabrice-rossi.github.io/blvim/reference/sim_runs.md).
+It is not kept for the other runs.
 
 ## Details
 
@@ -257,17 +275,32 @@ function; see
 The gradient algorithms optimise this potential directly using projected
 gradient ascent.
 
-The `"gradient"` algorithm works directly with the attractivenesses
-\\Z_j\\. The `"gradient_unit"` algorithm works with rescaled variables
-\\U_j\\ satisfying
+Both algorithms work with rescaled variables \\U_j = \kappa_j Z_j /
+\sum\_{i=1}^{n} X_i\\ satisfying
 
-\$\$ \sum\_{j=1}^{p} U_j = 1. \$\$
+\$\$ \sum\_{j=1}^{p} U_j = 1, \$\$
 
-The rescaling can accelerate convergence in some settings. The two
-algorithms optimise equivalent formulations and should produce the same
-solution up to numerical precision. They can nevertheless converge to
-solutions different from those obtained with the `"linear"` and
-`"quadratic"` algorithms.
+and differ only by the geometry used for the gradient steps. The
+`"gradient_unit"` algorithm uses the Euclidean geometry of the \\U_j\\.
+The `"gradient"` algorithm uses the Euclidean geometry of the
+attractivenesses \\Z_j\\, which amounts to preconditioning the gradient
+in \\U_j\\ by \\\kappa_j^2\\. The preconditioner is rescaled to a unit
+mean so that `rho_init` (see
+[`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md))
+has a similar meaning for both algorithms. When all the \\\kappa_j\\ are
+equal, the two algorithms are identical (up to rounding errors).
+Otherwise, as the potential is not concave in general, they can converge
+to different local maxima from the same starting point. They can also
+converge to solutions different from those obtained with the `"linear"`
+and `"quadratic"` algorithms.
+
+An arbitrary diagonal preconditioner can be specified with the
+`preconditioner` parameter of
+[`blvim_gradient_control()`](https://fabrice-rossi.github.io/blvim/reference/blvim_gradient_control.md).
+It multiplies the gradient with respect to the variables of the
+algorithm, \\Z_j\\ for `"gradient"` and \\U_j\\ for `"gradient_unit"`.
+For instance, `"gradient_unit"` with a preconditioner equal to
+\\\kappa_j^2\\ is equivalent to `"gradient"` without preconditioner.
 
 Both gradient algorithms use projected ascent with a backtracking line
 search and an Armijo sufficient-increase condition. Convergence is
