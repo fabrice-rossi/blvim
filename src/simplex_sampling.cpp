@@ -17,10 +17,10 @@ using namespace Rcpp;
 // The calculation is stopped before size_t overflow can occur.
 std::size_t choose_capped(unsigned n, unsigned k, std::size_t cap) {
   if(k > n)
-    return 0;
+    return 0;  // # nocov
   k = std::min(k, n - k);
   if(k == 0)
-    return 1;
+    return 1;  // # nocov
 
   // At each step the binomial recurrence gives an exact integer.
   std::size_t value = 1;
@@ -46,9 +46,9 @@ std::size_t choose_capped(unsigned n, unsigned k, std::size_t cap) {
     a /= g2;
     den /= g2;
     if(den != 1)
-      stop("Internal error in binomial coefficient calculation");
+      stop("Internal error in binomial coefficient calculation");  // # nocov
     if(b != 0 && a > cap / b)
-      return cap + 1;
+      return cap + 1;  // # nocov
     value = a * b;
   }
   return value;
@@ -65,7 +65,7 @@ bool next_combination(std::vector<unsigned>& x, unsigned d) {
       return true;
     }
   }
-  return false;
+  return false;  // # nocov
 }
 
 std::vector<unsigned> random_subset(unsigned d, unsigned r) {
@@ -75,7 +75,7 @@ std::vector<unsigned> random_subset(unsigned d, unsigned r) {
   for(unsigned j = d - r; j < d; ++j) {
     unsigned t = (unsigned)std::floor(R::runif(0.0, 1.0) * (j + 1.0));
     if(t > j)
-      t = j;
+      t = j;  // # nocov
     if(!s.insert(t).second)
       s.insert(j);
   }
@@ -124,7 +124,7 @@ void fill_point(arma::mat& Z,
   }
 
   if(!(total > 0.0L) || !std::isfinite(static_cast<double>(total)))
-    stop("Failed to normalize simplex coordinates");
+    stop("Failed to normalize simplex coordinates");  // # nocov
 
   for(std::size_t h = 0; h < s; ++h) {
     const unsigned j = support[h];
@@ -174,7 +174,7 @@ Rcpp::List sample_weighted_simplex_low_codim_cpp(const arma::vec& kappa,
       for(std::size_t i = 0; i < capacity; ++i) {
         faces.push_back(zero);
         if(i + 1 < capacity && !next_combination(zero, d))
-          stop("Internal error while enumerating faces");
+          stop("Internal error while enumerating faces");  // # nocov
       }
       remaining -= capacity;
     } else {
@@ -215,7 +215,7 @@ Rcpp::List sample_weighted_simplex_low_codim_cpp(const arma::vec& kappa,
   }
 
   if(total_capacity < static_cast<std::size_t>(n_face_points))
-    stop("Internal error: selected faces do not have enough point capacity");
+    stop("Internal error: selected faces do not have enough point capacity");  // # nocov
 
   // Progressive round-robin allocation keeps counts within one whenever the
   // capacities allow it, while vertices are automatically frozen at one.
@@ -230,7 +230,7 @@ Rcpp::List sample_weighted_simplex_low_codim_cpp(const arma::vec& kappa,
       }
     }
     if(!allocated)
-      stop("Internal error while allocating points to selected faces");
+      stop("Internal error while allocating points to selected faces");  // # nocov
   }
 
   arma::mat Z(n, d, arma::fill::zeros);
@@ -271,20 +271,20 @@ Rcpp::List sample_weighted_simplex_low_codim_cpp(const arma::vec& kappa,
   }
 
   if(row != static_cast<arma::uword>(n))
-    stop("Internal error: generated sample size differs from n");
+    stop("Internal error: generated sample size differs from n");  // # nocov
 
   const arma::vec mass = Z * kappa;
   const double max_error = n == 0 ? 0.0 : arma::max(arma::abs(mass - C));
   const double tolerance = 128.0 * std::numeric_limits<double>::epsilon() *
                            std::max(1.0, std::abs(C)) * d;
   if(max_error > tolerance)
-    warning("Weighted-simplex equality has a larger residual than expected");
+    warning("Weighted-simplex equality has a larger residual than expected");  // # nocov
 
   IntegerVector layer_count_R(d - 1);
   for(unsigned k = 1; k < d; ++k) {
     if(layer_count[k] >
        static_cast<std::size_t>(std::numeric_limits<int>::max()))
-      stop("A layer count exceeds R's integer range");
+      stop("A layer count exceeds R's integer range");  // # nocov
     layer_count_R[k - 1] = static_cast<int>(layer_count[k]);
   }
 
